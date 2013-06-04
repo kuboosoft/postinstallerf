@@ -2,9 +2,9 @@
 import sys, re
 import gtk, gobject
 import webkit
-DEFAULT_URL = 'extensions.gnome.org/' 
+DEFAULT_URL = 'extensions.gnome.org/' # Change this as you Wish
 class SimpleBrowser: # needs GTK, Python, Webkit-GTK (pywebkitgtk)
-  def __init__(self):
+	def __init__(self):
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		self.window.set_position(gtk.WIN_POS_CENTER_ALWAYS)
 		self.window.connect('delete_event', self.close_application)
