@@ -2,7 +2,7 @@
 import sys, re
 import gtk, gobject
 import webkit
-DEFAULT_URL = 'extensions.gnome.org/' # Change this as you Wish
+DEFAULT_URL = 'extensions.gnome.org/' 
 class SimpleBrowser: # needs GTK, Python, Webkit-GTK (pywebkitgtk)
   def __init__(self):
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
