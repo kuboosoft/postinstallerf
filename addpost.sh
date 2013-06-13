@@ -18,7 +18,7 @@
 # | debe dirigirse a:                                                              |
 # | http:www.kuboosoft.blogspot.com                                                |
 # +--------------------------------------------------------------------------------+
-# FEDORA 16, 17, 18, 19 ADPOST 2.1 32 BITS
+# FEDORA 17, 18, 19 ADPOST 32 BITS
 
 # ACTUALIZACION DE ADPOST
 updater=/usr/share/updatepostintaller/addpost.sh
