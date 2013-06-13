@@ -18,26 +18,26 @@
 # | debe dirigirse a:                                                              |
 # | http:www.kuboosoft.blogspot.com                                                |
 # +--------------------------------------------------------------------------------+
-# FEDORA 16, 17, 18, 19 ADPOST 2.1 32 BITS
+# FEDORA 17, 18, 19 ADPOST 1.2 64 BITS
 
 # ACTUALIZACION DE ADPOST
-updater=/usr/share/updatepostintaller/addpost.sh
+updater=/usr/share/updatepostintaller/addpost64.sh
 if [ -f $updater ]; then
-rm -f /usr/share/updatepostintaller/addpost.sh
+rm -f /usr/share/updatepostintaller/addpost64.sh
 echo "se elimino el archivo obsoleto de actualizacion"
 else
 echo "Aun no se ha descargado el archivo de actualizacion"
 fi
 
 if [ -d /usr/share/updatepostintaller/ ]; then
-xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/addpost.sh'
+xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/addpost64.sh'
 else
 mkdir /usr/share/updatepostintaller/
-xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/addpost.sh'
+xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/addpost64.sh'
 fi 
 
-source=/usr/bin/postinstallerf/addpost.sh
-update=/usr/share/updatepostintaller/addpost.sh
+source=/usr/bin/postinstallerf/addpost64.sh
+update=/usr/share/updatepostintaller/addpost64.sh
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 diff -a $source $update
@@ -46,7 +46,7 @@ echo "Los ficheros son iguales"
 zenity --info --text "Install se encuentra actualizado" --title "PostInstallerF" --timeout=5
 else
 echo "Los ficheros No son iguales"
-cp -f /usr/share/updatepostintaller/addpost.sh /usr/bin/postinstallerf/ 
+cp -f /usr/share/updatepostintaller/addpost64.sh /usr/bin/postinstallerf/ 
 zenity --info --text "Install se ha actualizado
 Por favor Reinicie Install" --title "PostInstallerF" --timeout=5
 fi
@@ -57,7 +57,7 @@ echo "Los ficheros son iguales"
 zenity --info --text "Install is updated" --title "PostInstallerF" --timeout=5
 else
 echo "Los ficheros No son iguales"
-cp -f /usr/share/updatepostintaller/addpost.sh /usr/bin/postinstallerf/ 
+cp -f /usr/share/updatepostintaller/addpost64.sh /usr/bin/postinstallerf/ 
 zenity --info --text "Install was updated
 Please Restart Install" --title "PostInstallerF" --timeout=5
 fi
@@ -70,7 +70,7 @@ fi
 # +--------------------------------------------------------------------------------------------------+
 
     generateInstallMenu(){ 
-            im="yad --image="/usr/share/icons/acciones/add.png" --image-on-top --class="Install" --window-icon="/usr/share/icons/acciones/add.png" --list --checklist  --width=700 --height=500 --title \"PostInstallerF for Fedora 32bit (Ver 1.2.0)\" --text \"Select items from the list below\" "
+            im="yad --image="/usr/share/icons/acciones/add.png" --image-on-top --class="Install" --window-icon="/usr/share/icons/acciones/add.png" --list --checklist  --width=700 --height=500 --title \"PostInstallerF for Fedora 64bit (Ver 1.2.0)\" --text \"Select items from the list below\" "
             im=$im"--column=\"\" --column \"Application\" --column \"Description\"    --column \"Status\"                           "
 
  # Building Install Menue
@@ -79,7 +79,7 @@ fi
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 
-if ! $installed | grep "Repositorios RPM Fusion" > /dev/null; then
+            if ! $installed | grep "Repositorios RPM Fusion" > /dev/null; then
 if [ -f /etc/yum.repos.d/rpmfusion-nonfree.repo ]; then
                     im=$im"FALSE \"Repositorios RPM Fusion\"     \"Proporciona un repositorio que se puede acceder usando yum y PackageKit para el software del Proyecto Fedora [Recomendado]\" \"ACTIVADO  \"  "
 else
@@ -89,9 +89,9 @@ fi
 
 if ! $installed | grep "Cambiar lenguaje del sistema" > /dev/null; then
 if [ -f /usr/bin/system-config-language ]; then
-                    im=$im"FALSE \"Cambiar lenguaje del sistema\"             \"Elegi tu lenguaje materno\" \"INSTALADO  \"  "
+                    im=$im"FALSE \"Cambiar lenguaje del sistema\"             \"Elige tu lenguaje materno\" \"INSTALADO  \"  "
 else
-im=$im"FALSE \"Cambiar lenguaje del sistema\"             \"Elegi tu lenguaje materno\" \"NO INSTALADO  \"  "
+im=$im"FALSE \"Cambiar lenguaje del sistema\"             \"Elige tu lenguaje materno\" \"NO INSTALADO  \"  "
 fi
             fi
 
@@ -142,7 +142,7 @@ fi
             fi
 
 if ! $installed | grep "Unrar y p7zip" > /dev/null; then
-if [ -f /usr/bin/unrar ] || [ -f /usr/bin/7za ]; then
+if [ -f /usr/bin/unrar ] && [ -f /usr/bin/7za ]; then
                     im=$im"FALSE \"Unrar y p7zip\"                   \"Descomprime archivos rar y 7zip\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Unrar y p7zip\"                   \"Descomprime archivos rar y 7zip\" \"NO INSTALADO  \"  "
@@ -167,7 +167,6 @@ im=$im"FALSE \"Java JRE Oracle\"           \"Implementation propietaria del leng
 fi
             fi
 
-
 if ! $installed | grep "GIMP" > /dev/null; then
 if [ -f /usr/bin/gimp ]
  then
@@ -188,7 +187,7 @@ fi
 
 if ! $installed | grep "Converseen" > /dev/null; then
 if [ -f /usr/bin/converseen ]; then
-                    im=$im"FALSE \"Converseen\"            \"Convertir y cambiar el tamaño de un número ilimitado de imágenes a cualquiera de los formatos más populares.\" \"INSTALADO  \"  "
+                    im=$im"FALSE \"Converseen\"            \"Convertir y cambiar el tamaño de un número ilimitado de imágenes a cualquiera de los formatos más populares: DPX, EXR, GIF, JPEG, JPEG 2000, PDF, PhotoCD, PNG, Postscript, SVG, y TIFF\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Converseen\"            \"Convertir y cambiar el tamaño de un número ilimitado de imágenes a cualquiera de los formatos más populares: DPX, EXR, GIF, JPEG, JPEG 2000, PDF, PhotoCD, PNG, Postscript, SVG, y TIFF\" \"NO INSTALADO  \"  "
 fi
@@ -211,7 +210,6 @@ im=$im"FALSE \"Pinta\" \"Pinta es un programa de dibujo libre y de codigo y mode
 fi
             fi
 
-
 if ! $installed | grep "Pencil" > /dev/null; then
 if [ -f /usr/bin/pencil ]; then
                     im=$im"FALSE \"Pencil\" \"Herramienta opensource para hacer diagramas y prototipos de interfaz gráfica de usuario.\" \"INSTALADO  \"  "
@@ -220,7 +218,6 @@ im=$im"FALSE \"Pencil\" \"Herramienta opensource para hacer diagramas y prototip
 fi
             fi
 
-
 if ! $installed | grep "Fotoxx" > /dev/null; then
 if [ -f /usr/bin/fotoxx ]; then
                     im=$im"FALSE \"Fotoxx\"               \"Edición de fotos y gestión de la colección\" \"INSTALADO  \"  "
@@ -228,7 +225,6 @@ else
 im=$im"FALSE \"Fotoxx\"               \"Edición de fotos y gestión de la colección\" \"NO INSTALADO  \"  "
 fi
             fi
-
 
 if ! $installed | grep "Shutter" > /dev/null; then
 if [ -f /usr/bin/shutter ]; then
@@ -262,14 +258,6 @@ im=$im"FALSE \"LibreOffice\"         \"LibreOffice es la suite de productividad 
 fi
             fi
 
-if ! $installed | grep "WPS Office" > /dev/null; then
-if [ -f /usr/bin/wps ]; then
-                    im=$im"FALSE \"WPS Office\"         \"Suite de oficina para Linux propietaria, desarrollado por Kingsoft\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"WPS Office\"         \"Suite de oficina para Linux propietaria, desarrollado por Kingsoft\" \"NO INSTALADO  \"  "
-fi
-            fi
-
 if ! $installed | grep "Basket" > /dev/null; then
 if [ -f /usr/bin/basket ]; then
                     im=$im"FALSE \"Basket\"         \"Organiza tus notas en una jerarquía de canastas, estupendo organizador de notas.\" \"INSTALADO  \"  "
@@ -287,7 +275,7 @@ fi
             fi
 
 if ! $installed | grep "Adobe Reader" > /dev/null; then
-if [ -f /usr/bin/acroread ]; then
+                    if [ -f /usr/bin/acroread ]; then
                     im=$im"FALSE \"Adobe Reader\"             \"Visor de PDF fácil de ver, buscar, imprimir\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Adobe Reader\"             \"Visor de PDF fácil de ver, buscar, imprimir\" \"NO INSTALADO  \"  "
@@ -366,7 +354,6 @@ im=$im"FALSE \"Freemind\"             \"Un programa premier para crear mapas men
 fi
             fi
 
-
 if ! $installed | grep "yEd" > /dev/null; then
 if [ -f /opt/yEd/yEd ]; then
                     im=$im"FALSE \"yEd\"             \"Aplicación de escritorio potente que puede usarse para generar de forma rápida y eficaz diagramas de alta calidad.\" \"INSTALADO  \"  "
@@ -375,7 +362,6 @@ im=$im"FALSE \"yEd\"             \"Aplicación de escritorio potente que puede u
 fi
             fi
 
-
 if ! $installed | grep "Cmap Tools" > /dev/null; then
 if [ -f $HOME/IHMC_CmapTools/bin/update ]; then
                     im=$im"FALSE \"Cmap Tools\"             \"Construir, navegar, compartir y criticar modelos de conocimiento representados como mapas conceptuales.\" \"INSTALADO  \"  "
@@ -383,7 +369,6 @@ else
 im=$im"FALSE \"Cmap Tools\"             \"Construir, navegar, compartir y criticar modelos de conocimiento representados como mapas conceptuales.\" \"NO INSTALADO  \"  "
 fi
             fi
-
 
 if ! $installed | grep "Anki" > /dev/null; then
 if [ -f /usr/bin/anki ]; then
@@ -395,7 +380,7 @@ fi
 
 
 if ! $installed | grep "Wine y winetricks" > /dev/null; then
-if [ -f /usr/bin/wine ] || [ -f /usr/bin/winetricks ]; then
+if [ -f /usr/bin/wine ] && [ -f /usr/bin/winetricks ]; then
                     im=$im"FALSE \"Wine y winetricks\"                  \"Instala algunas aplicaciones de windows\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Wine y winetricks\"                  \"Instala algunas aplicaciones de windows\" \"NO INSTALADO  \"  "
@@ -403,7 +388,7 @@ fi
             fi
 
 if ! $installed | grep "Oracle Virtual Box" > /dev/null; then
-if [ -f '/etc/yum.repos.d/virtualbox.repo' ] || [ -f /usr/bin/VirtualBox ]; then
+if [ -f '/etc/yum.repos.d/virtualbox.repo' ] && [ -f /usr/bin/VirtualBox ]; then
                     im=$im"FALSE \"Oracle Virtual Box\"            \"Software de virtualización para arquitecturas x86/amd64\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Oracle Virtual Box\"            \"Software de virtualización para arquitecturas x86/amd64\" \"NO INSTALADO  \"  "
@@ -431,14 +416,6 @@ if [ -f /usr/bin/dropbox ]; then
                     im=$im"FALSE \"DropBox\"                    \"Dropbox es un servicio de alojamiento de archivos multiplataforma en la nube, operado por la compañía Dropbox\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"DropBox\"                    \"Dropbox es un servicio de alojamiento de archivos multiplataforma en la nube, operado por la compañía Dropbox\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Winff" > /dev/null; then
-if [ -f /usr/bin/winff ]; then
-                    im=$im"FALSE \"Winff\"                   \"WinFF es una interfaz gráfica para la línea de comandos de conversión de vídeo de FFMPEG\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Winff\"                   \"WinFF es una interfaz gráfica para la línea de comandos de conversión de vídeo de FFMPEG\" \"NO INSTALADO  \"  "
 fi
             fi
 
@@ -475,7 +452,7 @@ fi
             fi
 
 if ! $installed | grep "Mobilmedia Converter" > /dev/null; then
-if [ -f /usr/bin/mmc ]; then
+if [ -f /usr/local/bin/mmc ]; then
                     im=$im"FALSE \"Mobilmedia Converter\"                  \"Conversion de video para dispositivos\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Mobilmedia Converter\"                  \"Conversion de video para dispositivos\" \"NO INSTALADO  \"  "
@@ -507,6 +484,13 @@ im=$im"FALSE \"FF Multi Converter\"               \"Sencilla aplicación que le 
 fi
             fi
 
+if ! $installed | grep "viDrop" > /dev/null; then
+if [ -f /usr/bin/vidrop ]; then
+                    im=$im"FALSE \"viDrop\"               \"Convierte películas o videos de música en un formato compatible con teléfonos inteligentes, tablets, reproductor de vídeo portátil y mucho más.\" \"INSTALADO  \"  "
+else
+im=$im"FALSE \"viDrop\"               \"Convierte películas o videos de música en un formato compatible con teléfonos inteligentes, tablets, reproductor de vídeo portátil y mucho más.\" \"NO INSTALADO  \"  "
+fi
+            fi
 
 if ! $installed | grep "GtkPod" > /dev/null; then
 if [ -f /usr/bin/gtkpod ]; then
@@ -597,16 +581,6 @@ im=$im"FALSE \"Inkscape\"                 \"Editor de Gráficos Vectoriales, sim
 fi
             fi
 
-
-if ! $installed | grep "Alchemy" > /dev/null; then
-if [ -f /usr/bin/alchemy ]; then
-                    im=$im"FALSE \"Alchemy\"                 \"Programa de dibujo para crear bocetos, dibujar y crear en nuestra pc de una manera nueva.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Alchemy\"                 \"Programa de dibujo para crear bocetos, dibujar y crear en nuestra pc de una manera nueva.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
 if ! $installed | grep "Openshot" > /dev/null; then
 if [ -f /usr/bin/openshot ]; then
                     im=$im"FALSE \"Openshot\"    \"Un simple, potente y gratuito editor de vídeo con un enfoque en la facilidad de uso\" \"INSTALADO  \"  "
@@ -622,7 +596,6 @@ else
 im=$im"FALSE \"Kdenlive\"    \"Intuitivo y poderoso editor de video multi-pista, incluye las tecnologías de vídeo más recientes.\" \"NO INSTALADO  \"  "
 fi
             fi
-
 
 if ! $installed | grep "LIVES" > /dev/null; then
 if [ -f /usr/bin/lives ]; then
@@ -665,7 +638,7 @@ fi
             fi
 
 if ! $installed | grep "Wink" > /dev/null; then
-if [ -f /usr/bin/wink ]; then
+if [ -f /usr/local/bin/Wink/wink ]; then
                     im=$im"FALSE \"Wink\"    \"Software de creación de Tutoriales y Presentaciones, dirigido principalmente a la creación de videotutoriales\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Wink\"    \"Software de creación de Tutoriales y Presentaciones, dirigido principalmente a la creación de videotutoriales\" \"NO INSTALADO  \"  "
@@ -762,13 +735,6 @@ im=$im"FALSE \"SKYPE\"    \"Te brinda la facilidad de llamar barato o de hacer l
 fi
             fi
 
-if ! $installed | grep "Jitsi" > /dev/null; then
-if [ -f /usr/bin/jitsi ]; then
-                    im=$im"FALSE \"Jitsi\"    \"Un audio / video y comunicador de chat que soporta protocolos como SIP, XMPP / Jabber, AIM / ICQ, Windows Live, Yahoo!.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Jitsi\"    \"Un audio / video y comunicador de chat que soporta protocolos como SIP, XMPP / Jabber, AIM / ICQ, Windows Live, Yahoo!.\" \"NO INSTALADO  \"  "
-fi
-            fi
 
 if ! $installed | grep "Turpial" > /dev/null; then
 if [ -f /usr/bin/turpial ]; then
@@ -914,6 +880,7 @@ fi
             fi
 
 
+
 if ! $installed | grep "Wormux" > /dev/null; then
 if [ -f /usr/bin/wormux ]; then
                     im=$im"FALSE \"Wormux\"    \"Juego de asesinato en masa 2D\" \"INSTALADO  \"  "
@@ -978,7 +945,7 @@ fi
 
 
 if ! $installed | grep "Alien Arena" > /dev/null; then
-if [ -f /usr/bin/alienarena ]; then
+if [ -e /usr/bin/alienarena ]; then
                     im=$im"FALSE \"Alien Arena\"    \"Juego de ciencia ficción retro de partida a muerte multijugador\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Alien Arena\"    \"Juego de ciencia ficción retro de partida a muerte multijugador\" \"NO INSTALADO  \"  "
@@ -1003,8 +970,9 @@ im=$im"FALSE \"FlightGear\"    \"Simulador de vuelo 3D\" \"NO INSTALADO  \"  "
 fi
             fi
 
+
 if ! $installed | grep "Performous" > /dev/null; then
-if [ -f /usr/bin/performous ]; then 
+if [ -f /usr/local/bin/performous ] && [ -d /usr/local/share/games/performous/ ]; then 
                     im=$im"FALSE \"Performous\"    \"Un juego abierto de karaoke, banda y baile en el que uno o más jugadores interpretan una canción, con los scores de sus actuaciones.\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Performous\"    \"Un juego abierto de karaoke, banda y baile en el que uno o más jugadores interpretan una canción, con los scores de sus actuaciones.\" \"NO INSTALADO  \"  "
@@ -1128,9 +1096,9 @@ fi
 
 if ! $installed | grep "Opera" > /dev/null; then
 if [ -f /usr/bin/opera ]; then
-                    im=$im"FALSE \"Opera\"    \"Navegador muy bueno que hace que la Web sea rápida y divertida, que le de una experiencia de web en cualquier computador\" \"INSTALADO  \"  "
+                    im=$im"FALSE \"Opera\"    \"Excelente navegador que hace que la Web sea rápida y divertida, que le de una experiencia de web en cualquier computador\" \"INSTALADO  \"  "
 else
-im=$im"FALSE \"Opera\"    \"Navegador muy bueno que hace que la Web sea rápida y divertida, que le de una experiencia de web en cualquier computador\" \"NO INSTALADO  \"  "
+im=$im"FALSE \"Opera\"    \"Excelente navegador que hace que la Web sea rápida y divertida, que le de una experiencia de web en cualquier computador\" \"NO INSTALADO  \"  "
 fi
             fi
 
@@ -1149,14 +1117,6 @@ if [ -f /usr/bin/gnome-tweak-tool ] || [ -f /usr/bin/dconf-editor ] || [ -f /usr
                     im=$im"FALSE \"GnomeTweakTool y dconf-editor\"    \"Herramientas avanzadas para personalizar las opciones de GNOME 3\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"GnomeTweakTool y dconf-editor\"    \"Herramientas avanzadas para personalizar las opciones de GNOME 3\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Menu Libre" > /dev/null; then
-if [ -f /usr/bin/menulibre ]; then
-                    im=$im"FALSE \"Menu Libre\"    \"Un editor de menú avanzado que proporciona características modernas en una interfaz limpia y fácil de usar.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Menu Libre\"    \"Un editor de menú avanzado que proporciona características modernas en una interfaz limpia y fácil de usar.\" \"NO INSTALADO  \"  "
 fi
             fi
 
@@ -1199,7 +1159,7 @@ fi
 
 
 if ! $installed | grep "Alien" > /dev/null; then
-if [ -e /usr/bin/alien ]; then
+if [ -f /usr/bin/alien ]; then
                     im=$im"FALSE \"Alien\"    \"Alien nos permite convertir entre diferentes formatos de paquetes binarios linux, pudiendo pasar entre sí cualquiera de estos 4 formatos: deb, rpm, slackware tgz\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Alien\"    \"Alien nos permite convertir entre diferentes formatos de paquetes binarios linux, pudiendo pasar entre sí cualquiera de estos 4 formatos: deb, rpm, slackware tgz\" \"NO INSTALADO  \"  "
@@ -1221,7 +1181,7 @@ if ! $installed | grep "Reset PostInstallerF" > /dev/null; then
             fi
 
    else
-# AQUI INICIA LENGUAJE INGLES
+# AQUI EMPIESA LENGUAJE INGLES
 
 if ! $installed | grep "Repositories RPM Fusion" > /dev/null; then
 if [ -f /etc/yum.repos.d/rpmfusion-nonfree.repo ]; then
@@ -1310,7 +1270,6 @@ im=$im"FALSE \"Java JRE Oracle\"           \"Propietary implementation of the Ja
 fi
             fi
 
-
 if ! $installed | grep "GIMP" > /dev/null; then
 if [ -f /usr/bin/gimp ]
  then
@@ -1354,7 +1313,6 @@ im=$im"FALSE \"Pinta\" \"drawing/editing program modeled after Paint.NET.\" \"NO
 fi
             fi
 
-
 if ! $installed | grep "Pencil" > /dev/null; then
 if [ -f /usr/bin/pencil ]; then
                     im=$im"FALSE \"Pencil\" \"Opensource tool for making diagrams and GUI prototyping that everyone can use.\" \"INSTALLED  \"  "
@@ -1362,7 +1320,6 @@ else
 im=$im"FALSE \"Pencil\" \"Opensource tool for making diagrams and GUI prototyping that everyone can use.\" \"NO INSTALLED  \"  "
 fi
             fi
-
 
 if ! $installed | grep "Fotoxx" > /dev/null; then
 if [ -f /usr/bin/fotoxx ]; then
@@ -1404,15 +1361,6 @@ im=$im"FALSE \"LibreOffice\"         \"Open Source, community-developed, office 
 fi
             fi
 
-if ! $installed | grep "WPS Office" > /dev/null; then
-if [ -f /usr/bin/wps ]; then
-                    im=$im"FALSE \"WPS Office\"         \"Office suite, built by Chinese development group Kingsoft, propietary.\" \"INSTALLED  \"  "
-else
-im=$im"FALSE \"WPS Office\"         \"Office suite, built by Chinese development group Kingsoft, propietary.\" \"NO INSTALLED  \"  "
-fi
-            fi
-
-
 if ! $installed | grep "Basket" > /dev/null; then
 if [ -f /usr/bin/basket ]; then
                     im=$im"FALSE \"Basket\"         \"Organize your notes in a hierarchy of baskets, by topic or project. Group notes together, collapse non-important groups...\" \"INSTALLED  \"  "
@@ -1420,7 +1368,6 @@ else
 im=$im"FALSE \"Basket\"         \"Organize your notes in a hierarchy of baskets, by topic or project. Group notes together, collapse non-important groups...\" \"NO INSTALLED  \"  "
 fi
             fi
-
 
 if ! $installed | grep "ProjectLibre" > /dev/null; then
 if [ -f /usr/bin/projectlibre ]; then
@@ -1524,7 +1471,7 @@ if ! $installed | grep "Cmap Tools" > /dev/null; then
 if [ -f $HOME/IHMC_CmapTools/bin/update ]; then
                     im=$im"FALSE \"Cmap Tools\"             \"Program empowers users to construct, navigate, share and criticize knowledge models represented as concept maps.\" \"INSTALLED  \"  "
 else
-im=$im"FALSE \"Cmap Tools\"             \"Program empowers users to construct, navigate, share and criticize knowledge models represented as concept maps.\" \"NO INSTALLED  \"  "
+im=$im"FALSE \"Cmap Tools\"             \"yEd is a powerful desktop application that can be used to quickly and effectively generate high-quality diagrams.\" \"NO INSTALLED  \"  "
 fi
             fi
 
@@ -1578,14 +1525,6 @@ im=$im"FALSE \"DropBox\"                    \"Sync and backup files between comp
 fi
             fi
 
-if ! $installed | grep "Winff" > /dev/null; then
-if [ -f /usr/bin/winff ]; then
-                    im=$im"FALSE \"Winff\"                   \"WinFF is a GUI for the command line video converter, FFMPEG\" \"INSTALLED  \"  "
-else
-im=$im"FALSE \"Winff\"                   \"WinFF is a GUI for the command line video converter, FFMPEG\" \"NO INSTALLED  \"  "
-fi
-            fi
-
 if ! $installed | grep "Hyper Video Converter" > /dev/null; then
 if [ -f /usr/bin/hypervc ]; then
                     im=$im"FALSE \"Hyper Video Converter\"                   \"A frontend for various command line tools such as ffmpeg.\" \"INSTALLED  \"  "
@@ -1594,7 +1533,6 @@ im=$im"FALSE \"Hyper Video Converter\"                   \"A frontend for variou
 fi
             fi
 
-
 if ! $installed | grep "Miro Video Converter" > /dev/null; then
 if [ -f /usr/bin/miro-video-converter.py ]; then
                     im=$im"FALSE \"Miro Video Converter\"                   \"Open source, cross-platform application to convert videos from and to various formats, including formats suitable for devices such as Android phones.\" \"INSTALLED  \"  "
@@ -1602,7 +1540,6 @@ else
 im=$im"FALSE \"Miro Video Converter\"                   \"Open source, cross-platform application to convert videos from and to various formats, including formats suitable for devices such as Android phones.\" \"NO INSTALLED  \"  "
 fi
             fi
-
 
 if ! $installed | grep "Arista Transcoder" > /dev/null; then
 if [ -f /usr/bin/arista-gtk ]; then
@@ -1621,7 +1558,7 @@ fi
             fi
 
 if ! $installed | grep "Mobilmedia Converter" > /dev/null; then
-if [ -f /usr/bin/mmc ]; then
+if [ -f /usr/local/bin/mmc ]; then
                     im=$im"FALSE \"Mobilmedia Converter\"                  \"Video converter for converting between popular desktop audio and video formats\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"Mobilmedia Converter\"                  \"Video converter for converting between popular desktop audio and video formats\" \"NO INSTALLED  \"  "
@@ -1653,6 +1590,13 @@ im=$im"FALSE \"FF Multi Converter\"               \"Simple graphical application
 fi
             fi
 
+if ! $installed | grep "viDrop" > /dev/null; then
+if [ -f /usr/bin/vidrop ]; then
+                    im=$im"FALSE \"viDrop\"               \"Free video transcoding software for GNU/Linux\" \"INSTALLED  \"  "
+else
+im=$im"FALSE \"viDrop\"               \"Free video transcoding software for GNU/Linux\" \"NO INSTALLED  \"  "
+fi
+            fi
 
 if ! $installed | grep "GtkPod" > /dev/null; then
 if [ -f /usr/bin/gtkpod ]; then
@@ -1666,7 +1610,7 @@ if ! $installed | grep "EasyTag" > /dev/null; then
 if [ -f /usr/bin/easytag ]; then
                     im=$im"FALSE \"EasyTag\"              \"Utility for viewing, editing and writing ID3 tags of your MP3 files.\" \"INSTALLED  \"  "
 else
-im=$im"FALSE \"EasyTag\"              \"Utility for viewing, editing and writing ID3 tags of your MP3 files.\" \"INSTALLED  \"  "
+im=$im"FALSE \"EasyTag\"              \"Utility for viewing, editing and writing ID3 tags of your MP3 files.\" \"NO INSTALLED  \"  "
 fi
             fi
 
@@ -1743,14 +1687,6 @@ im=$im"FALSE \"Inkscape\"                 \"Vector graphics editor using the SVG
 fi
             fi
 
-if ! $installed | grep "Alchemy" > /dev/null; then
-if [ -f /usr/bin/alchemy ]; then
-                    im=$im"FALSE \"Alchemy\"                 \"Open drawing project aimed at exploring how we can sketch, draw, and create on computers in new ways.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Alchemy\"                 \"Open drawing project aimed at exploring how we can sketch, draw, and create on computers in new ways.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
 if ! $installed | grep "Openshot" > /dev/null; then
 if [ -f /usr/bin/openshot ]; then
                     im=$im"FALSE \"Openshot\"    \"Open-source, non-linear video editor for Linux based on MLT framework.\" \"INSTALLED  \"  "
@@ -1759,7 +1695,6 @@ im=$im"FALSE \"Openshot\"    \"Open-source, non-linear video editor for Linux ba
 fi
             fi
 
-
 if ! $installed | grep "Kdenlive" > /dev/null; then
 if [ -f /usr/bin/kdenlive ]; then
                     im=$im"FALSE \"Kdenlive\"    \"Intuitive and powerful multi-track video editor, including most recent video technologies.\" \"INSTALLED  \"  "
@@ -1767,6 +1702,7 @@ else
 im=$im"FALSE \"Kdenlive\"    \"Intuitive and powerful multi-track video editor, including most recent video technologies.\" \"NO INSTALLED  \"  "
 fi
             fi
+
 
 if ! $installed | grep "LIVES" > /dev/null; then
 if [ -f /usr/bin/lives ]; then
@@ -1856,7 +1792,6 @@ im=$im"FALSE \"XBMC\"    \"Complete media center solution for Linux.\" \"NO INST
 fi
             fi
 
-
 if ! $installed | grep "Clementine" > /dev/null; then
 if [ -f /usr/bin/clementine ]; then
                     im=$im"FALSE \"Clementine\"    \"A music player and library organizer.\" \"INSTALLED  \"  "
@@ -1904,14 +1839,6 @@ if [ -f /usr/bin/skype ]; then
                     im=$im"FALSE \"SKYPE\"    \"Free Internet telephony that just works.\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"SKYPE\"    \"Free Internet telephony that just works.\" \"NO INSTALLED  \"  "
-fi
-            fi
-
-if ! $installed | grep "Jitsi" > /dev/null; then
-if [ -f /usr/bin/jitsi ]; then
-                    im=$im"FALSE \"Jitsi\"    \"An audio/video and chat communicator that supports protocols such as SIP, XMPP/Jabber, AIM/ICQ, Windows Live, Yahoo!.\" \"INSTALLED  \"  "
-else
-im=$im"FALSE \"Jitsi\"    \"An audio/video and chat communicator that supports protocols such as SIP, XMPP/Jabber, AIM/ICQ, Windows Live, Yahoo!.\" \"NO INSTALLED  \"  "
 fi
             fi
 
@@ -2151,7 +2078,7 @@ fi
 
 
 if ! $installed | grep "Performous" > /dev/null; then
-if [ -f /usr/bin/performous ]; then 
+if [ -f /usr/local/bin/performous ] && [ -d /usr/local/share/games/performous/ ]; then 
                     im=$im"FALSE \"Performous\"    \"Open-source rhythm/performance platform that contains singing, guitar/bass playing, drumming and dancing all in one game.\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"Performous\"    \"Open-source rhythm/performance platform that contains singing, guitar/bass playing, drumming and dancing all in one game.\" \"NO INSTALLED  \"  "
@@ -2192,20 +2119,20 @@ fi
             fi
 
 
+if ! $installed | grep "Frostwire" > /dev/null; then
+if [ -f /usr/bin/frostwirelauch ]; then
+                    im=$im"FALSE \"Frostwire\"    \"FrostWire is a free, open source BitTorrent client.\" \"INSTALLED  \"  "
+else
+im=$im"FALSE \"Frostwire\"    \"FrostWire is a free, open source BitTorrent client.\" \"NO INSTALLED  \"  "
+fi
+            fi
+
+
 if ! $installed | grep "GrooveOff" > /dev/null; then
 if [ -f /usr/bin/grooveoff ]; then
                     im=$im"FALSE \"GrooveOff\"    \"Unofficial client for grooveshark.com.\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"GrooveOff\"    \"Unofficial client for grooveshark.com.\" \"NO INSTALLED  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Frostwire" > /dev/null; then
-if [ -f /usr/bin/frostwire ]; then
-                    im=$im"FALSE \"Frostwire\"    \"FrostWire is a free, open source BitTorrent client.\" \"INSTALLED  \"  "
-else
-im=$im"FALSE \"Frostwire\"    \"FrostWire is a free, open source BitTorrent client.\" \"NO INSTALLED  \"  "
 fi
             fi
 
@@ -2292,20 +2219,13 @@ fi
 
 
 if ! $installed | grep "GnomeTweakTool and dconf-editor" > /dev/null; then
-if [ -f /usr/bin/gnome-tweak-tool ] || [ -f /usr/bin/dconf-editor ] || [ -f /usr/bin/gconf-editor ]; then
+if [ -f /usr/bin/gnome-tweak-tool ] && [ -f /usr/bin/dconf-editor ] && [ -f /usr/bin/gconf-editor ]; then
                     im=$im"FALSE \"GnomeTweakTool and dconf-editor\"    \"Advanced tools for customizing GNOME 3 options.\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"GnomeTweakTool and dconf-editor\"    \"Advanced tools for customizing GNOME 3 options.\" \"NO INSTALLED  \"  "
 fi
             fi
 
-if ! $installed | grep "Menu Libre" > /dev/null; then
-if [ -f /usr/bin/menulibre ]; then
-                    im=$im"FALSE \"Menu Libre\"    \"An advanced menu editor that provides modern features in a clean, easy-to-use interface.\" \"INSTALLED  \"  "
-else
-im=$im"FALSE \"Menu Libre\"    \"An advanced menu editor that provides modern features in a clean, easy-to-use interface.\" \"NO INSTALLED  \"  "
-fi
-            fi
 
 
 if ! $installed | grep "Complete pending installations" > /dev/null; then
@@ -2370,9 +2290,8 @@ fi
 
 
 
-
-
     }
+
 
 
 chooseInstalls(){
@@ -2391,6 +2310,7 @@ chooseInstalls(){
        
             fi
 
+
 if echo $choice | grep "Repositories RPM Fusion" > /dev/null; then
                     extraRepos
        
@@ -2400,14 +2320,15 @@ if echo $choice | grep "Repositories RPM Fusion" > /dev/null; then
                     lenguaje
             fi
 
+
 if echo $choice | grep "Change system language" > /dev/null; then
                     lenguaje
             fi
 
-
             if echo $choice | grep "Herramientas Básicas de compilación" > /dev/null; then
                     basicompile
             fi
+
 
 if echo $choice | grep "Build Basic Tools" > /dev/null; then
                     basicompile
@@ -2421,12 +2342,12 @@ if echo $choice | grep "Mozilla Firefox" > /dev/null; then
                     multimediaCodecs
             fi
 
-if echo $choice | grep "Install Codecs Audio/Video" > /dev/null; then
-                    multimediaCodecs
-            fi
-
             if echo $choice | grep "Dirty ffmpeg" > /dev/null; then
                     fdirty
+            fi
+
+            if echo $choice | grep "Install Codecs Audio/Video" > /dev/null; then
+                    multimediaCodecs
             fi
 
             if echo $choice | grep "Flash Player" > /dev/null; then
@@ -2436,7 +2357,8 @@ if echo $choice | grep "Install Codecs Audio/Video" > /dev/null; then
                     comprimir
             fi
 
-if echo $choice | grep "Unrar and p7zip" > /dev/null; then
+
+            if echo $choice | grep "Unrar and p7zip" > /dev/null; then
                     comprimir
             fi
 
@@ -2444,7 +2366,7 @@ if echo $choice | grep "Unrar and p7zip" > /dev/null; then
                     java
             fi
 
-if echo $choice | grep "Java JRE Oracle" > /dev/null; then
+            if echo $choice | grep "Java JRE Oracle" > /dev/null; then
                     jre
             fi
 
@@ -2488,15 +2410,9 @@ if echo $choice | grep "Java JRE Oracle" > /dev/null; then
                     office
             fi
 
-            if echo $choice | grep "WPS Office" > /dev/null; then
-                    wps
-            fi
-
-
             if echo $choice | grep "Basket" > /dev/null; then
                     basquet
             fi
-
 
             if echo $choice | grep "ProjectLibre" > /dev/null; then
                     project
@@ -2513,7 +2429,7 @@ if echo $choice | grep "Java JRE Oracle" > /dev/null; then
                     pdfsam
             fi
 
-      if echo $choice | grep "YAGF" > /dev/null; then
+            if echo $choice | grep "YAGF" > /dev/null; then
                     yagsca
             fi
 
@@ -2547,13 +2463,13 @@ if echo $choice | grep "Java JRE Oracle" > /dev/null; then
             if echo $choice | grep "Anki" > /dev/null; then
                     anki
             fi
-
-
-	    if echo $choice | grep "Wine y winetricks" > /dev/null; then
+            
+            if echo $choice | grep "Wine y winetricks" > /dev/null; then
                     wine
             fi
-            
-            if echo $choice | grep "Wine and winetricks" > /dev/null; then
+
+
+if echo $choice | grep "Wine and winetricks" > /dev/null; then
                     wine
             fi
 
@@ -2569,10 +2485,6 @@ if echo $choice | grep "Java JRE Oracle" > /dev/null; then
             if echo $choice | grep "DropBox" > /dev/null; then
                     dropbox
             fi
-
-            if echo $choice | grep "Winff" > /dev/null; then
-                    winf
-            fi
             if echo $choice | grep "Hyper Video Converter" > /dev/null; then
                     Hyper
             fi
@@ -2580,6 +2492,7 @@ if echo $choice | grep "Java JRE Oracle" > /dev/null; then
             if echo $choice | grep "Miro Video Converter" > /dev/null; then
                     mvcon
             fi
+
             if echo $choice | grep "Arista Transcoder" > /dev/null; then
                     arista
             fi
@@ -2600,6 +2513,10 @@ if echo $choice | grep "Java JRE Oracle" > /dev/null; then
                     ffmulticonverter
             fi
 
+            if echo $choice | grep "viDrop" > /dev/null; then
+                    vidrop
+            fi
+
             if echo $choice | grep "GtkPod" > /dev/null; then
                     gtkPod
             fi
@@ -2616,9 +2533,11 @@ if echo $choice | grep "Java JRE Oracle" > /dev/null; then
             if echo $choice | grep "Tupi" > /dev/null; then
                     tupapi
             fi
+
             if echo $choice | grep "BRL-CAD" > /dev/null; then
                     brlcad
             fi
+
             if echo $choice | grep "Sweet Home 3D" > /dev/null; then
                     Sweet
             fi
@@ -2634,13 +2553,8 @@ if echo $choice | grep "Java JRE Oracle" > /dev/null; then
                     Draft
             fi
 
-            
             if echo $choice | grep "Inkscape" > /dev/null; then
                     inkscape
-            fi
-
-            if echo $choice | grep "Alchemy" > /dev/null; then
-                    chemy
             fi
      
             if echo $choice | grep "Openshot" > /dev/null; then
@@ -2698,7 +2612,6 @@ if echo $choice | grep "Netflix Player" > /dev/null; then
                     flix
             fi
 
-
 if echo $choice | grep "XBMC" > /dev/null; then
                     xbm
             fi
@@ -2718,7 +2631,6 @@ if echo $choice | grep "Audacity" > /dev/null; then
                     audacity
             fi
 
-
 if echo $choice | grep "OcenAudio" > /dev/null; then
                     ocenaudio
             fi
@@ -2730,10 +2642,6 @@ if echo $choice | grep "Mixxx" > /dev/null; then
 
 if echo $choice | grep "SKYPE" > /dev/null; then
                     skype
-            fi
-
-if echo $choice | grep "Jitsi" > /dev/null; then
-                    jitsi
             fi
 
 
@@ -2887,7 +2795,6 @@ if echo $choice | grep "GrooveDown" > /dev/null; then
                     grooveDown
             fi
 
-
 if echo $choice | grep "GrooveOff" > /dev/null; then
                     veOff
             fi
@@ -2896,14 +2803,8 @@ if echo $choice | grep "Frostwire" > /dev/null; then
                     wirefro
             fi
 
-
 if echo $choice | grep "UGET" > /dev/null; then
                     uget
-            fi
-
-
-if echo $choice | grep "FlareGet" > /dev/null; then
-                    flare
             fi
 
 
@@ -2946,19 +2847,19 @@ if echo $choice | grep "GnomeTweakTool y dconf-editor" > /dev/null; then
                     GnomeTweak
             fi
 
-
 if echo $choice | grep "GnomeTweakTool and dconf-editor" > /dev/null; then
                     GnomeTweak
             fi
 
-if echo $choice | grep "Menu Libre" > /dev/null; then
-                    mlibre
+
+if echo $choice | grep "Multi Lanzer" > /dev/null; then
+                    lanzer
             fi
+
 
 if echo $choice | grep "Completar Instalaciones pendientes" > /dev/null; then
                     pendientes
             fi
-
 
 if echo $choice | grep "Complete pending installations" > /dev/null; then
                     pendientes
@@ -3015,6 +2916,7 @@ if echo $choice | grep "Reset PostInstallerF" > /dev/null; then
 libstdc(){
             #Checking for libstdc++-33
             if ! $installed | grep "libstdc++-33" > /dev/null; then
+                    #zenity --notification --text "Installing dependency compat-libstdc++-33" &
                     echo "Installing dependency compat-libstdc++-33..."
                     yum -y install compat-libstdc++-33
                     echo "libstdc++-33" >> installed.log
@@ -3022,20 +2924,22 @@ libstdc(){
     }
      
     extraRepos(){
-            echo "Adding rpmfusion repositories..."  
-
+            echo "Adding rpmfusion repositories..."    
+            
 if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "16" ]; then
-yum -y install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-16.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-16.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Repositorio RPMFusion" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-16.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-16.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=350
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "17" ]; then
-yum -y install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-17.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-17.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Repositorio RPMFusion" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-17.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-17.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=350
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "18" ]; then
-yum -y install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-18.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-18.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Repositorio RPMFusion" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-18.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-18.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=350
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "19" ]; then
 yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-19.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-19.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=400
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "20" ]; then
 yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-20.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-20.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=400
 fi
- 
+  
+     
+    
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Repositorio RPMFusion " -i "/usr/share/icons/pinguino.png" -t 5000'
 else           
@@ -3046,35 +2950,34 @@ fi
     }
      
     lenguaje(){
+
 if [ -x /usr/share/doc/kdesdk* ] && [ $(echo $LANG | cut -b1-2) = "es" ]; then
-yum -y install kde-l10n-Spanish | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing soporte español para KDE" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install kde-l10n-Spanish | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando soporte español para KDE" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 elif [ -x /usr/share/doc/kdesdk* ] && [ $(echo $LANG | cut -b1-2) = "pt" ]; then
-yum -y install kde-l10n-Portuguese | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalação de suporte para KDE Português" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install kde-l10n-Portuguese | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalação de suporte para KDE Português" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 
 elif [ -x /usr/share/doc/kdesdk* ] && [ $(echo $LANG | cut -b1-2) = "fr" ]; then
-yum -y install kde-l10n-French | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installation de soutien français pour KDE" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install kde-l10n-French | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installation de soutien français pour KDE" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 
 
 elif [ -x /usr/share/doc/kdesdk* ] && [ $(echo $LANG | cut -b1-2) = "ja" ]; then
-yum -y install kde-l10n-Japanese | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "KDE用日本語サポートのインストール" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install kde-l10n-Japanese | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "KDE用日本語サポートのインストール" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 
 
 elif [ -x /usr/share/doc/kdesdk* ] && [ $(echo $LANG | cut -b1-2) = "zh" ]; then
-yum -y install kde-l10n-Chinese | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "安装中国支持KDE" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install kde-l10n-Chinese | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "安装中国支持KDE" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 
 
 elif [ -x /usr/share/doc/kdesdk* ] && [ $(echo $LANG | cut -b1-2) = "it" ]; then
-yum -y install kde-l10n-Italian | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installazione del il supporto per KDE italiana" --text="Please wait...." --pulsate --auto-close --width=350
-fi
-
-            yum -y install system-config-language | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing el administrador de lenguaje" --text="Please wait...." --pulsate --auto-close --width=350
-
-
+yum -y install kde-l10n-Italian | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installazione del il supporto per KDE italiana" --text="Por favor espere...." --pulsate --auto-close --width=350
+fi    
+    
+            yum -y install system-config-language 2>&1 | zenity --progress  --title="'Instalando el administrador de lenguaje" --text="Please wait...." --pulsate --auto-close --width=350
 system-config-language
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
@@ -3083,17 +2986,16 @@ else
 su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Administrador de Lenguaje" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
 
-
     }
      
     basicompile(){
-            yum -y install kernel-headers kernel-devel hg git | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing kernel-headers, devel, hg y git" --text="Please wait...." --pulsate --auto-close --width=350
- 
- yum -y groupinstall "Development Tools" "Legacy Software Development" | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Development Tools y Legacy Software Development" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install kernel-headers kernel-devel hg git | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando kernel-headers, devel, hg y git" --text="Por favor espere...." --pulsate --auto-close --width=350
 
-yum -y groupinstall "Development Libraries" | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Development Libraries..." --text="Please wait...." --pulsate --auto-close --width=350
+ yum -y groupinstall "Development Tools" "Legacy Software Development" | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Development Tools y Legacy Software Development" --text="Por favor espere...." --pulsate --auto-close --width=350
 
-yum -y groupinstall "x-software-development" | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing x-software-development..." --text="Please wait...." --pulsate --auto-close --width=350
+yum -y groupinstall "Development Libraries" | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Development Libraries..." --text="Por favor espere...." --pulsate --auto-close --width=350
+
+yum -y groupinstall "x-software-development" | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando x-software-development..." --text="Por favor espere...." --pulsate --auto-close --width=350
 
 $changelog
 echo "Herramientas Básicas de compilación" >> installed.log
@@ -3107,7 +3009,7 @@ fi
 
 
     zorrito(){
-            yum -y install firefox | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Mozilla Firefox" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install firefox | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Mozilla Firefox" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 $changelog
 echo "Mozilla Firefox" >> installed.log
@@ -3117,26 +3019,26 @@ su $noti -c 'notify-send "PostInstallerF" "Completada instalacion de Mozilla Fir
 else
 su $noti -c 'notify-send "PostInstallerF" "Completada instalacion de Mozilla Firefox" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
-
     }
 
      
     multimediaCodecs(){
 
-            yum -y install gstreamer-plugins-bad gstreamer-plugins-bad-free-extras gstreamer-plugins-bad-nonfree gstreamer-plugins-ugly gstreamer-ffmpeg | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing codecs de video y audio" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install gstreamer-plugins-bad gstreamer-plugins-bad-free-extras gstreamer-plugins-bad-nonfree gstreamer-plugins-ugly gstreamer-ffmpeg | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando codecs de video y audio" --text="Por favor espere...." --pulsate --auto-close --width=350
 
- yum -y install ffmpeg mencoder ffmpeg2theora mplayer libdvdcss  | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing codecs de video y audio" --text="Please wait...." --pulsate --auto-close --width=350
+ yum -y install ffmpeg mencoder ffmpeg2theora mplayer libdvdcss | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando codecs de video y audio" --text="Por favor espere...." --pulsate --auto-close --width=350 
 
-yum -y install gstreamer1-libav gstreamer1-plugins-bad-free-extras gstreamer1-plugins-bad-freeworld gstreamer1-plugins-base-tools gstreamer1-plugins-good-extras gstreamer1-plugins-ugly gstreamer1-plugins-bad-free gstreamer1-plugins-good gstreamer1-plugins-base gstreamer1 | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing codecs de video y audio extras" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install gstreamer1-libav gstreamer1-plugins-bad-free-extras gstreamer1-plugins-bad-freeworld gstreamer1-plugins-base-tools gstreamer1-plugins-good-extras gstreamer1-plugins-ugly gstreamer1-plugins-bad-free gstreamer1-plugins-good gstreamer1-plugins-base gstreamer1 | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando codecs de video y audio extras" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 yum -y install faac vo-aacenc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing encoders of video extras" --text="Please wait...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/k3b ]; then
-yum -y install k3b-extras-freeworld | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing k3b Extras Freeworld" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install k3b-extras-freeworld | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando k3b Extras Freeworld" --text="Por favor espere...." --pulsate --auto-close --width=350
 fi
              
             $changelog
             echo "Multimedia codecs" >> installed.log
+
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada instalacion de Multimedia codecs" -i "/usr/share/icons/pinguino.png" -t 5000'
 else
@@ -3144,6 +3046,9 @@ su $noti -c 'notify-send "PostInstallerF" "Completada instalacion de Multimedia 
 fi
 
     }
+
+
+
 
     fdirty(){
 
@@ -3199,9 +3104,9 @@ fi
     }
      
     flash(){
-            yum -y install http://linuxdownload.adobe.com/adobe-release/adobe-release-i386-1.0-1.noarch.rpm
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
-yum -y install flash-plugin | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing flash-plugin" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y localinstall http://linuxdownload.adobe.com/linux/x86_64/adobe-release-x86_64-1.0-1.noarch.rpm
+yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
+yum -y install flash-plugin | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando flash-plugin" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Flash Player" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -3213,7 +3118,7 @@ fi
     }
      
     comprimir(){
-            yum -y install unrar p7zip p7zip-plugins | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing unrar y p7zip" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install unrar p7zip p7zip-plugins | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando unrar y p7zip" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Unrar y p7zip" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -3226,13 +3131,14 @@ fi
     }
      
     java(){
-            yum -y install java icedtea-web | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Java OpenJDK" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install java icedtea-web | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Java OpenJDK" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Java OpenJDK" -i "/usr/share/icons/pinguino.png" -t 5000'
 else
 su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Java OpenJDK" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
+
      
             echo "Java OpenJDK" >> installed.log
     }
@@ -3245,13 +3151,13 @@ rm -f /etc/profile.d/java.sh
 
 cd /tmp/
 
-wget -c -O jre-oraclejava.rpm http://javadl.sun.com/webapps/download/AutoDL?BundleId=76850 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Java JRE Oracle  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
+wget -c -O jre-oraclejava.rpm http://javadl.sun.com/webapps/download/AutoDL?BundleId=73849 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Java JRE Oracle  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 
 yum -y install jre-oraclejava.rpm
 
-cd /usr/lib/mozilla/plugins/
+cd /usr/lib64/mozilla/plugins/
 
-ln -s /usr/java/latest/lib/i386/libnpjp2.so
+ln -s /usr/java/latest/lib/amd64/libnpjp2.so
 
 echo 'PATH=/usr/java/latest/bin:$PATH' >> /etc/profile.d/java.sh
 
@@ -3260,11 +3166,13 @@ su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Java JRE
 else
 su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Java JRE Oracle" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
+
      
     }
+
      
     gimp(){
-            yum -y install gimp | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing GIMP" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install gimp | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando GIMP" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de GIMP" -i "/usr/share/icons/pincel_rco.png" -t 5000'
@@ -3275,9 +3183,8 @@ fi
             echo "GIMP" >> installed.log
     }
 
-
     hugp(){
-            yum -y install hugin | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Hugin" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install hugin | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Hugin" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Hugin" -i "/usr/share/icons/pincel_rco.png" -t 5000'
@@ -3290,7 +3197,7 @@ fi
 
 
      converseen(){
-            yum -y install converseen | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Converseen" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install converseen | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Converseen" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Converseen" -i "/usr/share/icons/pincel_rco.png" -t 5000'
@@ -3303,7 +3210,7 @@ fi
 
      
     mipaint(){
-            yum -y install mypaint | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing MyPaint" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install mypaint | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando MyPaint" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de MyPaint" -i "/usr/share/icons/pincel_rco.png" -t 5000'
@@ -3316,7 +3223,7 @@ fi
 
 
     pint(){
-            yum -y install pinta | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Pinta" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install pinta | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Pinta" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Pinta" -i "/usr/share/icons/pincel_rco.png" -t 5000'
@@ -3329,7 +3236,7 @@ fi
 
 
     pencil(){
-            yum -y --enablerepo=updates-testing install pencil | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Pencil" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y --enablerepo=updates-testing install pencil | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Pencil" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Pencil" -i "/usr/share/icons/pincel_rco.png" -t 5000'
@@ -3340,9 +3247,9 @@ fi
             echo "Pencil" >> installed.log
     }
 
-     
+    
     fotoxx(){
-            yum -y install fotoxx | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Fotoxx" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install fotoxx | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Fotoxx" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Fotoxx" -i "/usr/share/icons/camera.png" -t 5000'
@@ -3354,7 +3261,7 @@ fi
     }
      
     shutter(){
-            yum -y install shutter | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Shutter" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install shutter | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Shutter" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Shutter" -i "/usr/share/icons/camera.png" -t 5000'
@@ -3366,7 +3273,7 @@ fi
     }
      
     glabels(){
-            yum -y install glabels | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Glabels" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install glabels | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Glabels" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Glabels" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -3378,18 +3285,19 @@ fi
     }
      
     kover(){
-            yum -y install kover | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Kover" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install kover | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Kover" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Kover" -i "/usr/share/icons/pinguino.png" -t 5000'
 else
 su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Kover" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
+
             echo "Kover" >> installed.log
     }
      
     office(){
-            yum -y install libreoffice-writer libreoffice-calc libreoffice-impress libreoffice-draw libreoffice-langpack-es | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing LibreOffice" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install libreoffice-writer libreoffice-calc libreoffice-impress libreoffice-draw libreoffice-langpack-es | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando LibreOffice" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de LibreOffice" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -3398,39 +3306,6 @@ su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Li
 fi
      
             echo "LibreOffice" >> installed.log
-    }
-
-
-    caligra(){
-            yum -y install calligra | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Calligra" --text="Please wait...." --pulsate --auto-close --width=350
-
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Calligra" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of LibreOffice" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
-     
-            echo "LibreOffice" >> installed.log
-    }
-
-
-    wps(){ 
-
-yum -y install http://wdl.cache.ijinshan.com/wps/download/Linux/unstable/wps-office-8.1.0.3724-0.1.b1p2.i686.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing WPS Office" --text="Please wait...." --pulsate --auto-close --width=350
-
-if [ $(echo $LANG | cut -b1-2) = "zh" ]; then
-echo 'you are chinese'
-else
-cd /opt/kingsoft/wps-office/office6/2052 && sudo rm qt.qm wps.qm wpp.qm et.qm
-fi
-
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de WPS Office" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of WPS Office" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
-     
-            echo "WPS Office" >> installed.log
     }
 
 
@@ -3456,16 +3331,28 @@ fi
     }
 
 
+    caligra(){
+            yum -y install calligra | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Calligra" --text="Please wait...." --pulsate --auto-close --width=350
 
-    project(){
+if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Calligra" -i "/usr/share/icons/pinguino.png" -t 5000'
+else
+su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of LibreOffice" -i "/usr/share/icons/pinguino.png" -t 5000'
+fi
+     
+            echo "LibreOffice" >> installed.log
+    }
 
+
+project(){
+            
 foo3=$(w3m -dump http://sourceforge.net/projects/projectlibre/files/ProjectLibre/); echo "foo3=$foo3" >> /tmp/projectlibre.txt
 wait ${!}
 egrep '1.' /tmp/projectlibre.txt | sed '1d' | awk '{print $1}' | head -1 >> /tmp/lastest_projectlibre.txt
 
 latestfoo3=$(cat /tmp/lastest_projectlibre.txt ); echo "latestfoo3=$latestfoo3"
 
-yum -y install http://sourceforge.net/projects/projectlibre/files/ProjectLibre/$latestfoo3/projectlibre-$latestfoo3-1.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing ProjectLibre" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y localinstall http://sourceforge.net/projects/projectlibre/files/ProjectLibre/$latestfoo3/projectlibre-$latestfoo3-1.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando ProjectLibre" --text="Por favor espere...." --pulsate --auto-close --width=350 
 
 cat /dev/null > /tmp/projectlibre.txt
 cat /dev/null > /tmp/lastest_projectlibre.txt
@@ -3488,16 +3375,14 @@ su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Pr
 fi
  fi
 fi
+     
 
     }
-
      
     reader(){
-            yum -y install http://linuxdownload.adobe.com/adobe-release/adobe-release-i386-1.0-1.noarch.rpm
-
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
-
- yum -y install nspluginwrapper AdobeReader_enu | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Adobe Reader" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y localinstall http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm
+yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
+ yum -y install nspluginwrapper AdobeReader_enu | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Adobe Reader" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Adobe Reader" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -3508,8 +3393,7 @@ fi
     }
      
     pdfmod(){
-
-yum -y install pdfmod | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing PDF Mod" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install pdfmod | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando PDF Mod" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/pdfmod ]; then
 $changelog
@@ -3523,10 +3407,10 @@ fi
 zenity --info --title="PostInstallerF" --text="For some reason PDF Mod not installed, please try again"
 fi
 
+
     }
 
    pdfsam(){
-
 rm -f /usr/share/applications/pdfsam.desktop 
 rm -f /usr/share/applications/Split\ and\ Merge.desktop
 rm -f /usr/share/applications/pdfsam.desktop
@@ -3553,8 +3437,9 @@ fi
 
     }
 
+
 yagsca(){
-            yum -y install yagf | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing YAGF" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install yagf | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando YAGF" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de YAGF" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -3566,7 +3451,7 @@ fi
     }
      
     scribus(){
-            yum -y install scribus | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Scribus" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install scribus | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Scribus" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Scribus" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -3578,7 +3463,7 @@ fi
     }
      
     adia(){
-            yum -y install dia | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Dia" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install dia | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Dia" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Dia" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -3589,7 +3474,7 @@ fi
     }
      
     gnu(){
-            yum -y install gnumeric | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Gnumeric" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install gnumeric | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Gnumeric" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Gnumeric" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -3600,29 +3485,31 @@ fi
     }
      
     planner(){
-            yum -y install planner | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Planner" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install planner | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Planner" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Planner" -i "/usr/share/icons/pinguino.png" -t 5000'
 else
 su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Planner" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
+
             echo "Planner" >> installed.log
     }
      
     vym(){
-            yum -y install vym | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing VYM" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install vym | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando VYM" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de VYM" -i "/usr/share/icons/pinguino.png" -t 5000'
 else
 su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of VYM" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
+
             echo "VYM" >> installed.log
     }
      
     freemind(){
-            yum -y install freemind | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Freemind" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install freemind | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Freemind" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Freemind" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -3634,7 +3521,7 @@ fi
 
 
 yEdt(){
-            yum -y install java | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Java como complemento" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install java | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Java como complemento" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 wget -c -P/tmp/ http://www.yworks.com/products/yed/demo/yEd-3.9.2_setup.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: yEd  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 
@@ -3650,12 +3537,13 @@ fi
 else
 zenity --info --title="PostInstallerF" --text="For some reason yEd not installed, please try again"
 fi
+
     }
 
 
 cmap(){
 
-yum -y install java glibc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Java y glib como dependencias" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install java glibc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Java y glib como dependencias" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ -d /home/$noti/.local/share/applications/ ]; then
 echo 'existe el directorio applications'
@@ -3667,7 +3555,7 @@ if [ -f /home/$noti/.local/share/applications/CmapTools.desktop ]; then
 rm -f /home/$noti/.local/share/applications/CmapTools.desktop
 fi
 
-wget -c -P/tmp/ http://cmapdownload.ihmc.us/installs/CmapTools/Linux/LinuxCmapTools_v5.05_08-07-12.bin 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Cmap Tools  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
+wget -c -P/tmp/ http://cmapdownload.ihmc.us/installs/CmapTools/Linux/Linuxx64CmapTools_v5.05_08-07-12.bin 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Cmap Tools  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 
 if [ -f /home/$noti/IHMC_CmapTools/bin/update ]; then
 echo 'ya se encuentra instalado'
@@ -3708,25 +3596,27 @@ fi
  else
 zenity --info --title="PostInstallerF" --text="For some reason Cmap Tools not installed, please try again"
 fi
+
     }
 
      
     anki(){
-            yum -y install anki | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Anki" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install anki | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Anki" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Anki" -i "/usr/share/icons/pinguino.png" -t 5000'
 else
 su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Anki" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
+
             echo "Anki" >> installed.log
     }
      
      
     wine(){
-            yum -y install wine cabextract | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Wine" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install wine cabextract | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Wine" --text="Por favor espere...." --pulsate --auto-close --width=350
 
- yum -y install ftp://ftp.pbone.net/mirror/cachalot.mine.nu/RPMS/winetricks-20110429-0.fc15.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Winetricks" --text="Please wait...." --pulsate --auto-close --width=350
+ yum -y localinstall ftp://ftp.pbone.net/mirror/cachalot.mine.nu/RPMS/winetricks-20110429-0.fc15.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Winetricks" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Wine y winetricks" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -3748,46 +3638,9 @@ wget -c -P/tmp/ http://download.virtualbox.org/virtualbox/LATEST.TXT
 lastest=$(cat /tmp/LATEST.TXT ); echo lastest=$lastest
 
 
-uname -r | grep PAE >& /dev/null
-if [ $? -eq 0 ]
-then
-if [ -f '/etc/yum.repos.d/virtualbox.repo' ]; then
-yum -y install kernel-headers kernel-PAE-devel dkms gcc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing dependencias Virtualbox" --text="Please wait...." --pulsate --auto-close --width=350
-
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
-
-xterm -e 'yum -y install --enablerepo=virtualbox VirtualBox-4.2'
-wait ${!}
-xterm -e '/etc/init.d/vboxdrv setup'
-cd /tmp/
-wget -c  http://download.virtualbox.org/virtualbox/$lastest/Oracle_VM_VirtualBox_Extension_Pack-$lastest.vbox-extpack 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Virtual Box  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
-wait ${!}
-xterm -e "VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-$lastest.vbox-extpack"
-usermod -a -G vboxusers $noti
-groups $noti
-zenity --info --title="PostInstallerF" --text="Para obtener soporte usb en Oracle Virtual Box es necesario reiniciar el sistema "
-else
-wget -c -P/etc/yum.repos.d/ http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
-
-yum -y install kernel-headers kernel-PAE-devel dkms gcc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing dependencias de Virtual Box" --text="Please wait...." --pulsate --auto-close --width=350
-
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
-
-xterm -e 'yum -y install --enablerepo=virtualbox VirtualBox-4.2'
-xterm -e '/etc/init.d/vboxdrv setup'
-cd /tmp/
-wget -c  http://download.virtualbox.org/virtualbox/$lastest/Oracle_VM_VirtualBox_Extension_Pack-$lastest.vbox-extpack 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Virtual Box  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
-wait ${!}
-xterm -e "VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-$lastest.vbox-extpack"
-usermod -a -G vboxusers $noti
-groups $noti
-zenity --info --title="PostInstallerF" --text="Para obtener soporte usb en Oracle Virtual Box es necesario reiniciar el sistema "
-fi
-  else
-if [ -f '/etc/yum.repos.d/virtualbox.repo' ]; then
-yum -y install kernel-headers kernel-devel dkms gcc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing dependencias de Virtualbox" --text="Please wait...." --pulsate --auto-close --width=350
-
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
+            if [ -f '/etc/yum.repos.d/virtualbox.repo' ]; then
+yum -y install kernel-headers kernel-devel dkms gcc 2>&1 | zenity --progress  --title="Instalando dependencias de Virtual Box" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 xterm -e 'yum -y install --enablerepo=virtualbox VirtualBox-4.2'
 xterm -e '/etc/init.d/vboxdrv setup'
@@ -3800,22 +3653,20 @@ groups $noti
 zenity --info --title="PostInstallerF" --text="Para obtener soporte usb en Oracle Virtual Box es necesario reiniciar el sistema "
 else
 wget -c -P/etc/yum.repos.d/ http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
+yum -y install kernel-headers kernel-devel dkms gcc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando dependencias de Virtual Box" --text="Por favor espere...." --pulsate --auto-close --width=350
 
-yum -y install kernel-headers kernel-devel dkms gcc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing dependencias de Virtual Box" --text="Please wait...." --pulsate --auto-close --width=350
-
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 xterm -e 'yum -y install --enablerepo=virtualbox VirtualBox-4.2'
 xterm -e '/etc/init.d/vboxdrv setup'
 cd /tmp/
-wget -c  http://download.virtualbox.org/virtualbox/$lastest/Oracle_VM_VirtualBox_Extension_Pack-$lastest.vbox-extpack 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Virtual Box  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500 
+wget -c  http://download.virtualbox.org/virtualbox/$lastest/Oracle_VM_VirtualBox_Extension_Pack-$lastest.vbox-extpack 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Virtual Box  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 wait ${!}
 xterm -e "VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-$lastest.vbox-extpack"
 usermod -a -G vboxusers $noti
 groups $noti
 zenity --info --title="PostInstallerF" --text="Para obtener soporte usb en Oracle Virtual Box es necesario reiniciar el sistema "
 fi
- fi
 
 if [ -f "/etc/yum.repos.d/virtualbox.repo" ] && [ -f /usr/bin/VirtualBox ]; then
 rm -f /tmp/Oracle_VM_VirtualBox_Extension_Pack-*.vbox-extpack
@@ -3833,27 +3684,15 @@ fi
     }
      
     play(){
-            yum -y install cabextract | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Wine" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install wine cabextract | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Wine" --text="Por favor espere...." --pulsate --auto-close --width=350
 
- yum -y install ftp://ftp.pbone.net/mirror/cachalot.mine.nu/RPMS/winetricks-20110429-0.fc15.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Winetricks" --text="Please wait...." --pulsate --auto-close --width=350 
+ yum -y localinstall ftp://ftp.pbone.net/mirror/cachalot.mine.nu/RPMS/winetricks-20110429-0.fc15.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Winetricks" --text="Por favor espere...." --pulsate --auto-close --width=350 
 
-if [ -f /etc/yum.repos.d/playonlinux.repo ]; then
-echo 'exist repo PlayOnLinux'
-else
-echo '[playonlinux]
-name=PlayOnLinux Official repository
-baseurl=http://rpm.playonlinux.com/fedora/yum/base
-enable=1
-gpgcheck=0
-gpgkey=http://rpm.playonlinux.com/public.gpg
-skip_if_unavailable=1' >> /etc/yum.repos.d/playonlinux.repo
-fi
-wait ${!}
+yum -y localinstall http://rpm.playonlinux.com/PlayOnLinux_yum-3.3.rpm 
 
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
 
-
-yum -y install playonlinux | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "PlayOnLinux" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install playonlinux | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "PlayOnLinux" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/playonlinux ]; then
 $changelog
@@ -3869,10 +3708,8 @@ fi
 
     }
      
-    
-     
     team(){
-            yum -y install http://www.teamviewer.com/download/teamviewer_linux.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "TeamViewer" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y localinstall http://www.teamviewer.com/download/teamviewer_linux.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "TeamViewer" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ -f /opt/teamviewer/teamviewer ]; then
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
@@ -3898,12 +3735,11 @@ name=Dropbox Repository
 baseurl=http://linux.dropbox.com/fedora/$releasever/
 gpgkey=https://linux.dropbox.com/fedora/rpm-public-key.asc
 skip_if_unavailable=1' >> /etc/yum.repos.d/dropbox.repo
-wait ${!}
 yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep2.png" --image-on-top --progress --title "Updating new repositories" --text="Please wait...." --pulsate --auto-close --width=350
 yum -y install nautilus-dropbox | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Dropbox" --text="Please wait...." --pulsate --auto-close --width=350
 echo 'skip_if_unavailable=1' >> /etc/yum.repos.d/dropbox.repo
 fi
-
+            
 if [ -f /usr/bin/dropbox ]; then
 $changelog
 echo "DropBox" >> installed.log
@@ -3917,32 +3753,13 @@ zenity --info --title="PostInstallerF" --text="For some reason Dropbox not insta
 fi
 
     }
-
-
-    winf(){
-
-yum -y install winff | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Winff" --text="Please wait...." --pulsate --auto-close --width=350
-
-
-if [ -f /usr/bin/winff ]; then
-$changelog
-echo "Winff" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Winff" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Winff" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
- else 
-zenity --info --title="PostInstallerF" --text="For some reason Winff not installed, please try again"
-fi
-
-    }
-
      
     Hyper(){
+            
 
-yum -y install hypervc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Hyper Video Converter" --text="Please wait...." --pulsate --auto-close --width=350
-
+yum -y install hypervc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Hyper Video Converter" --text="Plesase wait...." --pulsate --auto-close --width=350
+ 
+ 
 
 if [ -f /usr/bin/hypervc ]; then
 $changelog
@@ -3957,8 +3774,6 @@ zenity --info --title="PostInstallerF" --text="For some reason Hyper Video Conve
 fi
 
     }
-
-
 
     mvcon(){
 
@@ -3978,12 +3793,10 @@ zenity --info --title="PostInstallerF" --text="For some reason Miro Video Conver
 fi
 
     }
-
      
     arista(){
 
-yum -y install arista | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Arista Transcoder" --text="Please wait...." --pulsate --auto-close --width=350
-
+yum -y install arista | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Arista Transcoder" --text="Por favor espere...." --pulsate --auto-close --width=350
            
 if [ -f /usr/bin/arista-gtk ]; then
 $changelog
@@ -4005,12 +3818,12 @@ rm -f /usr/share/applications/Transcoder.desktop
 else
 echo "ya esta instalado"
 fi
-            yum -y install gstreamer-plugins-bad gstreamer-plugins-bad-free-extras gstreamer-plugins-bad-nonfree gstreamer-plugins-ugly gstreamer-ffmpeg ffmpeg mencoder ffmpeg2theora mplayer | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing codecs de video y audio" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install gstreamer-plugins-bad gstreamer-plugins-bad-free-extras gstreamer-plugins-bad-nonfree gstreamer-plugins-ugly gstreamer-ffmpeg ffmpeg mencoder ffmpeg2theora mplayer | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "codecs de video y audio" --text="Por favor espere...." --pulsate --auto-close --width=350
 wait ${!}
 cd /usr/local/bin/
-wget -c -P/usr/local/bin/ http://sourceforge.net/projects/transcoder84/files/0.0.6/Transcoder_0.0.6_i386.tar.gz 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Transcoder  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
+wget -c -P/usr/local/bin/ http://sourceforge.net/projects/transcoder84/files/0.0.6/Transcoder_0.0.6_amd64.tar.gz 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Transcoder  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 cd /usr/local/bin/
-tar -xvzf Transcoder_0.0.6_i386.tar.gz 2>&1 | zenity --progress --title "Extrayendo e Installing Transcoder " --text="Please wait...." --pulsate --auto-close --width=350
+tar -xvzf Transcoder_0.0.6_amd64.tar.gz 2>&1 | zenity --progress --title "Extrayendo e instalando Transcoder " --text="Por favor espere...." --pulsate --auto-close --width=350
 cp -f /usr/local/bin/Transcoder/data/transcoder.png /usr/share/icons/
 
 echo "[Desktop Entry]
@@ -4026,7 +3839,7 @@ Comment=video convert
 Icon=/usr/share/icons/transcoder.png
 Categories=GTK;Application;AudioVideo;Video;" >> /usr/share/applications/Transcoder.desktop
 
-chmod +x /usr/share/applications/Transcoder.desktop
+chmod o=rwxs * /usr/share/applications/Transcoder.desktop
 
 if [ -f /usr/local/bin/Transcoder/Transcoder ]; then
 $changelog
@@ -4040,31 +3853,27 @@ fi
 zenity --info --title="PostInstallerF" --text="For some reason Transcoder not installed, please try again"
 fi
 
+
     }
      
     Mobilmedia(){
+            yum -y install mmc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Mobilmedia Converter" --text="Please wait...." --pulsate --auto-close --width=350
 
-yum -y install mmc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Mobilmedia Converter" --text="Please wait...." --pulsate --auto-close --width=350
 
-
-if [ -f /usr/bin/mmc ]; then
+if [ -f /usr/local/bin/mmc ]; then
 $changelog
 echo "Mobilmedia Converter" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Mobilmedia Converter" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Mobilmedia Converter" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
- else 
-zenity --info --title="PostInstallerF" --text="For some reason Mobilmedia Converter not installed, please try again"
+else 
+zenity --info --title="PostInstallerF" --text="Por alguna razon Mobilmedia Converter no esta instalado, vuelva a intentar "
 fi
 
     }
      
     yakiTo(){
-yum -y install gstreamer-plugins-bad gstreamer-plugins-bad-free-extras gstreamer-plugins-bad-nonfree gstreamer-plugins-ugly gstreamer-ffmpeg ffmpeg mencoder ffmpeg2theora mplayer | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing codecs de video y audio" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install gstreamer-plugins-bad gstreamer-plugins-bad-free-extras gstreamer-plugins-bad-nonfree gstreamer-plugins-ugly gstreamer-ffmpeg ffmpeg mencoder ffmpeg2theora mplayer | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "codecs de video y audio" --text="Por favor espere...." --pulsate --auto-close --width=350
 
-            yum -y install java | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Java OpenJDK" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install java | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Java OpenJDK" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 xterm -e 'curl -o yakito-0.1.2-linux.sh http://www.yakiboo.net/yakito/downloads/yakito-0.1.2-linux.sh' 
 wait ${!} 
@@ -4087,16 +3896,15 @@ fi
 
 ekd(){
 
-
 if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "18" ]; then
 
-yum -y install http://sourceforge.net/projects/postinstaller/files/data/ekd-3.1.2-1.fc18.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Ekd" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install ekd | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Ekd" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 else
 
-yum -y install gstreamer-plugins-bad gstreamer-plugins-bad-free-extras gstreamer-plugins-bad-nonfree gstreamer-plugins-ugly gstreamer-ffmpeg ffmpeg mencoder ffmpeg2theora mplayer | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing codecs de video y audio" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install gstreamer-plugins-bad gstreamer-plugins-bad-free-extras gstreamer-plugins-bad-nonfree gstreamer-plugins-ugly gstreamer-ffmpeg ffmpeg mencoder ffmpeg2theora mplayer | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando codecs de video y audio" --text="Por favor espere...." --pulsate --auto-close --width=350
 
-yum -y install mplayer mencoder ffmpeg2theora PyQt4 PyQt ImageMagick numpy python-imaging sox | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing dependencias para Ekd" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install PyQt4 PyQt ImageMagick numpy python-imaging sox | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando dependencias para Ekd" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 foo5=$(w3m -dump http://sourceforge.net/projects/ekd/files/ekd/); echo "foo5=$foo5" >> /tmp/ekd.txt 
 
@@ -4106,7 +3914,7 @@ wait ${!}
 
 latestfoo5=$(cat /tmp/lastest_ekd.txt ); echo "latestfoo5=$latestfoo5"
 
-yum -y install http://sourceforge.net/projects/ekd/files/ekd/$latestfoo5/GNU-Linux/ekd-$latestfoo5-2.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Ekd" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y localinstall http://sourceforge.net/projects/ekd/files/ekd/$latestfoo5/GNU-Linux/ekd-$latestfoo5-2.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Ekd" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 cat /dev/null > /tmp/ekd.txt
 cat /dev/null > /tmp/lastest_ekd.txt
@@ -4127,9 +3935,8 @@ fi
 
 ffmulticonverter(){
 
-
 yum -y install ffmulticonverter | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing ffmulticonverter" --text="Please wait...." --pulsate --auto-close --width=350
-
+ 
  
 
 if [ -f /usr/bin/ffmulticonverter ]; then
@@ -4144,10 +3951,10 @@ fi
 
     }
 
-     
+            
     gtkPod(){
             
-yum -y install gtkpod | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing dependencias para GtkPod" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install gtkpod | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando dependencias para GtkPod" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de GtkPod" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4159,7 +3966,7 @@ fi
     }
      
     easyTag(){
-            yum -y install easytag | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing EasyTag" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install easytag | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando EasyTag" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de EasyTag" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4171,7 +3978,7 @@ fi
     }
      
     avidemux(){
-            yum -y install avidemux | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Avidemux" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install avidemux | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Avidemux" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Avidemux" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4183,7 +3990,7 @@ fi
     }
      
     blender(){
-            yum -y install blender | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Blender" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install blender | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Blender" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Blender" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4193,6 +4000,7 @@ fi
 
             echo "Blender" >> installed.log
     }
+
 
     tupapi(){
             yum -y install tupi | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Tupi" --text="Por favor espere...." --pulsate --auto-close --width=350
@@ -4206,25 +4014,23 @@ fi
             echo "Tupi" >> installed.log
     }
 
+
+
 brlcad(){
-yum -y install http://sourceforge.net/projects/brlcad/files/BRL-CAD%20for%20Linux/7.22.0/brlcad-7.22.0-0.fedora.i386.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing BRL-CAD" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y localinstall http://sourceforge.net/projects/brlcad/files/BRL-CAD%20for%20Linux/7.20.6/brlcad-7.20.6-0.fedora.x86_64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando BRL-CAD" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ -f /usr/brlcad/bin/brlcad-config ]; then
 $changelog
 echo "BRL-CAD" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de BRL-CAD" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of BRL-CAD" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
- else 
-zenity --info --title="PostInstallerF" --text="For some reason BRL-CAD not installed, please try again"
+else 
+zenity --info --title="PostInstallerF" --text="Por alguna razon BRL-CAD no esta instalado, vuelva a intentar "
 fi
 
     }
 
      
-    Sweet(){
+    Sweet(){  
 if [ -f /usr/share/applications/SweetHome3D.desktop ]; then
 rm -f /usr/share/applications/SweetHome3D.desktop 
 fi
@@ -4241,11 +4047,11 @@ if [ -d /home/$noti/.sweethome/ ]; then
 rm -R /home/$noti/.sweethome/
 fi
 
-if [ -f /opt/SweetHome3D-linux-x86.tgz ]; then
-rm -f /opt/SSweetHome3D-linux-x86.tgz 
+if [ -f /opt/SweetHome3D-linux-x64.tgz ]; then
+rm -f /opt/SweetHome3D-linux-x64.tgz 
 fi
 
-
+        
 xterm -e 'wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/SweetHome3DLogo.png'
 
 xterm -e 'wget -c -P/usr/bin/ http://sourceforge.net/projects/postinstaller/files/scripts/sweethome3d.sh'
@@ -4259,7 +4065,7 @@ latestfoo=$(cat /tmp/lastest_sweethome.txt ); echo "latestfoo=$latestfoo"
         
 cd /opt/ 
 
-wget -c -O SweetHome3D-linux-x86.tgz http://sourceforge.net/projects/sweethome3d/files/SweetHome3D/$latestfoo/$latestfoo-linux-x86.tgz 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:SweetHome3D  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500 
+wget -c -O SweetHome3D-linux-x64.tgz http://sourceforge.net/projects/sweethome3d/files/SweetHome3D/$latestfoo/$latestfoo-linux-x64.tgz 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:SweetHome3D  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500 
 
 
 wait ${!}
@@ -4277,7 +4083,7 @@ Comment=Free interior design application that helps you place your furniture on 
 
 chmod a+x /usr/bin/sweethome3d.sh
 chmod a+x /usr/share/applications/SweetHome3D.desktop
-chmod a+rwx /opt/SweetHome3D-linux-x86.tgz
+chmod a+rwx /opt/SweetHome3D-linux-x64.tgz
 
 cat /dev/null > /tmp/sweethome.txt
 
@@ -4298,23 +4104,25 @@ fi
     }
      
     libreCAD(){
+if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) != "16" ]
+then
+yum -y install qt boost | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando dependencias para LibreCAD" --text="Por favor espere...." --pulsate --auto-close --width=350
 
-if [ -f /etc/yum.repos.d/LibreCAD.repo ]; then
-echo 'ya se encuentra el repositorio de librecad'
-else
-echo '[home_Rallaz]
-name=LibreCAD
-type=rpm-md
-baseurl=http://download.opensuse.org/repositories/home:/Rallaz/Fedora_$releasever/
-gpgcheck=1
-gpgkey=http://download.opensuse.org/repositories/home:/Rallaz/Fedora_$releasever/repodata/repomd.xml.key
-enabled=1
-skip_if_unavailable=1' >> /etc/yum.repos.d/LibreCAD.repo
-fi
-
+wget -c -P/usr/local/ http://sourceforge.net/projects/postinstaller/files/Fedora%2017/librecad64.tar.gz 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:LibreCAD  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
+cd /usr/local/
+tar -xvzf librecad64.tar.gz
 wait ${!}
-
-yum -y install librecad | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing LibreCAD" --text="Please wait...." --pulsate --auto-close --width=350
+cd librecad
+cp -f /usr/local/librecad/bin/librecad /usr/bin/
+cp -f /usr/local/librecad/share/applications/librecad.desktop /usr/share/applications/
+cp -R /usr/local/librecad/share/librecad/ /usr/share/
+cp -R /usr/local/librecad/share/applications/ /usr/share/
+cp -R /usr/local/librecad/share/pixmaps/ /usr/share/
+chmod a+x /usr/bin/librecad
+chmod a+x /usr/share/applications/librecad.desktop
+else 
+yum -y install http://sourceforge.net/projects/rallaz.u/files/LibreCAD-1.0.1/Fedora_16/librecad-1.0.1-1.1.x86_64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando LibreCAD" --text="Por favor espere...." --pulsate --auto-close --width=350
+fi   
 
 if [ -f /usr/bin/librecad ]; then
 $changelog
@@ -4330,9 +4138,8 @@ fi
 
     }
 
-
 freecad(){
-yum -y install freecad | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing FreeCAD" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install freecad | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando FreeCAD" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/FreeCAD ]; then
 $changelog
@@ -4349,8 +4156,8 @@ fi
     }
 
 
-    Draft(){
-yum -y install http://dl-ak.solidworks.com/nonsecure/draftsight/V1R2.0/draftSight.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing DraftSight" --text="Please wait...." --pulsate --auto-close --width=350
+Draft(){
+yum -y localinstall http://dl-ak.solidworks.com/nonsecure/draftsight/V1R2.0/draftSight.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando DraftSight" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/draftsight ]; then
 $changelog
@@ -4365,10 +4172,10 @@ zenity --info --title="PostInstallerF" --text="For some reason DraftSight not in
 fi 
 
     }
-  
+
      
     inkscape(){
-            yum -y install inkscape | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Inkscape" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install inkscape | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Inkscape" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Inkscape" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4379,32 +4186,15 @@ fi
             echo "Inkscape" >> installed.log
     }
 
-
-    chemy(){
-            yum -y install alchemy | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Alchemy" --text="Please wait...." --pulsate --auto-close --width=350
-
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Alchemy" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Alchemy" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
-           
-            echo "Alchemy" >> installed.log
-    }
-
      
     openshot(){
-            yum -y install blender | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Blender as complement a Openshot" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install blender | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Blender como complemento a Openshot" --text="Por favor espere...." --pulsate --auto-close --width=350
 
- yum -y install inkscape | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Inkscape as complement a Openshot" --text="Please wait...." --pulsate --auto-close --width=350
+ yum -y install inkscape | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Inkscape como complemento a Openshot" --text="Por favor espere...." --pulsate --auto-close --width=350
 
- yum -y install openshot | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Openshot" --text="Please wait...." --pulsate --auto-close --width=350
+ yum -y install openshot | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Openshot" --text="Por favor espere...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Openshot" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Openshot" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
 
 echo "Inkscape" >> installed.log
 echo "Blender" >> installed.log
@@ -4412,9 +4202,11 @@ echo "Openshot" >> installed.log
 
     }
 
-
 kden(){
-            yum -y install kdenlive | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Kdenlive" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install kdenlive | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Kdenlive" --text="Por favor espere...." --pulsate --auto-close --width=350
+
+$changelog
+echo "Kdenlive" >> installed.log
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Kdenlive" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4422,14 +4214,15 @@ else
 su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Kdenlive" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
 
-echo "Kdenlive" >> installed.log
-
     }
 
 
-
 lives(){
-            yum -y install lives | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Lives" --text="Please wait...." --pulsate --auto-close --width=350
+            
+
+ yum -y install lives | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Lives" --text="Por favor espere...." --pulsate --auto-close --width=350
+
+
 
 if [ -f /usr/bin/lives ]; then
 $changelog
@@ -4447,7 +4240,7 @@ fi
 
 
 imagination(){
-            yum -y install imagination | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Imagination" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install imagination | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Imagination" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Imagination" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4461,7 +4254,7 @@ echo "Imagination" >> installed.log
 
 
 deveDe(){
-            yum -y install devede | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing DeveDe" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install devede | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando DeveDe" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de DeveDe" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4475,7 +4268,7 @@ echo "DeveDe" >> installed.log
 
 
 dVDStyler(){
-            yum -y install dvdstyler | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing DVDStyler" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install dvdstyler | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando DVDStyler" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de DVDStyler" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4492,10 +4285,10 @@ ffaporama(){
             
 if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "17" ]
 then
-xterm -e 'yum -y install http://ffdiaporama.tuxfamily.org/download.php?f=Stable/1.3_20120627/ffDiaporama-1.3.2012.0627-0.fc17.i686.rpm'
+xterm -e 'yum -y localinstall http://ffdiaporama.tuxfamily.org/download.php?f=Stable/1.3_20120627/ffDiaporama-1.3.2012.0627-0.fc17.x86_64.rpm'
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "16" ]
 then
-xterm -e 'yum -y install http://ffdiaporama.tuxfamily.org/download.php?f=Stable/1.3_20120526/ffDiaporama-1.3.2012.0526-0.fc16.i686.rpm'
+xterm -e 'yum -y localinstall http://ffdiaporama.tuxfamily.org/download.php?f=Stable/1.3_20120526/ffDiaporama-1.3.2012.0526-0.fc16.x86_64.rpm'
 else
 yum -y install ffdiaporama | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing ffDiaporama" --text="Please wait...." --pulsate --auto-close --width=350
 fi
@@ -4535,7 +4328,7 @@ fi
 
 
 Virtual(){
-            yum -y install darktable | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Virtual Lighttable and Darkroom" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install darktable | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Virtual Lighttable and Darkroom" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Virtual Lighttable and Darkroom" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4549,7 +4342,7 @@ echo "Virtual Lighttable and Darkroom" >> installed.log
 
 
 GnomeSubtitles(){
-            yum -y install gnome-subtitles | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Gnome Subtitles" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install gnome-subtitles | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Gnome Subtitles" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Gnome Subtitles" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4563,7 +4356,7 @@ echo "Gnome Subtitles" >> installed.log
 
 
 vlc(){
-            yum -y install vlc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Vlc Media Player" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install vlc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Vlc Media Player" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de VLC media player" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4574,7 +4367,6 @@ fi
 echo "VLC media player" >> installed.log
 
     }
-
 
 flix(){
 
@@ -4588,10 +4380,6 @@ fi
 
 if [ -f /tmp/Netflix.sh ]; then
 rm -f /tmp/Netflix.sh
-fi
-
-if [ -f /usr/bin/Netflix.sh ]; then
-rm -f /usr/bin/Netflix.sh
 fi
 
 if [ -f /opt/Netflix.sh ]; then
@@ -4611,7 +4399,6 @@ fi
 zenity --info --title="PostInstallerF" --text="For some reason Netflix Player not installed, please try again"
 fi
 
-
     }
 
 
@@ -4621,7 +4408,8 @@ if [ -f /tmp/addonsxbmc.tar.gz ]; then
 rm -f /tmp/addonsxbmc.tar.gz
 fi
 
-            yum -y install xbmc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing XBMC" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install xbmc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando XBMC" --text="Por favor espere...." --pulsate --auto-close --width=350
+
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de XBMC" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4635,7 +4423,7 @@ echo "XBMC" >> installed.log
 
 
 clementine(){
-            yum -y install qtwebkit clementine | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Clementine" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install qtwebkit clementine | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Clementine" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Clementine" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4649,7 +4437,7 @@ echo "Clementine" >> installed.log
 
 
 sound(){
-            yum -y install soundconverter | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Sound Converter" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install soundconverter | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Sound Converter" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Sound converter" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4663,7 +4451,7 @@ echo "Sound converter" >> installed.log
 
 
 audacity(){
-            yum -y install audacity | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Audacity" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install audacity | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Audacity" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Audacity" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4671,13 +4459,14 @@ else
 su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Audacity" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
 
+
 echo "Audacity" >> installed.log
 
     }
 
 
 ocenaudio(){
-            yum -y install http://www.ocenaudio.com.br/downloads/ocenaudio32.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing OcenAudio" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y localinstall http://www.ocenaudio.com.br/downloads/ocenaudio64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando OcenAudio" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de OcenAudio" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4690,9 +4479,8 @@ echo "OcenAudio" >> installed.log
     }
 
 
-
 mix(){
-            yum -y install mixxx | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Mixxx" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install mixxx | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Mixxx" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Mixxx" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4705,8 +4493,9 @@ echo "Mixxx" >> installed.log
     }
 
 
+
 skype(){
-            yum -y install skype | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Skype" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install skype | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Skype" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/skype ]; then
 $changelog
@@ -4720,29 +4509,12 @@ fi
 zenity --info --title="PostInstallerF" --text="For some reason SKYPE not installed, please try again"
 fi
 
-    }
-
-
-jitsi(){
-            yum -y localinstall https://download.jitsi.org/jitsi/rpm/jitsi-2.2-latest.i386.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Jitsi" --text="Por favor espere...." --pulsate --auto-close --width=350
-
-if [ -f /usr/bin/jitsi ]; then
-$changelog
-echo "Jitsi" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Jitsi" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Jitsi" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
- else 
-zenity --info --title="PostInstallerF" --text="For some reason Jitsi not installed, please try again"
-fi
-
 
     }
+
 
 turpial(){
-            yum -y install turpial | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Turpial" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install turpial | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Turpial" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Turpial" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4756,7 +4528,7 @@ echo "Turpial" >> installed.log
 
 
 gwibber(){
-            yum -y install gwibber | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Gwibber" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install gwibber | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Gwibber" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Gwibber" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4770,7 +4542,7 @@ echo "Gwibber" >> installed.log
 
 
 bible(){
-            yum -y install bibletime | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Bible Time" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install bibletime | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Bible Time" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Bible Time" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4784,7 +4556,7 @@ echo "Bible Time" >> installed.log
 
 
 tuxpaint(){
-            yum -y install tuxpaint | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Tuxpaint" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install tuxpaint | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Tuxpaint" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Tuxpaint" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4798,7 +4570,7 @@ echo "Tuxpaint" >> installed.log
 
 
 Stellar(){
-            yum -y install stellarium | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Stellarium" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install stellarium | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Stellarium" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Stellarium" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4812,7 +4584,7 @@ echo "Stellarium" >> installed.log
 
 
 celestia(){
-            yum -y install celestia | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Celestia" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install celestia | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Celestia" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Celestia" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4826,7 +4598,7 @@ echo "Celestia" >> installed.log
 
 
 Earth(){
-            yum -y install http://dl.google.com/dl/earth/client/current/google-earth-stable_current_i386.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Google Earth" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y localinstall http://dl.google.com/dl/earth/client/current/google-earth-stable_current_x86_64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Google Earth" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ -f /opt/google/earth/free/googleearth ]; then
 $changelog
@@ -4840,11 +4612,12 @@ fi
 zenity --info --title="PostInstallerF" --text="For some reason Google Earth not installed, please try again"
 fi
 
+
     }
 
 
 gcompris(){
-            yum -y install gcompris | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Gcompris" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install gcompris | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Gcompris" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Gcompris" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4858,7 +4631,7 @@ echo "Gcompris" >> installed.log
 
 
 tuxMath(){
-            yum -y tuxmath | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing TuxMath" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y tuxmath | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando TuxMath" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de TuxMath" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4872,7 +4645,7 @@ echo "TuxMath" >> installed.log
 
 
 tuxType(){
-            yum -y install tuxtype2 | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing TuxType" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install tuxtype2 | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando TuxType" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de TuxType" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4886,7 +4659,7 @@ echo "TuxType" >> installed.log
 
 
 childsplay(){
-            yum -y install childsplay | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Childsplay" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install childsplay | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Childsplay" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Childsplay" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4900,7 +4673,7 @@ echo "Childsplay" >> installed.log
 
 
 scratch(){
-            yum -y install http://info.scratch.mit.edu/sites/infoscratch.media.mit.edu/files/file/scratch-1.4.0.1-1.i386.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Scratch" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y localinstall http://info.scratch.mit.edu/sites/infoscratch.media.mit.edu/files/file/scratch-1.4.0.1-1.i386.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Scratch" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/scratch ]; then
 $changelog
@@ -4918,7 +4691,7 @@ fi
 
 
 ri(){
-            yum -y install Ri-li | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Ri-li" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install Ri-li | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Ri-li" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Ri-li" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4932,7 +4705,7 @@ echo "Ri-li" >> installed.log
 
 
 Frozen(){
-            yum -y install frozen-bubble | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Frozen Bubble" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install frozen-bubble | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Frozen Bubble" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Frozen Bubble" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4946,7 +4719,7 @@ echo "Frozen Bubble" >> installed.log
 
 
 Extreme(){
-            yum -y install extremetuxracer | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Extreme Tux Racer" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install extremetuxracer | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Extreme Tux Racer" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Extreme Tux Racer" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4960,7 +4733,7 @@ echo "Extreme Tux Racer" >> installed.log
 
 
 Super(){
-            yum -y install supertuxkart | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Super Tux Kart" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install supertuxkart | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Super Tux Kart" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Extreme Super Tux Kart" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4973,8 +4746,9 @@ echo "Super Tux Kart" >> installed.log
     }
 
 
+
 wormux(){
-            yum -y install wormux | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Wormux" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install wormux | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Wormux" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Wormux" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4988,7 +4762,7 @@ echo "Wormux" >> installed.log
 
 
 tremulous(){
-            yum -y install tremulous | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Tremulous" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install tremulous | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Tremulous" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Tremulous" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -5002,7 +4776,7 @@ echo "Tremulous" >> installed.log
 
 
 Methane(){
-            yum -y install methane | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Super Methane Brothers" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install methane | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Super Methane Brothers" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Super Methane Brothers" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -5016,7 +4790,7 @@ echo "Super Methane Brothers" >> installed.log
 
 
 pingus(){
-            yum -y install pingus | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Pingus" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install pingus | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Pingus" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Pingus" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -5030,7 +4804,7 @@ echo "Pingus" >> installed.log
 
 
 hedgewars(){
-             yum -y install hedgewars | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Hedgewars" --text="Please wait...." --pulsate --auto-close --width=350
+             yum -y install hedgewars | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Hedgewars" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Hedgewars" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -5044,7 +4818,7 @@ echo "Hedgewars" >> installed.log
 
 
 glaxium(){
-            yum -y install glaxium | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Glaxium" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install glaxium | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Glaxium" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Glaxium" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -5058,7 +4832,7 @@ echo "Glaxium" >> installed.log
 
 
 amoebax(){
-            yum -y install amoebax | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Amoebax" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install amoebax | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Amoebax" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Amoebax" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -5072,7 +4846,7 @@ echo "Amoebax" >> installed.log
 
 
 AlienArena(){
-            yum -y install alienarena | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Alien Arena" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install alienarena | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Alien Arena" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Alien Arena" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -5086,7 +4860,7 @@ echo "Alien Arena" >> installed.log
 
 
 tORCS(){
-            yum -y install torcs | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing TORCS" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install torcs | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando TORCS" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de TORCS" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -5100,7 +4874,7 @@ echo "TORCS" >> installed.log
 
 
 flightGear(){
-            yum -y install FlightGear | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing FlightGear" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install FlightGear | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando FlightGear" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de FlightGear" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -5115,8 +4889,7 @@ echo "FlightGear" >> installed.log
 
 perfo(){
 
-
-yum -y install performous | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Performous" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install performous | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Performous" --text="Por favor espere...." --pulsate --auto-close --width=350 
 
 if [ -f /usr/bin/performous ]; then  
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
@@ -5129,11 +4902,11 @@ echo "Performous" >> installed.log
 zenity --info --title="PostInstallerF" --text="For some reason Performous not installed, please try again"
 fi
 
+
     }
 
 
 stea(){
-
 
 if [ -f /tmp/steam*.rpm ]; then
 rm -f /tmp/steam*.rpm
@@ -5148,7 +4921,7 @@ baseurl=http://spot.fedorapeople.org/steam/fedora-$releasever/
 enabled=1
 skip_if_unavailable=1
 gpgcheck=0' >> /etc/yum.repos.d/steam.repo
-fi  
+fi 
 
 wait ${!}
 
@@ -5166,6 +4939,7 @@ zenity --info --title="PostInstallerF" --text="For some reason Steam not install
 fi
 
     }
+
 
 aqua(){
 
@@ -5196,7 +4970,7 @@ fi
 
 
 Gnutella(){
-            yum -y install gtk-gnutella | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Gtk-Gnutella" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install gtk-gnutella | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Gtk-Gnutella" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Gtk-Gnutella" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -5210,7 +4984,6 @@ echo "Gtk-Gnutella" >> installed.log
 
 
 grooveDown(){
-
 rm -f /usr/share/applications/GrooveDown.desktop
 rm -rf /usr/share/GrooveDown/
 rm -R /usr/local/bin/GrooveDown/
@@ -5239,9 +5012,6 @@ fi
 
 veOff(){
 
-if [ -f /etc/yum.repos.d/home:gcala.repo ]; then
-echo 'se encuentra el repo'
-else
 echo '[home_gcala]
 name=gcala Home Project
 type=rpm-md
@@ -5250,10 +5020,15 @@ gpgcheck=1
 gpgkey=http://download.opensuse.org/repositories/home:/gcala/Fedora_$releasever/repodata/repomd.xml.key
 enabled=1
 skip_if_unavailable=1' >> /etc/yum.repos.d/home:gcala.repo
-fi
 
-wait ${!}
 yum -y install grooveoff | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing GrooveOff" --text="Please wait...." --pulsate --auto-close --width=350
+
+
+if [ -f /etc/yum.repos.d/home:gcala.repo ]; then
+echo 'se encuentra el repo'
+else
+xterm -e 'yum -y localinstall http://download.opensuse.org/repositories/home:/gcala/Fedora_18/x86_64/grooveoff-0.1.1-20.1.x86_64.rpm'
+fi
 
 
 if [ -f /usr/bin/grooveoff ]; then
@@ -5290,12 +5065,11 @@ fi
  else 
 zenity --info --title="PostInstallerF" --text="For some reason Frostwire not installed, please try again"
 fi
-
     }
 
 
 uget(){
-            yum -y install uget | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing UGET" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install uget | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando UGET" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de UGET" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -5309,11 +5083,7 @@ echo "UGET" >> installed.log
 
 
 flare(){
-
-cd /tmp/
-wget -c -O flareget32.rpm http://www.flareget.com/files/flareget/rpm/i386/rpm.php 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Flareget  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
-wait ${!}
-            yum -y install flareget32.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing FlareGet" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install http://www.flareget.com/files/flareget/rpms/amd64/flareget-1.4-7.x86_64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing FlareGet" --text="Please wait...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/flareget ]; then
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
@@ -5325,13 +5095,11 @@ fi
 zenity --info --title="PostInstallerF" --text="For some reason FlareGet not installed, please try again"
 fi
 
-rm -f /tmp/flareget32.rpm
-
     }
 
 
 tucan(){
-            yum -y install tucan | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Tucan Manager" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install tucan | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Tucan Manager" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Tucan Manager" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -5345,7 +5113,7 @@ echo "Tucan Manager" >> installed.log
 
 
 YumExtender(){
-            yum -y install yumex | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Yum Extender" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install yumex | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Yum Extender" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Yum Extender" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -5359,7 +5127,7 @@ echo "Yum Extender" >> installed.log
 
 
 blue(){
-            yum -y install blueman | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Blueman" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install blueman | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Blueman" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Blueman" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -5373,7 +5141,7 @@ echo "Blueman" >> installed.log
 
 
 Chrome(){
-            yum -y install https://dl.google.com/linux/direct/google-chrome-stable_current_i386.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Google-Chrome" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y localinstall https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Google-Chrome" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ -f /opt/google/chrome/google-chrome ]; then
 $changelog
@@ -5387,31 +5155,27 @@ fi
 zenity --info --title="PostInstallerF" --text="For some reason Google-Chrome not installed, please try again"
 fi
 
+
     }
 
 
 chromium(){
             
- yum -y install chromium | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Chromium" --text="Please wait...." --pulsate --auto-close --width=350  
+ yum -y install chromium | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Chromium" --text="Por favor espere...." --pulsate --auto-close --width=350   
 
 if [ -f /usr/lib/chromium/chromium-wrapper ]; then
 $changelog
 echo "Chromium" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Chromium" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Chromium" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
- else 
-zenity --info --title="PostInstallerF" --text="For some reason Chromium not installed, please try again"
+else 
+zenity --info --title="PostInstallerF" --text="Por alguna razon Navegador Chromium no esta instalado, vuelva a intentar "
 fi
 
     }
 
 
 opera(){
-            yum -y install opera | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Navegador Opera" --text="Please wait...." --pulsate --auto-close --width=350
-
+            yum -y install opera | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Navegador Opera" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/opera ]; then
 $changelog
@@ -5429,17 +5193,14 @@ fi
 
 
 bleachBit(){
-      
-yum -y install bleachbit | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing BleachBit" --text="Please wait...." --pulsate --auto-close --width=350
-
-
+            yum -y install bleachbit | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando BleachBit" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 foo7=$(w3m -dump http://sourceforge.net/projects/bleachbit/files/bleachbit/); echo "foo7=$foo7" >> /tmp/bleachbit.txt | egrep '0.9.' /tmp/bleachbit.txt | awk '{print $1}' | head -1 >> /tmp/lastest_bleachbit.txt 
 wait ${!}
 
 latestfoo7=$(cat /tmp/lastest_bleachbit.txt ); echo "latestfoo7=$latestfoo7"
 
-yum -y install http://sourceforge.net/projects/bleachbit/files/bleachbit/$latestfoo7/bleachbit-$latestfoo7-1.1.fc17.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing BleachBit" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y localinstall http://sourceforge.net/projects/bleachbit/files/bleachbit/$latestfoo7/bleachbit-$latestfoo7-1.1.fc17.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando BleachBit" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 cat /dev/null > /tmp/bleachbit.txt
 cat /dev/null > /tmp/lastest_bleachbit.txt
@@ -5460,7 +5221,7 @@ fi
 
 
 GnomeTweak(){
-            yum -y install python-devel gnome-tweak-tool dconf-editor gconf-editor | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing GnomeTweakTool y dconf-editor" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install python-devel gnome-tweak-tool dconf-editor gconf-editor | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando GnomeTweakTool y dconf-editor" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de GnomeTweakTool y dconf-editor" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -5472,25 +5233,9 @@ echo "GnomeTweakTool y dconf-editor" >> installed.log
 
     }
 
-melibre(){
-            yum -y install menulibre | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Menu Libre" --text="Por favor espere...." --pulsate --auto-close --width=350
-
-if [ -f /usr/bin/menulibre ]; then
-$changelog
-echo "Menu Libre" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Menu Libre" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Menu Libre" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
- else 
-zenity --info --title="PostInstallerF" --text="For some reason Menu Libre not installed, please try again"
-fi
-
-    }
 
 pendientes(){
-            yum-complete-transaction -y | pv -en 2>&1 | zenity --progress --title "Completando Instalaciones pendientes" --text="Please wait...." --pulsate --auto-close --width=350
+            yum-complete-transaction -y | pv -en 2>&1 | zenity --progress --title "Completando Instalaciones pendientes" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completado Instalaciones pendientes" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -5502,20 +5247,17 @@ fi
 
 
 bitdefender(){
+          
+yum -y localinstall http://download.bitdefender.com/repos/rpm/bitdefender/x86_64/bitdefender-scanner-7.6-3.x86_64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Bitdefender Antivirus- scanner" --text="Please wait...." --pulsate --auto-close --width=350
 
-yum -y install http://download.bitdefender.com/repos/rpm/bitdefender/i586/bitdefender-scanner-7.6-3.i586.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Bitdefender Antivirus- scanner" --text="Please wait...." --pulsate --auto-close --width=350
 
+yum -y localinstall http://download.bitdefender.com/repos/rpm/bitdefender/x86_64/bitdefender-scanner-gui-1.0-3.x86_64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Bitdefender Antivirus- scanner gui" --text="Please wait...." --pulsate --auto-close --width=350
 
-yum -y install http://download.bitdefender.com/repos/rpm/bitdefender/i586/bitdefender-scanner-gui-1.0-3.i586.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Bitdefender Antivirus- scanner gui" --text="Please wait...." --pulsate --auto-close --width=350
-
-if [ -f /opt/BitDefender-scanner/bin/bdgui ] && [ -f /opt/BitDefender-scanner/bin/bdscan ]; then
-$changelog
-echo "Bitdefender" >> installed.log
-
+if [ -f /opt/BitDefender-scanner/bin/bdgui ] || [ -f /opt/BitDefender-scanner/bin/bdscan ]; then
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Bitdefender" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Bitdefender" -i "/usr/share/icons/pinguino.png" -t 5000'
+else
+su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Bitdefender" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
  else 
 zenity --info --title="PostInstallerF" --text="For some reason Bitdefender not installed, please try again"
@@ -5535,11 +5277,12 @@ $(lspci | grep -i network)\n\nUptime:
 $(uptime)" --ok-label="Ok"
 
 
+
     }
 
 
 hardinfo(){
-            yum -y install hardinfo | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Hardinfo" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install hardinfo | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Hardinfo" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Hardinfo" -i "/usr/share/icons/sistema.png" -t 5000'
@@ -5553,8 +5296,7 @@ echo "Hardinfo" >> installed.log
 
 
 batti(){
-            yum -y install batti | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Batti" --text="Please wait...." --pulsate --auto-close --width=350
-
+            yum -y install batti | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Batti" --text="Por favor espere...." --pulsate --auto-close --width=350
 echo "@batti" >> /etc/xdg/lxsession/LXDE/autostart
 exec /usr/bin/batti
 
@@ -5570,7 +5312,7 @@ echo "Batti" >> installed.log
 
 
 alien(){
-             yum -y install http://sourceforge.net/projects/postinstaller/files/data/alien-8.86-1.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Alien" --text="Please wait...." --pulsate --auto-close --width=350
+             yum -y localinstall http://sourceforge.net/projects/postinstaller/files/data/alien-8.86-1.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Alien" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/alien ]; then
 $changelog
@@ -5591,7 +5333,7 @@ truetype(){
             if [ -d /usr/share/fonts/msttcorefonts ]; then
 zenity --info --title="PostInstallerF" --text="Ya tenes instalado Microsoft TrueType core fonts, nada que hacer"
 else
-yum -y install http://sourceforge.net/projects/postinstaller/files/fuduntu/msttcorefonts-2.0-2.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Microsoft TrueType core fonts" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y localinstall http://sourceforge.net/projects/postinstaller/files/fuduntu/msttcorefonts-2.0-2.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Microsoft TrueType core fonts" --text="Por favor espere...." --pulsate --auto-close --width=350
 fi
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
@@ -5599,10 +5341,6 @@ su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Microsof
 else
 su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Microsoft TrueType core fonts" -i "/usr/share/icons/sistema.png" -t 5000'
 fi
-
-$changelog
-echo "Microsoft TrueType core fonts" >> installed.log
-
 
 
     }
@@ -5612,11 +5350,7 @@ echo "Microsoft TrueType core fonts" >> installed.log
 cleanlog(){
             cat /dev/null > /usr/share/.postinstallerf/installed.log
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Se ha realizado el reset de PostInstallerF" -i "/usr/share/icons/sistema.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The PostInstallerF reset is complete" -i "/usr/share/icons/sistema.png" -t 5000'
-fi
 
     }
 
@@ -5677,7 +5411,7 @@ fi
     #if there was something to do
     if test ${#choice} -gt 0; then
        /usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+       if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "Terminado!" "Todo está completado" -i "/usr/share/icons/pinguino.png" -t 10000'
 else
        su $noti -c 'notify-send "Finish!" "All tasks were completed" -i "/usr/share/icons/pinguino.png" -t 10000'
