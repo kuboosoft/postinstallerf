@@ -18,7 +18,7 @@
 # | debe dirigirse a:                                                              |
 # | http:www.kuboosoft.blogspot.com                                                |
 # +--------------------------------------------------------------------------------+
-# FEDORA 17, 18, 19 ADPOST 2.1 32 BITS
+# FEDORA 16, 17, 18, 19 ADPOST 2.1 32 BITS
 
 # ACTUALIZACION DE ADPOST
 updater=/usr/share/updatepostintaller/addpost.sh
@@ -30,10 +30,10 @@ echo "Aun no se ha descargado el archivo de actualizacion"
 fi
 
 if [ -d /usr/share/updatepostintaller/ ]; then
-xterm -e 'wget -c -P/usr/share/updatepostintaller/ http://postinstallerfedora.googlecode.com/files/addpost.sh'
+xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/addpost.sh'
 else
 mkdir /usr/share/updatepostintaller/
-xterm -e 'wget -c -P/usr/share/updatepostintaller/ http://postinstallerfedora.googlecode.com/files/addpost.sh'
+xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/addpost.sh'
 fi 
 
 source=/usr/bin/postinstallerf/addpost.sh
@@ -2513,7 +2513,7 @@ if echo $choice | grep "Java JRE Oracle" > /dev/null; then
                     pdfsam
             fi
 
-      if echo $choice | grep "YAGF" > /dev/null; then
+	    if echo $choice | grep "YAGF" > /dev/null; then
                     yagsca
             fi
 
@@ -5142,8 +5142,13 @@ fi
 if [ -f /etc/yum.repos.d/steam.repo ]; then
 echo 'exist repository steam'
 else
-xterm -e 'wget -c -P/etc/yum.repos.d/ http://spot.fedorapeople.org/steam/steam.repo'
-fi 
+echo '[steam]
+name=Steam RPM packages (and dependencies) for Fedora
+baseurl=http://spot.fedorapeople.org/steam/fedora-$releasever/
+enabled=1
+skip_if_unavailable=1
+gpgcheck=0' >> /etc/yum.repos.d/steam.repo
+fi  
 
 wait ${!}
 
