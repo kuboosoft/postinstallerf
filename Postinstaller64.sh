@@ -364,10 +364,10 @@ echo "Aun no se ha descargado el archivo de actualizacion"
 fi
 
 if [ -d /usr/share/updatepostintaller/ ]; then
-xterm -e 'wget -c -P/usr/share/updatepostintaller/ http://postinstallerfedora.googlecode.com/files/Postinstaller64.sh'
+xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller64.sh'
 else
 mkdir /usr/share/updatepostintaller/
- wget -c -P/usr/share/updatepostintaller/ http://postinstallerfedora.googlecode.com/files/Postinstaller64.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
+ wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller64.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 fi 
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
@@ -408,10 +408,10 @@ echo "Aun no se ha descargado el archivo de actualizacion"
 fi
 
 if [ -d /usr/share/updatepostintaller/ ]; then
-xterm -e 'wget -c -P/usr/share/updatepostintaller/ http://postinstallerfedora.googlecode.com/files/Postinstaller64.sh'
+xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller64.sh'
 else
 mkdir /usr/share/updatepostintaller/
- wget -c -P/usr/share/updatepostintaller/ http://postinstallerfedora.googlecode.com/files/Postinstaller64.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
+ wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller64.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 fi 
 
 
