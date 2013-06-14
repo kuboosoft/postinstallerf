@@ -466,6 +466,14 @@ im=$im"FALSE \"Arista Transcoder\"                   \"Conversion de video para 
 fi
             fi
 
+if ! $installed | grep "Qwinff" > /dev/null; then
+if [ -f /usr/bin/qwinff ]; then
+                    im=$im"FALSE \"Qwinff\"                   \"QWinFF es un multiplataforma, y fácil de usar convertidor de medios frontend de FFmpeg.\" \"INSTALADO  \"  "
+else
+im=$im"FALSE \"Qwinff\"                   \"QWinFF es un multiplataforma, y fácil de usar convertidor de medios frontend de FFmpeg.\" \"NO INSTALADO  \"  "
+fi
+            fi
+
 if ! $installed | grep "Transcoder" > /dev/null; then
 if [ -f /usr/share/applications/Transcoder.desktop ] && [ -f /usr/local/bin/Transcoder/Transcoder ]; then
                     im=$im"FALSE \"Transcoder\"                \"Simple conversion de video y audio\" \"INSTALADO  \"  "
@@ -1612,6 +1620,14 @@ im=$im"FALSE \"Arista Transcoder\"                   \"A easy to use multimedia 
 fi
             fi
 
+if ! $installed | grep "Qwinff" > /dev/null; then
+if [ -f /usr/bin/qwinff ]; then
+                    im=$im"FALSE \"Qwinff\"                   \"QWinFF is a cross-platform, easy-to-use media converter frontend to FFmpeg.\" \"INSTALADO  \"  "
+else
+im=$im"FALSE \"Qwinff\"                   \"QWinFF is a cross-platform, easy-to-use media converter frontend to FFmpeg.\" \"NO INSTALADO  \"  "
+fi
+            fi
+
 if ! $installed | grep "Transcoder" > /dev/null; then
 if [ -f /usr/share/applications/Transcoder.desktop ] && [ -f /usr/local/bin/Transcoder/Transcoder ]; then
                     im=$im"FALSE \"Transcoder\"                \"Video converter for Linux using GTK+ as GUI toolkit and ffmpeg as backend.\" \"INSTALLED  \"  "
@@ -2583,8 +2599,12 @@ if echo $choice | grep "Java JRE Oracle" > /dev/null; then
             if echo $choice | grep "Arista Transcoder" > /dev/null; then
                     arista
             fi
+
+            if echo $choice | grep "Qwinff" > /dev/null; then
+                    qwinf
+            fi
             if echo $choice | grep "Transcoder" > /dev/null; then
-                    transcoder
+                    acoder
             fi
             if echo $choice | grep "Mobilmedia Converter" > /dev/null; then
                     Mobilmedia
@@ -3200,7 +3220,7 @@ fi
      
     flash(){
             yum -y install http://linuxdownload.adobe.com/adobe-release/adobe-release-i386-1.0-1.noarch.rpm
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
 yum -y install flash-plugin | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing flash-plugin" --text="Please wait...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
@@ -3495,7 +3515,7 @@ fi
     reader(){
             yum -y install http://linuxdownload.adobe.com/adobe-release/adobe-release-i386-1.0-1.noarch.rpm
 
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
 
  yum -y install nspluginwrapper AdobeReader_enu | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Adobe Reader" --text="Please wait...." --pulsate --auto-close --width=350
 
@@ -3754,7 +3774,7 @@ then
 if [ -f '/etc/yum.repos.d/virtualbox.repo' ]; then
 yum -y install kernel-headers kernel-PAE-devel dkms gcc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing dependencias Virtualbox" --text="Please wait...." --pulsate --auto-close --width=350
 
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
 
 xterm -e 'yum -y install --enablerepo=virtualbox VirtualBox-4.2'
 wait ${!}
@@ -3771,7 +3791,7 @@ wget -c -P/etc/yum.repos.d/ http://download.virtualbox.org/virtualbox/rpm/fedora
 
 yum -y install kernel-headers kernel-PAE-devel dkms gcc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing dependencias de Virtual Box" --text="Please wait...." --pulsate --auto-close --width=350
 
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
 
 xterm -e 'yum -y install --enablerepo=virtualbox VirtualBox-4.2'
 xterm -e '/etc/init.d/vboxdrv setup'
@@ -3787,7 +3807,7 @@ fi
 if [ -f '/etc/yum.repos.d/virtualbox.repo' ]; then
 yum -y install kernel-headers kernel-devel dkms gcc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing dependencias de Virtualbox" --text="Please wait...." --pulsate --auto-close --width=350
 
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
 
 xterm -e 'yum -y install --enablerepo=virtualbox VirtualBox-4.2'
 xterm -e '/etc/init.d/vboxdrv setup'
@@ -3803,7 +3823,7 @@ wget -c -P/etc/yum.repos.d/ http://download.virtualbox.org/virtualbox/rpm/fedora
 
 yum -y install kernel-headers kernel-devel dkms gcc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing dependencias de Virtual Box" --text="Please wait...." --pulsate --auto-close --width=350
 
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
 
 xterm -e 'yum -y install --enablerepo=virtualbox VirtualBox-4.2'
 xterm -e '/etc/init.d/vboxdrv setup'
@@ -3850,7 +3870,7 @@ skip_if_unavailable=1' >> /etc/yum.repos.d/playonlinux.repo
 fi
 wait ${!}
 
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
 
 
 yum -y install playonlinux | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "PlayOnLinux" --text="Please wait...." --pulsate --auto-close --width=350
@@ -3982,8 +4002,12 @@ fi
      
     arista(){
 
-yum -y install arista | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Arista Transcoder" --text="Please wait...." --pulsate --auto-close --width=350
-
+if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "19" ]; then
+zenity --info --title="PostInstallerF" --text="Arista Transcoder is not compatible with Fedora 19, sorry"
+elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "20" ]; then
+zenity --info --title="PostInstallerF" --text="Arista Transcoder is not compatible with Fedora 20, sorry"
+else
+yum -y install arista | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Arista Transcoder" --text="Por favor espere...." --pulsate --auto-close --width=350
            
 if [ -f /usr/bin/arista-gtk ]; then
 $changelog
@@ -3997,9 +4021,29 @@ fi
 zenity --info --title="PostInstallerF" --text="For some reason Arista Transcoder not installed, please try again"
 fi
 
+fi
+
+    }
+
+    qwinf(){
+
+yum -y install qwinff | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Qwinff" --text="Por favor espere...." --pulsate --auto-close --width=350
+           
+if [ -f /usr/bin/qwinff ]; then
+$changelog
+echo "Qwinff" >> installed.log
+if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Qwinff" -i "/usr/share/icons/pinguino.png" -t 5000'
+else
+su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Qwinff" -i "/usr/share/icons/pinguino.png" -t 5000'
+fi
+ else 
+zenity --info --title="PostInstallerF" --text="For some reason Qwinff not installed, please try again"
+fi
+
     }
      
-    transcoder(){
+    acoder(){
 if [ -f /usr/share/applications/Transcoder.desktop ] && [ -f /usr/local/bin/Transcoder/Transcoder ]; then
 rm -f /usr/share/applications/Transcoder.desktop
 else
