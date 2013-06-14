@@ -327,7 +327,7 @@ update=/usr/share/updatepostintaller/Postinstaller64.sh
 nuday=$(date +%u); echo "nuday=$nuday"
 
 time=$(date +%H); echo "time=$time"
-time2=$(date +%R); echo "time=$time"
+time2=$(date +%R); echo "time2=$time2"
 
 setime=08
 setimea=16:00
