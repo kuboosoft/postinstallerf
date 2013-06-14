@@ -443,6 +443,16 @@ im=$im"FALSE \"Arista Transcoder\"                   \"Conversion de video para 
 fi
             fi
 
+
+if ! $installed | grep "Qwinff" > /dev/null; then
+if [ -f /usr/bin/qwinff ]; then
+                    im=$im"FALSE \"Qwinff\"                   \"QWinFF es un multiplataforma, y fácil de usar convertidor de medios frontend de FFmpeg.\" \"INSTALADO  \"  "
+else
+im=$im"FALSE \"Qwinff\"                   \"QWinFF es un multiplataforma, y fácil de usar convertidor de medios frontend de FFmpeg.\" \"NO INSTALADO  \"  "
+fi
+            fi
+
+
 if ! $installed | grep "Transcoder" > /dev/null; then
 if [ -f /usr/share/applications/Transcoder.desktop ] && [ -f /usr/local/bin/Transcoder/Transcoder ]; then
                     im=$im"FALSE \"Transcoder\"                \"Simple conversion de video y audio\" \"INSTALADO  \"  "
@@ -484,13 +494,6 @@ im=$im"FALSE \"FF Multi Converter\"               \"Sencilla aplicación que le 
 fi
             fi
 
-if ! $installed | grep "viDrop" > /dev/null; then
-if [ -f /usr/bin/vidrop ]; then
-                    im=$im"FALSE \"viDrop\"               \"Convierte películas o videos de música en un formato compatible con teléfonos inteligentes, tablets, reproductor de vídeo portátil y mucho más.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"viDrop\"               \"Convierte películas o videos de música en un formato compatible con teléfonos inteligentes, tablets, reproductor de vídeo portátil y mucho más.\" \"NO INSTALADO  \"  "
-fi
-            fi
 
 if ! $installed | grep "GtkPod" > /dev/null; then
 if [ -f /usr/bin/gtkpod ]; then
@@ -732,6 +735,15 @@ if [ -f /usr/bin/skype ]; then
                     im=$im"FALSE \"SKYPE\"    \"Te brinda la facilidad de llamar barato o de hacer llamadas gratis entre usuarios de Skype\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"SKYPE\"    \"Te brinda la facilidad de llamar barato o de hacer llamadas gratis entre usuarios de Skype\" \"NO INSTALADO  \"  "
+fi
+            fi
+
+
+if ! $installed | grep "Jitsi" > /dev/null; then
+if [ -f /usr/bin/jitsi ]; then
+                    im=$im"FALSE \"Jitsi\"    \"Un audio / video y comunicador de chat que soporta protocolos como SIP, XMPP / Jabber, AIM / ICQ, Windows Live, Yahoo!.\" \"INSTALADO  \"  "
+else
+im=$im"FALSE \"Jitsi\"    \"Un audio / video y comunicador de chat que soporta protocolos como SIP, XMPP / Jabber, AIM / ICQ, Windows Live, Yahoo!.\" \"NO INSTALADO  \"  "
 fi
             fi
 
@@ -1117,6 +1129,14 @@ if [ -f /usr/bin/gnome-tweak-tool ] || [ -f /usr/bin/dconf-editor ] || [ -f /usr
                     im=$im"FALSE \"GnomeTweakTool y dconf-editor\"    \"Herramientas avanzadas para personalizar las opciones de GNOME 3\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"GnomeTweakTool y dconf-editor\"    \"Herramientas avanzadas para personalizar las opciones de GNOME 3\" \"NO INSTALADO  \"  "
+fi
+            fi
+
+if ! $installed | grep "Menu Libre" > /dev/null; then
+if [ -f /usr/bin/menulibre ]; then
+                    im=$im"FALSE \"Menu Libre\"    \"Un editor de menú avanzado que proporciona características modernas en una interfaz limpia y fácil de usar.\" \"INSTALADO  \"  "
+else
+im=$im"FALSE \"Menu Libre\"    \"Un editor de menú avanzado que proporciona características modernas en una interfaz limpia y fácil de usar.\" \"NO INSTALADO  \"  "
 fi
             fi
 
@@ -1549,6 +1569,14 @@ im=$im"FALSE \"Arista Transcoder\"                   \"A easy to use multimedia 
 fi
             fi
 
+if ! $installed | grep "Qwinff" > /dev/null; then
+if [ -f /usr/bin/qwinff ]; then
+                    im=$im"FALSE \"Qwinff\"                   \"QWinFF is a cross-platform, easy-to-use media converter frontend to FFmpeg.\" \"INSTALADO  \"  "
+else
+im=$im"FALSE \"Qwinff\"                   \"QWinFF is a cross-platform, easy-to-use media converter frontend to FFmpeg.\" \"NO INSTALADO  \"  "
+fi
+            fi
+
 if ! $installed | grep "Transcoder" > /dev/null; then
 if [ -f /usr/share/applications/Transcoder.desktop ] && [ -f /usr/local/bin/Transcoder/Transcoder ]; then
                     im=$im"FALSE \"Transcoder\"                \"Video converter for Linux using GTK+ as GUI toolkit and ffmpeg as backend.\" \"INSTALLED  \"  "
@@ -1590,13 +1618,6 @@ im=$im"FALSE \"FF Multi Converter\"               \"Simple graphical application
 fi
             fi
 
-if ! $installed | grep "viDrop" > /dev/null; then
-if [ -f /usr/bin/vidrop ]; then
-                    im=$im"FALSE \"viDrop\"               \"Free video transcoding software for GNU/Linux\" \"INSTALLED  \"  "
-else
-im=$im"FALSE \"viDrop\"               \"Free video transcoding software for GNU/Linux\" \"NO INSTALLED  \"  "
-fi
-            fi
 
 if ! $installed | grep "GtkPod" > /dev/null; then
 if [ -f /usr/bin/gtkpod ]; then
@@ -1842,6 +1863,14 @@ im=$im"FALSE \"SKYPE\"    \"Free Internet telephony that just works.\" \"NO INST
 fi
             fi
 
+
+if ! $installed | grep "Jitsi" > /dev/null; then
+if [ -f /usr/bin/jitsi ]; then
+                    im=$im"FALSE \"Jitsi\"    \"An audio/video and chat communicator that supports protocols such as SIP, XMPP/Jabber, AIM/ICQ, Windows Live, Yahoo!.\" \"INSTALLED  \"  "
+else
+im=$im"FALSE \"Jitsi\"    \"An audio/video and chat communicator that supports protocols such as SIP, XMPP/Jabber, AIM/ICQ, Windows Live, Yahoo!.\" \"NO INSTALLED  \"  "
+fi
+            fi
 
 if ! $installed | grep "Turpial" > /dev/null; then
 if [ -f /usr/bin/turpial ]; then
@@ -2226,7 +2255,13 @@ im=$im"FALSE \"GnomeTweakTool and dconf-editor\"    \"Advanced tools for customi
 fi
             fi
 
-
+if ! $installed | grep "Menu Libre" > /dev/null; then
+if [ -f /usr/bin/menulibre ]; then
+                    im=$im"FALSE \"Menu Libre\"    \"An advanced menu editor that provides modern features in a clean, easy-to-use interface.\" \"INSTALLED  \"  "
+else
+im=$im"FALSE \"Menu Libre\"    \"An advanced menu editor that provides modern features in a clean, easy-to-use interface.\" \"NO INSTALLED  \"  "
+fi
+            fi
 
 if ! $installed | grep "Complete pending installations" > /dev/null; then
                     im=$im"FALSE \"Complete pending installations\"    \"Continuing uncompleted installations for system errors.\" \"ACTIVO  \"  "
@@ -2496,6 +2531,10 @@ if echo $choice | grep "Wine and winetricks" > /dev/null; then
             if echo $choice | grep "Arista Transcoder" > /dev/null; then
                     arista
             fi
+
+            if echo $choice | grep "Qwinff" > /dev/null; then
+                    qwinf
+            fi
             if echo $choice | grep "Transcoder" > /dev/null; then
                     transcoder
             fi
@@ -2512,11 +2551,7 @@ if echo $choice | grep "Wine and winetricks" > /dev/null; then
             if echo $choice | grep "FF Multi Converter" > /dev/null; then
                     ffmulticonverter
             fi
-
-            if echo $choice | grep "viDrop" > /dev/null; then
-                    vidrop
-            fi
-
+           
             if echo $choice | grep "GtkPod" > /dev/null; then
                     gtkPod
             fi
@@ -2644,6 +2679,9 @@ if echo $choice | grep "SKYPE" > /dev/null; then
                     skype
             fi
 
+if echo $choice | grep "Jitsi" > /dev/null; then
+                    jitsi
+            fi
 
 if echo $choice | grep "Turpial" > /dev/null; then
                     turpial
@@ -2851,11 +2889,9 @@ if echo $choice | grep "GnomeTweakTool and dconf-editor" > /dev/null; then
                     GnomeTweak
             fi
 
-
-if echo $choice | grep "Multi Lanzer" > /dev/null; then
-                    lanzer
+if echo $choice | grep "Menu Libre" > /dev/null; then
+                    mlibre
             fi
-
 
 if echo $choice | grep "Completar Instalaciones pendientes" > /dev/null; then
                     pendientes
@@ -3105,7 +3141,7 @@ fi
      
     flash(){
             yum -y localinstall http://linuxdownload.adobe.com/linux/x86_64/adobe-release-x86_64-1.0-1.noarch.rpm
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
+yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
 yum -y install flash-plugin | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando flash-plugin" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
@@ -3381,7 +3417,7 @@ fi
      
     reader(){
             yum -y localinstall http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
+yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
  yum -y install nspluginwrapper AdobeReader_enu | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Adobe Reader" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
@@ -3640,7 +3676,7 @@ lastest=$(cat /tmp/LATEST.TXT ); echo lastest=$lastest
 
             if [ -f '/etc/yum.repos.d/virtualbox.repo' ]; then
 yum -y install kernel-headers kernel-devel dkms gcc 2>&1 | zenity --progress  --title="Instalando dependencias de Virtual Box" --text="Please wait...." --pulsate --auto-close --width=350
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
+yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 xterm -e 'yum -y install --enablerepo=virtualbox VirtualBox-4.2'
 xterm -e '/etc/init.d/vboxdrv setup'
@@ -3655,7 +3691,7 @@ else
 wget -c -P/etc/yum.repos.d/ http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
 yum -y install kernel-headers kernel-devel dkms gcc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando dependencias de Virtual Box" --text="Por favor espere...." --pulsate --auto-close --width=350
 
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
+yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 xterm -e 'yum -y install --enablerepo=virtualbox VirtualBox-4.2'
 xterm -e '/etc/init.d/vboxdrv setup'
@@ -3690,7 +3726,7 @@ fi
 
 yum -y localinstall http://rpm.playonlinux.com/PlayOnLinux_yum-3.3.rpm 
 
-yum -y update --skip-broken | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
+yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 yum -y install playonlinux | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "PlayOnLinux" --text="Por favor espere...." --pulsate --auto-close --width=350
 
@@ -3796,6 +3832,11 @@ fi
      
     arista(){
 
+if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "19" ]; then
+zenity --info --title="PostInstallerF" --text="Arista Transcoder is not compatible with Fedora 19, sorry"
+elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "20" ]; then
+zenity --info --title="PostInstallerF" --text="Arista Transcoder is not compatible with Fedora 20, sorry"
+else
 yum -y install arista | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Arista Transcoder" --text="Por favor espere...." --pulsate --auto-close --width=350
            
 if [ -f /usr/bin/arista-gtk ]; then
@@ -3808,6 +3849,26 @@ su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Ar
 fi
  else 
 zenity --info --title="PostInstallerF" --text="For some reason Arista Transcoder not installed, please try again"
+fi
+
+fi
+
+    }
+
+    qwinf(){
+
+yum -y install qwinff | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Qwinff" --text="Por favor espere...." --pulsate --auto-close --width=350
+           
+if [ -f /usr/bin/qwinff ]; then
+$changelog
+echo "Qwinff" >> installed.log
+if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Qwinff" -i "/usr/share/icons/pinguino.png" -t 5000'
+else
+su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Qwinff" -i "/usr/share/icons/pinguino.png" -t 5000'
+fi
+ else 
+zenity --info --title="PostInstallerF" --text="For some reason Qwinff not installed, please try again"
 fi
 
     }
@@ -4512,6 +4573,24 @@ fi
 
     }
 
+
+jitsi(){
+            yum -y localinstall https://download.jitsi.org/jitsi/rpm/jitsi-2.2-latest.x86_64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Jitsi" --text="Por favor espere...." --pulsate --auto-close --width=350
+
+if [ -f /usr/bin/jitsi ]; then
+$changelog
+echo "Jitsi" >> installed.log
+if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Jitsi" -i "/usr/share/icons/pinguino.png" -t 5000'
+else
+su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Jitsi" -i "/usr/share/icons/pinguino.png" -t 5000'
+fi
+ else 
+zenity --info --title="PostInstallerF" --text="For some reason Jitsi not installed, please try again"
+fi
+
+
+    }
 
 turpial(){
             yum -y install turpial | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Turpial" --text="Por favor espere...." --pulsate --auto-close --width=350
@@ -5233,6 +5312,22 @@ echo "GnomeTweakTool y dconf-editor" >> installed.log
 
     }
 
+melibre(){
+            yum -y install menulibre | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Menu Libre" --text="Por favor espere...." --pulsate --auto-close --width=350
+
+if [ -f /usr/bin/menulibre ]; then
+$changelog
+echo "Menu Libre" >> installed.log
+if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Menu Libre" -i "/usr/share/icons/pinguino.png" -t 5000'
+else
+su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Menu Libre" -i "/usr/share/icons/pinguino.png" -t 5000'
+fi
+ else 
+zenity --info --title="PostInstallerF" --text="For some reason Menu Libre not installed, please try again"
+fi
+
+    }
 
 pendientes(){
             yum-complete-transaction -y | pv -en 2>&1 | zenity --progress --title "Completando Instalaciones pendientes" --text="Por favor espere...." --pulsate --auto-close --width=350
