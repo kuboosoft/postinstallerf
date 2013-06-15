@@ -158,10 +158,10 @@ else
 mkdir -p /usr/bin/postinstallerf/
 fi
 
-if [ -d /usr/share/Postdesktopfiles/ ]; then
+if [ -d /usr/share/Postdesktopfiles64/ ]; then
 echo "directorio accesos directos esta presente"
 else
-mkdir -p /usr/share/Postdesktopfiles/
+mkdir -p /usr/share/Postdesktopfiles64/
 fi
 
 
