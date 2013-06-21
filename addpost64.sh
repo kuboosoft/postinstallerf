@@ -3187,7 +3187,7 @@ rm -f /etc/profile.d/java.sh
 
 cd /tmp/
 
-wget -c -O jre-oraclejava.rpm http://javadl.sun.com/webapps/download/AutoDL?BundleId=73849 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Java JRE Oracle  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
+wget -c -O jre-oraclejava.rpm http://javadl.sun.com/webapps/download/AutoDL?BundleId=78696 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Java JRE Oracle  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 
 yum -y install jre-oraclejava.rpm
 
