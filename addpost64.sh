@@ -3092,6 +3092,10 @@ enableff='exclude=ffmpeg ffmpeg-devel ffmpeg-libs'; echo "enableff = $enableff"
 dirtyff=$(grep 'exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/postinstallerf.repo | tail -n 1); echo "dirtyff = $dirtyff" 
 disable=""
 
+if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "19" ]; then
+zenity --info --title="PostInstallerF" --text="Dirty ffmpeg is no yet avaiable for Fedora 19, please try other day sorry"
+else
+
 if [ "$dirtyff" = "$enableff" ]; then 
 zenity --question --title="Detected disabled Dirty ffmpeg" --text="Do you want enable Dirty ffmpeg?" --ok-label "Yes" --cancel-label "No"
 if [[ $? -eq 0 ]]; then
@@ -3114,6 +3118,7 @@ fi
 
 
 elif [ "$dirtyff" != "$enableff" ]; then 
+
 zenity --question --title="Detected enable Dirty ffmpeg" --text="Do you want disable Dirty ffmpeg?" --ok-label "Yes" --cancel-label "No"
 if [[ $? -eq 0 ]]; then
 sed -i '8i exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/postinstallerf.repo
@@ -3136,6 +3141,7 @@ su $noti -c 'notify-send "PostInstallerF" "Completada instalacion de Dirty ffmpe
 else
 su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Dirty ffmpeg/RpmFusion" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
+  fi
 
     }
      
@@ -3961,6 +3967,9 @@ if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "18" ]; then
 
 yum -y install ekd | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Ekd" --text="Por favor espere...." --pulsate --auto-close --width=350
 
+elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "19" ]; then
+zenity --info --title="PostInstallerF" --text="Ekd is not compatible with Fedora 19, sorry"
+
 else
 
 yum -y install gstreamer-plugins-bad gstreamer-plugins-bad-free-extras gstreamer-plugins-bad-nonfree gstreamer-plugins-ugly gstreamer-ffmpeg ffmpeg mencoder ffmpeg2theora mplayer | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando codecs de video y audio" --text="Por favor espere...." --pulsate --auto-close --width=350
@@ -4343,8 +4352,10 @@ echo "DVDStyler" >> installed.log
 
 
 ffaporama(){
-            
-if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "17" ]
+
+if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "19" ]; then
+zenity --info --title="PostInstallerF" --text="ffDiaporama is no yet avaiable for Fedora 19, please try other day sorry"         
+elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "17" ]
 then
 xterm -e 'yum -y localinstall http://ffdiaporama.tuxfamily.org/download.php?f=Stable/1.3_20120627/ffDiaporama-1.3.2012.0627-0.fc17.x86_64.rpm'
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "16" ]
