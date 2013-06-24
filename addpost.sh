@@ -4136,6 +4136,9 @@ if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "18" ]; then
 
 yum -y install http://sourceforge.net/projects/postinstaller/files/data/ekd-3.1.2-1.fc18.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Ekd" --text="Please wait...." --pulsate --auto-close --width=350
 
+elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "19" ]; then
+zenity --info --title="PostInstallerF" --text="Ekd is not compatible with Fedora 19, sorry"
+
 else
 
 yum -y install gstreamer-plugins-bad gstreamer-plugins-bad-free-extras gstreamer-plugins-bad-nonfree gstreamer-plugins-ugly gstreamer-ffmpeg ffmpeg mencoder ffmpeg2theora mplayer | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing codecs de video y audio" --text="Please wait...." --pulsate --auto-close --width=350
