@@ -1,7 +1,8 @@
 # SOURCES LIST FOR SRPM POSTINSTALLERF
 
-ftp://heanet.dl.sourceforge.net/mirrors/sourceforge/p/po/postinstaller/SRPM/
-http://ftp.jaist.ac.jp/pub/sourceforge/p/po/postinstaller/SRPM/
-ftp://ftp.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/p/po/postinstaller/SRPM/
 http://www.mirrorservice.org/sites/ftp.sourceforge.net/pub/sourceforge/p/po/postinstaller/SRPM/
 http://ftp.pbone.net/mirror/ftp.sourceforge.net/pub/sourceforge/p/po/postinstaller/SRPM/
+http://ftp.jaist.ac.jp/pub/sourceforge/p/po/postinstaller/SRPM/
+ftp://ftp.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/p/po/postinstaller/SRPM/
+ftp://heanet.dl.sourceforge.net/mirrors/sourceforge/p/po/postinstaller/SRPM/
+
