@@ -1490,18 +1490,8 @@ fi
 
 grubcus(){
             
-if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "16" ]; then
 yum -y install grub-customizer | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Grub Customizer" --text="Por favor espere...." --pulsate --auto-close --width=350
-echo 'es fedora 16'
 
-elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "17" ]; then
-yum -y install grub-customizer | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Grub Customizer" --text="Por favor espere...." --pulsate --auto-close --width=350
-echo 'es fedora 17'
-
-elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "18" ]; then
-yum -y install grub-customizer | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Grub Customizer" --text="Por favor espere...." --pulsate --auto-close --width=350
-echo 'es fedora 18'
-fi
 
 if [ -f /usr/bin/grub-customizer ]; then
 $changelog
