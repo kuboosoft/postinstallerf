@@ -22,9 +22,7 @@
 # FEDORA 17, 18, 19 POSTINSTALLER V.1.2.0 64 BITS
 time=$(date +"%H")
 
-yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png"` --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
-
-Hello, PostInstallerF is a program that installs everything you need in Fedora"
+yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Hello, PostInstallerF is a program that installs everything you need in Fedora"
 
 
 # Removing Obselete Versions of Postinstallerf
@@ -52,7 +50,7 @@ fi
 
 
 if test -e /usr/local/bin/Postinstaller.sh; then
-echo 'Se detecto una version obsoleta, se procedera a desinstalalar'
+echo 'Found an Obselete version of postinstallerf, Removing now.'
 rm -f /usr/local/bin/Postinstaller.sh
 fi
 
