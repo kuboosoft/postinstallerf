@@ -193,13 +193,13 @@ fi
 if [ -f /etc/yum.repos.d/russianfedora-free.repo ]; then
 echo 'Already Installed'
 else
-yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/russianfedora-free-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorios Community 3rd party Free" --text="Please Wait...." --pulsate --auto-close --width=400
+yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/russianfedora-free-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Verifying and Adding 3rd Party Free Community Repos." --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 if [ -f /etc/yum.repos.d/russianfedora-nonfree.repo ]; then
 echo 'Already Installed'
 else
-yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/russianfedora-nonfree-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorios Community 3rd party Non-Free" --text="Please Wait...." --pulsate --auto-close --width=400
+yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/russianfedora-nonfree-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Verifying and Adding 3rd Party Non-Free Community Repos." --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 
@@ -316,7 +316,7 @@ fi
 wait ${!}
 
 
-# LIMPIANDO METADATOS EN REPOSITORIOS
+# Cleaning the repository metadata.
 
 updater=/usr/share/updatepostintaller/Postinstaller.sh
 source=/usr/bin/Postinstaller.sh

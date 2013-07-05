@@ -88,73 +88,73 @@ rm -f /usr/local/share/.postinstallerf/installed.log
 fi
 
 
-# DIRECTORIO Y ARCHIVO LOG
+# Directory and Archival Log
 
 if [ -d /usr/share/.postinstallerf/ ]; then
 cd /usr/share/.postinstallerf/
-echo "el directorio log existe" >> installed.log
+echo "The log directory is here." >> installed.log
 else
 mkdir -p /usr/share/.postinstallerf/
 cd /usr/share/.postinstallerf/
-echo "no existia directorio log" >> installed.log 
+echo "The log directory is not here" >> installed.log 
 fi
 
-# DIRECTORIOS DE POSTINSTALLERF
+# Postinstallerf Directories
 
 if [ -d /usr/share/icons/acciones/ ]; then
-echo "El directorio de iconos del menu esta presente"
+echo "The menu icons directory is here"
 else
 mkdir -p /usr/share/icons/acciones/
 fi
 
 if [ -d /usr/bin/postinstallerf/ ]; then
-echo "directorio submenus esta presente"
+echo "The submenus directory is here"
 else
 mkdir -p /usr/bin/postinstallerf/
 fi
 
 if [ -d /usr/share/Postdesktopfiles64/ ]; then
-echo "directorio accesos directos esta presente"
+echo "The direct access directory is here."
 else
 mkdir -p /usr/share/Postdesktopfiles64/
 fi
 
 
-# MATANDO BLOQUEO DE YUM
+# Killing the YUM block.
 pkill -SIGKILL -u root -o yum
 
-# VERIFICANDO REPOSITORIOS Y ACTUALIZANDO EL SISTEMA
+# Verifying Repositories and Updating System.
 if [ -f /etc/yum.repos.d/rpmfusion-nonfree.repo ] && [ -f /etc/yum.repos.d/rpmfusion-free.repo ]; then
-echo "RPM Fusion free y nonfree repo esta presente"
+echo "The free and non free RPM Fusion repo is here."
 else
 
 if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "16" ]; then
-yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-16.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-16.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-16.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-16.noarch.rpm 2>&1 | zenity --progress --title "Checking and Adding the RPMFUSION repo" --text="Please Wait...." --pulsate --auto-close --width=400
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "17" ]; then
-yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-17.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-17.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-17.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-17.noarch.rpm 2>&1 | zenity --progress --title "Checking and Adding the RPMFUSION repo" --text="Please Wait...." --pulsate --auto-close --width=400
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "18" ]; then
-yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-18.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-18.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-18.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-18.noarch.rpm 2>&1 | zenity --progress --title "Checking and Adding the RPMFUSION repo" --text="Please Wait...." --pulsate --auto-close --width=400
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "19" ]; then
-yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-19.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-19.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-19.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-19.noarch.rpm 2>&1 | zenity --progress --title "Checking and Adding the RPMFUSION repo" --text="Please Wait...." --pulsate --auto-close --width=400
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "20" ]; then
-yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-20.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-20.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-20.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-20.noarch.rpm 2>&1 | zenity --progress --title "Checking and Adding the RPMFUSION repo" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
  fi
 
 if [ -f /etc/yum.repos.d/russianfedora-free.repo ]; then
-echo 'ya esta instalado'
+echo 'Already Installed'
 else
-yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/russianfedora-free-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorios Community 3rd party Free" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/russianfedora-free-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Verifying and Adding 3rd Party Free Community Repos." --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 if [ -f /etc/yum.repos.d/russianfedora-nonfree.repo ]; then
-echo 'ya esta instalado'
+echo 'Already Installed'
 else
-yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/russianfedora-nonfree-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorios Community 3rd party Non-Free" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/russianfedora-nonfree-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Verifying and Adding 3rd Party Non-Free Community Repos." --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 if [ -f /etc/yum.repos.d/postinstallerf.repo ]; then
-echo 'postinstallerf repository is installed'
+echo 'Postinstallerf repository is installed'
 else
 echo '[postinstallerf]
 name=PostInstallerF
@@ -188,7 +188,7 @@ skip_if_unavailable=1
 exclude=ffmpeg ffmpeg-devel ffmpeg-libs' >> /etc/yum.repos.d/postinstallerf.repo
 fi
  
-# INSTALANDO DEPENDENCIAS BASICAS DE POSTINSTALLERF
+# Installing Basic Dependencies for postinstallerf
 
 znt=/usr/bin/zenity
 cu=/usr/bin/curl
@@ -204,76 +204,77 @@ w3=/usr/bin/w3m
 
 
 if [ -f $wm ]; then
-echo "wmctrl esta presente"
+echo "wmctrl is here"
 else
-yum -y install wmctrl 2>&1 | zenity --progress --title "instalando wmctrl herramientas basicas del programa" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y install wmctrl 2>&1 | zenity --progress --title "Installing wmctrl, a basic dependency for the program" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 if [ -f $xte ]; then
-echo "xterm esta presente"
+echo "xterm is here"
 else
-yum -y install xterm 2>&1 | zenity --progress --title "instalando xterm herramientas basicas del programa" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y install xterm 2>&1 | zenity --progress --title "Installing xterm, a basic dependency for the program" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 if [ -f $yadd ]; then
-echo "yad esta presente"
+echo "yad is here"
 else
 if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "18" ]; then
-yum -y localinstall http://kojipkgs.fedoraproject.org//packages/yad/0.19.1/1.fc18/x86_64/yad-0.19.1-1.fc18.x86_64.rpm 2>&1 | zenity --progress --title "instalando yad herramientas basicas del programa" --text="Porfavor espere...." --pulsate --auto-close --width=400
+yum -y localinstall http://kojipkgs.fedoraproject.org//packages/yad/0.19.1/1.fc18/x86_64/yad-0.19.1-1.fc18.x86_64.rpm 2>&1 | zenity --progress --title "Installing yad, a basic dependency for the program" --text="Porfavor espere...." --pulsate --auto-close --width=400
 else
-yum -y install yad 2>&1 | zenity --progress --title "instalando yad herramientas basicas del programa" --text="Porfavor espere...." --pulsate --auto-close --width=400
+yum -y install yad 2>&1 | zenity --progress --title "Installing yad, a basic dependency for the program" --text="Porfavor espere...." --pulsate --auto-close --width=400
 fi
 fi
 
 if [ -f $znt ]; then
-echo "zenity esta presente"
+echo "zenity is here"
 else
-yum -y install zenity 2>&1 | zenity --progress --title "instalando zenity herramientas basicas del programa" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y install zenity 2>&1 | zenity --progress --title "Installing zenity, a basic dependency for the program" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 if [ -f $cu ]; then
-echo "curl esta presente"
+echo "curl is here"
 else
-yum -y install curl 2>&1 | zenity --progress --title "instalando curl herramientas basicas del programa" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y install curl 2>&1 | zenity --progress --title "Installing curl, a basic dependency for the program" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 if [ -f $wg ]; then
-echo "wget esta presente"
+echo "wget is here"
 else
-yum -y install wget 2>&1 | zenity --progress --title "instalando wget herramientas basicas del programa" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y install wget 2>&1 | zenity --progress --title "Installing wget, a basic dependency for the program" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 
 if [ -f $wavep ]; then
-echo "SDL_mixer esta presente"
+echo "SDL_mixer is here"
 else
-yum -y install SDL_mixer 2>&1 | zenity --progress --title "instalando SDL_mixer como dependencia basica del programa" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y install SDL_mixer 2>&1 | zenity --progress --title "Installing SDL_mixer, a basic dependency for the program" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 
 if [ -f $gl ]; then
-echo "glibc esta presente"
+echo "glibc is here"
 else
 yum -y install glibc.i686 glibc-devel.i686
 fi
 
 if [ -f $pipeviewer ]; then
-echo "Pipe Viewer esta presente"
+echo "Pipe Viewer is here"
 else
-yum -y install pv 2>&1 | zenity --progress --title "instalando Pipe Viewer como dependencia basica del programa" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y install pv 2>&1 | zenity --progress --title "Installing Pipe Viewer, a basic dependency for the program" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 if [ -f $w3 ]; then
-echo "w3m esta presente"
+echo "w3m is here"
 else
-yum -y install w3m 2>&1 | zenity --progress --title "instalando w3m como dependencia basica del programa" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y install w3m 2>&1 | zenity --progress --title "Installing w3m, a basic dependency for the program" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 
 wait ${!}
 
 
-# LIMPIANDO METADATOS EN REPOSITORIOS
+# Cleaning the repository metadata.
+# Needs to be rethough, should not be time controlled.
 
 updater=/usr/share/updatepostintaller/Postinstaller64.sh
 source=/usr/bin/Postinstaller64.sh
@@ -307,15 +308,15 @@ elif [ ""$nuday = $Fri"" ] && [ ""$time = $setimec"" ]; then
 yum clean metadata
 fi
 
-# BUSCANDO E INSTALANDO NUEVAS ACTUALIZACIONES MENU PRINCIPAL DE POSTINSTALLERF
+# LOOKING FOR NEW UPDATES AND INSTALLING POSTINSTALLERF MAIN MENU
 
 
 if [ ""$nuday = $Tue"" ]; then
 if [ -f $updater ]; then
 rm -f /usr/share/updatepostintaller/Postinstaller64.sh
-echo "se elimino el archivo obsoleto de actualizacion"
+echo "Obselete file was removed, Updating file"
 else
-echo "Aun no se ha descargado el archivo de actualizacion"
+echo "Up to date did not update the file"
 fi
 
 if [ -d /usr/share/updatepostintaller/ ]; then
@@ -325,26 +326,13 @@ mkdir /usr/share/updatepostintaller/
  wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller64.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 fi 
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 diff -a $source $update
 if [ $? -eq 0 ]; then
-echo "Los ficheros son iguales"
-yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se encuentra actualizado" --timeout=5
-else
-echo "Los ficheros No son iguales"
-cp -f /usr/share/updatepostintaller/Postinstaller64.sh /usr/bin/ 
-yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se ha actualizado
-
- Por favor Reinicie PostInstallerF" 
-
-fi
-else
-diff -a $source $update
-if [ $? -eq 0 ]; then
-echo "Los ficheros son iguales"
+echo "The files are equal"
 yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
 else
-echo "Los ficheros No son iguales"
+echo "The files are not equal"
 cp -f /usr/share/updatepostintaller/Postinstaller64.sh /usr/bin/ 
 yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF was updated 
 
@@ -357,9 +345,9 @@ elif [ ""$nuday = $Thu"" ]; then
 
 if [ -f $updater ]; then
 rm -f /usr/share/updatepostintaller/Postinstaller64.sh
-echo "se elimino el archivo obsoleto de actualizacion"
+echo "Obselete file was removed, Updating file"
 else
-echo "Aun no se ha descargado el archivo de actualizacion"
+echo "Up to date did not update the file"
 fi
 
 if [ -d /usr/share/updatepostintaller/ ]; then
@@ -405,7 +393,7 @@ fi
 # ACTUALIZANDO EL SISTEMA
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep2.png" --image-on-top --progress --title "Actualizando el Sistema" --text="Por favor espere...." --pulsate --auto-close --width=350
+yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep2.png" --image-on-top --progress --title "Actualizando el Sistema" --text="Please Wait...." --pulsate --auto-close --width=350
 else
 yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Updating" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep2.png" --image-on-top --progress --title "Updating the system" --text="Please wait...." --pulsate --auto-close --width=350
 fi
@@ -413,7 +401,7 @@ fi
 
 # COMPLETANDO INSTALACIONES PENDIENTES
 
-yum-complete-transaction -y | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Completando Instalaciones pendientes" --text="Por favor espere...." --pulsate --auto-close --width=350
+yum-complete-transaction -y | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Completando Instalaciones pendientes" --text="Please Wait...." --pulsate --auto-close --width=350
 
 # MOSTRAR LAS ULTIMAS ACTUALIZACIONES INSTALADAS
 
@@ -538,14 +526,14 @@ fi
 # VERIFICANDO SUBMENUS DE POSTINSTALLERF
 
 if [ -f /usr/bin/PostinstallerF.sh ]; then
-echo "PostinstallerF esta presente"
+echo "PostinstallerF is here"
 else
 xterm -e 'wget -c -P/usr/bin/ https://raw.github.com/kuboosoft/postinstallerf/master/PostinstallerF.sh'
 chmod a+x /usr/bin/PostinstallerF.sh
 fi
 
 if [ -f /usr/bin/postinstallerf/addpost64.sh ]; then
-echo "addpost esta presente"
+echo "addpost is here"
 else
 xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/kuboosoft/postinstallerf/master/addpost64.sh'
 chmod a+x /usr/bin/postinstallerf/addpost64.sh
@@ -553,7 +541,7 @@ fi
 
 
 if [ -f /usr/bin/postinstallerf/confpost64.sh ]; then
-echo "confpost esta presente"
+echo "confpost is here"
 else
 xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/kuboosoft/postinstallerf/master/confpost64.sh'
 chmod a+x /usr/bin/postinstallerf/confpost64.sh
@@ -561,7 +549,7 @@ fi
 
 
 if [ -f /usr/bin/postinstallerf/gnext.sh ]; then
-echo "gnext esta presente"
+echo "gnext is here"
 else
 xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/kuboosoft/postinstallerf/master/gnext.sh'
 chmod a+x /usr/bin/postinstallerf/gnext.sh
@@ -569,7 +557,7 @@ fi
 
 
 if [ -f /usr/bin/postinstallerf/Logout.sh ]; then
-echo "Logout esta presente"
+echo "Logout is here"
 else
 xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/kuboosoft/postinstallerf/master/Logout.sh'
 chmod a+x /usr/bin/postinstallerf/Logout.sh
@@ -601,25 +589,25 @@ Categories=GTK;Utility;System;' >> /usr/share/applications/postinstallerf.deskto
 fi
 
 if [ -f $desktop1 ]; then
-echo "desktop1 esta presente"
+echo "desktop1 is here"
 else
 wget -c -P/usr/share/Postdesktopfiles/ http://sourceforge.net/projects/postinstaller/files/desktop64/Configure_Tuning.desktop
 chmod +x /usr/share/Postdesktopfiles/Configure_Tuning.desktop
 
 if [ -f $desktop2 ]; then
-echo "desktop2 esta presente"
+echo "desktop2 is here"
 else
 wget -c -P/usr/share/Postdesktopfiles/ http://sourceforge.net/projects/postinstaller/files/desktop/GnomeShell_Extensions.desktop
 chmod +x /usr/share/Postdesktopfiles/GnomeShell_Extensions.desktop
 
 if [ -f $desktop3 ]; then
-echo "desktop3 esta presente"
+echo "desktop3 is here"
 else
 wget -c -P/usr/share/Postdesktopfiles/ http://sourceforge.net/projects/postinstaller/files/desktop64/Install.desktop
 chmod +x /usr/share/Postdesktopfiles/Install.desktop
 
 if [ -f $desktop4 ]; then
-echo "desktop4 esta presente"
+echo "desktop4 is here"
 else
 wget -c -P/usr/share/Postdesktopfiles/ http://sourceforge.net/projects/postinstaller/files/desktop/Shutdown_Logout.desktop
 chmod +x /usr/share/Postdesktopfiles/Shutdown_Logout.desktop
@@ -631,7 +619,7 @@ fi
 # VERIFICANDO SONIDOS DE POSTINSTALLERF
 sound=/usr/bin/postinstallerf/sound21.ogg
 if [ -f $sound ]; then
-echo "sound esta presente"
+echo "sound is here"
 else
 wget -c -P/usr/bin/postinstallerf/ http://sourceforge.net/projects/postinstaller/files/data/sound21.ogg
 fi
