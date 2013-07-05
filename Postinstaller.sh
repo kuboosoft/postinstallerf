@@ -454,12 +454,12 @@ else
 yum-complete-transaction -y | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Completeing all pending isntallations" --text="Please wait...." --pulsate --auto-close --width=350
 fi
 
-# MOSTRAR LAS ULTIMAS ACTUALIZACIONES INSTALADAS
+# Showing Installed Updates
 
 cat /var/log/yum.log | tail -f | yad --title="Log viewer updates" --window-icon=logviewer --list --button=gtk-close --geometry 600x350 --text="Content of yum updates" --column Previous-Changes
 
 
-# VERIFICANDO ICONOS DE POSTINSTALLERF
+# Verifing the postinstallerf icons.
 icon1='/usr/share/icons/sistema.png'
 icon2='/usr/share/icons/pinguino.png'
 icon3='/usr/share/icons/pincel_rco.png'
@@ -613,7 +613,7 @@ fi
 
 
 
-# CHECKING LAUNCHERS OF POSTINSTALLERF
+# CHECKING POSTINSTALLERF LAUNCHERS
 
 desktop1=/usr/share/Postdesktopfiles/Configure_Tuning.desktop
 desktop2=/usr/share/Postdesktopfiles/GnomeShell_Extensions.desktop
@@ -664,7 +664,7 @@ fi
  fi
 fi
 
-# VERIFICANDO SONIDOS DE POSTINSTALLERF
+# Testing the sounds in postinstallerf.
 sound=/usr/bin/postinstallerf/sound21.ogg
 if [ -f $sound ]; then
 echo "sound is present"
@@ -686,7 +686,7 @@ P_RUN=$(yad --image="/usr/share/icons/acciones/topicon.png" --image-on-top --ico
 if [ $? -eq 0 ]; then
 	su $noti3 -c '/usr/bin/firefox http://sourceforge.net/projects/postinstaller/'
 else
-	echo "nothing to do"
+	echo "Nothing to do"
 	fi
 	exit 0
 

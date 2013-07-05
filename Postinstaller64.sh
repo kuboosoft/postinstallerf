@@ -20,6 +20,7 @@
 # |or send an e-mail to maxmrphy@gmail.com                                         |
 # +--------------------------------------------------------------------------------+
 # FEDORA 17, 18, 19 POSTINSTALLER V.1.2.0 64 BITS
+time=$(date +"%H")
 
 yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png"` --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
 
@@ -312,103 +313,87 @@ fi
 
 
 if [ ""$nuday = $Tue"" ]; then
-if [ -f $updater ]; then
-rm -f /usr/share/updatepostintaller/Postinstaller64.sh
-echo "Obselete file was removed, Updating file"
-else
-echo "Up to date did not update the file"
-fi
+        if [ -f $updater ]; then
+                rm -f /usr/share/updatepostintaller/Postinstaller64.sh
+                echo "Obselete file was removed, Updating file"
+        else
+                echo "Up to date did not update the file"
+        fi
 
-if [ -d /usr/share/updatepostintaller/ ]; then
-xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller64.sh'
-else
-mkdir /usr/share/updatepostintaller/
- wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller64.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
-fi 
+        if [ -d /usr/share/updatepostintaller/ ]; then
+                xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller64.sh'
+        else
+                mkdir /usr/share/updatepostintaller/
+                wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller64.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
+        fi 
 
 
-diff -a $source $update
-if [ $? -eq 0 ]; then
-echo "The files are equal"
-yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
-else
-echo "The files are not equal"
-cp -f /usr/share/updatepostintaller/Postinstaller64.sh /usr/bin/ 
-yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF was updated 
+        diff -a $source $update
+        if [ $? -eq 0 ]; then
+                echo "The files are equal"
+                yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
+        else
+                echo "The files are not equal"
+                cp -f /usr/share/updatepostintaller/Postinstaller64.sh /usr/bin/ 
+                yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF was updated 
 
- Please Restart PostInstallerF" 
+                Please Restart PostInstallerF" 
 
-fi
+        fi
 fi
 
 elif [ ""$nuday = $Thu"" ]; then
 
-if [ -f $updater ]; then
-rm -f /usr/share/updatepostintaller/Postinstaller64.sh
-echo "Obselete file was removed, Updating file"
-else
-echo "Up to date did not update the file"
-fi
+        if [ -f $updater ]; then
+                rm -f /usr/share/updatepostintaller/Postinstaller64.sh
+                echo "Obselete file was removed, Updating file"
+        else
+                echo "Up to date did not update the file"
+        fi
 
-if [ -d /usr/share/updatepostintaller/ ]; then
-xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller64.sh'
-else
-mkdir /usr/share/updatepostintaller/
- wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller64.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
-fi 
+        if [ -d /usr/share/updatepostintaller/ ]; then
+                xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller64.sh'
+        else
+                mkdir /usr/share/updatepostintaller/
+                wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller64.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
+        fi 
 
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-diff -a $source $update
-if [ $? -eq 0 ]; then
-echo "Los ficheros son iguales"
-yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se encuentra actualizado" --timeout=5
-else
-echo "Los ficheros No son iguales"
-cp -f /usr/share/updatepostintaller/Postinstaller64.sh /usr/bin/ 
-yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se ha actualizado
 
- Por favor Reinicie PostInstallerF" 
+        diff -a $source $update
+        if [ $? -eq 0 ]; then
+                echo "Los ficheros son iguales"
+                yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
+        else
+                echo "Los ficheros No son iguales"
+                cp -f /usr/share/updatepostintaller/Postinstaller64.sh /usr/bin/ 
+                yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF was updated 
 
-fi
-else
-diff -a $source $update
-if [ $? -eq 0 ]; then
-echo "Los ficheros son iguales"
-yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
-else
-echo "Los ficheros No son iguales"
-cp -f /usr/share/updatepostintaller/Postinstaller64.sh /usr/bin/ 
-yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF was updated 
+                Please Restart PostInstallerF" 
 
- Please Restart PostInstallerF" 
+        fi
 
-fi
-fi
 
 fi
 
 
 
-# ACTUALIZANDO EL SISTEMA
+# Updating the System
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep2.png" --image-on-top --progress --title "Actualizando el Sistema" --text="Please Wait...." --pulsate --auto-close --width=350
-else
+
 yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Updating" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep2.png" --image-on-top --progress --title "Updating the system" --text="Please wait...." --pulsate --auto-close --width=350
-fi
 
 
-# COMPLETANDO INSTALACIONES PENDIENTES
+# Completeing the pending installations.
 
-yum-complete-transaction -y | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Completando Instalaciones pendientes" --text="Please Wait...." --pulsate --auto-close --width=350
+yum-complete-transaction -y | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Completeing the Pending Installations." --text="Please Wait...." --pulsate --auto-close --width=350
 
-# MOSTRAR LAS ULTIMAS ACTUALIZACIONES INSTALADAS
+# Showing Installed Updates
 
 cat /var/log/yum.log | tail -f | yad --title="Log viewer updates" --window-icon=logviewer --list --button=gtk-close --geometry 600x350 --text="Content of yum updates" --column Previous-Changes
 
 
-# VERIFICANDO ICONOS DE POSTINSTALLERF
+# Verifing the postinstallerf icons.
 icon1='/usr/share/icons/sistema.png'
 icon2='/usr/share/icons/pinguino.png'
 icon3='/usr/share/icons/pincel_rco.png'
@@ -427,103 +412,103 @@ icon015='/usr/share/icons/updatep.png'
 icon016='/usr/share/icons/trashito.png'
 
 if test -e $icon1; then
-	echo "El archivo $icon1 si existe."
+	echo "The file $icon1 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/sistema.png
 fi
 
 if test -e $icon2; then
-	echo "El archivo $icon2 si existe."
+	echo "The file $icon2 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/pinguino.png
 fi
 
 if test -e $icon3; then
-	echo "El archivo $icon3 si existe."
+	echo "The file $icon3 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/pincel_rco.png
 fi
 
 if test -e $icon4; then
-	echo "El archivo $icon4 si existe."
+	echo "The file $icon4 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/user-trash-full.png
 fi
 
 if test -e $icon5; then
-	echo "El archivo $icon5 si existe."
+	echo "The file $icon5 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/camera.png
 fi
 
 if test -e $icon6; then
-	echo "El archivo $icon6 si existe."
+	echo "The file $icon6 is here."
 else
 wget -c -P/usr/share/icons/acciones/ http://sourceforge.net/projects/postinstaller/files/Icons/add.png
 fi
 
 if test -e $icon7; then
-	echo "El archivo $icon7 si existe."
+	echo "The file $icon7 is here."
 else
 wget -c -P/usr/share/icons/acciones/ http://sourceforge.net/projects/postinstaller/files/Icons/conf.png
 fi
 
 if test -e $icon8; then
-	echo "El archivo $icon8 si existe."
+	echo "The file $icon8 is here."
 else
 wget -c -P/usr/share/icons/acciones/ http://sourceforge.net/projects/postinstaller/files/Icons/gnomestension.svg
 fi
 
 if test -e $icon9; then
-	echo "El archivo $icon9 si existe."
+	echo "The file $icon9 is here."
 else
 wget -c -P/usr/share/icons/acciones/ http://sourceforge.net/projects/postinstaller/files/Icons/system-shutdown.svg
 fi
 
 if test -e $icon010; then
-	echo "El archivo $icon010 si existe."
+	echo "The file $icon010 is here."
 else
 wget -c -P/usr/share/icons/acciones/ http://sourceforge.net/projects/postinstaller/files/Icons/topicon.png
 fi
 
 if test -e $icon011; then
-	echo "El archivo $icon011 si existe."
+	echo "The file $icon011 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/Postinstaller1.svg
 fi
 
 if test -e $icon012; then
-	echo "El archivo $icon012 si existe."
+	echo "The file $icon012 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/icoinstall2.png
 fi
 
 if test -e $icon013; then
-	echo "El archivo $icon013 si existe."
+	echo "The file $icon013 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/brightness.png
 fi
 
 if test -e $icon014; then
-	echo "El archivo $icon014 si existe."
+	echo "The file $icon014 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/updatep2.png
 fi
 
 if test -e $icon015; then
-	echo "El archivo $icon015 si existe."
+	echo "The file $icon015 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/updatep.png
 fi
 
 if test -e $icon016; then
-	echo "El archivo $icon016 si existe."
+	echo "The file $icon016 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/trashito.png
 fi
  
 
-# VERIFICANDO SUBMENUS DE POSTINSTALLERF
+# Verifing the postinstallerf submenus.
 
 if [ -f /usr/bin/PostinstallerF.sh ]; then
 echo "PostinstallerF is here"
@@ -565,7 +550,7 @@ fi
 
 
 
-# VERIFICANDO LAZADORES DE POSTINSTALLERF
+# Checking postinstallerf launchers.
 
 
 desktop1=/usr/share/Postdesktopfiles/Configure_Tuning.desktop
@@ -574,7 +559,7 @@ desktop3=/usr/share/Postdesktopfiles/Install.desktop
 desktop4=/usr/share/Postdesktopfiles/Shutdown_Logout.desktop
 
 if test -e /usr/share/applications/postintallerf.desktop; then
-echo 'existe el acceso directo de postinstallerf'
+echo 'The Direct Access postinstallerf directory is here.'
 else
 echo '[Desktop Entry]
 Version=1.0.1
@@ -583,7 +568,6 @@ Terminal=false
 Name=PostIntallerF
 Exec=/usr/bin/PostinstallerF.sh
 Comment=Install all necessary, after to run first time Fedora
-Comment[es]= Instala todo lo que necesitas en Fedora
 Icon=/usr/share/icons/Postinstaller1.svg
 Categories=GTK;Utility;System;' >> /usr/share/applications/postinstallerf.desktop
 fi
@@ -616,7 +600,7 @@ fi
  fi
 fi
 
-# VERIFICANDO SONIDOS DE POSTINSTALLERF
+# Testing the sounds in postinstallerf.
 sound=/usr/bin/postinstallerf/sound21.ogg
 if [ -f $sound ]; then
 echo "sound is here"
@@ -628,7 +612,7 @@ fi
 clear
 
 # +--------------------------------------------------------------------------------------------------+
-# |AQUI INICIA EL MENU                                                                               |
+# |Here starts the menu                                                                              |
 # +--------------------------------------------------------------------------------------------------+
 
 
@@ -639,7 +623,7 @@ P_RUN=$(yad --image="/usr/share/icons/acciones/topicon.png" --image-on-top --ico
 if [ $? -eq 0 ]; then
 	su $noti3 -c '/usr/bin/firefox http://sourceforge.net/projects/postinstaller/'
 else
-	echo "nada que hacer"
+	echo "Nothing to do"
 	fi
 	exit 0
 
