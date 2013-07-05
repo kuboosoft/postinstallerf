@@ -23,53 +23,10 @@
 
 time=$(date +"%H")
 
-
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-
-if test $time -lt 12; then
-
-yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Welcome to Postintallerf
-
-Good day, PostInstallerF is a program that installs everything you need in Fedora"
-
-
-elif test $time -gt 12 & test $time -le 18; then
-
-  yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Welcome to Postintallerf
-
-Good afternoon, PostInstallerF is a program that installs everything you need in Fedora"
-
-else
-
-	yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Welcome to Postintallerf
-
-Good night, PostInstallerF is a program that installs everything you need in Fedora"
-
-fi
-
-else
-
-if test $time -lt 12; then
-
 yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
 
 Good day, PostInstallerF is a program that installs everything you need in Fedora"
 
-
-elif test $time -gt 12 & test $time -le 18; then
-
-	yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
-
-Good afternoon, PostInstallerF is a program that installs everything you need in Fedora"
-
-else
-
-	yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
-
-Good night, PostInstallerF is a program that installs everything you need in Fedora"
-
-fi
- fi
 
 
 # ELIMINATING OBSOLETE VERSIONS OF POSTINSTALLERF
@@ -369,30 +326,17 @@ mkdir /usr/share/updatepostintaller/
  wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 fi 
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 diff -a $source $update
 if [ $? -eq 0 ]; then
-echo "The files are equal"
-yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
+    echo "The files are equal"
+    yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
 else
-echo "The files are not equal"
-cp -f /usr/share/updatepostintaller/Postinstaller.sh /usr/bin/ 
-yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF has been updated. Please restart PostInstallerF" 
-fi
-  else
+    echo "The files are not equal"
+    cp -f /usr/share/updatepostintaller/Postinstaller.sh /usr/bin/ 
+    yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF was updated 
 
-diff -a $source $update
-if [ $? -eq 0 ]; then
-echo "The files are equal"
-yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
-else
-echo "The files are not equal"
-cp -f /usr/share/updatepostintaller/Postinstaller.sh /usr/bin/ 
-yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF was updated 
-
- Please Restart PostInstallerF" 
+    Please Restart PostInstallerF" 
 fi
- fi
 
 elif [ ""$nuday = $Thu"" ]; then
 
@@ -410,49 +354,29 @@ mkdir /usr/share/updatepostintaller/
  wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 fi 
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 diff -a $source $update
 if [ $? -eq 0 ]; then
-echo "The files are equal"
-yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
+    echo "The files are equal"
+    yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
 else
-echo "The files are not equal"
-cp -f /usr/share/updatepostintaller/Postinstaller.sh /usr/bin/ 
-yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Has been updated PostInstallerF Please Restart. PostInstallerF" 
+    echo "The files are not equal"
+    cp -f /usr/share/updatepostintaller/Postinstaller.sh /usr/bin/ 
+    yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF was updated 
+    Please Restart PostInstallerF" 
 fi
-  else
-
-diff -a $source $update
-if [ $? -eq 0 ]; then
-echo "The files are equal"
-yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
-else
-echo "The files are not equal"
-cp -f /usr/share/updatepostintaller/Postinstaller.sh /usr/bin/ 
-yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF was updated 
-
- Please Restart PostInstallerF" 
-fi
- fi
 
 fi
 
 
 # UPDATING THE SYSTEM
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Updating" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep2.png" --image-on-top --progress --title "Updating the System" --text="Please Wait...." --pulsate --auto-close --width=350
-else
 yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Updating" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep2.png" --image-on-top --progress --title "Updating the System" --text="Please wait...." --pulsate --auto-close --width=350
-fi
+
 
 # COMPLETING PENDING INSTALLATION
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-yum-complete-transaction -y | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Completeing all pending isntallations" --text="Please Wait...." --pulsate --auto-close --width=350
-else
 yum-complete-transaction -y | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Completeing all pending isntallations" --text="Please wait...." --pulsate --auto-close --width=350
-fi
+
 
 # Showing Installed Updates
 
