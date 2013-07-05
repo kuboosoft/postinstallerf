@@ -3,59 +3,60 @@
 # +--------------------------------------------------------------------------------+
 # | Copyright (C) 2012 Kuboosoft                                                   |
 # |                                                                                |
-# | Este programa es Software Libre; Puedes distribuirlo y/o                       |
-# | modificarlo bajo los términos de la GNU General Public License                 |
-# | como está publicada por la Free Software Foundation; cualquier                 |
-# | versión 3 de la Licencia, o (opcionalmente) cualquier versión                  |
-# | posterior. http://www.gnu.org/licenses/lgpl.html                               |
-# |                                                                                |
-# | Este programa es distribuido con la esperanza de que sea útil,                 |
-# | pero SIN NINGUNA GARANTÍA. Vea la GNU General Public License                   |
-# | para más detalles.                                                             |
+# |This program is free software; You can distribute it and / or                   |
+# |modify it under the terms of the GNU General Public License                     |
+# |as published by the Free Software Foundation; any                               |
+# |version 3 of the License, or (optionally) any version                           |
+# |later. http://www.gnu.org/licenses/lgpl.html                                    |
+# |This program is distributed in the hope that it will be useful,                 |
+# |but WITHOUT ANY WARRANTY. See the GNU General Public License                    |
+# |for details.                                                                    |
 # +--------------------------------------------------------------------------------+
-# | Este código ha sido diseñado,escrito y mantenido por Kuboode y David Vásquez   |
-# | Cualquier pregunta, comentario o consejo sobre este código                     |
-# | debe dirigirse a:                                                              |
-# | http:www.kuboosoft.blogspot.com                                                |
+# |This code is designed, written and maintained by Kuboode and David Vasquez      |
+# |This code was translated by Max M                                               |
+# |Any questions, comments or advice on this code                                  |
+# |should be addressed to:                                                         |
+# |http:www.kuboosoft.blogspot.com                                                 |
+# |or send an e-mail to maxmrphy@gmail.com                                         |
 # +--------------------------------------------------------------------------------+
 # FEDORA 17, 18, 19 POSTINSTALLER V.1.2.0 32 BITS
 
-hora=$(date +"%H")
+time=$(date +"%H")
 
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 
-if test $hora -lt 12; then
+if test $time -lt 12; then
 
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Bienvenido a PostInstallerF
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Welcome to Postintallerf
 
-Buen dia, PostInstallerF es un programa que instala todo lo necesario en Fedora"
+Good day, PostInstallerF is a program that installs everything you need in Fedora"
 
 
-elif test $hora -gt 12 & test $hora -le 18; then
+elif test $time -gt 12 & test $time -le 18; then
 
-  yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Bienvenido a PostInstallerF
+  yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Welcome to Postintallerf
 
-Buena tarde, PostInstallerF es un programa que instala todo lo necesario en Fedora"
+Good afternoon, PostInstallerF is a program that installs everything you need in Fedora"
 
 else
 
-	yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Bienvenido a PostInstallerF
+	yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Welcome to Postintallerf
 
-Buena noche, PostInstallerF es un programa que instala todo lo necesario en Fedora"
+Good night, PostInstallerF is a program that installs everything you need in Fedora"
 
 fi
 
 else
 
-if test $hora -lt 12; then
+if test $time -lt 12; then
 
 yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
 
 Good day, PostInstallerF is a program that installs everything you need in Fedora"
 
 
-elif test $hora -gt 12 & test $hora -le 18; then
+elif test $time -gt 12 & test $time -le 18; then
 
 	yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
 
@@ -71,7 +72,7 @@ fi
  fi
 
 
-# ELIMINANDO VERSIONES OBSOLETAS DE POSTINSTALLERF
+# ELIMINATING OBSOLETE VERSIONS OF POSTINSTALLERF
 
 
 grep '/usr/local/bin/' /usr/share/Postdesktopfiles/Configure_Tuning.desktop
@@ -96,7 +97,7 @@ fi
 
 
 if test -e /usr/local/bin/Postinstaller.sh; then
-echo 'Se detecto una version obsoleta, se procedera a desinstalalar'
+echo 'A version has been detected that is obsolete. Will proceed to uninstall'
 rm -f /usr/local/bin/Postinstaller.sh
 fi
 
@@ -134,76 +135,76 @@ fi
 
 
 
-# DIRECTORIO Y ARCHIVO LOG
+# DIRECTORY AND LOG FILE
 
 if [ -d /usr/share/.postinstallerf/ ]; then
 cd /usr/share/.postinstallerf/
-echo "el directorio log existe" >> installed.log
+echo "the log directory exists" >> installed.log
 else
 mkdir -p /usr/share/.postinstallerf/
 cd /usr/share/.postinstallerf/
-echo "se creo directorio log" >> installed.log 
+echo "log directory was created" >> installed.log 
 fi
 
-# DIRECTORIOS DE POSTINSTALLERF
+# DIRECTORIES POSTINSTALLERF
 
 if [ -d /usr/share/icons/acciones/ ]; then
-echo "El directorio de iconos del menu esta presente"
+echo "The menu icons directory is present"
 else
 mkdir -p /usr/share/icons/acciones/
 fi
 
 if [ -d /usr/bin/postinstallerf/ ]; then
-echo "directorio submenus esta presente"
+echo "Submenus directory is present"
 else
 mkdir -p /usr/bin/postinstallerf/
 fi
 
 if [ -d /usr/share/Postdesktopfiles ]; then
-echo "directorio accesos directos esta presente"
+echo "Shortcuts directory is present"
 else
 mkdir -p /usr/share/Postdesktopfiles/
 fi
 
 
 
-# MATANDO BLOQUEO DE YUM
+# KILLING LOCK YUM
 pkill -SIGKILL -u root -o yum
 
-# VERIFICANDO REPOSITORIOS 
+# CHECKING REPOSITORIES 
 
 if [ -f /etc/yum.repos.d/rpmfusion-nonfree.repo ] && [ -f /etc/yum.repos.d/rpmfusion-free.repo ]; then
-echo "RPM Fusion free y nonfree repo esta presente"
+echo "RPM Fusion free and nonfree repo is present"
 else
 
 if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "16" ]; then
-yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-16.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-16.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-16.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-16.noarch.rpm 2>&1 | zenity --progress --title "Checking Repository and Adding RPMFusion" --text="Please wait ...." --pulsate --auto-close --width=400
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "17" ]; then
-yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-17.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-17.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-17.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-17.noarch.rpm 2>&1 | zenity --progress --title "Checking Repository and Adding RPMFusion" --text="Please wait ...." --pulsate --auto-close --width=400
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "18" ]; then
-yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-18.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-18.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-18.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-18.noarch.rpm 2>&1 | zenity --progress --title "Checking Repository and Adding RPMFusion" --text="Please wait ...." --pulsate --auto-close --width=400
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "19" ]; then
-yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-19.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-19.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-19.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-19.noarch.rpm 2>&1 | zenity --progress --title "Checking Repository and Adding RPMFusion" --text="Please wait ...." --pulsate --auto-close --width=400
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "20" ]; then
-yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-20.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-20.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-20.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-20.noarch.rpm 2>&1 | zenity --progress --title "Checking Repository and Adding RPMFusion" --text="Please wait ...." --pulsate --auto-close --width=400
 fi
  fi
 
 if [ -f /etc/yum.repos.d/russianfedora-free.repo ]; then
-echo 'ya esta instalado'
+echo 'Already Installed'
 else
-yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/russianfedora-free-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorios Community 3rd party Free" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/russianfedora-free-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorios Community 3rd party Free" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 if [ -f /etc/yum.repos.d/russianfedora-nonfree.repo ]; then
-echo 'ya esta instalado'
+echo 'Already Installed'
 else
-yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/russianfedora-nonfree-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorios Community 3rd party Non-Free" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/russianfedora-nonfree-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorios Community 3rd party Non-Free" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 
 if [ -f /etc/yum.repos.d/postinstallerf.repo ]; then
-echo 'postinstallerf repository is installed'
+echo 'Postinstallerf Repository is installed'
 else
 echo '[postinstallerf]
 name=PostInstallerF
@@ -238,7 +239,7 @@ exclude=ffmpeg ffmpeg-devel ffmpeg-libs' >> /etc/yum.repos.d/postinstallerf.repo
 fi
 
 
-# INSTALANDO DEPENDENCIAS BASICAS DE POSTINSTALLERF
+# Installing Basic Dependencies for Postinstallerf
 
 znt=/usr/bin/zenity
 cu=/usr/bin/curl
@@ -250,64 +251,65 @@ wm=/usr/bin/wmctrl
 pipeviewer=/usr/bin/pv
 w3=/usr/bin/w3m
 
+echo "Running Dependency Checks"
 
 if [ -f $wm ]; then
-echo "wmctrl esta presente"
+echo "wmctrl is present"
 else
-yum -y install wmctrl 2>&1 | zenity --progress --title "instalando wmctrl herramientas basicas del programa" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y install wmctrl 2>&1 | zenity --progress --title "Installing dependency : wmctrl" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 if [ -f $xte ]; then
-echo "xterm esta presente"
+echo "xterm is present"
 else
-yum -y install xterm 2>&1 | zenity --progress --title "instalando yad herramientas basicas del programa" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y install xterm 2>&1 | zenity --progress --title "Installing dependency : xterm" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 if [ -f $yadd ]; then
-echo "yad esta presente"
+echo "yad is present"
 else
 if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "18" ]; then
 yum -y localinstall http://kojipkgs.fedoraproject.org//packages/yad/0.19.1/1.fc18/i686/yad-0.19.1-1.fc18.i686.rpm 2>&1 | zenity --progress --title "instalando yad herramientas basicas del programa" --text="Porfavor espere...." --pulsate --auto-close --width=400
 else
-yum -y install yad 2>&1 | zenity --progress --title "instalando yad herramientas basicas del programa" --text="Porfavor espere...." --pulsate --auto-close --width=400
+yum -y install yad 2>&1 | zenity --progress --title "Installing dependency : yad" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 fi
 
 if [ -f $znt ]; then
-echo "zenity esta presente"
+echo "zenity is present"
 else
-yum -y install zenity 2>&1 | zenity --progress --title "instalando zenity herramientas basicas del programa" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y install zenity 2>&1 | zenity --progress --title "Installing dependency : zenity" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 if [ -f $cu ]; then
-echo "curl esta presente"
+echo "curl is present"
 else
-yum -y install curl 2>&1 | zenity --progress --title "instalando curl herramientas basicas del programa" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y install curl 2>&1 | zenity --progress --title "Installing dependency : curl" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 if [ -f $wg ]; then
-echo "wget esta presente"
+echo "wget is present"
 else
-yum -y install wget 2>&1 | zenity --progress --title "instalando wget herramientas basicas del programa" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y install wget 2>&1 | zenity --progress --title "Installing dependency : wget" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 if [ -f $wavep ]; then
-echo "SDL_mixer esta presente"
+echo "SDL_mixer is present"
 else
-yum -y install SDL_mixer 2>&1 | zenity --progress --title "instalando SDL_mixer como dependencia basica del programa" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y install SDL_mixer 2>&1 | zenity --progress --title "Installing dependency : SDL_mixer" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 
 if [ -f $pipeviewer ]; then
-echo "Pipe Viewer esta presente"
+echo "Pipe Viewer is present"
 else
-yum -y install pv 2>&1 | zenity --progress --title "instalando Pipe Viewer como dependencia basica del programa" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y install pv 2>&1 | zenity --progress --title "Installing dependency : Pipe Viewer" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 if [ -f $w3 ]; then
-echo "w3m esta presente"
+echo "w3m is present"
 else
-yum -y install w3m 2>&1 | zenity --progress --title "instalando w3m como dependencia basica del programa" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y install w3m 2>&1 | zenity --progress --title "Installing dependency : w3m" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
 
 
@@ -348,16 +350,16 @@ elif [ ""$nuday = $Fri"" ] && [ ""$time = $setimec"" ]; then
 yum clean metadata
 fi
 
-# BUSCANDO E INSTALANDO NUEVAS ACTUALIZACIONES MENU PRINCIPAL DE POSTINSTALLERF
+# LOOKING FOR NEW UPDATES AND INSTALLING POSTINSTALLERF MAIN MENU
 
 
 if [ ""$nuday = $Tue"" ]; then
 
 if [ -f $updater ]; then
 rm -f /usr/share/updatepostintaller/Postinstaller.sh
-echo "se elimino el archivo obsoleto de actualizacion"
+echo "Obselete file was removed, Updating file"
 else
-echo "Aun no se ha descargado el archivo de actualizacion"
+echo "Up to date did not update the file"
 fi
 
 if [ -d /usr/share/updatepostintaller/ ]; then
@@ -370,25 +372,23 @@ fi
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 diff -a $source $update
 if [ $? -eq 0 ]; then
-echo "Los ficheros son iguales"
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se encuentra actualizado" --timeout=5
+echo "The files are equal"
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
 else
-echo "Los ficheros No son iguales"
+echo "The files are not equal"
 cp -f /usr/share/updatepostintaller/Postinstaller.sh /usr/bin/ 
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se ha actualizado 
-
- Por favor Reinicie PostInstallerF" 
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF has been updated. Please restart PostInstallerF" 
 fi
   else
 
 diff -a $source $update
 if [ $? -eq 0 ]; then
-echo "Los ficheros son iguales"
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
+echo "The files are equal"
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
 else
-echo "Los ficheros No son iguales"
+echo "The files are not equal"
 cp -f /usr/share/updatepostintaller/Postinstaller.sh /usr/bin/ 
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF was updated 
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF was updated 
 
  Please Restart PostInstallerF" 
 fi
@@ -398,9 +398,9 @@ elif [ ""$nuday = $Thu"" ]; then
 
 if [ -f $updater ]; then
 rm -f /usr/share/updatepostintaller/Postinstaller.sh
-echo "se elimino el archivo obsoleto de actualizacion"
+echo "Obselete file was removed, updating"
 else
-echo "Aun no se ha descargado el archivo de actualizacion"
+echo "File up to date, not updating"
 fi
 
 if [ -d /usr/share/updatepostintaller/ ]; then
@@ -413,25 +413,23 @@ fi
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 diff -a $source $update
 if [ $? -eq 0 ]; then
-echo "Los ficheros son iguales"
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se encuentra actualizado" --timeout=5
+echo "The files are equal"
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
 else
-echo "Los ficheros No son iguales"
+echo "The files are not equal"
 cp -f /usr/share/updatepostintaller/Postinstaller.sh /usr/bin/ 
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se ha actualizado 
-
- Por favor Reinicie PostInstallerF" 
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Has been updated PostInstallerF Please Restart. PostInstallerF" 
 fi
   else
 
 diff -a $source $update
 if [ $? -eq 0 ]; then
-echo "Los ficheros son iguales"
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
+echo "The files are equal"
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
 else
-echo "Los ficheros No son iguales"
+echo "The files are not equal"
 cp -f /usr/share/updatepostintaller/Postinstaller.sh /usr/bin/ 
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF was updated 
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF was updated 
 
  Please Restart PostInstallerF" 
 fi
@@ -440,20 +438,20 @@ fi
 fi
 
 
-# ACTUALIZANDO EL SISTEMA
+# UPDATING THE SYSTEM
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep2.png" --image-on-top --progress --title "Actualizando el Sistema" --text="Por favor espere...." --pulsate --auto-close --width=350
+yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Updating" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep2.png" --image-on-top --progress --title "Updating the System" --text="Please Wait...." --pulsate --auto-close --width=350
 else
-yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Updating" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep2.png" --image-on-top --progress --title "Updating the system" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Updating" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep2.png" --image-on-top --progress --title "Updating the System" --text="Please wait...." --pulsate --auto-close --width=350
 fi
 
-# COMPLETANDO INSTALACIONES PENDIENTES
+# COMPLETING PENDING INSTALLATION
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-yum-complete-transaction -y | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Completando Instalaciones pendientes" --text="Por favor espere...." --pulsate --auto-close --width=350
+yum-complete-transaction -y | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Completeing all pending isntallations" --text="Please Wait...." --pulsate --auto-close --width=350
 else
-yum-complete-transaction -y | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Completing all installation pending." --text="Please wait...." --pulsate --auto-close --width=350
+yum-complete-transaction -y | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Completeing all pending isntallations" --text="Please wait...." --pulsate --auto-close --width=350
 fi
 
 # MOSTRAR LAS ULTIMAS ACTUALIZACIONES INSTALADAS
@@ -480,134 +478,134 @@ icon015='/usr/share/icons/updatep.png'
 icon016='/usr/share/icons/trashito.png'
 
 if test -e $icon1; then
-	echo "El archivo $icon1 si existe."
+	echo "The file $icon1 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/sistema.png
 fi
 
 if test -e $icon2; then
-	echo "El archivo $icon2 si existe."
+	echo "The file $icon2 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/pinguino.png
 fi
 
 if test -e $icon3; then
-	echo "El archivo $icon3 si existe."
+	echo "The file $icon3 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/pincel_rco.png
 fi
 
 if test -e $icon4; then
-	echo "El archivo $icon4 si existe."
+	echo "The file $icon4 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/user-trash-full.png
 fi
 
 if test -e $icon5; then
-	echo "El archivo $icon5 si existe."
+	echo "The file $icon5 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/camera.png
 fi
 
 if test -e $icon6; then
-	echo "El archivo $icon6 si existe."
+	echo "The file $icon6 is here."
 else
 wget -c -P/usr/share/icons/acciones/ http://sourceforge.net/projects/postinstaller/files/Icons/add.png
 fi
 
 if test -e $icon7; then
-	echo "El archivo $icon7 si existe."
+	echo "The file $icon7 is here."
 else
 wget -c -P/usr/share/icons/acciones/ http://sourceforge.net/projects/postinstaller/files/Icons/conf.png
 fi
 
 if test -e $icon8; then
-	echo "El archivo $icon8 si existe."
+	echo "The file $icon8 is here."
 else
 wget -c -P/usr/share/icons/acciones/ http://sourceforge.net/projects/postinstaller/files/Icons/gnomestension.svg
 fi
 
 if test -e $icon9; then
-	echo "El archivo $icon9 si existe."
+	echo "The file $icon9 is here."
 else
 wget -c -P/usr/share/icons/acciones/ http://sourceforge.net/projects/postinstaller/files/Icons/system-shutdown.svg
 fi
 
 if test -e $icon010; then
-	echo "El archivo $icon010 si existe."
+	echo "The file $icon010 is here."
 else
 wget -c -P/usr/share/icons/acciones/ http://sourceforge.net/projects/postinstaller/files/Icons/topicon.png
 fi
 
 if test -e $icon011; then
-	echo "El archivo $icon011 si existe."
+	echo "The file $icon011 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/Postinstaller1.svg
 fi
 
 if test -e $icon012; then
-	echo "El archivo $icon012 si existe."
+	echo "The file $icon012 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/icoinstall2.png
 fi
 
 if test -e $icon013; then
-	echo "El archivo $icon013 si existe."
+	echo "The file $icon013 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/brightness.png
 fi
 
 if test -e $icon014; then
-	echo "El archivo $icon014 si existe."
+	echo "The file $icon014 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/updatep2.png
 fi
 
 if test -e $icon015; then
-	echo "El archivo $icon015 si existe."
+	echo "The file $icon015 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/updatep.png
 fi
 
 if test -e $icon016; then
-	echo "El archivo $icon016 si existe."
+	echo "The file $icon016 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/trashito.png
 fi
  
 
-# VERIFICANDO SUBMENUS DE POSTINSTALLERF
+# CHECKING SUBMENUS OF POSTINSTALLERF
 
 if [ -f /usr/bin/PostinstallerF.sh ]; then
-echo "PostinstallerF esta presente"
+echo "PostinstallerF is present"
 else
 xterm -e 'wget -c -P/usr/bin/ https://raw.github.com/kuboosoft/postinstallerf/master/PostinstallerF.sh'
 chmod a+x /usr/bin/PostinstallerF.sh
 fi
 
 if [ -f /usr/bin/postinstallerf/addpost.sh ]; then
-echo "addpost esta presente"
+echo "addpost is present"
 else
 xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/kuboosoft/postinstallerf/master/addpost.sh'
 chmod a+x /usr/bin/postinstallerf/addpost.sh
 fi
 
 if [ -f /usr/bin/postinstallerf/confpost.sh ]; then
-echo "confpost esta presente"
+echo "confpost is present"
 else
 xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/kuboosoft/postinstallerf/master/confpost.sh'
 chmod a+x /usr/bin/postinstallerf/confpost.sh
 fi
 
 if [ -f /usr/bin/postinstallerf/gnext.sh ]; then
-echo "gnext esta presente"
+echo "gnext is present"
 else
 xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/kuboosoft/postinstallerf/master/gnext.sh'
 chmod a+x /usr/bin/postinstallerf/gnext.sh
 fi
 
 if [ -f /usr/bin/postinstallerf/Logout.sh ]; then
-echo "Logout esta presente"
+echo "Logout is present"
 else
 xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/kuboosoft/postinstallerf/master/Logout.sh'
 chmod a+x /usr/bin/postinstallerf/Logout.sh
@@ -615,7 +613,7 @@ fi
 
 
 
-# VERIFICANDO LANZADORES DE POSTINSTALLERF
+# CHECKING LAUNCHERS OF POSTINSTALLERF
 
 desktop1=/usr/share/Postdesktopfiles/Configure_Tuning.desktop
 desktop2=/usr/share/Postdesktopfiles/GnomeShell_Extensions.desktop
@@ -624,7 +622,7 @@ desktop4=/usr/share/Postdesktopfiles/Shutdown_Logout.desktop
 
 
 if test -e /usr/share/applications/postintallerf.desktop; then
-echo 'existe el acceso directo de postinstallerf'
+echo 'There is a desktop file for postinstallerf'
 else
 echo '[Desktop Entry]
 Version=1.0.1
@@ -651,13 +649,13 @@ wget -c -P/usr/share/Postdesktopfiles/ http://sourceforge.net/projects/postinsta
 chmod +x /usr/share/Postdesktopfiles/GnomeShell_Extensions.desktop
 
 if [ -f $desktop3 ]; then
-echo "Install esta presente"
+echo "Install is present"
 else
 wget -c -P/usr/share/Postdesktopfiles/ http://sourceforge.net/projects/postinstaller/files/desktop/Install.desktop
 chmod +x /usr/share/Postdesktopfiles/Install.desktop
 
 if [ -f $desktop4 ]; then
-echo "Shutdown_Logout esta presente"
+echo "Shutdown_Logout is present"
 else
 wget -c -P/usr/share/Postdesktopfiles/ http://sourceforge.net/projects/postinstaller/files/desktop/Shutdown_Logout.desktop
 chmod +x /usr/share/Postdesktopfiles/Shutdown_Logout.desktop
@@ -669,7 +667,7 @@ fi
 # VERIFICANDO SONIDOS DE POSTINSTALLERF
 sound=/usr/bin/postinstallerf/sound21.ogg
 if [ -f $sound ]; then
-echo "sound esta presente"
+echo "sound is present"
 else
 wget -c -P/usr/bin/postinstallerf/ http://sourceforge.net/projects/postinstaller/files/data/sound21.ogg
 fi
@@ -677,7 +675,7 @@ fi
 clear
 
 # +--------------------------------------------------------------------------------------------------+
-# |AQUI INICIA EL MENU                                                                               |
+# |HERE BEGINS THE MENU                                                                            |
 # +--------------------------------------------------------------------------------------------------+
 
 
@@ -688,7 +686,7 @@ P_RUN=$(yad --image="/usr/share/icons/acciones/topicon.png" --image-on-top --ico
 if [ $? -eq 0 ]; then
 	su $noti3 -c '/usr/bin/firefox http://sourceforge.net/projects/postinstaller/'
 else
-	echo "nada que hacer"
+	echo "nothing to do"
 	fi
 	exit 0
 
