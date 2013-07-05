@@ -3,75 +3,30 @@
 # +--------------------------------------------------------------------------------+
 # | Copyright (C) 2012 Kuboosoft                                                   |
 # |                                                                                |
-# | Este programa es Software Libre; Puedes distribuirlo y/o                       |
-# | modificarlo bajo los términos de la GNU General Public License                 |
-# | como está publicada por la Free Software Foundation; cualquier                 |
-# | versión 3 de la Licencia, o (opcionalmente) cualquier versión                  |
-# | posterior. http://www.gnu.org/licenses/lgpl.html                               |
-# |                                                                                |
-# | Este programa es distribuido con la esperanza de que sea útil,                 |
-# | pero SIN NINGUNA GARANTÍA. Vea la GNU General Public License                   |
-# | para más detalles.                                                             |
+# |This program is free software; You can distribute it and / or                   |
+# |modify it under the terms of the GNU General Public License                     |
+# |as published by the Free Software Foundation; any                               |
+# |version 3 of the License, or (optionally) any version                           |
+# |later. http://www.gnu.org/licenses/lgpl.html                                    |
+# |This program is distributed in the hope that it will be useful,                 |
+# |but WITHOUT ANY WARRANTY. See the GNU General Public License                    |
+# |for details.                                                                    |
 # +--------------------------------------------------------------------------------+
-# | Este código ha sido diseñado,escrito y mantenido por Kuboode y David Vásquez   |
-# | Cualquier pregunta, comentario o consejo sobre este código                     |
-# | debe dirigirse a:                                                              |
-# | http:www.kuboosoft.blogspot.com                                                |
+# |This code is designed, written and maintained by Kuboode and David Vasquez      |
+# |This code was translated by Max M                                               |
+# |Any questions, comments or advice on this code                                  |
+# |should be addressed to:                                                         |
+# |http:www.kuboosoft.blogspot.com                                                 |
+# |or send an e-mail to maxmrphy@gmail.com                                         |
 # +--------------------------------------------------------------------------------+
-# FEDORA 17, 18 y 19 POSTINSTALLERF V.1.2.0 64 BITS
+# FEDORA 17, 18, 19 POSTINSTALLER V.1.2.0 64 BITS
 
-hora=$(date +"%H")
+yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png"` --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
 
-
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-
-if test $hora -lt 12; then
-
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Bienvenido a PostInstallerF
-
-Buen dia, PostInstallerF es un programa que instala todo lo necesario en Fedora"
+Hello, PostInstallerF is a program that installs everything you need in Fedora"
 
 
-elif test $hora -gt 12 & test $hora -le 18; then
-
-  yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Bienvenido a PostInstallerF
-
-Buena tarde, PostInstallerF es un programa que instala todo lo necesario en Fedora"
-
-else
-
-	yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Bienvenido a PostInstallerF
-
-Buena noche, PostInstallerF es un programa que instala todo lo necesario en Fedora"
-
-fi
-
-else
-
-if test $hora -lt 12; then
-
-yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
-
-Good day, PostInstallerF is a program that installs everything you need in Fedora"
-
-
-elif test $hora -gt 12 & test $hora -le 18; then
-
-	yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
-
-Good afternoon, PostInstallerF is a program that installs everything you need in Fedora"
-
-else
-
-	yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
-
-Good night, PostInstallerF is a program that installs everything you need in Fedora"
-
-fi
- fi
-
-
-# ELIMINANDO VERSIONES OBSOLETAS DE POSTINSTALLERF
+# Removing Obselete Versions of Postinstallerf
 
 
 grep '/usr/local/bin/' /usr/share/Postdesktopfiles/Configure_Tuning.desktop
@@ -374,11 +329,11 @@ if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 diff -a $source $update
 if [ $? -eq 0 ]; then
 echo "Los ficheros son iguales"
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se encuentra actualizado" --timeout=5
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se encuentra actualizado" --timeout=5
 else
 echo "Los ficheros No son iguales"
 cp -f /usr/share/updatepostintaller/Postinstaller64.sh /usr/bin/ 
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se ha actualizado
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se ha actualizado
 
  Por favor Reinicie PostInstallerF" 
 
@@ -387,11 +342,11 @@ else
 diff -a $source $update
 if [ $? -eq 0 ]; then
 echo "Los ficheros son iguales"
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
 else
 echo "Los ficheros No son iguales"
 cp -f /usr/share/updatepostintaller/Postinstaller64.sh /usr/bin/ 
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF was updated 
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF was updated 
 
  Please Restart PostInstallerF" 
 
@@ -419,11 +374,11 @@ if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 diff -a $source $update
 if [ $? -eq 0 ]; then
 echo "Los ficheros son iguales"
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se encuentra actualizado" --timeout=5
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se encuentra actualizado" --timeout=5
 else
 echo "Los ficheros No son iguales"
 cp -f /usr/share/updatepostintaller/Postinstaller64.sh /usr/bin/ 
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se ha actualizado
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se ha actualizado
 
  Por favor Reinicie PostInstallerF" 
 
@@ -432,11 +387,11 @@ else
 diff -a $source $update
 if [ $? -eq 0 ]; then
 echo "Los ficheros son iguales"
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF is updated" --timeout=5
 else
 echo "Los ficheros No son iguales"
 cp -f /usr/share/updatepostintaller/Postinstaller64.sh /usr/bin/ 
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF was updated 
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF was updated 
 
  Please Restart PostInstallerF" 
 
