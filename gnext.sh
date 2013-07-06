@@ -3,30 +3,31 @@
 # +--------------------------------------------------------------------------------+
 # | Copyright (C) 2012 Kuboosoft                                                   |
 # |                                                                                |
-# | Este programa es Software Libre; Puedes distribuirlo y/o                       |
-# | modificarlo bajo los términos de la GNU General Public License                 |
-# | como está publicada por la Free Software Foundation; cualquier                 |
-# | versión 3 de la Licencia, o (opcionalmente) cualquier versión                  |
-# | posterior. http://www.gnu.org/licenses/lgpl.html                               |
-# |                                                                                |
-# | Este programa es distribuido con la esperanza de que sea útil,                 |
-# | pero SIN NINGUNA GARANTÍA. Vea la GNU General Public License                   |
-# | para más detalles.                                                             |
+# |This program is free software; You can distribute it and / or                   |
+# |modify it under the terms of the GNU General Public License                     |
+# |as published by the Free Software Foundation; any                               |
+# |version 3 of the License, or (optionally) any version                           |
+# |later. http://www.gnu.org/licenses/lgpl.html                                    |
+# |This program is distributed in the hope that it will be useful,                 |
+# |but WITHOUT ANY WARRANTY. See the GNU General Public License                    |
+# |for details.                                                                    |
 # +--------------------------------------------------------------------------------+
-# | Este código ha sido diseñado,escrito y mantenido por Kuboode y David Vásquez   |
-# | Cualquier pregunta, comentario o consejo sobre este código                     |
-# | debe dirigirse a:                                                              |
-# | http:www.kuboosoft.blogspot.com                                                |
+# |This code is designed, written and maintained by Kuboode and David Vasquez      |
+# |This code was translated by Max M                                               |
+# |Any questions, comments or advice on this code                                  |
+# |should be addressed to:                                                         |
+# |http:www.kuboosoft.blogspot.com                                                 |
+# |or send an e-mail to maxmrphy@gmail.com                                         |
 # +--------------------------------------------------------------------------------+
 # FEDORA 17, 18 Y 19 gnext 1.2.0
 
-# ACTUALIZACION DE CONFPOST
+# Updating Confpost
 updater=/usr/share/updatepostintaller/gnext.sh
 if [ -f $updater ]; then
 rm -f /usr/share/updatepostintaller/gnext.sh
-echo "se elimino el archivo obsoleto de actualizacion"
+echo "Obselete file was removed, Updating."
 else
-echo "Aun no se ha descargado el archivo de actualizacion"
+echo "Up to date."
 fi
 
 if [ -d /usr/share/updatepostintaller/ ]; then
@@ -39,39 +40,26 @@ fi
 source=/usr/bin/postinstallerf/gnext.sh
 update=/usr/share/updatepostintaller/gnext.sh
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 diff -a $source $update
 if [ $? -eq 0 ]; then
-echo "Los ficheros son iguales"
-zenity --info --text "Gnome Extensions se encuentra actualizado" --title "PostInstallerF" --timeout=5
+    echo "The files are equal."
+    zenity --info --text "Gnome Extensions is updated" --title "PostInstallerF" --timeout=5
 else
-echo "Los ficheros No son iguales"
-cp -f /usr/share/updatepostintaller/gnext.sh /usr/bin/postinstallerf/ 
-zenity --info --text "Gnome Extensions se ha actualizado
-Por favor Reinicie Gnome Extensions" --title "PostInstallerF" --timeout=5
-fi
- else
-diff -a $source $update
-if [ $? -eq 0 ]; then
-echo "Los ficheros son iguales"
-zenity --info --text "Gnome Extensions is updated" --title "PostInstallerF" --timeout=5
-else
-echo "Los ficheros No son iguales"
-cp -f /usr/share/updatepostintaller/gnext.sh /usr/bin/postinstallerf/ 
-zenity --info --text "Gnome Extensions was updated
-Please Restart Gnome Extensions" --title "PostInstallerF" --timeout=5
-fi
+    echo "The files are not equal."
+    cp -f /usr/share/updatepostintaller/gnext.sh /usr/bin/postinstallerf/ 
+    zenity --info --text "Gnome Extensions was updated
+    Please Restart Gnome Extensions" --title "PostInstallerF" --timeout=5
 fi
 
 
 if [ -f /usr/bin/postinstallerf/gnextnav.py ]; then
-echo 'ya se encuentra gnextnav'
+echo 'Already have gnextnav'
 else
 xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/kuboosoft/postinstallerf/master/gnextnav.py'
 fi
 
 if [ -f /usr/share/pywebkitgtk/defs/webkit-base-types.defs ]; then
-echo 'ya existe WebKit-gtk'
+echo 'Already have WebKit-gtk'
 else
 yum -y install pywebkitgtk | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing WebKit-gtk" --text="Please wait...." --pulsate --auto-close --width=350
 fi
@@ -79,7 +67,7 @@ fi
 
 
 # +--------------------------------------------------------------------------------------------------+
-# |AQUI INICIA EL MENU                                                                               |
+# |Here starts the menu                                                                              |
 # +--------------------------------------------------------------------------------------------------+
 
     generateInstallMenu(){ 
@@ -88,56 +76,25 @@ fi
 
  # Building Install Menue
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-
-        if ! $installed | grep "Gnome Extensions" > /dev/null;
- then
-
-if [ -f /usr/bin/postinstallerf/gnextnav.py ]; then
-
-                    im=$im"FALSE \"Gnome Extensions\"    \"GNOME Shell extensiones son pequeñas piezas de código escrito por los desarrolladores de terceros que modifican la forma de GNOME funciona\" \"ACTIVO  \"  "
-else
-im=$im"FALSE \"Gnome Extensions\"    \"GNOME Shell extensiones son pequeñas piezas de código escrito por los desarrolladores de terceros que modifican la forma de GNOME funciona\" \"NO ACTIVO  \""
-fi
- fi
-
-if ! $installed | grep "Extension-Common" > /dev/null;
- then
-if [ -d /usr/share/doc/gnome-shell-extension-common-*/ ]; then
-im=$im"FALSE \"Extension-Common\"    \"Extensiones comunes, para Gnome Shell.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Extension-Common\"    \"Extensiones comunes, para Gnome Shell.\" \"NO INSTALADO  \"  "
-fi
- fi
-
-
-
- else
-
-
 if ! $installed | grep "Gnome Extensions" > /dev/null;
- then
-if [ -f /usr/bin/postinstallerf/gnextnav.py ]; then
-im=$im"FALSE \"Gnome Extensions\"    \"GNOME Shell provides core user interface functions for GNOME, like switching to windows and launching applications.\" \"ACTIVE  \"  "
-else
-im=$im"FALSE \"Gnome Extensions\"    \"GNOME Shell provides core user interface functions for GNOME, like switching to windows and launching applications.\" \"NO ACTIVE  \""
-fi 
- fi
+then
+    if [ -f /usr/bin/postinstallerf/gnextnav.py ]; then
+        im=$im"FALSE \"Gnome Extensions\"    \"GNOME Shell provides core user interface functions for GNOME, like switching to windows and launching applications.\" \"ACTIVE  \"  "
+    else
+        im=$im"FALSE \"Gnome Extensions\"    \"GNOME Shell provides core user interface functions for GNOME, like switching to windows and launching applications.\" \"NO ACTIVE  \""
+    fi 
+fi
 
 if ! $installed | grep "Extension-Common" > /dev/null;
- then
-if [ -d /usr/share/doc/gnome-shell-extension-common-*/ ]; then
-im=$im"FALSE \"Extension-Common\"    \"Common extensions for Gnome Shell.\" \"INSTALLED  \"  "
-else
-im=$im"FALSE \"Extension-Common\"    \"Common extensions for Gnome Shell.\" \"NO INSTALLED  \"  "
-fi
- fi
-
-
-
+then
+    if [ -d /usr/share/doc/gnome-shell-extension-common-*/ ]; then
+        im=$im"FALSE \"Extension-Common\"    \"Common extensions for Gnome Shell.\" \"INSTALLED  \"  "
+    else
+        im=$im"FALSE \"Extension-Common\"    \"Common extensions for Gnome Shell.\" \"NO INSTALLED  \"  "
+    fi
 fi
 
-    }
+}
 
 
 chooseInstalls(){
@@ -160,15 +117,15 @@ if echo $choice | grep "Extension-Common" > /dev/null; then
     }
      
      
-    ##
-    ## Tweak/Install functions
-    ##
+##
+## Tweak/Install functions
+##
 
      
 Extensions(){     
             su $noti -c 'python /usr/bin/postinstallerf/gnextnav.py'
 
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Gnome Extensions" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $noti -c 'notify-send "PostInstallerF" "Completed installing the Gnome-Extensions" -i "/usr/share/icons/pinguino.png" -t 5000'
 
     }
 
@@ -177,7 +134,7 @@ su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Gnome Ex
 common(){     
             yum -y install gnome-shell-extension-common
 
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Extension-Common" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $noti -c 'notify-send "PostInstallerF" "Completed installing the Extension-Common" -i "/usr/share/icons/pinguino.png" -t 5000'
 
     }
 
@@ -238,7 +195,7 @@ su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Extensio
     #if there was something to do
     if test ${#choice} -gt 0; then
        /usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg
-       su $noti -c 'notify-send "Terminado!" "Todo está completado, visita http://www.kuboosoft.blogspot.com" -i "/usr/share/icons/pinguino.png" -t 10000'
+       su $noti -c 'notify-send "Finished!" "Everything is completed, visit http://www.kuboosoft.blogspot.com" -i "/usr/share/icons/pinguino.png" -t 10000'
        
             
     fi
