@@ -31,7 +31,7 @@ class SimpleBrowser: # needs GTK, Python, Webkit-GTK (pywebkitgtk)
 		toolbar.pack_start(self.btnforward,False,False)
 
 		# I add the "Refresh"
-		btnrefresh = gtk.Button('Actualizar')
+		btnrefresh = gtk.Button('Refresh')
 		btnrefresh.connect('clicked',self._refresh)
 		toolbar.pack_start(btnrefresh,False,False)
 
@@ -75,13 +75,13 @@ class SimpleBrowser: # needs GTK, Python, Webkit-GTK (pywebkitgtk)
 	def close_application(self, widget, event, data=None):
 		gtk.main_quit()
 	def _load_start(self, view, nadas):
-		self.status.set_text('Cargando...')
+		self.status.set_text('Loading...')
 		self.pbar.set_fraction(0)
 	def _load_progress_changed(self, view, prog):
 		self.pbar.set_fraction(prog/100.0)
 	def _load_finished(self, view, nada):
 		self.pbar.set_fraction(0)
-		self.status.set_text('Listo')
+		self.status.set_text('Ready')
 	def _go_back(self,nada):
 		self.webview.go_back()
 	def _go_forward(self,nada):
