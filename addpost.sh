@@ -1,32 +1,33 @@
 #!/bin/bash
 #
 # +--------------------------------------------------------------------------------+
-# | Copyright (C) 2013 Kuboosoft                                                   |
+# | Copyright (C) 2012 Kuboosoft                                                   |
 # |                                                                                |
-# | Este programa es Software Libre; Puedes distribuirlo y/o                       |
-# | modificarlo bajo los términos de la GNU General Public License                 |
-# | como está publicada por la Free Software Foundation; cualquier                 |
-# | versión 3 de la Licencia, o (opcionalmente) cualquier versión                  |
-# | posterior. http://www.gnu.org/licenses/lgpl.html                               |
-# |                                                                                |
-# | Este programa es distribuido con la esperanza de que sea útil,                 |
-# | pero SIN NINGUNA GARANTÍA. Vea la GNU General Public License                   |
-# | para más detalles.                                                             |
+# |This program is free software; You can distribute it and / or                   |
+# |modify it under the terms of the GNU General Public License                     |
+# |as published by the Free Software Foundation; any                               |
+# |version 3 of the License, or (optionally) any version                           |
+# |later. http://www.gnu.org/licenses/lgpl.html                                    |
+# |This program is distributed in the hope that it will be useful,                 |
+# |but WITHOUT ANY WARRANTY. See the GNU General Public License                    |
+# |for details.                                                                    |
 # +--------------------------------------------------------------------------------+
-# | Este código ha sido diseñado,escrito y mantenido por Kuboode y David Vásquez   |
-# | Cualquier pregunta, comentario o consejo sobre este código                     |
-# | debe dirigirse a:                                                              |
-# | http:www.kuboosoft.blogspot.com                                                |
+# |This code is designed, written and maintained by Kuboode and David Vasquez      |
+# |This code was translated by Max M                                               |
+# |Any questions, comments or advice on this code                                  |
+# |should be addressed to:                                                         |
+# |http:www.kuboosoft.blogspot.com                                                 |
+# |or send an e-mail to maxmrphy@gmail.com                                         |
 # +--------------------------------------------------------------------------------+
 # FEDORA 17, 18, 19 ADPOST 1.2 32 BITS
 
-# ACTUALIZACION DE ADPOST
+# Updating Adpost
 updater=/usr/share/updatepostintaller/addpost.sh
 if [ -f $updater ]; then
 rm -f /usr/share/updatepostintaller/addpost.sh
-echo "se elimino el archivo obsoleto de actualizacion"
+echo "Deleteing obselete version, and Updating"
 else
-echo "Aun no se ha descargado el archivo de actualizacion"
+echo "Up to date"
 fi
 
 if [ -d /usr/share/updatepostintaller/ ]; then
@@ -39,1198 +40,30 @@ fi
 source=/usr/bin/postinstallerf/addpost.sh
 update=/usr/share/updatepostintaller/addpost.sh
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 diff -a $source $update
 if [ $? -eq 0 ]; then
-echo "Los ficheros son iguales"
-zenity --info --text "Install se encuentra actualizado" --title "PostInstallerF" --timeout=5
+    echo "The files are equal"
+    zenity --info --text "Install is updated" --title "PostInstallerF" --timeout=5
 else
-echo "Los ficheros No son iguales"
-cp -f /usr/share/updatepostintaller/addpost.sh /usr/bin/postinstallerf/ 
-zenity --info --text "Install se ha actualizado
-Por favor Reinicie Install" --title "PostInstallerF" --timeout=5
-fi
- else
-diff -a $source $update
-if [ $? -eq 0 ]; then
-echo "Los ficheros son iguales"
-zenity --info --text "Install is updated" --title "PostInstallerF" --timeout=5
-else
-echo "Los ficheros No son iguales"
-cp -f /usr/share/updatepostintaller/addpost.sh /usr/bin/postinstallerf/ 
-zenity --info --text "Install was updated
-Please Restart Install" --title "PostInstallerF" --timeout=5
-fi
+    echo "The files are not equal"
+    cp -f /usr/share/updatepostintaller/addpost.sh /usr/bin/postinstallerf/ 
+    zenity --info --text "Install was updated
+    Please Restart Install" --title "PostInstallerF" --timeout=5
 fi
 
 
 
 # +--------------------------------------------------------------------------------------------------+
-# |AQUI INICIA EL MENU                                                                               |
+# |Here starts the menu.                                                                             |
 # +--------------------------------------------------------------------------------------------------+
 
     generateInstallMenu(){ 
             im="yad --image="/usr/share/icons/acciones/add.png" --image-on-top --class="Install" --window-icon="/usr/share/icons/acciones/add.png" --list --checklist  --width=700 --height=500 --title \"PostInstallerF for Fedora 32bit (Ver 1.2.0)\" --text \"Select items from the list below\" "
             im=$im"--column=\"\" --column \"Application\" --column \"Description\"    --column \"Status\"                           "
 
- # Building Install Menue
+# Building Install Menu
 
-            # Building Install Menue
-
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-
-if ! $installed | grep "Repositorios RPM Fusion" > /dev/null; then
-if [ -f /etc/yum.repos.d/rpmfusion-nonfree.repo ]; then
-                    im=$im"FALSE \"Repositorios RPM Fusion\"     \"Proporciona un repositorio que se puede acceder usando yum y PackageKit para el software del Proyecto Fedora [Recomendado]\" \"ACTIVADO  \"  "
-else
-im=$im"FALSE \"Repositorios RPM Fusion\"     \"Proporciona un repositorio que se puede acceder usando yum y PackageKit para el software del Proyecto Fedora [Recomendado]\" \"NO ACTIVADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Cambiar lenguaje del sistema" > /dev/null; then
-if [ -f /usr/bin/system-config-language ]; then
-                    im=$im"FALSE \"Cambiar lenguaje del sistema\"             \"Elegi tu lenguaje materno\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Cambiar lenguaje del sistema\"             \"Elegi tu lenguaje materno\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Herramientas Básicas de compilación" > /dev/null; then
-if [ -f /usr/bin/make ]
-then
-                    im=$im"FALSE \"Herramientas Básicas de compilación\"                  \"Compila tus programas\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Herramientas Básicas de compilación\"                  \"Compila tus programas\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Mozilla Firefox" > /dev/null; then
-if [ -f /usr/bin/firefox ]
-then
-                    im=$im"FALSE \"Mozilla Firefox\"                  \"Navegador web de mozilla.org\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Mozilla Firefox\"                  \"Navegador web de mozilla.org\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Instalar Codecs Audio/Video" > /dev/null; then
-if [ -d /usr/share/doc/gstreamer-plugins-bad-nonfree-* ]; then
-                    im=$im"FALSE \"Instalar Codecs Audio/Video\"      \"Todo lo necesario para reproduccion de audio y video\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Instalar Codecs Audio/Video\"      \"Todo lo necesario para reproduccion de audio y video\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Dirty ffmpeg" > /dev/null; then
-
-enableff='exclude=ffmpeg ffmpeg-devel ffmpeg-libs'; echo "enableff = $enableff"
-dirtyff=$(grep 'exclude=ffmpeg ffmpeg-devel ffmpeg-libs'  /etc/yum.repos.d/postinstallerf.repo | tail -n 1); echo "dirtyff = $dirtyff" 
-
-if [ "$dirtyff" = "$enableff" ]; then
-                    im=$im"FALSE \"Dirty ffmpeg\"      \"ffmpeg con varios codecs extras habilitados [Recomendado si necesita utilizar varios programas como winff, mvc y otros]\" \"NO ACTIVADO  \"  "
-else
-im=$im"FALSE \"Dirty ffmpeg\"      \"ffmpeg con varios codecs extras habilitados [Recomendado si necesita utilizar varios programas como winff, mvc y otros]\" \"ACTIVADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Flash Player" > /dev/null; then
-if [ -f /usr/bin/flash-player-properties ]; then
-                    im=$im"FALSE \"Flash Player\"           \"Plugin necesario para reproduccion flash del navegador\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Flash Player\"           \"Plugin necesario para reproduccion flash del navegador\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Unrar y p7zip" > /dev/null; then
-if [ -f /usr/bin/unrar ] || [ -f /usr/bin/7za ]; then
-                    im=$im"FALSE \"Unrar y p7zip\"                   \"Descomprime archivos rar y 7zip\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Unrar y p7zip\"                   \"Descomprime archivos rar y 7zip\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Java OpenJDK" > /dev/null; then
-
-if [ -f /usr/bin/java ]; then
-                    im=$im"FALSE \"Java OpenJDK\"           \"Ejecucion de archivos o programas escritos en java\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Java OpenJDK\"           \"Ejecucion de archivos o programas escritos en java\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Java JRE Oracle" > /dev/null; then
-
-if [ -f /usr/java/latest/bin/java ]; then
-                    im=$im"FALSE \"Java JRE Oracle\"           \"Implementation propietaria del lenguaje de programacion Java.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Java JRE Oracle\"           \"Implementation propietaria del lenguaje de programacion Java.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "GIMP" > /dev/null; then
-if [ -f /usr/bin/gimp ]
- then
-                    im=$im"FALSE \"GIMP\"            \"Edición de imágenes digitales en forma de mapa de bits, tanto dibujos como fotografías\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"GIMP\"            \"Edición de imágenes digitales en forma de mapa de bits, tanto dibujos como fotografías\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Hugin" > /dev/null; then
-if [ -f /usr/bin/hugin ]
- then
-                    im=$im"FALSE \"Hugin\"            \"Une múltiples imágenes, la imagen resultante puede abarcar 360 grados. Excelentes imágenes panorámicas\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Hugin\"            \"Une múltiples imágenes, la imagen resultante puede abarcar 360 grados. Excelentes imágenes panorámicas.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Converseen" > /dev/null; then
-if [ -f /usr/bin/converseen ]; then
-                    im=$im"FALSE \"Converseen\"            \"Convertir y cambiar el tamaño de un número ilimitado de imágenes a cualquiera de los formatos más populares.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Converseen\"            \"Convertir y cambiar el tamaño de un número ilimitado de imágenes a cualquiera de los formatos más populares: DPX, EXR, GIF, JPEG, JPEG 2000, PDF, PhotoCD, PNG, Postscript, SVG, y TIFF\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "MyPaint" > /dev/null; then
-if [ -f /usr/bin/mypaint ]; then
-                    im=$im"FALSE \"MyPaint\" \"MyPaint es una aplicación de software libre para ilustrar y dibujar con una tableta digitalizadora\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"MyPaint\" \"MyPaint es una aplicación de software libre para ilustrar y dibujar con una tableta digitalizadora\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Pinta" > /dev/null; then
-if [ -f /usr/bin/pinta ]; then
-                    im=$im"FALSE \"Pinta\" \"Pinta es un programa de dibujo libre y de codigo y modelado similar Paint.NET.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Pinta\" \"Pinta es un programa de dibujo libre y de codigo y modelado similar Paint.NET.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Pencil" > /dev/null; then
-if [ -f /usr/bin/pencil ]; then
-                    im=$im"FALSE \"Pencil\" \"Herramienta opensource para hacer diagramas y prototipos de interfaz gráfica de usuario.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Pencil\" \"Herramienta opensource para hacer diagramas y prototipos de interfaz gráfica de usuario.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Fotoxx" > /dev/null; then
-if [ -f /usr/bin/fotoxx ]; then
-                    im=$im"FALSE \"Fotoxx\"               \"Edición de fotos y gestión de la colección\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Fotoxx\"               \"Edición de fotos y gestión de la colección\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Shutter" > /dev/null; then
-if [ -f /usr/bin/shutter ]; then
-                    im=$im"FALSE \"Shutter\"       \"Shutter es un programa con características ricas de captura de pantalla\" \"INSTALADO  \"  "
-else
-m=$im"FALSE \"Shutter\"       \"Shutter es un programa con características ricas de captura de pantalla\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Glabels" > /dev/null; then
-if [ -f /usr/bin/glabels-* ]; then
-                    im=$im"FALSE \"Glabels\"            \"Es un programa para crear etiquetas y tarjetas de visita para el entorno de escritorio GNOME\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Glabels\"            \"Es un programa para crear etiquetas y tarjetas de visita para el entorno de escritorio GNOME\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Kover" > /dev/null; then
-if [ -f /usr/bin/kover ]; then
-                    im=$im"FALSE \"Kover\"              \"Kover es una aplicación informática libre que permite diseñar e imprimir carátulas de CD\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Kover\"              \"Kover es una aplicación informática libre que permite diseñar e imprimir carátulas de CD\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "LibreOffice" > /dev/null; then
-if [ -d /usr/lib/libreoffice/ ]; then
-                    im=$im"FALSE \"LibreOffice\"         \"LibreOffice es la suite de productividad personal de código abierto para GNU/Linux\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"LibreOffice\"         \"LibreOffice es la suite de productividad personal de código abierto para GNU/Linux\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "WPS Office" > /dev/null; then
-if [ -f /usr/bin/wps ]; then
-                    im=$im"FALSE \"WPS Office\"         \"Suite de oficina para Linux propietaria, desarrollado por Kingsoft\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"WPS Office\"         \"Suite de oficina para Linux propietaria, desarrollado por Kingsoft\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Basket" > /dev/null; then
-if [ -f /usr/bin/basket ]; then
-                    im=$im"FALSE \"Basket\"         \"Organiza tus notas en una jerarquía de canastas, estupendo organizador de notas.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Basket\"         \"Organiza tus notas en una jerarquía de canastas, estupendo organizador de notas.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "ProjectLibre" > /dev/null; then
-if [ -f /usr/bin/projectlibre ]; then
-                    im=$im"FALSE \"ProjectLibre\"         \"ProjectLibre es la alternativa de código abierto a Microsoft Project.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"ProjectLibre\"         \"ProjectLibre es la alternativa de código abierto a Microsoft Project.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Adobe Reader" > /dev/null; then
-if [ -f /usr/bin/acroread ]; then
-                    im=$im"FALSE \"Adobe Reader\"             \"Visor de PDF fácil de ver, buscar, imprimir\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Adobe Reader\"             \"Visor de PDF fácil de ver, buscar, imprimir\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "PDF Mod" > /dev/null; then
-if [ -f /usr/bin/pdfmod ]; then
-                    im=$im"FALSE \"PDF Mod\"                \"PDF Mod es una sencilla aplicación para la modificación de documentos PDF\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"PDF Mod\"                \"PDF Mod es una sencilla aplicación para la modificación de documentos PDF\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "PDF Split and Merge" > /dev/null; then
-if [ -f /usr/bin/pdfsam ]; then
-                    im=$im"FALSE \"PDF Split and Merge\"                \"Herramienta fácil de usar para combinar y dividir documentos en formato pdf\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"PDF Split and Merge\"                \"Herramienta fácil de usar para combinar y dividir documentos en formato pdf\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "YAGF" > /dev/null; then
-if [ -f /usr/bin/yagf ]; then
-                    im=$im"FALSE \"YAGF\"                \"Herramienta de reconocimiento de texto con interfaz gráfica para la escritura cuneiforme y Tesseract.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"YAGF\"                \"Herramienta de reconocimiento de texto con interfaz gráfica para la escritura cuneiforme y Tesseract.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Scribus" > /dev/null; then
-if [ -f /usr/bin/scribus ]; then
-                    im=$im"FALSE \"Scribus\"               \"Scribus es un programa de maquetación de páginas de código abierto\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Scribus\"               \"Scribus es un programa de maquetación de páginas de código abierto\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Dia" > /dev/null; then
-if [ -f /usr/bin/dia ]; then
-                    im=$im"FALSE \"Dia\"                   \"Dia es más o menos inspirado en el programa comercial de Windows Visio\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Dia\"                   \"Dia es más o menos inspirado en el programa comercial de Windows Visio\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Gnumeric" > /dev/null; then
-if [ -f /usr/bin/gnumeric ]; then
-                    im=$im"FALSE \"Gnumeric\"                 \"Gnumeric es una hoja de cálculo libre que forma parte del entorno de escritorio GNOME\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Gnumeric\"                 \"Gnumeric es una hoja de cálculo libre que forma parte del entorno de escritorio GNOME\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Planner" > /dev/null; then
-if [ -f /usr/bin/planner ]; then
-                    im=$im"FALSE \"Planner\"            \"Planner es la mejor herramienta de creacion y gestión de proyectos, una alternativa a Microsoft Project\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Planner\"            \"Planner es la mejor herramienta de creacion y gestión de proyectos, una alternativa a Microsoft Project\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "VYM" > /dev/null; then
-if [ -f /usr/bin/vym ]; then
-                    im=$im"FALSE \"VYM\"                   \"(Ver su mente) es una herramienta para generar y manipular mapas que muestran sus pensamientos,conocidos como mapa mentales\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"VYM\"                   \"(Ver su mente) es una herramienta para generar y manipular mapas que muestran sus pensamientos,conocidos como mapa mentales\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Freemind" > /dev/null; then
-if [ -f /usr/bin/freemind ]; then
-                    im=$im"FALSE \"Freemind\"             \"Un programa premier para crear mapas mentales, hecho en java\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Freemind\"             \"Un programa premier para crear mapas mentales, hecho en java\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "yEd" > /dev/null; then
-if [ -f /opt/yEd/yEd ]; then
-                    im=$im"FALSE \"yEd\"             \"Aplicación de escritorio potente que puede usarse para generar de forma rápida y eficaz diagramas de alta calidad.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"yEd\"             \"Aplicación de escritorio potente que puede usarse para generar de forma rápida y eficaz diagramas de alta calidad.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Cmap Tools" > /dev/null; then
-if [ -f $HOME/IHMC_CmapTools/bin/update ]; then
-                    im=$im"FALSE \"Cmap Tools\"             \"Construir, navegar, compartir y criticar modelos de conocimiento representados como mapas conceptuales.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Cmap Tools\"             \"Construir, navegar, compartir y criticar modelos de conocimiento representados como mapas conceptuales.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Anki" > /dev/null; then
-if [ -f /usr/bin/anki ]; then
-                    im=$im"FALSE \"Anki\"                \"Programa que hace recordar las cosas fáciles. Debido a que es mucho más eficiente que los métodos tradicionales de estudio.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Anki\"                \"Programa que hace recordar las cosas fáciles. Debido a que es mucho más eficiente que los métodos tradicionales de estudio.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Wine y winetricks" > /dev/null; then
-if [ -f /usr/bin/wine ] || [ -f /usr/bin/winetricks ]; then
-                    im=$im"FALSE \"Wine y winetricks\"                  \"Instala algunas aplicaciones de windows\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Wine y winetricks\"                  \"Instala algunas aplicaciones de windows\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Oracle Virtual Box" > /dev/null; then
-if [ -f '/etc/yum.repos.d/virtualbox.repo' ] || [ -f /usr/bin/VirtualBox ]; then
-                    im=$im"FALSE \"Oracle Virtual Box\"            \"Software de virtualización para arquitecturas x86/amd64\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Oracle Virtual Box\"            \"Software de virtualización para arquitecturas x86/amd64\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "PlayOnLinux" > /dev/null; then
-if [ -f /usr/bin/playonlinux ]; then
-                    im=$im"FALSE \"PlayOnLinux\"                \"Programa que nos permite instalar y usar fácilmente numerosos juegos y programas para Windows®\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"PlayOnLinux\"                \"Programa que nos permite instalar y usar fácilmente numerosos juegos y programas para Windows®\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "TeamViewer" > /dev/null; then
-if [ -f /opt/teamviewer/teamviewer ]; then
-                    im=$im"FALSE \"TeamViewer\"                  \"La solución All-In-One para el acceso remoto y la asistencia a través de internet\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"TeamViewer\"                  \"La solución All-In-One para el acceso remoto y la asistencia a través de internet\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "DropBox" > /dev/null; then
-if [ -f /usr/bin/dropbox ]; then
-                    im=$im"FALSE \"DropBox\"                    \"Dropbox es un servicio de alojamiento de archivos multiplataforma en la nube, operado por la compañía Dropbox\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"DropBox\"                    \"Dropbox es un servicio de alojamiento de archivos multiplataforma en la nube, operado por la compañía Dropbox\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Winff" > /dev/null; then
-if [ -f /usr/bin/winff ]; then
-                    im=$im"FALSE \"Winff\"                   \"WinFF es una interfaz gráfica para la línea de comandos de conversión de vídeo de FFMPEG\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Winff\"                   \"WinFF es una interfaz gráfica para la línea de comandos de conversión de vídeo de FFMPEG\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Hyper Video Converter" > /dev/null; then
-if [ -f /usr/bin/hypervc ]; then
-                    im=$im"FALSE \"Hyper Video Converter\"                   \"Conversion de video profesional\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Hyper Video Converter\"                   \"Conversion de video profesional\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Miro Video Converter" > /dev/null; then
-if [ -f /usr/bin/miro-video-converter.py ]; then
-                    im=$im"FALSE \"Miro Video Converter\"                   \"Conversion de videos desde y hacia diferentes formatos, incluyendo formatos para dispositivos como teléfonos Android.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Miro Video Converter\"                   \"Conversion de videos desde y hacia diferentes formatos, incluyendo formatos para dispositivos como teléfonos Android.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Arista Transcoder" > /dev/null; then
-if [ -f /usr/bin/arista-gtk ]; then
-                    im=$im"FALSE \"Arista Transcoder\"                   \"Conversion de video para dispositivos\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Arista Transcoder\"                   \"Conversion de video para dispositivos\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Qwinff" > /dev/null; then
-if [ -f /usr/bin/qwinff ]; then
-                    im=$im"FALSE \"Qwinff\"                   \"QWinFF es un multiplataforma, y fácil de usar convertidor de medios frontend de FFmpeg.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Qwinff\"                   \"QWinFF es un multiplataforma, y fácil de usar convertidor de medios frontend de FFmpeg.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Transcoder" > /dev/null; then
-if [ -f /usr/share/applications/Transcoder.desktop ] && [ -f /usr/local/bin/Transcoder/Transcoder ]; then
-                    im=$im"FALSE \"Transcoder\"                \"Simple conversion de video y audio\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Transcoder\"                \"Simple conversion de video y audio\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Mobilmedia Converter" > /dev/null; then
-if [ -f /usr/bin/mmc ]; then
-                    im=$im"FALSE \"Mobilmedia Converter\"                  \"Conversion de video para dispositivos\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Mobilmedia Converter\"                  \"Conversion de video para dispositivos\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "YakiTo" > /dev/null; then
-if [ -f /usr/bin/yakito ]; then
-                    im=$im"FALSE \"YakiTo\"               \"Conversion de video profesional\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"YakiTo\"               \"Conversion de video profesional\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Ekd" > /dev/null; then
-if [ -f /usr/bin/ekd ]; then
-                    im=$im"FALSE \"Ekd\"               \"Esta aplicación puede ser utilizada para operaciones de post producción para vídeos y lotes de imágenes\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Ekd\"               \"Esta aplicación puede ser utilizada para operaciones de post producción para vídeos y lotes de imágenes\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "FF Multi Converter" > /dev/null; then
-if [ -f /usr/bin/ffmulticonverter ]; then
-                    im=$im"FALSE \"FF Multi Converter\"               \"Sencilla aplicación que le permite convertir archivos de audio, vídeo, imágenes y documentos\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"FF Multi Converter\"               \"Sencilla aplicación que le permite convertir archivos de audio, vídeo, imágenes y documentos\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "GtkPod" > /dev/null; then
-if [ -f /usr/bin/gtkpod ]; then
-                    im=$im"FALSE \"GtkPod\"             \"Interfaz gráfica de usuario para el iPod de Apple\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"GtkPod\"             \"Interfaz gráfica de usuario para el iPod de Apple\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "EasyTag" > /dev/null; then
-if [ -f /usr/bin/easytag ]; then
-                    im=$im"FALSE \"EasyTag\"              \"EasyTAG es una utilidad para ver y editar las etiquetas para archivos MP3, MP2, MP4/AAC, FLAC, Ogg Vorbis, MusePack, Monkey Audio y WavPack archivos\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"EasyTag\"              \"EasyTAG es una utilidad para ver y editar las etiquetas para archivos MP3, MP2, MP4/AAC, FLAC, Ogg Vorbis, MusePack, Monkey Audio y WavPack archivos\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Avidemux" > /dev/null; then
-if [ -f /usr/bin/avidemux ]; then
-                    im=$im"FALSE \"Avidemux\"       \"Avidemux es un editor de vídeo gratuito diseñado para corte simple, filtrado y codificación de tareas\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Avidemux\"       \"Avidemux es un editor de vídeo gratuito diseñado para corte simple, filtrado y codificación de tareas\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Blender" > /dev/null; then
-if [ -f /usr/bin/blender ]; then
-                    im=$im"FALSE \"Blender\"               \"Programa de modelado, animación y creación de gráficos tridimensionales\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Blender\"               \"Programa de modelado, animación y creación de gráficos tridimensionales\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Tupi" > /dev/null; then
-if [ -f /usr/bin/tupi ]; then
-                    im=$im"FALSE \"Tupi\"               \"Herramienta de diseño y autoría, para los artistas digitales interesados ​​en animación 2D.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Tupi\"               \"Herramienta de diseño y autoría, para los artistas digitales interesados ​​en animación 2D.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "BRL-CAD" > /dev/null; then
-if [ -f /usr/brlcad/bin/brlcad-config ]; then
-                    im=$im"FALSE \"BRL-CAD\"    \"BRL-CAD es un programa libre, de código abierto alternativo a AutoCAD, desarrollado por los militares de USA en colaboración con la NASA\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"BRL-CAD\"    \"BRL-CAD es un programa libre, de código abierto alternativo a AutoCAD, desarrollado por los militares de USA en colaboración con la NASA\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Sweet Home 3D" > /dev/null; then
-if [ -f /usr/share/applications/SweetHome3D.desktop ] && [ -f /usr/bin/sweethome3d.sh ]; then
-                    im=$im"FALSE \"Sweet Home 3D\"          \"Sweet Home 3D es una aplicación libre de diseño de interiores que le ayuda a colocar sus muebles sobre un plano de una casa en 2D, con una vista previa en 3D\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Sweet Home 3D\"          \"Sweet Home 3D es una aplicación libre de diseño de interiores que le ayuda a colocar sus muebles sobre un plano de una casa en 2D, con una vista previa en 3D\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Libre CAD" > /dev/null; then
-if [ -f /usr/bin/librecad ]; then
-                    im=$im"FALSE \"Libre CAD\"    \"LibreCAD es un libre de código abierto aplicación de CAD\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Libre CAD\"    \"LibreCAD es un libre de código abierto aplicación de CAD\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "FreeCAD" > /dev/null; then
-if [ -f /usr/bin/FreeCAD ]; then
-                    im=$im"FALSE \"FreeCAD\"    \"FreeCAD es un propósito general 3D CAD, MCAD, CAx, CAE y PLM modelador.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"FreeCAD\"    \"FreeCAD es un propósito general 3D CAD, MCAD, CAx, CAE y PLM modelador.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "DraftSight" > /dev/null; then
-if [ -f /usr/bin/draftsight ]; then
-                    im=$im"FALSE \"DraftSight\"    \"DraftSight es un programa libre de la aplicación CAD 2D que te permite crear, editar y visualizar sus archivos DWG / DXF\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"DraftSight\"    \"DraftSight es un programa libre de la aplicación CAD 2D que te permite crear, editar y visualizar sus archivos DWG / DXF\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Inkscape" > /dev/null; then
-if [ -f /usr/bin/inkscape ]; then
-                    im=$im"FALSE \"Inkscape\"                 \"Editor de Gráficos Vectoriales, similar al Adobe Illustrator, que busca ser compatible con SVG, de código abierto\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Inkscape\"                 \"Editor de Gráficos Vectoriales, similar al Adobe Illustrator, que busca ser compatible con SVG, de código abierto\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Alchemy" > /dev/null; then
-if [ -f /usr/bin/alchemy ]; then
-                    im=$im"FALSE \"Alchemy\"                 \"Programa de dibujo para crear bocetos, dibujar y crear en nuestra pc de una manera nueva.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Alchemy\"                 \"Programa de dibujo para crear bocetos, dibujar y crear en nuestra pc de una manera nueva.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Openshot" > /dev/null; then
-if [ -f /usr/bin/openshot ]; then
-                    im=$im"FALSE \"Openshot\"    \"Un simple, potente y gratuito editor de vídeo con un enfoque en la facilidad de uso\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Openshot\"    \"Un simple, potente y gratuito editor de vídeo con un enfoque en la facilidad de uso\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Kdenlive" > /dev/null; then
-if [ -f /usr/bin/kdenlive ]; then
-                    im=$im"FALSE \"Kdenlive\"    \"Intuitivo y poderoso editor de video multi-pista, incluye las tecnologías de vídeo más recientes.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Kdenlive\"    \"Intuitivo y poderoso editor de video multi-pista, incluye las tecnologías de vídeo más recientes.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "LIVES" > /dev/null; then
-if [ -f /usr/bin/lives ]; then
-                    im=$im"FALSE \"LIVES\"    \"Programa de edición de video y VJ software para Linux\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"LIVES\"    \"Programa de edición de video y VJ software para Linux\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Imagination" > /dev/null; then
-if [ -f /usr/bin/imagination ]; then
-                    im=$im"FALSE \"Imagination\"    \"Ligero creador de diapositivas para DVD\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Imagination\"    \"Ligero creador de diapositivas para DVD\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "DeveDe" > /dev/null; then
-if [ -f /usr/bin/devede ]; then
-                    im=$im"FALSE \"DeveDe\"    \"Programa que permite crear video DVDs y CDs, aptos para un reproductor doméstico\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"DeveDe\"    \"Programa que permite crear video DVDs y CDs, aptos para un reproductor doméstico\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "DVDStyler" > /dev/null; then
-if [ -f /usr/bin/dvdstyler ]; then
-                    im=$im"FALSE \"DVDStyler\"    \"Crea menús de DVDs a tu gusto\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"DVDStyler\"    \"Crea menús de DVDs a tu gusto\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "ffDiaporama" > /dev/null; then
-if [ -f /usr/bin/ffDiaporama ]; then
-                    im=$im"FALSE \"ffDiaporama\"    \"Aplicación para la creación de secuencias de videos\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"ffDiaporama\"    \"Aplicación para la creación de secuencias de videos\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Wink" > /dev/null; then
-if [ -f /usr/bin/wink ]; then
-                    im=$im"FALSE \"Wink\"    \"Software de creación de Tutoriales y Presentaciones, dirigido principalmente a la creación de videotutoriales\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Wink\"    \"Software de creación de Tutoriales y Presentaciones, dirigido principalmente a la creación de videotutoriales\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Virtual Lighttable and Darkroom" > /dev/null; then
-if [ -f /usr/bin/darktable ]; then
-                    im=$im"FALSE \"Virtual Lighttable and Darkroom\"    \"Es una aplicacion de flujo de trabajo y el revelador RAW para fotógrafos. Un lighttable virtual y cuarto oscuro para los fotógrafos\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Virtual Lighttable and Darkroom\"    \"Es una aplicacion de flujo de trabajo y el revelador RAW para fotógrafos. Un lighttable virtual y cuarto oscuro para los fotógrafos\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Gnome Subtitles" > /dev/null; then
-if [ -f /usr/bin/gnome-subtitles ]; then
-                    im=$im"FALSE \"Gnome Subtitles\"    \"Un editor de subtítulos para el escritorio GNOME\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Gnome Subtitles\"    \"Un editor de subtítulos para el escritorio GNOME\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "VLC media player" > /dev/null; then
-if [ -f /usr/bin/qvlc ]; then
-                    im=$im"FALSE \"VLC media player\"    \"Potente reproductor multimedia y servidor de streaming\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"VLC media player\"    \"Potente reproductor multimedia y servidor de streaming\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Netflix Player" > /dev/null; then
-if [ -f /usr/bin/netflix-desktop ]; then
-                    im=$im"FALSE \"Netflix Player\"    \" Ver Peliculas & TV Shows Online.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Netflix Player\"    \" Ver Peliculas & TV Shows Online.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "XBMC" > /dev/null; then
-if [ -f /usr/bin/xbmc ]; then
-                    im=$im"FALSE \"XBMC\"    \"Completo centro multimedia de entretenimiento para Linux.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"XBMC\"    \"Completo centro multimedia de entretenimiento para Linux.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Clementine" > /dev/null; then
-if [ -f /usr/bin/clementine ]; then
-                    im=$im"FALSE \"Clementine\"    \"Reproductor musical multiplataforma. Está inspirado en Amarok\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Clementine\"    \"Reproductor musical multiplataforma. Está inspirado en Amarok\" \"NO INSTALADO  \"  "
-fi
-            fi
- 
-if ! $installed | grep "Sound converter" > /dev/null; then
-if [ -f /usr/bin/soundconverter ]; then
-                    im=$im"FALSE \"Sound converter\"    \"SoundConverter es el convertidor de archivos de audio principal para el escritorio GNOME\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Sound converter\"    \"SoundConverter es el convertidor de archivos de audio principal para el escritorio GNOME\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Audacity" > /dev/null; then
-if [ -f /usr/bin/audacity ]; then
-                    im=$im"FALSE \"Audacity\"    \"Un editor de audio y grabador de Linux gratuito y fácil de usar\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Audacity\"    \"Un editor de audio y grabador de Linux gratuito y fácil de usar\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "OcenAudio" > /dev/null; then
-if [ -f /usr/bin/ocenaudio ]; then
-                    im=$im"FALSE \"OcenAudio\"    \"Programa multiplataforma de edicion de audio rápido, funcional y fácil de usar.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"OcenAudio\"    \"Programa multiplataforma de edicion de audio rápido, funcional y fácil de usar.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Mixxx" > /dev/null; then
-if [ -f /usr/bin/mixxx ]; then
-                    im=$im"FALSE \"Mixxx\"    \"Mixxx tiene todo lo necesario para empezar a hacer mezclas de DJ con un ajustado paquete integrado.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Mixxx\"    \"Mixxx tiene todo lo necesario para empezar a hacer mezclas de DJ con un ajustado paquete integrado.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "SKYPE" > /dev/null; then
-if [ -f /usr/bin/skype ]; then
-                    im=$im"FALSE \"SKYPE\"    \"Te brinda la facilidad de llamar barato o de hacer llamadas gratis entre usuarios de Skype\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"SKYPE\"    \"Te brinda la facilidad de llamar barato o de hacer llamadas gratis entre usuarios de Skype\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Jitsi" > /dev/null; then
-if [ -f /usr/bin/jitsi ]; then
-                    im=$im"FALSE \"Jitsi\"    \"Un audio / video y comunicador de chat que soporta protocolos como SIP, XMPP / Jabber, AIM / ICQ, Windows Live, Yahoo!.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Jitsi\"    \"Un audio / video y comunicador de chat que soporta protocolos como SIP, XMPP / Jabber, AIM / ICQ, Windows Live, Yahoo!.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Turpial" > /dev/null; then
-if [ -f /usr/bin/turpial ]; then
-                    im=$im"FALSE \"Turpial\"    \"Cliente alternativo para la red Twitter con múltiples interfaces\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Turpial\"    \"Cliente alternativo para la red Twitter con múltiples interfaces\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Gwibber" > /dev/null; then
-if [ -f /usr/bin/gwibber ]; then
-                    im=$im"FALSE \"Gwibber\"    \"Cliente de microblogging para el entorno de escritorio GNOME\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Gwibber\"    \"Cliente de microblogging para el entorno de escritorio GNOME\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Bible Time" > /dev/null; then
-if [ -f /usr/bin/bibletime ]; then
-                    im=$im"FALSE \"Bible Time\"    \"Biblia para Linux\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Bible Time\"    \"Biblia para Linux\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Tuxpaint" > /dev/null; then
-if [ -f /usr/bin/tuxpaint ]; then
-                    im=$im"FALSE \"Tuxpaint\"    \"Programa de diseño gratuito para niños de 3 años y más\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Tuxpaint\"    \"Programa de diseño gratuito para niños de 3 años y más\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Stellarium" > /dev/null; then
-if [ -f /usr/bin/stellarium ]; then
-                    im=$im"FALSE \"Stellarium\"    \"Programa planetario, muestra un cielo realista en 3D tal como se aprecia a simple vista, con binoculares o telescopio\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Stellarium\"    \"Programa planetario, muestra un cielo realista en 3D tal como se aprecia a simple vista, con binoculares o telescopio\" \"INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Celestia" > /dev/null; then
-if [ -f /usr/bin/celestia ]; then
-                    im=$im"FALSE \"Celestia\"    \"Simulación de espacio visual de tiempo real OpenGL\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Celestia\"    \"Simulación de espacio visual de tiempo real OpenGL\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Google Earth" > /dev/null; then
-if [ -f /opt/google/earth/free/googleearth ]; then
-                    im=$im"FALSE \"Google Earth\"    \"Programa informático similar a un Sistema de Información Geográfica (SIG)\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Google Earth\"    \"Programa informático similar a un Sistema de Información Geográfica (SIG)\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Gcompris" > /dev/null; then
-if [ -f /usr/bin/gcompris ]; then
-                    im=$im"FALSE \"Gcompris\"    \"GCompris es un programa de cómputo educacional con diferentes actividades para niños entre 2 y 10 años de edad\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Gcompris\"    \"GCompris es un programa de cómputo educacional con diferentes actividades para niños entre 2 y 10 años de edad\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "TuxMath" > /dev/null; then
-if [ -f /usr/bin/tuxmath ]; then
-                    im=$im"FALSE \"TuxMath\"    \"Tutor de escritura con un juego de arcade\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"TuxMath\"    \"Tutor de escritura con un juego de arcade\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "TuxType" > /dev/null; then
-if [ -f /usr/bin/tuxtype ]; then
-                    im=$im"FALSE \"TuxType\"    \"Simulación de espacio visual de tiempo real OpenGL\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"TuxType\"    \"Simulación de espacio visual de tiempo real OpenGL\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Childsplay" > /dev/null; then
-if [ -f /usr/bin/childsplay ]; then
-                    im=$im"FALSE \"Childsplay\"    \"Excelente paquete de juegos educativos para niños\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Childsplay\"    \"Excelente paquete de juegos educativos para niños\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Scratch" > /dev/null; then
-if [ -f /usr/bin/scratch ]; then
-                    im=$im"FALSE \"Scratch\"    \"Lenguaje de programación para todo el mundo. Crear historias interactivas, juegos, música y arte\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Scratch\"    \"Lenguaje de programación para todo el mundo. Crear historias interactivas, juegos, música y arte\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Ri-li" > /dev/null; then
-if [ -f /usr/bin/Ri_li ]; then
-                    im=$im"FALSE \"Ri-li\"    \"Juego para niños, Usted conduce un motor de madera de juguete en muchos niveles y tienes que recoger todos los vagones para ganar\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Ri-li\"    \"Juego para niños, Usted conduce un motor de madera de juguete en muchos niveles y tienes que recoger todos los vagones para ganar\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Frozen Bubble" > /dev/null; then
-if [ -f /usr/bin/frozen-bubble ]; then
-                    im=$im"FALSE \"Frozen Bubble\"    \"Videojuego de puzzles inspirado en Puzzle Bobble\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Frozen Bubble\"    \"Videojuego de puzzles inspirado en Puzzle Bobble\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Extreme Tux Racer" > /dev/null; then
-if [ -f /usr/bin/etracer ]; then
-                    im=$im"FALSE \"Extreme Tux Racer\"    \"Un proyecto de código abierto en el que el usuario toma la forma de Tux y las carreras de descenso a través de senderos alpinos\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Extreme Tux Racer\"    \"Un proyecto de código abierto en el que el usuario toma la forma de Tux y las carreras de descenso a través de senderos alpinos\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Super Tux Kart" > /dev/null; then
-if [ -f /usr/bin/supertuxkart ]; then
-                    im=$im"FALSE \"Super Tux Kart\"    \"Juego libre y gratuito de carreras de coches tipo arcade en 3D, cuyo protagonista es Tux\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Super Tux Kart\"    \"Juego libre y gratuito de carreras de coches tipo arcade en 3D, cuyo protagonista es Tux\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Wormux" > /dev/null; then
-if [ -f /usr/bin/wormux ]; then
-                    im=$im"FALSE \"Wormux\"    \"Juego de asesinato en masa 2D\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Wormux\"    \"Juego de asesinato en masa 2D\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Tremulous" > /dev/null; then
-if [ -f /usr/bin/tremded ]; then
-                    im=$im"FALSE \"Tremulous\"    \"Juego de disparos en primera persona, usando el motor de Quake 3\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Tremulous\"    \"Juego de disparos en primera persona, usando el motor de Quake 3\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Super Methane Brothers" > /dev/null; then
-if [ -f /usr/bin/methane ]; then
-                    im=$im"FALSE \"Super Methane Brothers\"    \"Juego de plataforma 2D\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Super Methane Brothers\"    \"Juego de plataforma 2D\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Pingus" > /dev/null; then
-if [ -f /usr/bin/pingus ]; then
-                    im=$im"FALSE \"Pingus\"    \"Juego donde se guía a los pingüinos con seguridad a casa antes de caer en el precipicio\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Pingus\"    \"Juego donde se guía a los pingüinos con seguridad a casa antes de caer en el precipicio\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Hedgewars" > /dev/null; then
-if [ -f /usr/bin/hedgewars ]; then
-                    im=$im"FALSE \"Hedgewars\"    \"Juego de batalla de tanques 2D donde los tanques son remplazados por erizos\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Hedgewars\"    \"Juego de batalla de tanques 2D donde los tanques son remplazados por erizos\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Glaxium" > /dev/null; then
-if [ -f /usr/bin/glaxium ]; then
-                    im=$im"FALSE \"Glaxium\"    \"Juego OpenGL de disparos en el espacio\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Glaxium\"    \"Juego OpenGL de disparos en el espacio\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Amoebax" > /dev/null; then
-if [ -f /usr/bin/amoebax ]; then
-                    im=$im"FALSE \"Amoebax\"    \"Juego rompecabezas de acción\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Amoebax\"    \"Juego rompecabezas de acción\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Alien Arena" > /dev/null; then
-if [ -f /usr/bin/alienarena ]; then
-                    im=$im"FALSE \"Alien Arena\"    \"Juego de ciencia ficción retro de partida a muerte multijugador\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Alien Arena\"    \"Juego de ciencia ficción retro de partida a muerte multijugador\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "TORCS" > /dev/null; then
-if [ -f /usr/bin/torcs ]; then
-                    im=$im"FALSE \"TORCS\"    \"Simulador abierto de carrera de autos\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"TORCS\"    \"Simulador abierto de carrera de autos\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "FlightGear" > /dev/null; then
-if [ -f /usr/bin/fgfs ]; then
-                    im=$im"FALSE \"FlightGear\"    \"Simulador de vuelo 3D\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"FlightGear\"    \"Simulador de vuelo 3D\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Performous" > /dev/null; then
-if [ -f /usr/bin/performous ]; then 
-                    im=$im"FALSE \"Performous\"    \"Un juego abierto de karaoke, banda y baile en el que uno o más jugadores interpretan una canción, con los scores de sus actuaciones.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Performous\"    \"Un juego abierto de karaoke, banda y baile en el que uno o más jugadores interpretan una canción, con los scores de sus actuaciones.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Steam" > /dev/null; then
-if [ -f /usr/bin/steam ]; then
-                    im=$im"FALSE \"Steam\"    \"Ofrece una gama de juegos directamente al escritorio del ordenador.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Steam\"    \"Ofrece una gama de juegos directamente al escritorio del ordenador.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Aquaria" > /dev/null; then
-if [ -f /home/$noti/aquaria/aquaria ]; then
-                    im=$im"FALSE \"Aquaria\"    \"Aquaria, es un premiado videojuego de acción-aventura, [requiere drivers gráficos instalados].\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Aquaria\"    \"Aquaria, es un premiado videojuego de acción-aventura, [requiere drivers gráficos instalados].\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Gtk-Gnutella" > /dev/null; then
-if [ -f /usr/bin/gtk-gnutella ]; then
-                    im=$im"FALSE \"Gtk-Gnutella\"    \"Programa P2P clónico de Gnutella (frostwire)\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Gtk-Gnutella\"    \"Programa P2P clónico de Gnutella (frostwire)\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "GrooveDown" > /dev/null; then
-if [ -f /usr/bin/groovedown ]; then
-                    im=$im"FALSE \"GrooveDown\"    \"Herramienta simple descarga para Grooveshark.com\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"GrooveDown\"    \"Herramienta simple descarga para Grooveshark.com\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "GrooveOff" > /dev/null; then
-if [ -f /usr/bin/grooveoff ]; then
-                    im=$im"FALSE \"GrooveOff\"    \"Cliente no oficial para grooveshark.com.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"GrooveOff\"    \"Cliente no oficial para grooveshark.com.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Frostwire" > /dev/null; then
-if [ -f /usr/bin/frostwire ]; then
-                    im=$im"FALSE \"Frostwire\"    \"FrostWire es un cliente P2P de código abierto compatible con la red Gnutella.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Frostwire\"    \"FrostWire es un cliente P2P de código abierto compatible con la red Gnutella.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "UGET" > /dev/null; then
-if [ -f /usr/bin/uget-gtk ]; then
-                    im=$im"FALSE \"UGET\"    \"Uget (antes urlgfe) es un gestor de descargas escrito en GTK +, fácil de usar, reanudar, clasificar descargar, y más\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"UGET\"    \"Uget (antes urlgfe) es un gestor de descargas escrito en GTK +, fácil de usar, reanudar, clasificar descargar, y más\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "FlareGet" > /dev/null; then
-if [ -f /usr/bin/flareget ]; then
-                    im=$im"FALSE \"FlareGet\"    \"Completo y avanzado, multi-threaded, gestor de descargas multi-segmento y acelerador para Linux.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"FlareGet\"    \"Completo y avanzado, multi-threaded, gestor de descargas multi-segmento y acelerador para Linux.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Tucan Manager" > /dev/null; then
-if [ -f /usr/bin/tucan ]; then
-                    im=$im"FALSE \"Tucan Manager\"    \"Tucan Manager es una aplicación para compartir archivos gratuito diseñado para hosters de 1-Click. Rápido y ligero, Tucan es totalmente de código abierto\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Tucan Manager\"    \"Tucan Manager es una aplicación para compartir archivos gratuito diseñado para hosters de 1-Click. Rápido y ligero, Tucan es totalmente de código abierto\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Yum Extender" > /dev/null; then
-if [ -f /usr/bin/yumex ]; then
-                    im=$im"FALSE \"Yum Extender\"    \"Una GUI para el gestor de paquetes yum\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Yum Extender\"    \"Una GUI para el gestor de paquetes yum\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Blueman" > /dev/null; then
-if [ -f /usr/bin/blueman-manager ]; then
-                    im=$im"FALSE \"Blueman\"    \"Todas las funciones de GTK Bluetooth Manager para GNOME\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Blueman\"    \"Todas las funciones de GTK Bluetooth Manager para GNOME\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Google-Chrome" > /dev/null; then
-if [ -f /opt/google/chrome/google-chrome ]; then
-                    im=$im"FALSE \"Google-Chrome\"    \"Navegador minimalista que hacer la web más rápido, más seguro y más fácil\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Google-Chrome\"    \"Navegador minimalista que hacer la web más rápido, más seguro y más fácil\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Chromium" > /dev/null; then
-if [ -f /usr/bin/chromium-browser ]; then
-                    im=$im"FALSE \"Chromium\"    \"Navegador de código abierto que pretende construir una forma más segura, más rápida y más estable para todos los usuarios de Internet\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Chromium\"    \"Navegador de código abierto que pretende construir una forma más segura, más rápida y más estable para todos los usuarios de Internet\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Opera" > /dev/null; then
-if [ -f /usr/bin/opera ]; then
-                    im=$im"FALSE \"Opera\"    \"Navegador muy bueno que hace que la Web sea rápida y divertida, que le de una experiencia de web en cualquier computador\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Opera\"    \"Navegador muy bueno que hace que la Web sea rápida y divertida, que le de una experiencia de web en cualquier computador\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "BleachBit" > /dev/null; then
-if [ -f /usr/bin/bleachbit ]; then
-                    im=$im"FALSE \"BleachBit\"    \"Programa para limpiar espacio en disco, mantener la privacidad\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"BleachBit\"    \"Programa para limpiar espacio en disco, mantener la privacidad\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "GnomeTweakTool y dconf-editor" > /dev/null; then
-if [ -f /usr/bin/gnome-tweak-tool ] || [ -f /usr/bin/dconf-editor ] || [ -f /usr/bin/gconf-editor ]; then
-                    im=$im"FALSE \"GnomeTweakTool y dconf-editor\"    \"Herramientas avanzadas para personalizar las opciones de GNOME 3\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"GnomeTweakTool y dconf-editor\"    \"Herramientas avanzadas para personalizar las opciones de GNOME 3\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "Menu Libre" > /dev/null; then
-if [ -f /usr/bin/menulibre ]; then
-                    im=$im"FALSE \"Menu Libre\"    \"Un editor de menú avanzado que proporciona características modernas en una interfaz limpia y fácil de usar.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Menu Libre\"    \"Un editor de menú avanzado que proporciona características modernas en una interfaz limpia y fácil de usar.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Completar Instalaciones pendientes" > /dev/null; then
-                    im=$im"FALSE \"Completar Instalaciones pendientes\"    \"Continua instalaciones no completadas por errores del sistema\" \"ACTIVO  \"  "
-            fi
-
-
-if ! $installed | grep "Bitdefender" > /dev/null; then
-if [ -f /opt/BitDefender-scanner/bin/bdgui ] || [ -f /opt/BitDefender-scanner/bin/bdscan ]; then
-                    im=$im"FALSE \"Bitdefender\"    \"Antivirus para particiones ntsf etc\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Bitdefender\"    \"Antivirus para particiones ntsf etc\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Informacion del Sistema" > /dev/null; then
-                    im=$im"FALSE \"Informacion del Sistema\"    \"Muestra la informacion del sistema\" \"ACTIVO  \"  "
-            fi
-
-
-if ! $installed | grep "Hardinfo" > /dev/null; then
-if [ -f /usr/bin/hardinfo ]; then
-                    im=$im"FALSE \"Hardinfo\"    \"Muestra información sobre el hardware del sistema y el sistema operativo\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Hardinfo\"    \"Muestra información sobre el hardware del sistema y el sistema operativo\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Batti" > /dev/null; then
-if [ -f /usr/bin/batti ]; then
-                    im=$im"FALSE \"Batti\"    \"Batti es un applet de monitor de batería ideal para LXDE para la bandeja del sistema\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Batti\"    \"Batti es un applet de monitor de batería ideal para LXDE para la bandeja del sistema\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Alien" > /dev/null; then
-if [ -e /usr/bin/alien ]; then
-                    im=$im"FALSE \"Alien\"    \"Alien nos permite convertir entre diferentes formatos de paquetes binarios linux, pudiendo pasar entre sí cualquiera de estos 4 formatos: deb, rpm, slackware tgz\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Alien\"    \"Alien nos permite convertir entre diferentes formatos de paquetes binarios linux, pudiendo pasar entre sí cualquiera de estos 4 formatos: deb, rpm, slackware tgz\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Microsoft TrueType core fonts" > /dev/null; then
-if [ -d /usr/share/fonts/msttcorefonts ]; then
-                    im=$im"FALSE \"Microsoft TrueType core fonts\"    \"Tipografias o letras oficiales de Microsoft\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Microsoft TrueType core fonts\"    \"Tipografias o letras oficiales de Microsoft\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Reset PostInstallerF" > /dev/null; then
-                    im=$im"FALSE \"Reset PostInstallerF\"    \"Reinicia el registro de los programas instalados via PostInstallerF\" \"ACTIVO  \"  "
-            fi
-
-   else
-# AQUI INICIA LENGUAJE INGLES
-
+# Building Install Menu
 if ! $installed | grep "Repositories RPM Fusion" > /dev/null; then
 if [ -f /etc/yum.repos.d/rpmfusion-nonfree.repo ]; then
                     im=$im"FALSE \"Repositories RPM Fusion\"     \"RPM Fusion provides software that the Fedora Project or Red Hat doesn't want to ship.[Recommended]\" \"ACTIVATED  \"  "
@@ -2382,7 +1215,7 @@ fi
 if ! $installed | grep "Reset PostInstallerF" > /dev/null; then
                     im=$im"FALSE \"Reset PostInstallerF\"    \"Restart the registry, of the programs installed via PostInstallerF.\" \"ACTIVE  \"  "
             fi
-fi
+
 
 
 
@@ -2452,7 +1285,7 @@ if echo $choice | grep "Install Codecs Audio/Video" > /dev/null; then
                     comprimir
             fi
 
-if echo $choice | grep "Unrar and p7zip" > /dev/null; then
+            if echo $choice | grep "Unrar and p7zip" > /dev/null; then
                     comprimir
             fi
 
@@ -2460,7 +1293,7 @@ if echo $choice | grep "Unrar and p7zip" > /dev/null; then
                     java
             fi
 
-if echo $choice | grep "Java JRE Oracle" > /dev/null; then
+            if echo $choice | grep "Java JRE Oracle" > /dev/null; then
                     jre
             fi
 
@@ -2529,7 +1362,7 @@ if echo $choice | grep "Java JRE Oracle" > /dev/null; then
                     pdfsam
             fi
 
-	    if echo $choice | grep "YAGF" > /dev/null; then
+	       if echo $choice | grep "YAGF" > /dev/null; then
                     yagsca
             fi
 
@@ -2565,7 +1398,7 @@ if echo $choice | grep "Java JRE Oracle" > /dev/null; then
             fi
 
 
-	    if echo $choice | grep "Wine y winetricks" > /dev/null; then
+	        if echo $choice | grep "Wine y winetricks" > /dev/null; then
                     wine
             fi
             
@@ -3051,16 +1884,12 @@ yum -y install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "18" ]; then
 yum -y install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-18.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-18.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Repositorio RPMFusion" --text="Please wait...." --pulsate --auto-close --width=350
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "19" ]; then
-yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-19.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-19.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-19.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-19.noarch.rpm 2>&1 | zenity --progress --title "Verifing and Adding RPM Fusion" --text="Please Wait...." --pulsate --auto-close --width=400
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "20" ]; then
-yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-20.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-20.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=400
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-20.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-20.noarch.rpm 2>&1 | zenity --progress --title "Verifing and Adding RPM Fusion" --text="Please Wait...." --pulsate --auto-close --width=400
 fi
- 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Repositorio RPMFusion " -i "/usr/share/icons/pinguino.png" -t 5000'
-else           
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Repositorio RPMFusion " -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
+su $noti -c 'notify-send "PostInstallerF" "The installation of the repository RPMFusion has been completed" -i "/usr/share/icons/pinguino.png" -t 5000'
      
 
     }
@@ -3092,37 +1921,30 @@ elif [ -x /usr/share/doc/kdesdk* ] && [ $(echo $LANG | cut -b1-2) = "it" ]; then
 yum -y install kde-l10n-Italian | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installazione del il supporto per KDE italiana" --text="Please wait...." --pulsate --auto-close --width=350
 fi
 
-            yum -y install system-config-language | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing el administrador de lenguaje" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install system-config-language | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing the Administration language." --text="Please wait...." --pulsate --auto-close --width=350
 
 
 system-config-language
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Administrador de Lenguaje" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
 su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Administrador de Lenguaje" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
 
 
     }
      
     basicompile(){
-            yum -y install kernel-headers kernel-devel hg git | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing kernel-headers, devel, hg y git" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install kernel-headers kernel-devel hg git | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing kernel-headers, devel, hg and git" --text="Please wait...." --pulsate --auto-close --width=350
  
- yum -y groupinstall "Development Tools" "Legacy Software Development" | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Development Tools y Legacy Software Development" --text="Please wait...." --pulsate --auto-close --width=350
+ yum -y groupinstall "Development Tools" "Legacy Software Development" | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Development Tools and Legacy Software Development" --text="Please wait...." --pulsate --auto-close --width=350
 
 yum -y groupinstall "Development Libraries" | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Development Libraries..." --text="Please wait...." --pulsate --auto-close --width=350
 
 yum -y groupinstall "x-software-development" | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing x-software-development..." --text="Please wait...." --pulsate --auto-close --width=350
 
 $changelog
-echo "Herramientas Básicas de compilación" >> installed.log
+echo "Compiling Basic Tools" >> installed.log
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada instalacion de Herramientas Básicas de compilación" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Completada instalacion de Herramientas Básicas de compilación" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+su $noti -c 'notify-send "PostInstallerF" "Completed the installation of the basic tools." -i "/usr/share/icons/pinguino.png" -t 5000'
+
     }
 
 
@@ -3132,20 +1954,17 @@ fi
 $changelog
 echo "Mozilla Firefox" >> installed.log
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada instalacion de Mozilla Firefox" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Completada instalacion de Mozilla Firefox" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+su $noti -c 'notify-send "PostInstallerF" "Completed installing Mozilla Firefox" -i "/usr/share/icons/pinguino.png" -t 5000'
+
 
     }
 
      
     multimediaCodecs(){
 
-            yum -y install gstreamer-plugins-bad gstreamer-plugins-bad-free-extras gstreamer-plugins-bad-nonfree gstreamer-plugins-ugly gstreamer-ffmpeg | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing codecs de video y audio" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install gstreamer-plugins-bad gstreamer-plugins-bad-free-extras gstreamer-plugins-bad-nonfree gstreamer-plugins-ugly gstreamer-ffmpeg | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing audio and video codecs" --text="Please wait...." --pulsate --auto-close --width=350
 
- yum -y install ffmpeg mencoder ffmpeg2theora mplayer libdvdcss  | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing codecs de video y audio" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install ffmpeg mencoder ffmpeg2theora mplayer libdvdcss  | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing audio and video codecs" --text="Please wait...." --pulsate --auto-close --width=350
 
 yum -y install gstreamer1-libav gstreamer1-plugins-bad-free-extras gstreamer1-plugins-bad-freeworld gstreamer1-plugins-base-tools gstreamer1-plugins-good-extras gstreamer1-plugins-ugly gstreamer1-plugins-bad-free gstreamer1-plugins-good gstreamer1-plugins-base gstreamer1 | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing codecs de video y audio extras" --text="Please wait...." --pulsate --auto-close --width=350
 
@@ -3157,11 +1976,8 @@ fi
              
             $changelog
             echo "Multimedia codecs" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada instalacion de Multimedia codecs" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Completada instalacion de Multimedia codecs" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
+su $noti -c 'notify-send "PostInstallerF" "Completed the installation of the media codecs" -i "/usr/share/icons/pinguino.png" -t 5000'
 
     }
 
@@ -3186,7 +2002,7 @@ sed -i '8i exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/rpmfusion-f
 sed -i '22i exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/rpmfusion-free-updates.repo
 fi
 sed -i '/exclude=ffmpeg ffmpeg-devel ffmpeg-libs/d' /etc/yum.repos.d/postinstallerf.repo
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Has been enabled Dirty ffmpeg" 
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Has been enabled Dirty ffmpeg" 
 else
 echo 'thanks 2'
 fi
@@ -3199,7 +2015,7 @@ sed -i '8i exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/postinstall
 sed -i '30i exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/postinstallerf.repo
 sed -i '/exclude=ffmpeg ffmpeg-devel ffmpeg-libs/d' /etc/yum.repos.d/rpmfusion-free.repo
 sed -i '/exclude=ffmpeg ffmpeg-devel ffmpeg-libs/d' /etc/yum.repos.d/rpmfusion-free-updates.repo
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Has been disabled Dirty ffmpeg"
+yad --class="ATTENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Has been disabled Dirty ffmpeg"
 else
 echo 'thanks 1'
 fi
@@ -3207,7 +2023,7 @@ fi
 
 rpm -e --nodeps ffmpeg ffmpeg-devel ffmpeg-libs
 
-yum -y install ffmpeg  | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Dirty ffmpeg" --text="Por favor espere...." --pulsate --auto-close --width=350 
+yum -y install ffmpeg  | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Dirty ffmpeg" --text="Please Wait...." --pulsate --auto-close --width=350 
 
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
@@ -4007,7 +2823,7 @@ zenity --info --title="PostInstallerF" --text="Arista Transcoder is not compatib
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "20" ]; then
 zenity --info --title="PostInstallerF" --text="Arista Transcoder is not compatible with Fedora 20, sorry"
 else
-yum -y install arista | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Arista Transcoder" --text="Por favor espere...." --pulsate --auto-close --width=350
+yum -y install arista | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Arista Transcoder" --text="Please Wait...." --pulsate --auto-close --width=350
            
 if [ -f /usr/bin/arista-gtk ]; then
 $changelog
@@ -4027,7 +2843,7 @@ fi
 
     qwinf(){
 
-yum -y install qwinff | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Qwinff" --text="Por favor espere...." --pulsate --auto-close --width=350
+yum -y install qwinff | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Qwinff" --text="Please Wait...." --pulsate --auto-close --width=350
            
 if [ -f /usr/bin/qwinff ]; then
 $changelog
@@ -4242,7 +3058,7 @@ fi
     }
 
     tupapi(){
-            yum -y install tupi | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Tupi" --text="Por favor espere...." --pulsate --auto-close --width=350
+            yum -y install tupi | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Tupi" --text="Please Wait...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Tupi" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4771,7 +3587,7 @@ fi
 
 
 jitsi(){
-            yum -y localinstall https://download.jitsi.org/jitsi/rpm/jitsi-2.2-latest.i386.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Jitsi" --text="Por favor espere...." --pulsate --auto-close --width=350
+            yum -y localinstall https://download.jitsi.org/jitsi/rpm/jitsi-2.2-latest.i386.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Jitsi" --text="Please Wait...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/jitsi ]; then
 $changelog
@@ -5520,7 +4336,7 @@ echo "GnomeTweakTool y dconf-editor" >> installed.log
     }
 
 melibre(){
-            yum -y install menulibre | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Menu Libre" --text="Por favor espere...." --pulsate --auto-close --width=350
+            yum -y install menulibre | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Menu Libre" --text="Please Wait...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/menulibre ]; then
 $changelog
