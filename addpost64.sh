@@ -1994,11 +1994,9 @@ rpm -e --nodeps ffmpeg ffmpeg-devel ffmpeg-libs
 yum -y install ffmpeg  | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Dirty ffmpeg" --text="Please Wait...." --pulsate --auto-close --width=350 
 
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada instalacion de Dirty ffmpeg/RpmFusion" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Dirty ffmpeg/RpmFusion" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
     }
      
@@ -2007,11 +2005,9 @@ fi
 yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
 yum -y install flash-plugin | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing flash-plugin" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Flash Player" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Flash Player" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
             echo "Flash Player" >> installed.log
     }
@@ -2019,11 +2015,9 @@ fi
     comprimir(){
             yum -y install unrar p7zip p7zip-plugins | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing unrar y p7zip" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Unrar y p7zip" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Unrar y p7zip" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
                     echo "Unrar y p7zip" >> installed.log
             
@@ -2032,11 +2026,9 @@ fi
     java(){
             yum -y install java icedtea-web | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Java OpenJDK" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Java OpenJDK" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Java OpenJDK" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
      
             echo "Java OpenJDK" >> installed.log
     }
@@ -2059,22 +2051,17 @@ ln -s /usr/java/latest/lib/amd64/libnpjp2.so
 
 echo 'PATH=/usr/java/latest/bin:$PATH' >> /etc/profile.d/java.sh
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Java JRE Oracle" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Java JRE Oracle" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
      
     }
      
     gimp(){
             yum -y install gimp | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing GIMP" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : GIMP" -i "/usr/share/icons/pincel_rco.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : GIMP" -i "/usr/share/icons/pincel_rco.png" -t 5000'
-fi
+
            
             echo "GIMP" >> installed.log
     }
@@ -2083,12 +2070,8 @@ fi
     hugp(){
             yum -y install hugin | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Hugin" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Hugin" -i "/usr/share/icons/pincel_rco.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Hugin" -i "/usr/share/icons/pincel_rco.png" -t 5000'
-fi
-           
+         
             echo "Hugin" >> installed.log
     }
 
@@ -2096,11 +2079,9 @@ fi
      converseen(){
             yum -y install converseen | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Converseen" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Converseen" -i "/usr/share/icons/pincel_rco.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Converseen" -i "/usr/share/icons/pincel_rco.png" -t 5000'
-fi
+
            
             echo "Converseen" >> installed.log
     }
@@ -2109,11 +2090,9 @@ fi
     mipaint(){
             yum -y install mypaint | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing MyPaint" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : MyPaint" -i "/usr/share/icons/pincel_rco.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : MyPaint" -i "/usr/share/icons/pincel_rco.png" -t 5000'
-fi
+
      
             echo "MyPaint" >> installed.log
     }
@@ -2122,11 +2101,9 @@ fi
     pint(){
             yum -y install pinta | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Pinta" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Pinta" -i "/usr/share/icons/pincel_rco.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Pinta" -i "/usr/share/icons/pincel_rco.png" -t 5000'
-fi
+
      
             echo "Pinta" >> installed.log
     }
@@ -2135,11 +2112,9 @@ fi
     pencil(){
             yum -y --enablerepo=updates-testing install pencil | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Pencil" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Pencil" -i "/usr/share/icons/pincel_rco.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Pencil" -i "/usr/share/icons/pincel_rco.png" -t 5000'
-fi
+
      
             echo "Pencil" >> installed.log
     }
@@ -2148,11 +2123,9 @@ fi
     fotoxx(){
             yum -y install fotoxx | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Fotoxx" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Fotoxx" -i "/usr/share/icons/camera.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Fotoxx" -i "/usr/share/icons/camera.png" -t 5000'
-fi
+
      
             echo "Fotoxx" >> installed.log
     }
@@ -2160,11 +2133,9 @@ fi
     shutter(){
             yum -y install shutter | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Shutter" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Shutter" -i "/usr/share/icons/camera.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Shutter" -i "/usr/share/icons/camera.png" -t 5000'
-fi
+
      
             echo "Shutter" >> installed.log
     }
@@ -2172,11 +2143,9 @@ fi
     glabels(){
             yum -y install glabels | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Glabels" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Glabels" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Glabels" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
             echo "Glabels" >> installed.log
     }
@@ -2184,22 +2153,18 @@ fi
     kover(){
             yum -y install kover | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Kover" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Kover" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Kover" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
             echo "Kover" >> installed.log
     }
      
     office(){
             yum -y install libreoffice-writer libreoffice-calc libreoffice-impress libreoffice-draw libreoffice-langpack-es | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing LibreOffice" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : LibreOffice" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : LibreOffice" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
      
             echo "LibreOffice" >> installed.log
     }
@@ -2212,13 +2177,11 @@ yum -y install basket | pv -n 2>&1 | yad --class="Installing" --window-icon="/us
 if [ -f /usr/bin/basket ]; then
 $changelog
 echo "Basket" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Basket" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Basket" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Basket not installed, please try again."
+zenity --info --title="PostInstallerF" --text="For some reason Basket is not installed, please try again."
 fi
 
      
@@ -2228,11 +2191,9 @@ fi
     caligra(){
             yum -y install calligra | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Calligra" --text="Please wait...." --pulsate --auto-close --width=350
  
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Calligra" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : LibreOffice" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
      
             echo "LibreOffice" >> installed.log
     }
@@ -2252,20 +2213,14 @@ cat /dev/null > /tmp/lastest_projectlibre.txt
 
 if [ -f /usr/bin/projectlibre ]; then
 $changelog
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : ProjectLibre" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : ProjectLibre" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
  else
      xterm -e 'yum -y install http://sourceforge.net/projects/projectlibre/files/ProjectLibre/1.5.4/projectlibre-1.5.4-1.rpm'
 if [ -f /usr/bin/projectlibre ]; then
 $changelog
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : ProjectLibre" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : ProjectLibre" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
  fi
 fi
 
@@ -2279,11 +2234,9 @@ yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Installing" --window
 
  yum -y install nspluginwrapper AdobeReader_enu | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Adobe Reader" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Adobe Reader" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Adobe Reader" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
             echo "Adobe Reader" >> installed.log
     }
      
@@ -2294,13 +2247,11 @@ yum -y install pdfmod | pv -n 2>&1 | yad --class="Installing" --window-icon="/us
 if [ -f /usr/bin/pdfmod ]; then
 $changelog
 echo "PDF Mod" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : PDF Mod" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : PDF Mod" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason PDF Mod not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason PDF Mod is not installed, please try again"
 fi
 
     }
@@ -2322,13 +2273,11 @@ yum -y install pdfsam | pv -n 2>&1 | yad --class="Installing" --window-icon="/us
 
 
 if [ -f /usr/bin/pdfsam ]; then
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : PDF Split and Merge" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : PDF Split and Merge" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason PDF Split not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason PDF Split is not installed, please try again"
 fi
 
     }
@@ -2336,11 +2285,9 @@ fi
 yagsca(){
             yum -y install yagf | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing YAGF" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : YAGF" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : YAGF" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
             echo "YAGF" >> installed.log
     }
@@ -2348,11 +2295,9 @@ fi
     scribus(){
             yum -y install scribus | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Scribus" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Scribus" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Scribus" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
             echo "Scribus" >> installed.log
     }
@@ -2360,55 +2305,45 @@ fi
     adia(){
             yum -y install dia | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Dia" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Dia" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Dia" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
             echo "Dia" >> installed.log
     }
      
     gnu(){
             yum -y install gnumeric | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Gnumeric" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Gnumeric" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Gnumeric" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
             echo "Gnumeric" >> installed.log
     }
      
     planner(){
             yum -y install planner | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Planner" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Planner" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Planner" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
             echo "Planner" >> installed.log
     }
      
     vym(){
             yum -y install vym | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing VYM" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : VYM" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : VYM" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
             echo "VYM" >> installed.log
     }
      
     freemind(){
             yum -y install freemind | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Freemind" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Freemind" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Freemind" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
             echo "Freemind" >> installed.log
     }
 
@@ -2421,14 +2356,12 @@ wget -c -P/tmp/ http://www.yworks.com/products/yed/demo/yEd-3.9.2_setup.sh 2>&1 
 xterm -e 'sh /tmp/yEd-3.9.2_setup.sh'
 
 if [ -f /opt/yEd/yEd ]; then
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : yEd" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : yEd" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
             echo "yEd" >> installed.log
 else
-zenity --info --title="PostInstallerF" --text="For some reason yEd not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason yEd is not installed, please try again"
 fi
     }
 
@@ -2480,13 +2413,11 @@ wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/
             
 
 if [ -f /home/$noti/IHMC_CmapTools/bin/update ]; then
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Cmap Tools" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Cmap Tools" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else
-zenity --info --title="PostInstallerF" --text="For some reason Cmap Tools not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Cmap Tools is not installed, please try again"
 fi
     }
 
@@ -2494,11 +2425,9 @@ fi
     anki(){
             yum -y install anki | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Anki" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Anki" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Anki" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
             echo "Anki" >> installed.log
     }
      
@@ -2508,11 +2437,8 @@ fi
 
  yum -y localinstall ftp://ftp.pbone.net/mirror/cachalot.mine.nu/RPMS/winetricks-20110429-0.fc15.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Winetricks" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Wine y winetricks" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Wine y winetricks" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
      
             echo "Wine y winetricks" >> installed.log
     }
@@ -2564,13 +2490,11 @@ if [ -f "/etc/yum.repos.d/virtualbox.repo" ] && [ -f /usr/bin/VirtualBox ]; then
 rm -f /tmp/Oracle_VM_VirtualBox_Extension_Pack-*.vbox-extpack
 $changelog
 echo "Oracle Virtual Box" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Oracle Virtual Box" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Oracle Virtual Box" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Oracle Virtual Box not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Oracle Virtual Box is not installed, please try again"
 fi
 
     }
@@ -2588,13 +2512,11 @@ yum -y install playonlinux | pv -n 2>&1 | yad --class="Installing" --window-icon
 if [ -f /usr/bin/playonlinux ]; then
 $changelog
 echo "PlayOnLinux" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : PlayOnLinux" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : PlayOnLinux" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason PlayOnLinux not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason PlayOnLinux is not installed, please try again"
 fi
 
     }
@@ -2605,13 +2527,11 @@ fi
             yum -y localinstall http://www.teamviewer.com/download/teamviewer_linux.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "TeamViewer" --text="Please wait...." --pulsate --auto-close --width=350
 
 if [ -f /opt/teamviewer/teamviewer ]; then
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : TeamViewer" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : TeamViewer" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason TeamViewer not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason TeamViewer is not installed, please try again"
 fi
 
     }
@@ -2636,13 +2556,11 @@ fi
 if [ -f /usr/bin/dropbox ]; then
 $changelog
 echo "DropBox" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : DropBox" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : DropBox" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Dropbox not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Dropbox is not installed, please try again"
 fi
 
     }
@@ -2656,13 +2574,11 @@ yum -y install hypervc | pv -n 2>&1 | yad --class="Installing" --window-icon="/u
 if [ -f /usr/bin/hypervc ]; then
 $changelog
 echo "Hyper Video Converter" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Hyper Video Converter" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Hyper Video Converter" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Hyper Video Converter not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Hyper Video Converter is not installed, please try again"
 fi
 
     }
@@ -2677,13 +2593,11 @@ yum -y install mvc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/s
 if [ -f /usr/bin/miro-video-converter.py ]; then
 $changelog
 echo "Miro Video Converter" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Miro Video Converter" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Miro Video Converter" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Miro Video Converter not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Miro Video Converter is not installed, please try again"
 fi
 
     }
@@ -2701,13 +2615,11 @@ yum -y install arista | pv -n 2>&1 | yad --class="Installing" --window-icon="/us
 if [ -f /usr/bin/arista-gtk ]; then
 $changelog
 echo "Arista Transcoder" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Arista Transcoder" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Arista Transcoder" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Arista Transcoder not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Arista Transcoder is not installed, please try again"
 fi
 
 fi
@@ -2721,13 +2633,11 @@ yum -y install qwinff | pv -n 2>&1 | yad --class="Installing" --window-icon="/us
 if [ -f /usr/bin/qwinff ]; then
 $changelog
 echo "Qwinff" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Qwinff" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Qwinff" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Qwinff not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Qwinff is not installed, please try again"
 fi
 
     }
@@ -2764,13 +2674,11 @@ chmod o=rwxs * /usr/share/applications/Transcoder.desktop
 if [ -f /usr/local/bin/Transcoder/Transcoder ]; then
 $changelog
 echo "Transcoder" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Transcoder" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Transcoder" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Transcoder not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Transcoder is not installed, please try again"
 fi
 
     }
@@ -2787,7 +2695,7 @@ echo "Mobilmedia Converter" >> installed.log
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Mobilmedia Converter" -i "/usr/share/icons/pinguino.png" -t 5000'
 
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Mobilmedia Converter not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Mobilmedia Converter is not installed, please try again"
 fi
 
     }
@@ -2804,13 +2712,11 @@ xterm -e 'sudo sh yakito-0.1.2-linux.sh'
 if [ -f /usr/bin/yakito ]; then
 $changelog
 echo "YakiTo" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : YakiTo" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : YakiTo" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason YakiTo not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason YakiTo is not installed, please try again"
 fi
 
     }
@@ -2847,13 +2753,11 @@ cat /dev/null > /tmp/lastest_ekd.txt
 fi
 
 if [ -f /usr/bin/ekd ]; then
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Ekd" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Ekd" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Ekd not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Ekd is not installed, please try again"
 fi
 
     }
@@ -2867,13 +2771,11 @@ yum -y install ffmulticonverter | pv -n 2>&1 | yad --class="Installing" --window
  
 
 if [ -f /usr/bin/ffmulticonverter ]; then
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : FF Multi Converter" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : FF Multi Converter" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason FF Multi Coverter not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason FF Multi Coverter is not installed, please try again"
 fi
 
     }
@@ -2883,11 +2785,9 @@ fi
             
 yum -y install gtkpod | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing dependencias para GtkPod" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : GtkPod" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : GtkPod" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
             echo "GtkPod" >> installed.log
     }
@@ -2895,11 +2795,9 @@ fi
     easyTag(){
             yum -y install easytag | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing EasyTag" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : EasyTag" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : EasyTag" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi 
+ 
 
             echo "EasyTag" >> installed.log
     }
@@ -2907,11 +2805,9 @@ fi
     avidemux(){
             yum -y install avidemux | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Avidemux" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Avidemux" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Avidemux" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi 
+
 
             echo "Avidemux" >> installed.log
     }
@@ -2919,11 +2815,9 @@ fi
     blender(){
             yum -y install blender | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Blender" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Blender" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Blender" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
             echo "Blender" >> installed.log
     }
@@ -2931,11 +2825,9 @@ fi
     tupapi(){
             yum -y install tupi | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Tupi" --text="Please Wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Tupi" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Tupi" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
             echo "Tupi" >> installed.log
     }
@@ -2948,7 +2840,7 @@ $changelog
 echo "BRL-CAD" >> installed.log
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : BRL-CAD" -i "/usr/share/icons/pinguino.png" -t 5000'
 else 
-zenity --info --title="PostInstallerF" --text="For some reason BRL-CAD not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason BRL-CAD is not installed, please try again"
 fi
 
     }
@@ -3016,13 +2908,11 @@ cat /dev/null > /tmp/lastest_sweethome.txt
 
 if [ -f /usr/bin/sweethome3d.sh ] && [ -f /opt/SweetHome3D-linux-x86.tgz ]; then
 echo "Sweet Home 3D" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Sweet Home 3D" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Sweet Home 3D" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Sweet Home 3D not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Sweet Home 3D is not installed, please try again"
 fi
 
     }
@@ -3056,13 +2946,11 @@ yum -y install librecad | pv -n 2>&1 | yad --class="Installing" --window-icon="/
 if [ -f /usr/bin/librecad ]; then
 $changelog
 echo "Libre CAD" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : LibreCAD" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : LibreCAD" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason LibreCAD not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason LibreCAD is not installed, please try again"
 fi
 
     }
@@ -3074,13 +2962,11 @@ yum -y install freecad | pv -n 2>&1 | yad --class="Installing" --window-icon="/u
 if [ -f /usr/bin/FreeCAD ]; then
 $changelog
 echo "FreeCAD" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : FreeCAD" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : FreeCAD" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason FreeCAD not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason FreeCAD is not installed, please try again"
 fi
 
     }
@@ -3092,13 +2978,11 @@ yum -y localinstall http://dl-ak.solidworks.com/nonsecure/draftsight/V1R2.0/draf
 if [ -f /usr/bin/draftsight ]; then
 $changelog
 echo "DraftSight" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : DraftSight" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : DraftSight" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason DraftSight not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason DraftSight is not installed, please try again"
 fi 
 
     }
@@ -3107,11 +2991,9 @@ fi
     inkscape(){
             yum -y install inkscape | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Inkscape" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Inkscape" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Inkscape" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
            
             echo "Inkscape" >> installed.log
     }
@@ -3123,11 +3005,9 @@ fi
 
  yum -y install openshot | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Openshot" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Openshot" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Openshot" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Inkscape" >> installed.log
 echo "Blender" >> installed.log
@@ -3140,11 +3020,9 @@ kden(){
             yum -y install kdenlive | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Kdenlive" --text="Please wait...." --pulsate --auto-close --width=350
 $changelog
 echo "Kdenlive" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Kdenlive" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Kdenlive" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Kdenlive" >> installed.log
 
@@ -3158,13 +3036,11 @@ lives(){
 if [ -f /usr/bin/lives ]; then
 $changelog
 echo "LIVES" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : LIVES" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : LIVES" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason LIVES not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason LIVES is not installed, please try again"
 fi
 
     }
@@ -3173,11 +3049,9 @@ fi
 imagination(){
             yum -y install imagination | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Imagination" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Imagination" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Imagination" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Imagination" >> installed.log
 
@@ -3187,11 +3061,9 @@ echo "Imagination" >> installed.log
 deveDe(){
             yum -y install devede | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing DeveDe" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : DeveDe" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : DeveDe" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "DeveDe" >> installed.log
 
@@ -3201,11 +3073,9 @@ echo "DeveDe" >> installed.log
 dVDStyler(){
             yum -y install dvdstyler | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing DVDStyler" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : DVDStyler" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : DVDStyler" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "DVDStyler" >> installed.log
 
@@ -3228,13 +3098,11 @@ fi
 if [ -f /usr/bin/ffDiaporama ]; then
 $changelog
 echo "ffDiaporama" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : ffDiaporama" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : ffDiaporama" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason ffDiaporama not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason ffDiaporama is not installed, please try again"
 fi
 
     }
@@ -3247,13 +3115,11 @@ yum -y install wink | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/
 if [ -f /usr/bin/wink ]; then
 $changelog
 echo "Wink" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Wink" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Wink" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Wink not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Wink is not installed, please try again"
 fi
 
     }
@@ -3262,11 +3128,9 @@ fi
 Virtual(){
             yum -y install darktable | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Virtual Lighttable and Darkroom" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Virtual Lighttable and Darkroom" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Virtual Lighttable and Darkroom" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Virtual Lighttable and Darkroom" >> installed.log
 
@@ -3276,11 +3140,9 @@ echo "Virtual Lighttable and Darkroom" >> installed.log
 GnomeSubtitles(){
             yum -y install gnome-subtitles | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Gnome Subtitles" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Gnome Subtitles" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Gnome Subtitles" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Gnome Subtitles" >> installed.log
 
@@ -3290,11 +3152,9 @@ echo "Gnome Subtitles" >> installed.log
 vlc(){
             yum -y install vlc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Vlc Media Player" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : VLC media player" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : VLC media player" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "VLC media player" >> installed.log
 
@@ -3323,13 +3183,11 @@ yum -y install netflix-desktop | pv -n 2>&1 | yad --class="Installing" --window-
 
 
 if [ -f /usr/bin/netflix-desktop ]; then
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Netflix Player" -i "/opt/Netflix/netflix.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Netflix Player" -i "/opt/Netflix/netflix.png" -t 5000'
-fi
+
  else
-zenity --info --title="PostInstallerF" --text="For some reason Netflix Player not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Netflix Player is not installed, please try again"
 fi
 
 
@@ -3344,11 +3202,9 @@ fi
 
             yum -y install xbmc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing XBMC" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : XBMC" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : XBMC" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "XBMC" >> installed.log
 
@@ -3358,11 +3214,9 @@ echo "XBMC" >> installed.log
 clementine(){
             yum -y install qtwebkit clementine | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Clementine" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Clementine" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Clementine" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Clementine" >> installed.log
 
@@ -3372,11 +3226,9 @@ echo "Clementine" >> installed.log
 sound(){
             yum -y install soundconverter | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Sound Converter" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Sound converter" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Sound converter" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Sound converter" >> installed.log
 
@@ -3386,11 +3238,9 @@ echo "Sound converter" >> installed.log
 audacity(){
             yum -y install audacity | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Audacity" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Audacity" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Audacity" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Audacity" >> installed.log
 
@@ -3400,11 +3250,9 @@ echo "Audacity" >> installed.log
 ocenaudio(){
             yum -y localinstall http://www.ocenaudio.com.br/downloads/ocenaudio64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing OcenAudio" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : OcenAudio" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : OcenAudio" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "OcenAudio" >> installed.log
 
@@ -3415,11 +3263,8 @@ echo "OcenAudio" >> installed.log
 mix(){
             yum -y install mixxx | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Mixxx" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Mixxx" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Mixxx" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
 
 echo "Mixxx" >> installed.log
 
@@ -3432,13 +3277,11 @@ skype(){
 if [ -f /usr/bin/skype ]; then
 $changelog
 echo "SKYPE" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : SKYPE" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : SKYPE" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason SKYPE not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason SKYPE is not installed, please try again"
 fi
 
     }
@@ -3450,13 +3293,10 @@ jitsi(){
 if [ -f /usr/bin/jitsi ]; then
 $changelog
 echo "Jitsi" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Jitsi" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Jitsi" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Jitsi not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Jitsi is not installed, please try again"
 fi
 
 
@@ -3465,11 +3305,9 @@ fi
 turpial(){
             yum -y install turpial | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Turpial" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Turpial" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Turpial" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Turpial" >> installed.log
 
@@ -3479,11 +3317,9 @@ echo "Turpial" >> installed.log
 gwibber(){
             yum -y install gwibber | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Gwibber" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Gwibber" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Gwibber" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Gwibber" >> installed.log
 
@@ -3493,11 +3329,9 @@ echo "Gwibber" >> installed.log
 bible(){
             yum -y install bibletime | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Bible Time" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Bible Time" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Bible Time" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Bible Time" >> installed.log
 
@@ -3507,11 +3341,9 @@ echo "Bible Time" >> installed.log
 tuxpaint(){
             yum -y install tuxpaint | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Tuxpaint" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Tuxpaint" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Tuxpaint" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Tuxpaint" >> installed.log
 
@@ -3521,11 +3353,9 @@ echo "Tuxpaint" >> installed.log
 Stellar(){
             yum -y install stellarium | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Stellarium" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Stellarium" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Stellarium" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Stellarium" >> installed.log
 
@@ -3535,12 +3365,8 @@ echo "Stellarium" >> installed.log
 celestia(){
             yum -y install celestia | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Celestia" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Celestia" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Celestia" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
 
+su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Celestia" -i "/usr/share/icons/pinguino.png" -t 5000'
 echo "Celestia" >> installed.log
 
     }
@@ -3552,13 +3378,11 @@ Earth(){
 if [ -f /opt/google/earth/free/googleearth ]; then
 $changelog
 echo "Google Earth" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Google Earth" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Google Earth" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Google Earth not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Google Earth is not installed, please try again"
 fi
 
     }
@@ -3567,11 +3391,9 @@ fi
 gcompris(){
             yum -y install gcompris | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Gcompris" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Gcompris" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Gcompris" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Gcompris" >> installed.log
 
@@ -3581,11 +3403,9 @@ echo "Gcompris" >> installed.log
 tuxMath(){
             yum -y tuxmath | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing TuxMath" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : TuxMath" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : TuxMath" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "TuxMath" >> installed.log
 
@@ -3595,11 +3415,9 @@ echo "TuxMath" >> installed.log
 tuxType(){
             yum -y install tuxtype2 | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing TuxType" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : TuxType" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : TuxType" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "TuxType" >> installed.log
 
@@ -3609,11 +3427,9 @@ echo "TuxType" >> installed.log
 childsplay(){
             yum -y install childsplay | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Childsplay" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Childsplay" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Childsplay" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Childsplay" >> installed.log
 
@@ -3626,13 +3442,11 @@ scratch(){
 if [ -f /usr/bin/scratch ]; then
 $changelog
 echo "Scratch" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Scratch" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Scratch" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Scratch not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Scratch is not installed, please try again"
 fi
 
     }
@@ -3641,11 +3455,9 @@ fi
 ri(){
             yum -y install Ri-li | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Ri-li" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Ri-li" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Ri-li" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Ri-li" >> installed.log
 
@@ -3655,11 +3467,9 @@ echo "Ri-li" >> installed.log
 Frozen(){
             yum -y install frozen-bubble | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Frozen Bubble" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Frozen Bubble" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Frozen Bubble" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Frozen Bubble" >> installed.log
 
@@ -3669,11 +3479,9 @@ echo "Frozen Bubble" >> installed.log
 Extreme(){
             yum -y install extremetuxracer | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Extreme Tux Racer" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Extreme Tux Racer" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Extreme Tux Racer" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Extreme Tux Racer" >> installed.log
 
@@ -3683,11 +3491,9 @@ echo "Extreme Tux Racer" >> installed.log
 Super(){
             yum -y install supertuxkart | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Super Tux Kart" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Extreme Super Tux Kart" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Extreme Super Tux Kart" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Super Tux Kart" >> installed.log
 
@@ -3697,11 +3503,9 @@ echo "Super Tux Kart" >> installed.log
 wormux(){
             yum -y install wormux | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Wormux" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Wormux" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Wormux" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Wormux" >> installed.log
 
@@ -3711,11 +3515,9 @@ echo "Wormux" >> installed.log
 tremulous(){
             yum -y install tremulous | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Tremulous" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Tremulous" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Tremulous" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Tremulous" >> installed.log
 
@@ -3725,11 +3527,9 @@ echo "Tremulous" >> installed.log
 Methane(){
             yum -y install methane | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Super Methane Brothers" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Super Methane Brothers" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Super Methane Brothers" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Super Methane Brothers" >> installed.log
 
@@ -3739,11 +3539,9 @@ echo "Super Methane Brothers" >> installed.log
 pingus(){
             yum -y install pingus | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Pingus" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Pingus" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Pingus" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Pingus" >> installed.log
 
@@ -3753,11 +3551,9 @@ echo "Pingus" >> installed.log
 hedgewars(){
              yum -y install hedgewars | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Hedgewars" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Hedgewars" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Hedgewars" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Hedgewars" >> installed.log
 
@@ -3767,11 +3563,9 @@ echo "Hedgewars" >> installed.log
 glaxium(){
             yum -y install glaxium | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Glaxium" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Glaxium" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Glaxium" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Glaxium" >> installed.log
 
@@ -3781,11 +3575,9 @@ echo "Glaxium" >> installed.log
 amoebax(){
             yum -y install amoebax | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Amoebax" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Amoebax" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Amoebax" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Amoebax" >> installed.log
 
@@ -3795,11 +3587,9 @@ echo "Amoebax" >> installed.log
 AlienArena(){
             yum -y install alienarena | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Alien Arena" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Alien Arena" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Alien Arena" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Alien Arena" >> installed.log
 
@@ -3809,11 +3599,9 @@ echo "Alien Arena" >> installed.log
 tORCS(){
             yum -y install torcs | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing TORCS" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : TORCS" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : TORCS" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "TORCS" >> installed.log
 
@@ -3823,11 +3611,9 @@ echo "TORCS" >> installed.log
 flightGear(){
             yum -y install FlightGear | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing FlightGear" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : FlightGear" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : FlightGear" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "FlightGear" >> installed.log
 
@@ -3840,14 +3626,12 @@ perfo(){
 yum -y install performous | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Performous" --text="Please wait...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/performous ]; then  
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+       
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Performous" -i "/usr/share/icons/pinguino.png" -t 5000'
-else         
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Performous" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 echo "Performous" >> installed.log
  else
-zenity --info --title="PostInstallerF" --text="For some reason Performous not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Performous is not installed, please try again"
 fi
 
     }
@@ -3877,13 +3661,11 @@ yum -y install steam | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr
 
 
 if [ -f /usr/bin/steam ]; then
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Steam" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Steam" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else
-zenity --info --title="PostInstallerF" --text="For some reason Steam not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Steam is not installed, please try again"
 fi
 
     }
@@ -3903,14 +3685,12 @@ chmod a+x aquaria-beta3-installer.run
 su $noti -c xterm -e './aquaria-beta3-installer.run'
 
 if [ -f /home/$noti/aquaria/aquaria ]; then
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Aquaria" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Aquaria" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 echo "Aquaria" >> installed.log
  else
-zenity --info --title="PostInstallerF" --text="For some reason Aquaria not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Aquaria is not installed, please try again"
 fi
 
     }
@@ -3919,11 +3699,9 @@ fi
 Gnutella(){
             yum -y install gtk-gnutella | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Gtk-Gnutella" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Gtk-Gnutella" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Gtk-Gnutella" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Gtk-Gnutella" >> installed.log
 
@@ -3946,13 +3724,11 @@ yum -y install groovedown | pv -n 2>&1 | yad --class="Installing" --window-icon=
 if [ -f /usr/bin/groovedown ]; then
 $changelog
 echo "GrooveDown" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : GrooveDown" -i "/usr/share/icons/gd_logo.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : GrooveDown" -i "/usr/share/icons/gd_logo.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason GrooveDown not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason GrooveDown is is not installed, please try again"
 fi
 
     }
@@ -3980,13 +3756,11 @@ fi
 if [ -f /usr/bin/grooveoff ]; then
 $changelog
 echo "GrooveOff" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : GrooveOff" -i "/usr/share/icons/gd_logo.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : GrooveOff" -i "/usr/share/icons/gd_logo.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason GrooveOff not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason GrooveOff is is not installed, please try again"
 fi
 
     }
@@ -4003,13 +3777,11 @@ yum -y install frostwire | pv -n 2>&1 | yad --class="Installing" --window-icon="
 
 
 if [ -f /usr/bin/frostwire ]; then
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Frostwire" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Frostwire" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Frostwire not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Frostwire is is not installed, please try again"
 fi
 
     }
@@ -4018,11 +3790,9 @@ fi
 uget(){
             yum -y install uget | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing UGET" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : UGET" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : UGET" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "UGET" >> installed.log
 
@@ -4034,13 +3804,11 @@ flare(){
             yum -y install http://www.flareget.com/files/flareget/rpms/amd64/flareget-1.4-7.x86_64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing FlareGet" --text="Please wait...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/flareget ]; then
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : FlareGet" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : FlareGet" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason FlareGet not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason FlareGet is is not installed, please try again"
 fi
 
 rm -f /tmp/flareget32.rpm
@@ -4051,11 +3819,9 @@ rm -f /tmp/flareget32.rpm
 tucan(){
             yum -y install tucan | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Tucan Manager" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Tucan Manager" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Tucan Manager" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Tucan Manager" >> installed.log
 
@@ -4065,11 +3831,9 @@ echo "Tucan Manager" >> installed.log
 YumExtender(){
             yum -y install yumex | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Yum Extender" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Yum Extender" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Yum Extender" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Yum Extender" >> installed.log
 
@@ -4079,11 +3843,9 @@ echo "Yum Extender" >> installed.log
 blue(){
             yum -y install blueman | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Blueman" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Blueman" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Blueman" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "Blueman" >> installed.log
 
@@ -4096,13 +3858,11 @@ Chrome(){
 if [ -f /opt/google/chrome/google-chrome ]; then
 $changelog
 echo "Google-Chrome" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Google-Chrome" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Google-Chrome" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Google-Chrome not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Google-Chrome is is not installed, please try again"
 fi
 
     }
@@ -4117,7 +3877,7 @@ $changelog
 echo "Chromium" >> installed.log
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Chromium" -i "/usr/share/icons/pinguino.png" -t 5000'
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Chromium not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Chromium is is not installed, please try again"
 fi
 
     }
@@ -4130,13 +3890,11 @@ opera(){
 if [ -f /usr/bin/opera ]; then
 $changelog
 echo "Opera" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Navegador Opera" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Navegador Opera" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Opera not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Opera is is not installed, please try again"
 fi
 
     }
@@ -4153,7 +3911,7 @@ wait ${!}
 
 latestfoo7=$(cat /tmp/lastest_bleachbit.txt ); echo "latestfoo7=$latestfoo7"
 
-yum -y install http://sourceforge.net/projects/bleachbit/files/bleachbit/$latestfoo7/bleachbit-$latestfoo7-1.1.fc17.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing BleachBit" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y localinstall http://sourceforge.net/projects/bleachbit/files/bleachbit/$latestfoo7/bleachbit-$latestfoo7-1.1.fc17.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing BleachBit" --text="Please wait...." --pulsate --auto-close --width=350
 
 cat /dev/null > /tmp/bleachbit.txt
 cat /dev/null > /tmp/lastest_bleachbit.txt
@@ -4161,13 +3919,11 @@ cat /dev/null > /tmp/lastest_bleachbit.txt
 if [ -f /usr/bin/bleachbit ]; then
 $changelog
 echo "BleachBit" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : BleachBit" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : BleachBit" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Bleachbit not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Bleachbit is is not installed, please try again"
 fi
 
     }
@@ -4176,11 +3932,9 @@ fi
 GnomeTweak(){
             yum -y install python-devel gnome-tweak-tool dconf-editor gconf-editor | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing GnomeTweakTool y dconf-editor" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : GnomeTweakTool y dconf-editor" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : GnomeTweakTool y dconf-editor" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
 
 echo "GnomeTweakTool y dconf-editor" >> installed.log
 
@@ -4194,7 +3948,7 @@ $changelog
 echo "Menu Library" >> installed.log
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Menu Libre" -i "/usr/share/icons/pinguino.png" -t 5000'
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Menu Libre not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Menu Libre is is not installed, please try again"
 fi
 
     }
@@ -4211,10 +3965,10 @@ su $noti -c 'notify-send "PostInstallerF" "Completed Pending Installations" -i "
 
 bitdefender(){
 
-yum -y install http://download.bitdefender.com/repos/rpm/bitdefender/i586/bitdefender-scanner-7.6-3.i586.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Bitdefender Antivirus- scanner" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y localinstall http://download.bitdefender.com/repos/rpm/bitdefender/x86_64/bitdefender-scanner-7.6-3.x86_64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Bitdefender Antivirus- scanner" --text="Please wait...." --pulsate --auto-close --width=350
 
 
-yum -y install http://download.bitdefender.com/repos/rpm/bitdefender/i586/bitdefender-scanner-gui-1.0-3.i586.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Bitdefender Antivirus- scanner gui" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y localinstall http://download.bitdefender.com/repos/rpm/bitdefender/x86_64/bitdefender-scanner-gui-1.0-3.x86_64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Bitdefender Antivirus- scanner gui" --text="Please wait...." --pulsate --auto-close --width=350
 
 if [ -f /opt/BitDefender-scanner/bin/bdgui ] && [ -f /opt/BitDefender-scanner/bin/bdscan ]; then
 $changelog
@@ -4224,7 +3978,7 @@ echo "Bitdefender" >> installed.log
 su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Bitdefender" -i "/usr/share/icons/pinguino.png" -t 5000'
 
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Bitdefender not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Bitdefender is is not installed, please try again"
 fi
 
     }
@@ -4271,7 +4025,7 @@ echo "Batti" >> installed.log
 
 
 alien(){
-             yum -y install http://sourceforge.net/projects/postinstaller/files/data/alien-8.86-1.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Alien" --text="Please wait...." --pulsate --auto-close --width=350
+             yum -y localinstall http://sourceforge.net/projects/postinstaller/files/data/alien-8.86-1.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Alien" --text="Please wait...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/alien ]; then
 $changelog
@@ -4280,7 +4034,7 @@ echo "Alien" >> installed.log
 su $noti -c 'notify-send "PostInstallerF" "The installation completed of the software " -i "/usr/share/icons/sistema.png" -t 5000'
 
  else 
-zenity --info --title="PostInstallerF" --text="For some reason Alien not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Alien is is not installed, please try again"
 fi
 
     }
@@ -4290,16 +4044,11 @@ truetype(){
             if [ -d /usr/share/fonts/msttcorefonts ]; then
 zenity --info --title="PostInstallerF" --text="Ya tenes instalado Microsoft TrueType core fonts, nada que hacer"
 else
-yum -y install http://sourceforge.net/projects/postinstaller/files/fuduntu/msttcorefonts-2.0-2.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Microsoft TrueType core fonts" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y localinstall http://sourceforge.net/projects/postinstaller/files/fuduntu/msttcorefonts-2.0-2.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Microsoft TrueType core fonts" --text="Please wait...." --pulsate --auto-close --width=350
 fi
 
 
 su $noti -c 'notify-send "PostInstallerF" "The installation completed of the software Microsoft TrueType core fonts" -i "/usr/share/icons/sistema.png" -t 5000'
-
-
-$changelog
-echo "Microsoft TrueType core fonts" >> installed.log
-
 
 
     }
