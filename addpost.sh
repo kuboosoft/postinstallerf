@@ -1362,7 +1362,7 @@ if echo $choice | grep "Install Codecs Audio/Video" > /dev/null; then
                     pdfsam
             fi
 
-	       if echo $choice | grep "YAGF" > /dev/null; then
+         if echo $choice | grep "YAGF" > /dev/null; then
                     yagsca
             fi
 
@@ -1398,7 +1398,7 @@ if echo $choice | grep "Install Codecs Audio/Video" > /dev/null; then
             fi
 
 
-	        if echo $choice | grep "Wine y winetricks" > /dev/null; then
+          if echo $choice | grep "Wine y winetricks" > /dev/null; then
                     wine
             fi
             
@@ -4340,12 +4340,8 @@ melibre(){
 
 if [ -f /usr/bin/menulibre ]; then
 $changelog
-echo "Menu Libre" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Menu Libre" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
+echo "Menu Library" >> installed.log
 su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Menu Libre" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
  else 
 zenity --info --title="PostInstallerF" --text="For some reason Menu Libre not installed, please try again"
 fi
@@ -4353,13 +4349,11 @@ fi
     }
 
 pendientes(){
-            yum-complete-transaction -y | pv -en 2>&1 | zenity --progress --title "Completando Instalaciones pendientes" --text="Please wait...." --pulsate --auto-close --width=350
+            yum-complete-transaction -y | pv -en 2>&1 | zenity --progress --title "Completed Pending Install" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completado Instalaciones pendientes" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Completed Installations pending" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
+su $noti -c 'notify-send "PostInstallerF" "Completed Pending Installations" -i "/usr/share/icons/pinguino.png" -t 5000'
+
 
     }
 
@@ -4375,11 +4369,9 @@ if [ -f /opt/BitDefender-scanner/bin/bdgui ] && [ -f /opt/BitDefender-scanner/bi
 $changelog
 echo "Bitdefender" >> installed.log
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Bitdefender" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
+
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Bitdefender" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
+
  else 
 zenity --info --title="PostInstallerF" --text="For some reason Bitdefender not installed, please try again"
 fi
@@ -4388,7 +4380,7 @@ fi
 
 
 infosystem(){
-            zenity --info --title="Informacion del Sistema" --text="Distribucion: 
+            zenity --info --title="System Inforamation" --text="Distribucion: 
 $(cat /etc/fedora-release)\n\nKernel: $(uname -s -r)\n\nArchitecture: 
 $(uname -i)\n\nRAM: $(cat /proc/meminfo | grep MemTotal | cut -c10-)\n\nGraphics Card: 
 $(/sbin/lspci | grep VGA)\n\nGraphics Drivers: 
@@ -4404,11 +4396,9 @@ $(uptime)" --ok-label="Ok"
 hardinfo(){
             yum -y install hardinfo | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Hardinfo" --text="Please wait...." --pulsate --auto-close --width=350
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Hardinfo" -i "/usr/share/icons/sistema.png" -t 5000'
-else
+
 su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Hardinfo" -i "/usr/share/icons/sistema.png" -t 5000'
-fi
+
 
 echo "Hardinfo" >> installed.log
 
@@ -4421,11 +4411,8 @@ batti(){
 echo "@batti" >> /etc/xdg/lxsession/LXDE/autostart
 exec /usr/bin/batti
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Batti" -i "/usr/share/icons/sistema.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Batti" -i "/usr/share/icons/sistema.png" -t 5000'
-fi
+su $noti -c 'notify-send "PostInstallerF" "The Installation of Batti has completed." -i "/usr/share/icons/sistema.png" -t 5000'
+
 
 echo "Batti" >> installed.log
 
@@ -4438,11 +4425,9 @@ alien(){
 if [ -f /usr/bin/alien ]; then
 $changelog
 echo "Alien" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Alien" -i "/usr/share/icons/sistema.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Alien" -i "/usr/share/icons/sistema.png" -t 5000'
-fi
+
+su $noti -c 'notify-send "PostInstallerF" "The installation completed of the software " -i "/usr/share/icons/sistema.png" -t 5000'
+
  else 
 zenity --info --title="PostInstallerF" --text="For some reason Alien not installed, please try again"
 fi
@@ -4457,11 +4442,9 @@ else
 yum -y install http://sourceforge.net/projects/postinstaller/files/fuduntu/msttcorefonts-2.0-2.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Microsoft TrueType core fonts" --text="Please wait...." --pulsate --auto-close --width=350
 fi
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Microsoft TrueType core fonts" -i "/usr/share/icons/sistema.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Microsoft TrueType core fonts" -i "/usr/share/icons/sistema.png" -t 5000'
-fi
+
+su $noti -c 'notify-send "PostInstallerF" "The installation completed of the software Microsoft TrueType core fonts" -i "/usr/share/icons/sistema.png" -t 5000'
+
 
 $changelog
 echo "Microsoft TrueType core fonts" >> installed.log
@@ -4475,11 +4458,9 @@ echo "Microsoft TrueType core fonts" >> installed.log
 cleanlog(){
             cat /dev/null > /usr/share/.postinstallerf/installed.log
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Se ha realizado el reset de PostInstallerF" -i "/usr/share/icons/sistema.png" -t 5000'
-else
+
 su $noti -c 'notify-send "PostInstallerF" "The PostInstallerF reset is complete" -i "/usr/share/icons/sistema.png" -t 5000'
-fi
+
 
     }
 
@@ -4540,11 +4521,9 @@ fi
     #if there was something to do
     if test ${#choice} -gt 0; then
        /usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "Terminado!" "Todo está completado" -i "/usr/share/icons/pinguino.png" -t 10000'
-else
+
        su $noti -c 'notify-send "Finish!" "All tasks were completed" -i "/usr/share/icons/pinguino.png" -t 10000'
-fi
+
        
             
     fi
