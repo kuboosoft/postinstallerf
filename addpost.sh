@@ -515,7 +515,7 @@ if ! $installed | grep "EasyTag" > /dev/null; then
 if [ -f /usr/bin/easytag ]; then
                     im=$im"FALSE \"EasyTag\"              \"Utility for viewing, editing and writing ID3 tags of your MP3 files.\" \"INSTALLED  \"  "
 else
-im=$im"FALSE \"EasyTag\"              \"Utility for viewing, editing and writing ID3 tags of your MP3 files.\" \"INSTALLED  \"  "
+im=$im"FALSE \"EasyTag\"              \"Utility for viewing, editing and writing ID3 tags of your MP3 files.\" \"NO INSTALLED  \"  "
 fi
             fi
 
@@ -4522,7 +4522,7 @@ su $noti -c 'notify-send "PostInstallerF" "The PostInstallerF reset is complete"
     if test ${#choice} -gt 0; then
        /usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg
 
-       su $noti -c 'notify-send "Finish!" "All tasks were completed" -i "/usr/share/icons/pinguino.png" -t 10000'
+       su $noti -c 'notify-send "Finished!" "All tasks were completed" -i "/usr/share/icons/pinguino.png" -t 10000'
 
        
             
