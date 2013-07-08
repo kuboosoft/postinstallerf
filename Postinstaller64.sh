@@ -340,7 +340,7 @@ if [ ""$nuday = $Tue"" ]; then
         fi
 fi
 
-elif [ ""$nuday = $Thu"" ]; then
+if [ ""$nuday = $Thu"" ]; then
 
         if [ -f $updater ]; then
                 rm -f /usr/share/updatepostintaller/Postinstaller64.sh
@@ -410,97 +410,97 @@ icon015='/usr/share/icons/updatep.png'
 icon016='/usr/share/icons/trashito.png'
 
 if test -e $icon1; then
-	echo "The file $icon1 is here."
+        echo "The file $icon1 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/sistema.png
 fi
 
 if test -e $icon2; then
-	echo "The file $icon2 is here."
+        echo "The file $icon2 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/pinguino.png
 fi
 
 if test -e $icon3; then
-	echo "The file $icon3 is here."
+        echo "The file $icon3 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/pincel_rco.png
 fi
 
 if test -e $icon4; then
-	echo "The file $icon4 is here."
+        echo "The file $icon4 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/user-trash-full.png
 fi
 
 if test -e $icon5; then
-	echo "The file $icon5 is here."
+        echo "The file $icon5 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/camera.png
 fi
 
 if test -e $icon6; then
-	echo "The file $icon6 is here."
+        echo "The file $icon6 is here."
 else
 wget -c -P/usr/share/icons/acciones/ http://sourceforge.net/projects/postinstaller/files/Icons/add.png
 fi
 
 if test -e $icon7; then
-	echo "The file $icon7 is here."
+        echo "The file $icon7 is here."
 else
 wget -c -P/usr/share/icons/acciones/ http://sourceforge.net/projects/postinstaller/files/Icons/conf.png
 fi
 
 if test -e $icon8; then
-	echo "The file $icon8 is here."
+        echo "The file $icon8 is here."
 else
 wget -c -P/usr/share/icons/acciones/ http://sourceforge.net/projects/postinstaller/files/Icons/gnomestension.svg
 fi
 
 if test -e $icon9; then
-	echo "The file $icon9 is here."
+        echo "The file $icon9 is here."
 else
 wget -c -P/usr/share/icons/acciones/ http://sourceforge.net/projects/postinstaller/files/Icons/system-shutdown.svg
 fi
 
 if test -e $icon010; then
-	echo "The file $icon010 is here."
+        echo "The file $icon010 is here."
 else
 wget -c -P/usr/share/icons/acciones/ http://sourceforge.net/projects/postinstaller/files/Icons/topicon.png
 fi
 
 if test -e $icon011; then
-	echo "The file $icon011 is here."
+        echo "The file $icon011 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/Postinstaller1.svg
 fi
 
 if test -e $icon012; then
-	echo "The file $icon012 is here."
+        echo "The file $icon012 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/icoinstall2.png
 fi
 
 if test -e $icon013; then
-	echo "The file $icon013 is here."
+        echo "The file $icon013 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/brightness.png
 fi
 
 if test -e $icon014; then
-	echo "The file $icon014 is here."
+        echo "The file $icon014 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/updatep2.png
 fi
 
 if test -e $icon015; then
-	echo "The file $icon015 is here."
+        echo "The file $icon015 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/updatep.png
 fi
 
 if test -e $icon016; then
-	echo "The file $icon016 is here."
+        echo "The file $icon016 is here."
 else
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/trashito.png
 fi
@@ -619,11 +619,11 @@ clear
 P_RUN=$(yad --image="/usr/share/icons/acciones/topicon.png" --image-on-top --icons --class="PostInstallerF" --name="PostInstallerF" --window-icon="/usr/share/icons/Postinstaller1.svg" --item-width="182" --read-dir="/usr/share/Postdesktopfiles64" --width="435" --height="440" --title="PostInstallerF" --auto-kill --text="\n<b>Double click</b> an item to select an action:" --button="Website:0" --button="Close:1")
 
 if [ $? -eq 0 ]; then
-	su $noti3 -c '/usr/bin/firefox http://sourceforge.net/projects/postinstaller/'
+        su $noti3 -c '/usr/bin/firefox http://sourceforge.net/projects/postinstaller/'
 else
-	echo "Nothing to do"
-	fi
-	exit 0
+        echo "Nothing to do"
+        fi
+        exit 0
 
 
 #initialising notification
