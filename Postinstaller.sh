@@ -320,10 +320,10 @@ echo "Up to date did not update the file"
 fi
 
 if [ -d /usr/share/updatepostintaller/ ]; then
-xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller.sh' 
+xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/maxm11/postinstallerf/master/Postinstaller.sh' 
 else
 mkdir /usr/share/updatepostintaller/
- wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
+ wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/maxm11/postinstallerf/master/Postinstaller.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 fi 
 
 diff -a $source $update
@@ -348,10 +348,10 @@ echo "File up to date, not updating"
 fi
 
 if [ -d /usr/share/updatepostintaller/ ]; then
-xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller.sh' 
+xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/maxm11/postinstallerf/master/Postinstaller.sh' 
 else
 mkdir /usr/share/updatepostintaller/
- wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
+ wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/maxm11/postinstallerf/master/Postinstaller.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 fi 
 
 diff -a $source $update
@@ -503,35 +503,35 @@ fi
 if [ -f /usr/bin/PostinstallerF.sh ]; then
 echo "PostinstallerF is present"
 else
-xterm -e 'wget -c -P/usr/bin/ https://raw.github.com/kuboosoft/postinstallerf/master/PostinstallerF.sh'
+xterm -e 'wget -c -P/usr/bin/ https://raw.github.com/maxm11/postinstallerf/master/PostinstallerF.sh'
 chmod a+x /usr/bin/PostinstallerF.sh
 fi
 
 if [ -f /usr/bin/postinstallerf/addpost.sh ]; then
 echo "addpost is present"
 else
-xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/kuboosoft/postinstallerf/master/addpost.sh'
+xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/maxm11/postinstallerf/master/addpost.sh'
 chmod a+x /usr/bin/postinstallerf/addpost.sh
 fi
 
 if [ -f /usr/bin/postinstallerf/confpost.sh ]; then
 echo "confpost is present"
 else
-xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/kuboosoft/postinstallerf/master/confpost.sh'
+xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/maxm11/postinstallerf/master/confpost.sh'
 chmod a+x /usr/bin/postinstallerf/confpost.sh
 fi
 
 if [ -f /usr/bin/postinstallerf/gnext.sh ]; then
 echo "gnext is present"
 else
-xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/kuboosoft/postinstallerf/master/gnext.sh'
+xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/maxm11/postinstallerf/master/gnext.sh'
 chmod a+x /usr/bin/postinstallerf/gnext.sh
 fi
 
 if [ -f /usr/bin/postinstallerf/Logout.sh ]; then
 echo "Logout is present"
 else
-xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/kuboosoft/postinstallerf/master/Logout.sh'
+xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/maxm11/postinstallerf/master/Logout.sh'
 chmod a+x /usr/bin/postinstallerf/Logout.sh
 fi
 
