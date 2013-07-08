@@ -25,7 +25,7 @@ time=$(date +"%H")
 
 yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
 
-Good day, PostInstallerF is a program that installs everything you need in Fedora"
+Hello, PostInstallerF is a program that installs everything you need in Fedora"
 
 
 
