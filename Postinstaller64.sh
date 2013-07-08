@@ -511,14 +511,14 @@ fi
 if [ -f /usr/bin/PostinstallerF.sh ]; then
 echo "PostinstallerF is here"
 else
-xterm -e 'wget -c -P/usr/bin/ https://raw.github.com/kuboosoft/postinstallerf/master/PostinstallerF.sh'
+xterm -e 'wget -c -P/usr/bin/ https://raw.github.com/maxm11/postinstallerf/master/PostinstallerF.sh'
 chmod a+x /usr/bin/PostinstallerF.sh
 fi
 
 if [ -f /usr/bin/postinstallerf/addpost64.sh ]; then
 echo "addpost is here"
 else
-xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/kuboosoft/postinstallerf/master/addpost64.sh'
+xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/maxm11/postinstallerf/master/addpost64.sh'
 chmod a+x /usr/bin/postinstallerf/addpost64.sh
 fi
 
@@ -526,7 +526,7 @@ fi
 if [ -f /usr/bin/postinstallerf/confpost64.sh ]; then
 echo "confpost is here"
 else
-xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/kuboosoft/postinstallerf/master/confpost64.sh'
+xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/maxm11/postinstallerf/master/confpost64.sh'
 chmod a+x /usr/bin/postinstallerf/confpost64.sh
 fi
 
@@ -534,7 +534,7 @@ fi
 if [ -f /usr/bin/postinstallerf/gnext.sh ]; then
 echo "gnext is here"
 else
-xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/kuboosoft/postinstallerf/master/gnext.sh'
+xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/maxm11/postinstallerf/master/gnext.sh'
 chmod a+x /usr/bin/postinstallerf/gnext.sh
 fi
 
@@ -542,7 +542,7 @@ fi
 if [ -f /usr/bin/postinstallerf/Logout.sh ]; then
 echo "Logout is here"
 else
-xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/kuboosoft/postinstallerf/master/Logout.sh'
+xterm -e 'wget -c -P/usr/bin/postinstallerf/ https://raw.github.com/maxm11/postinstallerf/master/Logout.sh'
 chmod a+x /usr/bin/postinstallerf/Logout.sh
 fi
 
