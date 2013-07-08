@@ -129,7 +129,7 @@ if ! $installed | grep "Unrar and p7zip" > /dev/null; then
 if [ -f /usr/bin/unrar ] || [ -f /usr/bin/7za ]; then
                     im=$im"FALSE \"Unrar and p7zip\"                   \"Decompresses rar and 7zip files\" \"INSTALLED  \"  "
 else
-im=$im"FALSE \"Unrar y p7zip\"                   \"Decompresses rar and 7zip files\" \"NO INSTALLED  \"  "
+im=$im"FALSE \"Unrar and p7zip\"                   \"Decompresses rar and 7zip files\" \"NO INSTALLED  \"  "
 fi
             fi
 
@@ -1281,7 +1281,7 @@ if echo $choice | grep "Install Codecs Audio/Video" > /dev/null; then
             if echo $choice | grep "Flash Player" > /dev/null; then
                     flash
             fi
-            if echo $choice | grep "Unrar y p7zip" > /dev/null; then
+            if echo $choice | grep "Unrar and p7zip" > /dev/null; then
                     comprimir
             fi
 
@@ -2049,15 +2049,15 @@ fi
     }
      
     comprimir(){
-            yum -y install unrar p7zip p7zip-plugins | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing unrar y p7zip" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install unrar p7zip p7zip-plugins | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing unrar and p7zip" --text="Please wait...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Unrar y p7zip" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Unrar and p7zip" -i "/usr/share/icons/pinguino.png" -t 5000'
 else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Unrar y p7zip" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Unrar and p7zip" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
 
-                    echo "Unrar y p7zip" >> installed.log
+                    echo "Unrar and p7zip" >> installed.log
             
     }
      

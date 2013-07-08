@@ -129,7 +129,7 @@ if ! $installed | grep "Unrar and p7zip" > /dev/null; then
 if [ -f /usr/bin/unrar ] || [ -f /usr/bin/7za ]; then
                     im=$im"FALSE \"Unrar and p7zip\"                   \"Decompresses rar and 7zip files\" \"INSTALLED  \"  "
 else
-im=$im"FALSE \"Unrar y p7zip\"                   \"Decompresses rar and 7zip files\" \"NO INSTALLED  \"  "
+im=$im"FALSE \"Unrar and p7zip\"                   \"Decompresses rar and 7zip files\" \"NO INSTALLED  \"  "
 fi
             fi
 
@@ -1263,7 +1263,7 @@ if echo $choice | grep "Install Codecs Audio/Video" > /dev/null; then
             if echo $choice | grep "Flash Player" > /dev/null; then
                     flash
             fi
-            if echo $choice | grep "Unrar y p7zip" > /dev/null; then
+            if echo $choice | grep "Unrar and p7zip" > /dev/null; then
                     comprimir
             fi
 
@@ -1375,7 +1375,7 @@ if echo $choice | grep "Install Codecs Audio/Video" > /dev/null; then
             fi
 
 
-          if echo $choice | grep "Wine y winetricks" > /dev/null; then
+          if echo $choice | grep "Wine and winetricks" > /dev/null; then
                     wine
             fi
             
@@ -1759,7 +1759,7 @@ if echo $choice | grep "BleachBit" > /dev/null; then
             fi
 
 
-if echo $choice | grep "GnomeTweakTool y dconf-editor" > /dev/null; then
+if echo $choice | grep "GnomeTweakTool and dconf-editor" > /dev/null; then
                     GnomeTweak
             fi
 
@@ -2013,13 +2013,13 @@ su $noti -c 'notify-send "PostInstallerF" "The installation has completed for th
     }
      
     comprimir(){
-            yum -y install unrar p7zip p7zip-plugins | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing unrar y p7zip" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install unrar p7zip p7zip-plugins | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing unrar and p7zip" --text="Please wait...." --pulsate --auto-close --width=350
 
 
-su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Unrar y p7zip" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $noti -c 'notify-send "PostInstallerF" "The installation has completed for the sofware : Unrar and p7zip" -i "/usr/share/icons/pinguino.png" -t 5000'
 
 
-                    echo "Unrar y p7zip" >> installed.log
+                    echo "Unrar and p7zip" >> installed.log
             
     }
      
