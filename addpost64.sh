@@ -2921,7 +2921,7 @@ fi
 
 if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) != "16" ]
 then
-yum -y install qt boost | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando dependencias para LibreCAD" --text="Por favor espere...." --pulsate --auto-close --width=350
+yum -y install qt boost | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando dependencias para LibreCAD" --text="Please Wait...." --pulsate --auto-close --width=350
  
 wget -c -P/usr/local/ http://sourceforge.net/projects/postinstaller/files/Fedora%2017/librecad64.tar.gz 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:LibreCAD  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 cd /usr/local/
@@ -2936,7 +2936,7 @@ cp -R /usr/local/librecad/share/pixmaps/ /usr/share/
 chmod a+x /usr/bin/librecad
 chmod a+x /usr/share/applications/librecad.desktop
 else
-yum -y install http://sourceforge.net/projects/rallaz.u/files/LibreCAD-1.0.1/Fedora_16/librecad-1.0.1-1.1.x86_64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando LibreCAD" --text="Por favor espere...." --pulsate --auto-close --width=350
+yum -y install http://sourceforge.net/projects/rallaz.u/files/LibreCAD-1.0.1/Fedora_16/librecad-1.0.1-1.1.x86_64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando LibreCAD" --text="Please Wait...." --pulsate --auto-close --width=350
 fi
 
 wait ${!}

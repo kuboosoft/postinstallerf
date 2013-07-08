@@ -2823,7 +2823,7 @@ zenity --info --title="PostInstallerF" --text="Arista Transcoder is not compatib
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "20" ]; then
 zenity --info --title="PostInstallerF" --text="Arista Transcoder is not compatible with Fedora 20, sorry"
 else
-yum -y install arista | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Arista Transcoder" --text="Please Wait...." --pulsate --auto-close --width=350
+yum -y install arista | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Arista Transcoder" --text="Please Wait...." --pulsate --auto-close --width=350
            
 if [ -f /usr/bin/arista-gtk ]; then
 $changelog
@@ -2843,7 +2843,7 @@ fi
 
     qwinf(){
 
-yum -y install qwinff | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Qwinff" --text="Please Wait...." --pulsate --auto-close --width=350
+yum -y install qwinff | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Qwinff" --text="Please Wait...." --pulsate --auto-close --width=350
            
 if [ -f /usr/bin/qwinff ]; then
 $changelog
@@ -3058,7 +3058,7 @@ fi
     }
 
     tupapi(){
-            yum -y install tupi | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Tupi" --text="Please Wait...." --pulsate --auto-close --width=350
+            yum -y install tupi | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Tupi" --text="Please Wait...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Tupi" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -3587,7 +3587,7 @@ fi
 
 
 jitsi(){
-            yum -y localinstall https://download.jitsi.org/jitsi/rpm/jitsi-2.2-latest.i386.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Jitsi" --text="Please Wait...." --pulsate --auto-close --width=350
+            yum -y localinstall https://download.jitsi.org/jitsi/rpm/jitsi-2.2-latest.i386.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Jitsi" --text="Please Wait...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/jitsi ]; then
 $changelog
@@ -4336,7 +4336,7 @@ echo "GnomeTweakTool y dconf-editor" >> installed.log
     }
 
 melibre(){
-            yum -y install menulibre | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Menu Libre" --text="Please Wait...." --pulsate --auto-close --width=350
+            yum -y install menulibre | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Menu Libre" --text="Please Wait...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/menulibre ]; then
 $changelog
