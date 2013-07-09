@@ -1659,7 +1659,28 @@ su $noti -c 'notify-send "PostInstallerF" "Se ha instalado los drivers Nvidia, p
 fi
 
 
-VGA7=$(grep -e 'GeForce 2' -e 'GeForce 3' -e 'GeForce 4' -e 'GeForce 5' -e 'GeForce 6' -e 'GeForce 7' -e 'GeForce 8' /tmp/targra2.txt) > /dev/null
+VGA7=$(grep -e 'GeForce 2' -e 'GeForce 3' -e 'GeForce 4' -e 'GeForce 5' -e 'GeForce 6' -e 'GeForce 7' /tmp/targra2.txt) > /dev/null
+	if [[ "$?" = 0 ]]; then
+echo 'Series 304'
+yum -y update kernel | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando el kernel" --text="Por favor espere puede tardar mucho...." --pulsate --auto-close --width=350
+
+yum -y install akmod-nvidia-304xx xorg-x11-drv-nvidia-304xx-libs | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Nvidia Drivers" --text="Por favor espere...." --pulsate --auto-close --width=350
+
+mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img
+
+dracut /boot/initramfs-$(uname -r).img $(uname -r)
+
+xterm -e 'nvidia-xconfig'
+
+cat /dev/null > /tmp/nvdia.txt
+cat /dev/null > /tmp/lastest_nvdia.txt
+cat /dev/null > /tmp/targra2.txt
+
+su $noti -c 'notify-send "PostInstallerF" "Se ha instalado los drivers Nvidia, por favor reinicie el sistema" -i "/usr/share/icons/sistema.png" -t 5000'
+fi
+
+
+VGA8=$(grep -e 'GeForce 8' -e 'GeForce 9' /tmp/targra2.txt) > /dev/null
 	if [[ "$?" = 0 ]]; then
 echo 'Nuevos controladores'
 yum -y update kernel | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando el kernel" --text="Por favor espere puede tardar mucho...." --pulsate --auto-close --width=350
@@ -1678,6 +1699,8 @@ cat /dev/null > /tmp/targra2.txt
 
 su $noti -c 'notify-send "PostInstallerF" "Se ha instalado los drivers Nvidia, por favor reinicie el sistema" -i "/usr/share/icons/sistema.png" -t 5000'
 fi
+
+
 fi
 echo 'cuando tu quieras'
 fi
