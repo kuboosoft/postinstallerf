@@ -5323,7 +5323,7 @@ echo "GnomeTweakTool y dconf-editor" >> installed.log
 
     }
 
-melibre(){
+mlibre(){
             yum -y install menulibre | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Menu Libre" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 if [ -f /usr/bin/menulibre ]; then
