@@ -3092,7 +3092,7 @@ enableff='exclude=ffmpeg ffmpeg-devel ffmpeg-libs'; echo "enableff = $enableff"
 dirtyff=$(grep 'exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/postinstallerf.repo | tail -n 1); echo "dirtyff = $dirtyff" 
 disable=""
 
-if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "19" ]; then
+if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "20" ]; then
 zenity --info --title="PostInstallerF" --text="Dirty ffmpeg is no yet avaiable for Fedora 19, please try other day sorry"
 else
 
@@ -4353,7 +4353,7 @@ echo "DVDStyler" >> installed.log
 
 ffaporama(){
 
-if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "19" ]; then
+if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "20" ]; then
 zenity --info --title="PostInstallerF" --text="ffDiaporama is no yet avaiable for Fedora 19, please try other day sorry"         
 elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "17" ]
 then
