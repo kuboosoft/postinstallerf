@@ -5511,7 +5511,7 @@ skip_if_unavailable=1' >> /etc/yum.repos.d/home:gcala.repo
 fi
 
 wait ${!}
-yum -y install grooveoff | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing GrooveOff" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install http://download.opensuse.org/repositories/home:/gcala/Fedora_18/i686/grooveoff-0.1.5-4.1.i686.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing GrooveOff" --text="Please wait...." --pulsate --auto-close --width=350
 
 
 if [ -f /usr/bin/grooveoff ]; then
