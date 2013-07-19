@@ -160,10 +160,20 @@ fi
 
 if ! $installed | grep "Java JRE Oracle" > /dev/null; then
 
-if [ -f /usr/java/latest/bin/java ]; then
-                    im=$im"FALSE \"Java JRE Oracle\"           \"Implementation propietaria del lenguaje de programacion Java.\" \"INSTALADO  \"  "
+if [ -f /usr/java/latest/lib/i386/libnpjp2.so ] || [ -f /usr/java/latest/lib64/x86_64/libnpjp2.so ]; then
+                    im=$im"FALSE \"Java JRE Oracle\"           \"Implementation propietaria del lenguaje de programacion Java.\" \"INSTALADO [$versionjava] \"  "
 else
 im=$im"FALSE \"Java JRE Oracle\"           \"Implementation propietaria del lenguaje de programacion Java.\" \"NO INSTALADO  \"  "
+fi
+            fi
+
+
+if ! $installed | grep "Java JDK Oracle" > /dev/null; then
+
+if [ -f /usr/java/latest/jre/lib64/x86_64/libnpjp2.so ] || [ -f /usr/java/latest/jre/lib/i386/libnpjp2.so ]; then
+                    im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Desarrolladores]\" \"INSTALADO [$versionjkd]  \"  "
+else
+im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Desarrolladores]\" \"NO INSTALADO  \"  "
 fi
             fi
 
@@ -1283,10 +1293,20 @@ fi
 
 if ! $installed | grep "Java JRE Oracle" > /dev/null; then
 
-if [ -f /usr/java/latest/bin/java ]; then
-                    im=$im"FALSE \"Java JRE Oracle\"           \"Propietary implementation of the Java programming language.\" \"INSTALLED  \"  "
+if [ -f /usr/java/latest/lib/i386/libnpjp2.so ] || [ -f /usr/java/latest/lib64/x86_64/libnpjp2.so ]; then
+                    im=$im"FALSE \"Java JRE Oracle\"           \"Propietary implementation of the Java programming language.\" \"INSTALLED [$versionjava] \"  "
 else
 im=$im"FALSE \"Java JRE Oracle\"           \"Propietary implementation of the Java programming language.\" \"NO INSTALLED  \"  "
+fi
+            fi
+
+
+if ! $installed | grep "Java JDK Oracle" > /dev/null; then
+
+if [ -f /usr/java/latest/jre/lib64/x86_64/libnpjp2.so ] || [ -f /usr/java/latest/jre/lib/i386/libnpjp2.so ]; then
+                    im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Developer]\" \"INSTALLED [$versionjkd]  \"  "
+else
+im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Developer]\" \"NO INSTALLED  \"  "
 fi
             fi
 
@@ -2405,6 +2425,10 @@ if echo $choice | grep "Mozilla Firefox" > /dev/null; then
                     jre
             fi
 
+            if echo $choice | grep "Java JDK Oracle" > /dev/null; then
+                    jdkin
+            fi
+
             if echo $choice | grep "GIMP" > /dev/null; then
                     gimp
             fi
@@ -3191,25 +3215,209 @@ jre(){
 rm -f /tmp/jre-oraclejava.rpm
 rm -f /etc/profile.d/java.sh
 
-cd /tmp/
+if [ -f /usr/lib/IcedTeaPlugin.so ] || [ -f /usr/lib64/IcedTeaPlugin.so ]; then
+xterm -e 'yum -y remove icedtea-web'
+fi
 
-wget -c -O jre-oraclejava.rpm http://javadl.sun.com/webapps/download/AutoDL?BundleId=78696 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Java JRE Oracle  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
+PKGSINSTALLED=$(rpm -qa jdk*-linux-*.rpm)  
 
-yum -y install jre-oraclejava.rpm
+ if [[ -n "$PKGSINSTALLED" ]]; then
 
-cd /usr/lib64/mozilla/plugins/
+zenity --question --title="Detected jkd oracle java installed" --text="You need uninstall jdk oracle java, Do you want uninstall" --ok-label "Yes" --cancel-label "No"
+if [[ $? -eq 0 ]]; then
 
-ln -s /usr/java/latest/lib/amd64/libnpjp2.so
+xterm -e 'yum -y remove jdk'
+
+rm -f /etc/profile.d/java.sh
+
+if [ `getconf LONG_BIT` = "64" ]
+then
+rm -f /usr/lib64/mozilla/plugins/libnpjp2.so
+else
+rm -f /usr/lib/mozilla/plugins/libnpjp2.so
+fi  
+           
+if [ `getconf LONG_BIT` = "64" ]
+then
+xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajre*-linux-x64.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
+wait ${!}
+
+xterm -e 'yum -y install /tmp/jre*-linux-x64.rpm'
+else
+xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajre*-linux-i586.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
+wait ${!}
+xterm -e 'yum -y install /tmp/jre*-linux-i586.rpm'
+fi
+
+
+if [ `getconf LONG_BIT` = "64" ]
+then
+ln -s /usr/java/latest/lib64/x86_64/libnpjp2.so /usr/lib64/mozilla/plugins/
+else
+ln -s /usr/java/latest/lib/i386/libnpjp2.so /usr/lib/mozilla/plugins/
+fi
 
 echo 'PATH=/usr/java/latest/bin:$PATH' >> /etc/profile.d/java.sh
+
+if [ `getconf LONG_BIT` = "64" ]
+then
+rm -f jre*-linux-x64.rpm
+else
+rm -f jre*-linux-i586.rpm
+fi
+
+else
+echo 'en otra ocacion'
+fi
+
+ else
+
+if [ `getconf LONG_BIT` = "64" ]
+then
+xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajre*-linux-x64.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
+wait ${!}
+xterm -e 'yum -y install /tmp/jre*-linux-x64.rpm'
+else
+xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajre*-linux-i586.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
+wait ${!}
+xterm -e 'yum -y install /tmp/jre*-linux-i586.rpm'
+fi
+
+if [ -f /usr/lib64/mozilla/plugins/libnpjp2.so ] || [ -f /usr/lib/mozilla/plugins/libnpjp2.so ]; then
+echo 'jre plugin enabled'
+else
+if [ `getconf LONG_BIT` = "64" ]
+then
+ln -s /usr/java/latest/lib64/x86_64/libnpjp2.so /usr/lib64/mozilla/plugins/
+else
+ln -s /usr/java/latest/lib/i386/libnpjp2.so /usr/lib/mozilla/plugins/
+fi
+  fi
+
+if [ -f /etc/profile.d/java.sh ]; then
+echo 'default jdk java enabled'
+else
+echo 'PATH=/usr/java/latest/bin:$PATH' >> /etc/profile.d/java.sh
+fi
+
+if [ `getconf LONG_BIT` = "64" ]
+then
+rm -f jre*-linux-x64.rpm
+else
+rm -f jre*-linux-i586.rpm
+fi
+  fi
+
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Java JRE Oracle" -i "/usr/share/icons/pinguino.png" -t 5000'
 else
 su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Java JRE Oracle" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
-
      
+    }
+
+
+jdkin(){  
+
+if [ -f /usr/lib/IcedTeaPlugin.so ] || [ -f /usr/lib64/IcedTeaPlugin.so ]; then
+xterm -e 'yum -y remove icedtea-web'
+fi 
+
+PKGSINSTALLED=$(rpm -qa jdk*-linux-*.rpm)  
+
+	if [[ -n "$PKGSINSTALLED" ]]; then
+
+zenity --question --title="Detected jre oracle java installed" --text="You need uninstall jre oracle java, Do you want uninstall" --ok-label "Yes" --cancel-label "No"
+if [[ $? -eq 0 ]]; then
+
+xterm -e 'yum -y remove jre'
+
+rm -f /etc/profile.d/java.sh
+
+if [ `getconf LONG_BIT` = "64" ]
+then
+rm -f /usr/lib64/mozilla/plugins/libnpjp2.so
+else
+rm -f /usr/lib/mozilla/plugins/libnpjp2.so
+fi
+
+if [ `getconf LONG_BIT` = "64" ]
+then
+xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajdk*-linux-x64.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
+wait ${!}
+xterm -e 'yum -y install /tmp/jdk*-linux-x64.rpm'
+else
+xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajdk*-linux-i586.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
+wait ${!}
+xterm -e 'yum -y install /tmp/jdk*-linux-i586.rpm'
+fi
+
+
+if [ `getconf LONG_BIT` = "64" ]
+then
+ln -s /usr/java/latest/jre/lib64/x86_64/libnpjp2.so /usr/lib64/mozilla/plugins/
+else
+ln -s /usr/java/latest/jre/lib/i386/libnpjp2.so /usr/lib/mozilla/plugins/
+fi
+
+echo 'PATH=/usr/java/latest/bin:$PATH' >> /etc/profile.d/java.sh
+
+if [ `getconf LONG_BIT` = "64" ]
+then
+rm -f jdk*-linux-x64.rpm
+else
+rm -f jdk*-linux-i586.rpm
+fi
+
+ else
+echo 'en otra ocacion'
+  fi
+
+  else           
+if [ `getconf LONG_BIT` = "64" ]
+then
+xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajdk*-linux-x64.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
+wait ${!}
+xterm -e 'yum -y install /tmp/jdk*-linux-x64.rpm'
+else
+xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajdk*-linux-i586.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
+wait ${!}
+xterm -e 'yum -y install /tmp/jdk*-linux-i586.rpm'
+fi
+
+if [ -f /usr/lib64/mozilla/plugins/libnpjp2.so ] || [ -f /usr/lib/mozilla/plugins/libnpjp2.so ]; then
+echo 'jdk plugin enabled'
+else
+if [ `getconf LONG_BIT` = "64" ]
+then
+ln -s /usr/java/latest/jre/lib64/x86_64/libnpjp2.so /usr/lib64/mozilla/plugins/
+else
+ln -s /usr/java/latest/jre/lib/i386/libnpjp2.so /usr/lib/mozilla/plugins/
+fi
+  fi
+
+if [ -f /etc/profile.d/java.sh ]; then
+echo 'default jdk java enabled'
+else
+echo 'PATH=/usr/java/latest/bin:$PATH' >> /etc/profile.d/java.sh
+fi
+
+if [ `getconf LONG_BIT` = "64" ]
+then
+rm -f jdk*-linux-x64.rpm
+else
+rm -f jdk*-linux-i586.rpm
+fi
+  
+   fi
+
+if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Java JDK Oracle" -i "/usr/share/icons/pinguino.png" -t 5000'
+else
+su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Java JKD Oracle" -i "/usr/share/icons/pinguino.png" -t 5000'
+fi   
+
     }
 
      
@@ -5485,6 +5693,10 @@ su $noti -c 'notify-send "PostInstallerF" "Se ha realizado el reset de PostInsta
 
     #initialising change directory default log
     changelog="cd /usr/share/.postinstallerf/"
+
+    #variables deteccion JRE o JDK java Oracle
+    versionjava=$(rpm -qi jre | sed -n '2p' | cut -b1-40); echo "versionjava=$versionjava"
+    versionjkd=$(head -1 /usr/java/latest/release); echo "versionjdk=$versionjdk"
 
 
 # its others alternative similar initialising other users or notification 
