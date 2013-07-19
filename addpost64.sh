@@ -5319,7 +5319,7 @@ gpgkey=http://download.opensuse.org/repositories/home:/gcala/Fedora_$releasever/
 enabled=1
 skip_if_unavailable=1' >> /etc/yum.repos.d/home:gcala.repo
 
-yum -y install grooveoff | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing GrooveOff" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install http://download.opensuse.org/repositories/home:/gcala/Fedora_18/x86_64/grooveoff-0.1.1-20.1.x86_64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing GrooveOff" --text="Please wait...." --pulsate --auto-close --width=350
 
 
 if [ -f /etc/yum.repos.d/home:gcala.repo ]; then
