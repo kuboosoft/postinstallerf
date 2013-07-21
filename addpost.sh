@@ -3886,58 +3886,10 @@ fi
 
 cmap(){
 
-yum -y install java glibc | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Java y glib como dependencias" --text="Please wait...." --pulsate --auto-close --width=350
-
-if [ -d /home/$noti/.local/share/applications/ ]; then
-echo 'existe el directorio applications'
+if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "18" ]; then
+yum -y localinstall http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/i386/updates/cmaptools-5.05-2.fc19.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando CmapTools" --text="Por favor espere...." --pulsate --auto-close --width=350
 else
-mkdir /home/$noti/.local/share/applications/
-fi
-
-if [ -f /home/$noti/.local/share/applications/CmapTools.desktop ]; then
-rm -f /home/$noti/.local/share/applications/CmapTools.desktop
-fi
-
-wget -c -P/tmp/ http://cmapdownload.ihmc.us/installs/CmapTools/Linux/LinuxCmapTools_v5.05_08-07-12.bin 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Cmap Tools  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
-
-if [ -f /home/$noti/IHMC_CmapTools/bin/update ]; then
-echo 'ya se encuentra instalado'
-else
-mkdir /home/$noti/IHMC_CmapTools/
-mkdir /home/$noti/IHMC_CmapTools/bin/
-echo "#!/bin/bash
-sh /tmp/LinuxCmapTools_v5.05_08-07-12.bin" >> /home/$noti/IHMC_CmapTools/bin/update
-fi
-
-echo "[Desktop Entry]
-Version=5.05
-Type=Application
-Terminal=false
-Icon[en_US]=/usr/share/icons/cmap.png
-Name[en_US]=CmapTools
-Exec=/home/$noti/IHMC_CmapTools/bin/update
-Comment[en_US]=video convert
-Name=CmapTools
-Comment=Make Concept Maps
-Icon=/usr/share/icons/cmap.png
-Categories=GTK;Graphics;" >> /home/$noti/.local/share/applications/CmapTools.desktop
-
-chmod a+rwxs * /home/$noti/.local/share/applications/CmapTools.desktop
-chmod a+rwxs * /home/$noti/IHMC_CmapTools/
-chmod a+rwxs * /home/$noti/IHMC_CmapTools/*
-chmod a+x /home/$noti/IHMC_CmapTools/bin/update
-
-wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/cmap.png 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Cmap Tools icons  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
-            
-
-if [ -f /home/$noti/IHMC_CmapTools/bin/update ]; then
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Cmap Tools" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Cmap Tools" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
- else
-zenity --info --title="PostInstallerF" --text="For some reason Cmap Tools not installed, please try again"
+yum -y install cmaptools | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando CmapTools" --text="Por favor espere...." --pulsate --auto-close --width=350
 fi
     }
 
