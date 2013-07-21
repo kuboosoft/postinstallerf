@@ -3794,7 +3794,7 @@ fi
 cmap(){
 
 if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "18" ]; then
-http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/i386/updates/cmaptools-5.05-2.fc19.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando CmapTools" --text="Por favor espere...." --pulsate --auto-close --width=350
+yum -y localinstall http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/i386/updates/cmaptools-5.05-2.fc19.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando CmapTools" --text="Por favor espere...." --pulsate --auto-close --width=350
 else
 yum -y install cmaptools | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando CmapTools" --text="Por favor espere...." --pulsate --auto-close --width=350
 fi
