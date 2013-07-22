@@ -170,7 +170,7 @@ fi
 
 if ! $installed | grep "Java JDK Oracle" > /dev/null; then
 
-if [ -f /usr/java/latest/jre/lib64/x86_64/libnpjp2.so ] || [ -f /usr/java/latest/jre/lib/i386/libnpjp2.so ]; then
+if [ -f /usr/java/latest/jre/lib/amd64/libnpjp2.so ] || [ -f /usr/java/latest/jre/lib/i386/libnpjp2.so ]; then
                     im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Desarrolladores]\" \"INSTALADO [$versionjkd]  \"  "
 else
 im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Desarrolladores]\" \"NO INSTALADO  \"  "
@@ -1331,7 +1331,7 @@ fi
 
 if ! $installed | grep "Java JDK Oracle" > /dev/null; then
 
-if [ -f /usr/java/latest/jre/lib64/x86_64/libnpjp2.so ] || [ -f /usr/java/latest/jre/lib/i386/libnpjp2.so ]; then
+if [ -f /usr/java/latest/jre/lib/amd64/libnpjp2.so ] || [ -f /usr/java/latest/jre/lib/i386/libnpjp2.so ]; then
                     im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Developer]\" \"INSTALLED [$versionjkd]  \"  "
 else
 im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Developer]\" \"NO INSTALLED  \"  "
@@ -3287,6 +3287,13 @@ jre(){
 rm -f /tmp/jre-oraclejava.rpm
 rm -f /etc/profile.d/java.sh
 
+if ps ax | grep -v grep | grep $PROGRAMA > /dev/null
+then
+    echo "$PROGRAMA está ejecutándose"
+killall $PROGRAMA
+else
+    echo "$PROGRAMA NO está ejecutándose"
+fi
 
 if [ -f /usr/lib/IcedTeaPlugin.so ] || [ -f /usr/lib64/IcedTeaPlugin.so ]; then
 xterm -e 'yum -y remove icedtea-web'
@@ -3294,7 +3301,7 @@ fi
 
 PKGSINSTALLED=$(rpm -qa jdk*-linux-*.rpm)  
 
-	if [[ -n "$PKGSINSTALLED" ]]; then
+ if [[ -n "$PKGSINSTALLED" ]]; then
 
 zenity --question --title="Detected jkd oracle java installed" --text="You need uninstall jdk oracle java, Do you want uninstall" --ok-label "Yes" --cancel-label "No"
 if [[ $? -eq 0 ]]; then
@@ -3393,9 +3400,18 @@ fi
 
 jdkin(){  
 
+if ps ax | grep -v grep | grep $PROGRAMA > /dev/null
+then
+    echo "$PROGRAMA está ejecutándose"
+killall $PROGRAMA
+else
+    echo "$PROGRAMA NO está ejecutándose"
+fi
+
 if [ -f /usr/lib/IcedTeaPlugin.so ] || [ -f /usr/lib64/IcedTeaPlugin.so ]; then
 xterm -e 'yum -y remove icedtea-web'
-fi 
+fi
+
 
 PKGSINSTALLED=$(rpm -qa jdk*-linux-*.rpm)  
 
@@ -3429,7 +3445,7 @@ fi
 
 if [ `getconf LONG_BIT` = "64" ]
 then
-ln -s /usr/java/latest/jre/lib64/x86_64/libnpjp2.so /usr/lib64/mozilla/plugins/
+ln -s /usr/java/latest/jre/lib/amd64/libnpjp2.so /usr/lib64/mozilla/plugins/
 else
 ln -s /usr/java/latest/jre/lib/i386/libnpjp2.so /usr/lib/mozilla/plugins/
 fi
@@ -3447,7 +3463,10 @@ fi
 echo 'en otra ocacion'
   fi
 
-  else           
+  else 
+
+
+          
 if [ `getconf LONG_BIT` = "64" ]
 then
 xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajdk*-linux-x64.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
@@ -3460,11 +3479,13 @@ xterm -e 'yum -y install /tmp/jdk*-linux-i586.rpm'
 fi
 
 if [ -f /usr/lib64/mozilla/plugins/libnpjp2.so ] || [ -f /usr/lib/mozilla/plugins/libnpjp2.so ]; then
-echo 'jdk plugin enabled'
+echo 'jdk plugin enabled, removing old ln'
+rm -f  /usr/lib64/mozilla/plugins/libnpjp2.so
+rm -f  /usr/lib/mozilla/plugins/libnpjp2.so
 else
 if [ `getconf LONG_BIT` = "64" ]
 then
-ln -s /usr/java/latest/jre/lib64/x86_64/libnpjp2.so /usr/lib64/mozilla/plugins/
+ln -s /usr/java/latest/jre/lib/amd64/libnpjp2.so /usr/lib64/mozilla/plugins/
 else
 ln -s /usr/java/latest/jre/lib/i386/libnpjp2.so /usr/lib/mozilla/plugins/
 fi
@@ -5859,6 +5880,9 @@ fi
     #variables deteccion JRE o JDK java Oracle
     versionjava=$(rpm -qi jre | sed -n '2p' | cut -b1-40); echo "versionjava=$versionjava"
     versionjkd=$(head -1 /usr/java/latest/release); echo "versionjdk=$versionjdk"
+
+    #var detect if program is running
+    PROGRAMA='firefox'
 
 
 # its others alternative similar initialising other users or notification 
