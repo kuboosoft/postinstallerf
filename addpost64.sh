@@ -3322,7 +3322,8 @@ jdkin(){
 
 if [ -f /usr/lib/IcedTeaPlugin.so ] || [ -f /usr/lib64/IcedTeaPlugin.so ]; then
 xterm -e 'yum -y remove icedtea-web'
-fi 
+fi
+
 
 PKGSINSTALLED=$(rpm -qa jdk*-linux-*.rpm)  
 
@@ -3356,7 +3357,7 @@ fi
 
 if [ `getconf LONG_BIT` = "64" ]
 then
-ln -s /usr/java/latest/jre/lib64/x86_64/libnpjp2.so /usr/lib64/mozilla/plugins/
+ln -s /usr/java/latest/jre/lib/amd64/libnpjp2.so /usr/lib64/mozilla/plugins/
 else
 ln -s /usr/java/latest/jre/lib/i386/libnpjp2.so /usr/lib/mozilla/plugins/
 fi
@@ -3374,7 +3375,10 @@ fi
 echo 'en otra ocacion'
   fi
 
-  else           
+  else 
+
+
+          
 if [ `getconf LONG_BIT` = "64" ]
 then
 xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajdk*-linux-x64.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
@@ -3387,11 +3391,13 @@ xterm -e 'yum -y install /tmp/jdk*-linux-i586.rpm'
 fi
 
 if [ -f /usr/lib64/mozilla/plugins/libnpjp2.so ] || [ -f /usr/lib/mozilla/plugins/libnpjp2.so ]; then
-echo 'jdk plugin enabled'
+echo 'jdk plugin enabled, removing old ln'
+rm -f  /usr/lib64/mozilla/plugins/libnpjp2.so
+rm -f  /usr/lib/mozilla/plugins/libnpjp2.so
 else
 if [ `getconf LONG_BIT` = "64" ]
 then
-ln -s /usr/java/latest/jre/lib64/x86_64/libnpjp2.so /usr/lib64/mozilla/plugins/
+ln -s /usr/java/latest/jre/lib/amd64/libnpjp2.so /usr/lib64/mozilla/plugins/
 else
 ln -s /usr/java/latest/jre/lib/i386/libnpjp2.so /usr/lib/mozilla/plugins/
 fi
