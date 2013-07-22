@@ -170,7 +170,7 @@ fi
 
 if ! $installed | grep "Java JDK Oracle" > /dev/null; then
 
-if [ -f /usr/java/latest/jre/lib64/x86_64/libnpjp2.so ] || [ -f /usr/java/latest/jre/lib/i386/libnpjp2.so ]; then
+if [ -f /usr/java/latest/jre/lib/amd64/libnpjp2.so ] || [ -f /usr/java/latest/jre/lib/i386/libnpjp2.so ]; then
                     im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Desarrolladores]\" \"INSTALADO [$versionjkd]  \"  "
 else
 im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Desarrolladores]\" \"NO INSTALADO  \"  "
@@ -1303,7 +1303,7 @@ fi
 
 if ! $installed | grep "Java JDK Oracle" > /dev/null; then
 
-if [ -f /usr/java/latest/jre/lib64/x86_64/libnpjp2.so ] || [ -f /usr/java/latest/jre/lib/i386/libnpjp2.so ]; then
+if [ -f /usr/java/latest/jre/lib/amd64/libnpjp2.so ] || [ -f /usr/java/latest/jre/lib/i386/libnpjp2.so ]; then
                     im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Developer]\" \"INSTALLED [$versionjkd]  \"  "
 else
 im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Developer]\" \"NO INSTALLED  \"  "
