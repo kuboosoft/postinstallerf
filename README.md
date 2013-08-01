@@ -1,3 +1,6 @@
+[![logo](https://a.fsdn.com/con/app/proj/postinstaller/screenshots/Screenshot%20from%202013-01-17%2021:57:47.png)](https://sourceforge.net/projects/postinstaller/)
+
+
 postinstallerf
 ==============
 
