@@ -5,6 +5,7 @@ PostInstallerF will install all the software that Fedora doesn't include by defa
 
 
 SPANISH
+
 PostinstallerF Instalara todo software que no se incluye por defecto, después de ejecutar Fedora por primera vez. Es fácil para el nuevo usuario. Contiene lo que tu necesitas!
 
 ----------------------------------------------------
