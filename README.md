@@ -1,7 +1,7 @@
 [![logo](https://a.fsdn.com/con/app/proj/postinstaller/screenshots/Screenshot%20from%202013-01-17%2021:57:47.png)](https://sourceforge.net/projects/postinstaller/)
 
 
-postinstallerf
+PostInstallerF
 ==============
 
 PostInstallerF will install all the software that Fedora doesn't include by default, after running Fedora for the first time. Its easy for a new user. PostInstallerF contains everything that you need for your daily computing. 
