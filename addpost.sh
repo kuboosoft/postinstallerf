@@ -3221,7 +3221,7 @@ zenity --question --title="Detected enable Dirty ffmpeg" --text="Do you want dis
 if [[ $? -eq 0 ]]; then
 sed -i '8i exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/postinstallerf.repo
 sed -i '30i exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/postinstallerf.repo
-sed -i '50i exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/postinstallerf.repo
+sed -i '49i exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/postinstallerf.repo
 sed -i '/exclude=ffmpeg ffmpeg-devel ffmpeg-libs/d' /etc/yum.repos.d/rpmfusion-free.repo
 sed -i '/exclude=ffmpeg ffmpeg-devel ffmpeg-libs/d' /etc/yum.repos.d/rpmfusion-free-updates.repo
 yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Has been disabled Dirty ffmpeg"
