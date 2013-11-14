@@ -22,9 +22,9 @@ su -c 'yum install http://sourceforge.net/projects/postinstaller/files/fedora/re
 
 FEDORA 19
 
-su -c 'yum install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/i386/updates/postinstallerf-1.2.1-1.fc19.noarch.rpm' 
+su -c 'yum install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/x86_64/updates/postinstallerf-1.2.2-1.fc19.noarch.rpm' 
 
 
 -----------------------------------------------------
 SOURCE CODE
-http://sourceforge.net/projects/postinstaller/files/srpm/postinstallerf-1.2.1-1.fc19.src.rpm
+http://sourceforge.net/projects/postinstaller/files/srpm/postinstallerf-1.2.2-1.fc19.src.rpm
