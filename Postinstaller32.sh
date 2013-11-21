@@ -18,7 +18,7 @@
 # |should be addressed to:                                                         |
 # |http:www.kuboosoft.blogspot.com                                                 |
 # +--------------------------------------------------------------------------------+
-# FEDORA 17, 18, 19 POSTINSTALLER V.1.2.0 32 BITS
+# FEDORA 19,20 POSTINSTALLER V.1.2.2 32 BITS
 
 hora=$(date +"%H")
 
@@ -188,17 +188,17 @@ fi
 if [ ""$nuday = $Tue"" ]; then
 
 if [ -f $updater ]; then
-rm -f /usr/share/updatepostintaller/Postinstaller.sh
+rm -f /usr/share/updatepostintaller/Postinstaller32.sh
 echo "Obselete file was removed, Updating file"
 else
 echo "Up to date did not update the file"
 fi
 
 if [ -d /usr/share/updatepostintaller/ ]; then
-xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller.sh' 
+xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller32.sh' 
 else
 mkdir /usr/share/updatepostintaller/
- wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
+ wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller32.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 fi 
 
 
@@ -212,7 +212,7 @@ yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --
 fi
  else
 echo "The files are not equal"
-cp -f /usr/share/updatepostintaller/Postinstaller.sh /usr/bin/ 
+cp -f /usr/share/updatepostintaller/Postinstaller32.sh /usr/bin/ 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se ha actualizado 
 
@@ -227,17 +227,17 @@ fi
 elif [ ""$nuday = $Thu"" ]; then
 
 if [ -f $updater ]; then
-rm -f /usr/share/updatepostintaller/Postinstaller.sh
+rm -f /usr/share/updatepostintaller/Postinstaller32.sh
 echo "Obselete file was removed, Updating file"
 else
 echo "Up to date did not update the file"
 fi
 
 if [ -d /usr/share/updatepostintaller/ ]; then
-xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller.sh' 
+xterm -e 'wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller32.sh' 
 else
 mkdir /usr/share/updatepostintaller/
- wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
+ wget -c -P/usr/share/updatepostintaller/ https://raw.github.com/kuboosoft/postinstallerf/master/Postinstaller32.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Updates  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 fi 
 
 
@@ -251,7 +251,7 @@ yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --
 fi
  else
 echo "The files are not equal"
-cp -f /usr/share/updatepostintaller/Postinstaller.sh /usr/bin/ 
+cp -f /usr/share/updatepostintaller/Postinstaller32.sh /usr/bin/ 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="PostInstallerF se ha actualizado 
 
