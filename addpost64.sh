@@ -121,17 +121,6 @@ im=$im"FALSE \"Instalar Codecs Audio/Video\"      \"Todo lo necesario para repro
 fi
             fi
 
-if ! $installed | grep "Dirty ffmpeg" > /dev/null; then
-
-enableff='exclude=ffmpeg ffmpeg-devel ffmpeg-libs'; echo "enableff = $enableff"
-dirtyff=$(grep 'exclude=ffmpeg ffmpeg-devel ffmpeg-libs'  /etc/yum.repos.d/postinstallerf.repo | tail -n 1); echo "dirtyff = $dirtyff" 
-
-if [ "$dirtyff" = "$enableff" ]; then
-                    im=$im"FALSE \"Dirty ffmpeg\"      \"ffmpeg con varios codecs extras habilitados [Recomendado si necesita utilizar varios programas como winff, mvc y otros]\" \"NO ACTIVADO  \"  "
-else
-im=$im"FALSE \"Dirty ffmpeg\"      \"ffmpeg con varios codecs extras habilitados [Recomendado si necesita utilizar varios programas como winff, mvc y otros]\" \"ACTIVADO  \"  "
-fi
-            fi
 
 if ! $installed | grep "Flash Player" > /dev/null; then
 if [ -f /usr/bin/flash-player-properties ]; then
@@ -1255,16 +1244,6 @@ im=$im"FALSE \"Install Codecs Audio/Video\"      \"Everything you need for audio
 fi
             fi
 
-if ! $installed | grep "Dirty ffmpeg" > /dev/null; then
-enableff='exclude=ffmpeg ffmpeg-devel ffmpeg-libs'; echo "enableff = $enableff"
-dirtyff=$(grep 'exclude=ffmpeg ffmpeg-devel ffmpeg-libs'  /etc/yum.repos.d/postinstallerf.repo | tail -n 1); echo "dirtyff = $dirtyff" 
-
-if [ "$dirtyff" = "$enableff" ]; then
-                    im=$im"FALSE \"Dirty ffmpeg\"      \"ffmpeg with several extra codecs enabled [Recommended if you need to use several programs like winff, mvc and others converters]\" \"DISABLED  \"  "
-else
-im=$im"FALSE \"Dirty ffmpeg\"      \"ffmpeg with several extra codecs enabled [Recommended if you need to use several programs like winff, mvc and others converters]\" \"ENABLED  \"  "
-fi
-            fi
 
 if ! $installed | grep "Flash Player" > /dev/null; then
 if [ -f /usr/bin/flash-player-properties ]; then
@@ -2397,10 +2376,6 @@ if echo $choice | grep "Mozilla Firefox" > /dev/null; then
                     multimediaCodecs
             fi
 
-            if echo $choice | grep "Dirty ffmpeg" > /dev/null; then
-                    fdirty
-            fi
-
             if echo $choice | grep "Install Codecs Audio/Video" > /dev/null; then
                     multimediaCodecs
             fi
@@ -3107,68 +3082,6 @@ fi
 
     }
 
-
-
-
-    fdirty(){
-
-enableff='exclude=ffmpeg ffmpeg-devel ffmpeg-libs'; echo "enableff = $enableff"
-dirtyff=$(grep 'exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/postinstallerf.repo | tail -n 1); echo "dirtyff = $dirtyff" 
-disable=""
-
-if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "20" ]; then
-zenity --info --title="PostInstallerF" --text="Dirty ffmpeg is no yet avaiable for Fedora 19, please try other day sorry"
-else
-
-if [ "$dirtyff" = "$enableff" ]; then 
-zenity --question --title="Detected disabled Dirty ffmpeg" --text="Do you want enable Dirty ffmpeg?" --ok-label "Yes" --cancel-label "No"
-if [[ $? -eq 0 ]]; then
-grep 'exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/rpmfusion-free.repo
-if [[ "$?" != 0 ]]; then
-sed -i '8i exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/rpmfusion-free.repo
-sed -i '28i exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/rpmfusion-free.repo
- fi
-
-grep 'exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/rpmfusion-free-updates.repo
-if [[ "$?" != 0 ]]; then
-sed -i '8i exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/rpmfusion-free-updates.repo
-sed -i '22i exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/rpmfusion-free-updates.repo
-fi
-sed -i '/exclude=ffmpeg ffmpeg-devel ffmpeg-libs/d' /etc/yum.repos.d/postinstallerf.repo
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Has been enabled Dirty ffmpeg" 
-else
-echo 'thanks 2'
-fi
-
-
-elif [ "$dirtyff" != "$enableff" ]; then 
-
-zenity --question --title="Detected enable Dirty ffmpeg" --text="Do you want disable Dirty ffmpeg?" --ok-label "Yes" --cancel-label "No"
-if [[ $? -eq 0 ]]; then
-sed -i '8i exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/postinstallerf.repo
-sed -i '30i exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/postinstallerf.repo
-sed -i '49i exclude=ffmpeg ffmpeg-devel ffmpeg-libs' /etc/yum.repos.d/postinstallerf.repo
-sed -i '/exclude=ffmpeg ffmpeg-devel ffmpeg-libs/d' /etc/yum.repos.d/rpmfusion-free.repo
-sed -i '/exclude=ffmpeg ffmpeg-devel ffmpeg-libs/d' /etc/yum.repos.d/rpmfusion-free-updates.repo
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Has been disabled Dirty ffmpeg"
-else
-echo 'thanks 1'
-fi
-fi
-
-rpm -e --nodeps ffmpeg ffmpeg-devel ffmpeg-libs
-
-yum -y install ffmpeg  | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Dirty ffmpeg" --text="Por favor espere...." --pulsate --auto-close --width=350 
-
-
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada instalacion de Dirty ffmpeg/RpmFusion" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Dirty ffmpeg/RpmFusion" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
-  fi
-
-    }
      
     flash(){
             yum -y localinstall http://linuxdownload.adobe.com/linux/x86_64/adobe-release-x86_64-1.0-1.noarch.rpm
