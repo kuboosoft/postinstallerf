@@ -288,11 +288,11 @@ cat /var/log/yum.log | tail -f | yad --title="Log viewer updates" --window-icon=
 
 # CHECKING SUBMENUS OF POSTINSTALLERF
 
-if [ -f /usr/bin/PostinstallerF.sh ]; then
+if [ -f /usr/bin/postinstaller ]; then
 echo "PostinstallerF esta presente"
 else
-xterm -e 'wget -c -P/usr/bin/ https://raw.github.com/kuboosoft/postinstallerf/master/PostinstallerF.sh'
-chmod a+x /usr/bin/PostinstallerF.sh
+xterm -e 'wget -c -P/usr/bin/ https://raw.github.com/kuboosoft/postinstallerf/master/postinstaller'
+chmod a+x /usr/bin/postinstaller
 fi
 
 if [ -f /usr/bin/postinstallerf/addpost.sh ]; then
