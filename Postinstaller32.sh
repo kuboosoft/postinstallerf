@@ -150,9 +150,9 @@ wait ${!}
 
 # CLEANING THE REPOSITORY METADATA.
 
-updater=/usr/share/updatepostintaller/Postinstaller.sh
+updater=/usr/share/updatepostintaller/Postinstaller32.sh
 source=/usr/bin/Postinstaller32.sh
-update=/usr/share/updatepostintaller/Postinstaller.sh
+update=/usr/share/updatepostintaller/Postinstaller32.sh
 
 nuday=$(date +%u); echo "nuday=$nuday"
 
