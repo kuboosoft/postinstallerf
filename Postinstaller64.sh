@@ -18,7 +18,7 @@
 # |should be addressed to:                                                         |
 # |http:www.kuboosoft.blogspot.com                                                 |
 # +--------------------------------------------------------------------------------+
-# FEDORA 17, 18, 19 POSTINSTALLER V.1.2.0 32 BITS
+# FEDORA 19,20 POSTINSTALLER V.1.2.2 64 BITS
 
 hora=$(date +"%H")
 
