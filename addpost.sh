@@ -18,7 +18,7 @@
 # | debe dirigirse a:                                                              |
 # | http:www.kuboosoft.blogspot.com                                                |
 # +--------------------------------------------------------------------------------+
-# FEDORA 17, 18, 19 ADPOST 1.2 32 BITS
+# FEDORA 19,20 ADPOST 1.2.2 32 BITS
 
 # ACTUALIZACION DE ADPOST
 updater=/usr/share/updatepostintaller/addpost.sh
@@ -3068,17 +3068,14 @@ libstdc(){
     extraRepos(){
             echo "Adding rpmfusion repositories..."  
 
-if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "16" ]; then
-yum -y install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-16.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-16.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Repositorio RPMFusion" --text="Please wait...." --pulsate --auto-close --width=350
-elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "17" ]; then
-yum -y install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-17.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-17.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Repositorio RPMFusion" --text="Please wait...." --pulsate --auto-close --width=350
-elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "18" ]; then
-yum -y install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-18.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-18.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Repositorio RPMFusion" --text="Please wait...." --pulsate --auto-close --width=350
-elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "19" ]; then
-yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-19.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-19.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=400
-elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "20" ]; then
-yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-20.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-20.noarch.rpm 2>&1 | zenity --progress --title "Verificando o agregando Repositorio RPMFusion" --text="Por favor espere...." --pulsate --auto-close --width=400
+relea=$(rpm -q --queryformat '%{VERSION}\n' fedora-release); echo "relea=$relea"
+
+if [ -f /etc/yum.repos.d/rpmfusion-nonfree.repo ] && [ -f /etc/yum.repos.d/rpmfusion-free.repo ]; then
+echo "RPM Fusion free and nonfree repo is present"
+else
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$relea.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$relea.noarch.rpm 2>&1 | zenity --progress --title "Checking Repository and Adding RPMFusion" --text="Please wait...." --pulsate --auto-close --width=400
 fi
+
  
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Repositorio RPMFusion " -i "/usr/share/icons/pinguino.png" -t 5000'
