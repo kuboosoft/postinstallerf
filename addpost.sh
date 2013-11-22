@@ -325,11 +325,11 @@ im=$im"FALSE \"Scribus\"               \"Scribus es un programa de maquetación 
 fi
             fi
 
-if ! $installed | grep "Dia" > /dev/null; then
+if ! $installed | grep "Gnome dia" > /dev/null; then
 if [ -f /usr/bin/dia ]; then
-                    im=$im"FALSE \"Dia\"                   \"Dia es más o menos inspirado en el programa comercial de Windows Visio\" \"INSTALADO  \"  "
+                    im=$im"FALSE \"Gnome dia\"                   \"Dia es más o menos inspirado en el programa comercial de Windows Visio\" \"INSTALADO  \"  "
 else
-im=$im"FALSE \"Dia\"                   \"Dia es más o menos inspirado en el programa comercial de Windows Visio\" \"NO INSTALADO  \"  "
+im=$im"FALSE \"Gnome dia\"                   \"Dia es más o menos inspirado en el programa comercial de Windows Visio\" \"NO INSTALADO  \"  "
 fi
             fi
 
@@ -1477,11 +1477,11 @@ im=$im"FALSE \"Scribus\"               \"DeskTop Publishing application written 
 fi
             fi
 
-if ! $installed | grep "Dia" > /dev/null; then
+if ! $installed | grep "Gnome dia" > /dev/null; then
 if [ -f /usr/bin/dia ]; then
-                    im=$im"FALSE \"Dia\"                   \"A GTK+ based diagram creation program similar Windows Visio\" \"INSTALLED  \"  "
+                    im=$im"FALSE \"Gnome dia\"                   \"A GTK+ based diagram creation program similar Windows Visio\" \"INSTALLED  \"  "
 else
-im=$im"FALSE \"Dia\"                   \"A GTK+ based diagram creation program similar Windows Visio\" \"NO INSTALLED  \"  "
+im=$im"FALSE \"Gnome dia\"                   \"A GTK+ based diagram creation program similar Windows Visio\" \"NO INSTALLED  \"  "
 fi
             fi
 
@@ -2535,7 +2535,7 @@ if echo $choice | grep "Java JDK Oracle" > /dev/null; then
             if echo $choice | grep "Scribus" > /dev/null; then
                     scribus
             fi
-            if echo $choice | grep "Dia" > /dev/null; then
+            if echo $choice | grep "Gnome dia" > /dev/null; then
                     adia
             fi
             if echo $choice | grep "Gnumeric" > /dev/null; then
