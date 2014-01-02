@@ -1350,7 +1350,7 @@ echo "Entorno de escritorio KDE" >> installed.log
 xfdesk(){
             yum -y install @xfce-desktop | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando escritorio XFCE" --text="Por favor espere...." --pulsate --auto-close --width=350
 
-yum -y install greybird-gtk2-theme greybird-gtk2-theme greybird-xfwm4-theme greybird-xfce4-notifyd-theme | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando tema Greybird para XFCE" --text="Por favor espere...." --pulsate --auto-close --width=350
+yum -y install greybird-gtk2-theme greybird-gtk2-theme greybird-xfwm4-theme greybird-xfce4-notifyd-theme xfce4-volumed | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando tema Greybird para XFCE" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Entorno de escritorio XFCE" -i "/usr/share/icons/sistema.png" -t 5000'
