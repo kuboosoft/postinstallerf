@@ -802,7 +802,7 @@ fi
 
 
 if ! $installed | grep "Google Earth" > /dev/null; then
-if [ -f /opt/google/earth/free/googleearth ]; then
+if [ -f /usr/bin/google-earth ]; then
                     im=$im"FALSE \"Google Earth\"    \"Programa informático similar a un Sistema de Información Geográfica (SIG)\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Google Earth\"    \"Programa informático similar a un Sistema de Información Geográfica (SIG)\" \"NO INSTALADO  \"  "
@@ -1926,7 +1926,7 @@ fi
 
 
 if ! $installed | grep "Google Earth" > /dev/null; then
-if [ -f /opt/google/earth/free/googleearth ]; then
+if [ -f /usr/bin/google-earth ]; then
                     im=$im"FALSE \"Google Earth\"    \"3D planet viewer that lets you interactively navigate satellite imagery, maps, terrain, and so forth.\" \"INSTALALED  \"  "
 else
 im=$im"FALSE \"Google Earth\"    \"3D planet viewer that lets you interactively navigate satellite imagery, maps, terrain, and so forth.\" \"NO INSTALLED  \"  "
@@ -4769,9 +4769,19 @@ echo "Celestia" >> installed.log
 
 
 Earth(){
-            yum -y localinstall http://dl.google.com/dl/earth/client/current/google-earth-stable_current_x86_64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Google Earth" --text="Por favor espere...." --pulsate --auto-close --width=350
 
-if [ -f /opt/google/earth/free/googleearth ]; then
+if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) != "20" ]; then
+
+            yum -y install http://sourceforge.net/projects/postinstaller/files/fedora/releases/20/x86_64/updates/google-earth-7.1.2.2041-1.fc20.x86_64.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Google Earth" --text="Por favor espere...." --pulsate --auto-close --width=350
+
+else
+
+yum -y install google-earth | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Google Earth" --text="Por favor espere...." --pulsate --auto-close --width=350
+
+
+fi
+
+if [ -f /usr/bin/google-earth ]; then
 $changelog
 echo "Google Earth" >> installed.log
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
