@@ -1,22 +1,22 @@
 #!/bin/bash
 #
 # +--------------------------------------------------------------------------------+
-# | Copyright (C) 2012 Kuboosoft                                                   |
+# | Copyright (C) 2013 Kuboosoft                                                   |
 # |                                                                                |
 # |This program is free software; You can distribute it and / or                   |
 # |modify it under the terms of the GNU General Public License                     |
 # |as published by the Free Software Foundation; any                               |
 # |version 3 of the License, or (optionally) any version                           |
-# |later. http://www.gnu.org/licenses/lgpl.html                                    |
+# |later. http://www.gnu.org/licenses/gpl-3.0.html                                 |
 # |This program is distributed in the hope that it will be useful,                 |
 # |but WITHOUT ANY WARRANTY. See the GNU General Public License                    |
 # |for details.                                                                    |
 # +--------------------------------------------------------------------------------+
-# |This code is designed, written and maintained by Kuboode and David Vasquez      |
+# |This code is designed, written and maintained by David Vasquez                  |
 # |This code was translated by Max M                                               |
 # |Any questions, comments or advice on this code                                  |
 # |should be addressed to:                                                         |
-# |http:www.kuboosoft.blogspot.com                                                 |
+# |https://plus.google.com/communities/118230919321773121406                       |
 # +--------------------------------------------------------------------------------+
 # FEDORA 19,20 POSTINSTALLER V.1.2.2 64 BITS
 
