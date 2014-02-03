@@ -52,6 +52,9 @@ if [ $? -eq 0 ]; then
 	pkill -SIGKILL -u root -o yum
 else
 	echo "thanks"
+
+yum-complete-transaction --cleanup-only -y | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Completando Instalaciones pendientes" --text="Por favor espere...." --pulsate --auto-close ---width="435" --height="300"
+
 yad --title="Log viewer updates" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/logview.png" --image-on-top --list --width="435" --height="300" --text="Content of yum updates" --column=Month --column=Date --column=Time --column=Status --column=Package $log --button="Close:1"
 	fi
 	exit 0 
@@ -81,6 +84,8 @@ if [ $? -eq 0 ]; then
 	pkill -SIGKILL -u root -o yum
 else
 	echo "thanks"
+yum-complete-transaction --cleanup-only -y | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Completando Instalaciones pendientes" --text="Por favor espere...." --pulsate --auto-close ---width="435" --height="300"
+
 yad --title="Log viewer updates" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/logview.png" --image-on-top --list --width="435" --height="300" --text="Content of yum updates" --column=Month --column=Date --column=Time --column=Status --column=Package $log --button="Close:1"
 	fi
 	exit 0 
