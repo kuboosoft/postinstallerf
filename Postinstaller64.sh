@@ -98,13 +98,13 @@ fi
 
 
 if [ -f /etc/yum.repos.d/russianfedora-free.repo ]; then
-echo 'ya esta instalado'
+echo 'Russian Fedora Free repository is installed'
 else
 yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/russianfedora-free-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Checking Repository and Adding Community 3rd party Free" --text="Please wait...." --pulsate --auto-close --width=400
 fi
 
 if [ -f /etc/yum.repos.d/russianfedora-nonfree.repo ]; then
-echo 'ya esta instalado'
+echo 'Russian Fedora Non Free repository is installed'
 else
 yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/russianfedora-nonfree-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Checking Repository and Adding Community 3rd party Free" --text="Please wait...." --pulsate --auto-close --width=400
 fi
@@ -276,19 +276,19 @@ if [ ! -f /usr/share/icons/logview.png ]; then
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/icons/logview.png
 fi
 
-WORK=/var/log/yum.log
-
 check_up= yum -e0 -d0 check-update > /tmp/yum.results.XXXXXX
+
+WORK=/tmp/yum.results.XXXXXX
+
+YUMHIS=`yum history | grep -n "U" | head -n 1 | cut -f3 -d'|' | sed 's/^ //g' | cut -f1 -d' '`
 
 updatenow=/usr/bin/postinstallerf/update_system
 
-check=3
+
 
 # If there are updates available, Ask to user if want update 
 
-if [ -s $WORK ]; then  
-
-find /var/log/ -name yum.log -ctime +$check -exec $updatenow {} \;
+if [ -s $WORK ] && [ -z $YUMHIS ]; then "sh $updatenow" 
 wait ${!}
 cat /dev/null > /tmp/yum.results.XXXXXX
  else
