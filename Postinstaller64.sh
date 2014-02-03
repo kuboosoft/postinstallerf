@@ -18,7 +18,7 @@
 # |should be addressed to:                                                         |
 # |https://plus.google.com/communities/118230919321773121406                       |
 # +--------------------------------------------------------------------------------+
-# FEDORA 19,20 POSTINSTALLER V.1.2.2 64 BITS
+# FEDORA 19,20 POSTINSTALLER V.1.2.3 64 BITS
 
 hora=$(date +"%H")
 
