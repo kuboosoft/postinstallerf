@@ -1,0 +1,92 @@
+#!/bin/bash
+#
+# +--------------------------------------------------------------------------------+
+# | Copyright (C) 2013 Kuboosoft                                                   |
+# |                                                                                |
+# |This program is free software; You can distribute it and / or                   |
+# |modify it under the terms of the GNU General Public License                     |
+# |as published by the Free Software Foundation; any                               |
+# |version 3 of the License, or (optionally) any version                           |
+# |later. http://www.gnu.org/licenses/gpl-3.0.html                                 |
+# |This program is distributed in the hope that it will be useful,                 |
+# |but WITHOUT ANY WARRANTY. See the GNU General Public License                    |
+# |for details.                                                                    |
+# +--------------------------------------------------------------------------------+
+# |This code is designed, written and maintained by David Vasquez    		   |
+# |Any questions, comments or advice on this code                                  |
+# |should be addressed to:                                                         |
+# |https://plus.google.com/communities/118230919321773121406                       |
+# +--------------------------------------------------------------------------------+
+
+
+export LC_TIME=en_US
+
+date3=$(date +"%b %d")
+date2=$(date +%D)
+number=$( wc -l /home/makerpm/paco.txt | awk '{print $1}' ); echo number=$number 
+
+#WORK2=/tmp/yum.results.XXXXXX
+WORK2=/home/makerpm/paco.txt
+
+
+culito=$( awk '{print $1, "	", $2, "	", $3}' $WORK2 ); echo culito=$culito
+
+
+	if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
+yad --width=450 --height=300 \
+                                --title="Hay $number actualizaciones disponibles este $date2" \
+				--window-icon=logviewer \
+                                --image-on-top --image="/usr/share/icons/updatep2.png" \
+				--text="Desea usted actualizar?" \
+				--list \
+				--column=Paquete --column=Version --column=Repositorio $culito \
+                                --button="Actualizar Ahora:0" --button="Actualizar Despues:1" 
+
+if [ $? -eq 0 ]; then
+
+yum -y --exclude=kernel* update | pv 2>&1 | yad --class="Updating" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep2.png" --image-on-top --width="435" --height="300" --title "Updating the system" --text="Por favor espere.... Cierre cuando los procesos terminen." --list --column="Lista de Progreso" --button="Cancelar (No recomendado):0" --button="Cerrar:1"
+
+
+if [ $? -eq 0 ]; then
+	pkill -SIGKILL -u root -o yum
+else
+	echo "thanks"
+	fi
+	exit 0 
+
+else
+	echo "thanks"
+	fi
+	exit 0 
+
+else
+
+
+yad --width=450 --height=300 \
+                                --title="There are $number updates available at $date2" \
+				--window-icon=logviewer \
+                                --image-on-top --image="/usr/share/icons/updatep2.png" \
+				--text="Do you want update?" \
+				--list \
+				--column=Package --column=Version --column=Repository $culito \
+                                --button="Update Now:0" --button="Update Later:1"
+
+if [ $? -eq 0 ]; then
+
+yum -y --exclude=kernel* update | pv 2>&1 | yad --class="Updating" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep2.png" --image-on-top --width="435" --height="300" --title "Updating the system" --text="Please wait.... Close when the process is finished." --list --column="Progress List" --button="Cancel (Not recommended):0" --button="Close:1"
+
+if [ $? -eq 0 ]; then
+	pkill -SIGKILL -u root -o yum
+else
+	echo "thanks"
+	fi
+	exit 0 
+
+else
+	echo "thanks"
+	fi
+	exit 0 
+
+
+   fi
