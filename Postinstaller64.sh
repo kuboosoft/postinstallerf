@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # +--------------------------------------------------------------------------------+
-# | Copyright (C) 2013 Kuboosoft                                                   |
+# | Copyright (C) 2014 Kuboosoft                                                   |
 # |                                                                                |
 # |This program is free software; You can distribute it and / or                   |
 # |modify it under the terms of the GNU General Public License                     |
@@ -276,7 +276,7 @@ if [ ! -f /usr/share/icons/logview.png ]; then
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/icons/logview.png
 fi
 
-log=$(cat -T /var/log/yum.log | grep -e "`date "+%b %d"`" )
+WORK=/var/log/yum.log
 
 check_up= yum -e0 -d0 check-update > /tmp/yum.results.XXXXXX
 
@@ -290,8 +290,6 @@ if [ -s $WORK ]; then
 
 find /var/log/ -name yum.log -ctime +$check -exec $updatenow {} \;
 wait ${!}
-yad --title="Log viewer updates" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/logview.png" --image-on-top --list --width="435" --height="300" --text="Content of yum updates" --column=Month --column=Date --column=Time --column=Status --column=Package $log --button="Close:1"
-
 cat /dev/null > /tmp/yum.results.XXXXXX
  else
 echo 'no updates'
