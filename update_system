@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # +--------------------------------------------------------------------------------+
-# | Copyright (C) 2014 Kuboosoft                                                   |
+# | Copyright (C) 2013 Kuboosoft                                                   |
 # |                                                                                |
 # |This program is free software; You can distribute it and / or                   |
 # |modify it under the terms of the GNU General Public License                     |
@@ -23,7 +23,8 @@ export LC_TIME=en_US
 
 date3=$(date +"%b %d")
 date2=$(date +%D)
-number=$( wc -l /home/makerpm/paco.txt | awk '{print $1}' ); echo number=$number 
+number=$( wc -l /tmp/yum.results.XXXXXX | awk '{print $1}' ); echo number=$number
+log=$(cat -T /var/log/yum.log | grep -e "`date "+%b %d"`" ) 
 
 WORK2=/tmp/yum.results.XXXXXX
 
@@ -51,6 +52,7 @@ if [ $? -eq 0 ]; then
 	pkill -SIGKILL -u root -o yum
 else
 	echo "thanks"
+yad --title="Log viewer updates" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/logview.png" --image-on-top --list --width="435" --height="300" --text="Content of yum updates" --column=Month --column=Date --column=Time --column=Status --column=Package $log --button="Close:1"
 	fi
 	exit 0 
 
@@ -79,6 +81,7 @@ if [ $? -eq 0 ]; then
 	pkill -SIGKILL -u root -o yum
 else
 	echo "thanks"
+yad --title="Log viewer updates" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/logview.png" --image-on-top --list --width="435" --height="300" --text="Content of yum updates" --column=Month --column=Date --column=Time --column=Status --column=Package $log --button="Close:1"
 	fi
 	exit 0 
 
@@ -86,6 +89,5 @@ else
 	echo "thanks"
 	fi
 	exit 0 
-
 
    fi
