@@ -25,8 +25,7 @@ date3=$(date +"%b %d")
 date2=$(date +%D)
 number=$( wc -l /home/makerpm/paco.txt | awk '{print $1}' ); echo number=$number 
 
-#WORK2=/tmp/yum.results.XXXXXX
-WORK2=/home/makerpm/paco.txt
+WORK2=/tmp/yum.results.XXXXXX
 
 
 culito=$( awk '{print $1, "	", $2, "	", $3}' $WORK2 ); echo culito=$culito
