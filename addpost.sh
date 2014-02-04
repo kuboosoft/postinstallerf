@@ -695,11 +695,11 @@ im=$im"FALSE \"VLC media player\"    \"Potente reproductor multimedia y servidor
 fi
             fi
 
-if ! $installed | grep "Netflix Player" > /dev/null; then
-if [ -f /usr/bin/netflix-desktop ]; then
-                    im=$im"FALSE \"Netflix Player\"    \" Ver Peliculas & TV Shows Online.\" \"INSTALADO  \"  "
+if ! $installed | grep "Pipelight" > /dev/null; then
+if [ -f /usr/bin/pipelight-plugin ]; then
+                    im=$im"FALSE \"Pipelight\"    \"Pipelight es un plugin para el navegador que permite usar plugins como Silverlight dentro de los navegadores de Linux.\" \"INSTALADO  \"  "
 else
-im=$im"FALSE \"Netflix Player\"    \" Ver Peliculas & TV Shows Online.\" \"NO INSTALADO  \"  "
+im=$im"FALSE \"Pipelight\"    \"Pipelight es un plugin para el navegador que permite usar plugins como Silverlight dentro de los navegadores de Linux.\" \"NO INSTALADO  \"  "
 fi
             fi
 
@@ -1848,11 +1848,11 @@ im=$im"FALSE \"VLC media player\"    \"A multi-platform MPEG, VCD/DVD, and DivX 
 fi
             fi
 
-if ! $installed | grep "Netflix Player" > /dev/null; then
-if [ -f /usr/bin/netflix-desktop ]; then
-                    im=$im"FALSE \"Netflix Player\"    \" Watch Movies & TV Shows Online.\" \"INSTALLED  \"  "
+if ! $installed | grep "Pipelight" > /dev/null; then
+if [ -f /usr/bin/pipelight-plugin ]; then
+                    im=$im"FALSE \"Pipelight\"    \"Pipelight is a special browser plugin which allows one to use windows only plugins inside Linux browsers. We are currently focusing on Silverlight.\" \"INSTALLED  \"  "
 else
-im=$im"FALSE \"Netflix Player\"    \" Watch Movies & TV Shows Online.\" \"NO INSTALLED  \"  "
+im=$im"FALSE \"Pipelight\"    \"Pipelight is a special browser plugin which allows one to use windows only plugins inside Linux browsers. We are currently focusing on Silverlight.\" \"NO INSTALLED  \"  "
 fi
             fi
 
@@ -2715,7 +2715,7 @@ if echo $choice | grep "VLC media player" > /dev/null; then
                     vlc
             fi
 
-if echo $choice | grep "Netflix Player" > /dev/null; then
+if echo $choice | grep "Pipelight" > /dev/null; then
                     flix
             fi
 
@@ -3171,7 +3171,7 @@ fi
     flash(){
             yum -y install http://linuxdownload.adobe.com/adobe-release/adobe-release-i386-1.0-1.noarch.rpm
 yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Please wait...." --pulsate --auto-close --width=350
-yum -y install flash-plugin | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing flash-plugin" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install flash-plugin hal-flash | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing flash-plugin" --text="Please wait...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Flash Player" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4710,39 +4710,18 @@ echo "VLC media player" >> installed.log
 
 flix(){
 
-if [ -f /tmp/Netflixplayer.tar.gz ]; then
-rm -f /tmp/Netflixplayer.tar.gz
-fi
-
-if [ -f /opt/Netflixplayer.tar.gz ]; then
-rm -f /opt/Netflixplayer.tar.gz
-fi
-
-if [ -f /tmp/Netflix.sh ]; then
-rm -f /tmp/Netflix.sh
-fi
-
-if [ -f /usr/bin/Netflix.sh ]; then
-rm -f /usr/bin/Netflix.sh
-fi
-
-if [ -f /opt/Netflix.sh ]; then
-rm -f /opt/Netflix.sh
-fi
-
-yum -y install netflix-desktop | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Netflix-Desktop" --text="Please wait...." --pulsate --auto-close --width=350
+yum -y install pipelight | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Pipelight" --text="Please wait...." --pulsate --auto-close --width=350
 
 
-if [ -f /usr/bin/netflix-desktop ]; then
+if [ -f /usr/bin/pipelight-plugin ]; then
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Netflix Player" -i "/opt/Netflix/netflix.png" -t 5000'
+su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Pipelight" -i "/usr/share/icons/pinguino.png" -t 5000'
 else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Netflix Player" -i "/opt/Netflix/netflix.png" -t 5000'
+su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Pipelight" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
  else
-zenity --info --title="PostInstallerF" --text="For some reason Netflix Player not installed, please try again"
+zenity --info --title="PostInstallerF" --text="For some reason Pipelight not installed, please try again"
 fi
-
 
     }
 
