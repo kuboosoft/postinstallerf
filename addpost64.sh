@@ -69,7 +69,7 @@ fi
 # +--------------------------------------------------------------------------------------------------+
 
     generateInstallMenu(){ 
-            im="yad --image="/usr/share/icons/acciones/add.png" --image-on-top --class="Install" --window-icon="/usr/share/icons/acciones/add.png" --list --checklist  --width=700 --height=500 --title \"PostInstallerF for Fedora 64bit (Ver 1.2.0)\" --text \"Select items from the list below\" "
+            im="yad --center --image="/usr/share/icons/acciones/add.png" --image-on-top --class="Install" --window-icon="/usr/share/icons/acciones/add.png" --list --checklist  --width=700 --height=500 --title \"PostInstallerF for Fedora 64bit (Ver 1.2.0)\" --text \"Select items from the list below\" "
             im=$im"--column=\"\" --column \"Application\" --column \"Description\"    --column \"Status\"                           "
 
  # Building Install Menue
