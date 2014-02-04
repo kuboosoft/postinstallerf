@@ -1,24 +1,23 @@
 #!/bin/bash
 #
 # +--------------------------------------------------------------------------------+
-# | Copyright (C) 2012 Kuboosoft                                                   |
+# | Copyright (C) 2014 Kuboosoft                                                   |
 # |                                                                                |
-# | Este programa es Software Libre; Puedes distribuirlo y/o                       |
-# | modificarlo bajo los términos de la GNU General Public License                 |
-# | como está publicada por la Free Software Foundation; cualquier                 |
-# | versión 3 de la Licencia, o (opcionalmente) cualquier versión                  |
-# | posterior. http://www.gnu.org/licenses/lgpl.html                               |
-# |                                                                                |
-# | Este programa es distribuido con la esperanza de que sea útil,                 |
-# | pero SIN NINGUNA GARANTÍA. Vea la GNU General Public License                   |
-# | para más detalles.                                                             |
+# |This program is free software; You can distribute it and / or                   |
+# |modify it under the terms of the GNU General Public License                     |
+# |as published by the Free Software Foundation; any                               |
+# |version 3 of the License, or (optionally) any version                           |
+# |later. http://www.gnu.org/licenses/gpl-3.0.html                                 |
+# |This program is distributed in the hope that it will be useful,                 |
+# |but WITHOUT ANY WARRANTY. See the GNU General Public License                    |
+# |for details.                                                                    |
 # +--------------------------------------------------------------------------------+
-# | Este código ha sido diseñado,escrito y mantenido por Kuboode y David Vásquez   |
-# | Cualquier pregunta, comentario o consejo sobre este código                     |
-# | debe dirigirse a:                                                              |
-# | http:www.kuboosoft.blogspot.com                                                |
+# |This code is designed, written and maintained by David Vasquez    		   |
+# |Any questions, comments or advice on this code                                  |
+# |should be addressed to:                                                         |
+# |https://plus.google.com/communities/118230919321773121406                       |
 # +--------------------------------------------------------------------------------+
-# FEDORA 17, 18 y 19 CONFPOST 1.2.0 32 BITS
+# FEDORA 19 y 20 CONFPOST 1.2.3 32 BITS
 
 # ACTUALIZACION DE CONFPOST
 updater=/usr/share/updatepostintaller/confpost.sh
@@ -1767,18 +1766,40 @@ fi
 
 actualizar(){
 
+if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "20" ]; then
+
+setenforce 0
+xterm -e 'yum -y clean expire-cache'
+xterm -e 'yum -y update selinux-policy\*'
 xterm -e 'rm -f /var/lib/rpm/_db*'
 
 xterm -e 'rpm -vv --rebuilddb' 
 
-package-cleanup --cleandupes -y | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/trashito.png" --image-on-top --progress --title "Eliminando paquetes duplicados" --text="Por favor espere...." --pulsate --auto-close --width=350
+yum-complete-transaction --cleanup-only -y | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/trashito.png" --image-on-top --progress --title "Eliminando paquetes duplicados" --text="Por favor espere...." --pulsate --auto-close --width=350
 
-yum clean all | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/trashito.png" --image-on-top --progress --title "limpiando repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350 
+yum clean all | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/trashito.png" --image-on-top --progress --title "limpiando repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
+
+yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando el Sistema" --text="Por favor espere puede tardar mucho...." --pulsate --auto-close --width=350
+
+yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando el Sistema" --text="Por favor espere puede tardar mucho...." --pulsate --auto-close --width=350
+setenforce 1
+
+
+else
+
+xterm -e 'rm -f /var/lib/rpm/_db*'
+
+xterm -e 'rpm -vv --rebuilddb' 
+
+yum-complete-transaction --cleanup-only -y | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/trashito.png" --image-on-top --progress --title "Eliminando paquetes duplicados" --text="Por favor espere...." --pulsate --auto-close --width=350
+
+yum clean all | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/trashito.png" --image-on-top --progress --title "limpiando repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
 
 yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando el Sistema" --text="Por favor espere puede tardar mucho...." --pulsate --auto-close --width=350
 
 yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando el Sistema" --text="Por favor espere puede tardar mucho...." --pulsate --auto-close --width=350
 
+fi
 
 su $noti -c 'notify-send "PostInstallerF" "Se ha actualizado el sistema" -i "/usr/share/icons/sistema.png" -t 5000'
 
