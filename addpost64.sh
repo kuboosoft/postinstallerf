@@ -4553,7 +4553,7 @@ echo "Clementine" >> installed.log
 
 
 spotify(){
-            yum -y install spotify | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Spotify" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install spotify-client | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Spotify" --text="Please wait...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Spotify" -i "/usr/share/icons/pinguino.png" -t 5000'
