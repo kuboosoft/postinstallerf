@@ -1,24 +1,23 @@
 #!/bin/bash
 #
 # +--------------------------------------------------------------------------------+
-# | Copyright (C) 2013 Kuboosoft                                                   |
+# | Copyright (C) 2014 Kuboosoft                                                   |
 # |                                                                                |
-# | Este programa es Software Libre; Puedes distribuirlo y/o                       |
-# | modificarlo bajo los términos de la GNU General Public License                 |
-# | como está publicada por la Free Software Foundation; cualquier                 |
-# | versión 3 de la Licencia, o (opcionalmente) cualquier versión                  |
-# | posterior. http://www.gnu.org/licenses/lgpl.html                               |
-# |                                                                                |
-# | Este programa es distribuido con la esperanza de que sea útil,                 |
-# | pero SIN NINGUNA GARANTÍA. Vea la GNU General Public License                   |
-# | para más detalles.                                                             |
+# |This program is free software; You can distribute it and / or                   |
+# |modify it under the terms of the GNU General Public License                     |
+# |as published by the Free Software Foundation; any                               |
+# |version 3 of the License, or (optionally) any version                           |
+# |later. http://www.gnu.org/licenses/gpl-3.0.html                                 |
+# |This program is distributed in the hope that it will be useful,                 |
+# |but WITHOUT ANY WARRANTY. See the GNU General Public License                    |
+# |for details.                                                                    |
 # +--------------------------------------------------------------------------------+
-# | Este código ha sido diseñado,escrito y mantenido por Kuboode y David Vásquez   |
-# | Cualquier pregunta, comentario o consejo sobre este código                     |
-# | debe dirigirse a:                                                              |
-# | http:www.kuboosoft.blogspot.com                                                |
+# |This code is designed, written and maintained by David Vasquez    		   |
+# |Any questions, comments or advice on this code                                  |
+# |should be addressed to:                                                         |
+# |https://plus.google.com/communities/118230919321773121406                       |
 # +--------------------------------------------------------------------------------+
-# FEDORA 19,20 ADPOST 1.2.2 32 BITS
+# FEDORA 19,20 ADPOST 1.2.3 32 BITS
 
 # ACTUALIZACION DE ADPOST
 updater=/usr/share/updatepostintaller/addpost.sh
@@ -457,13 +456,6 @@ im=$im"FALSE \"Miro Video Converter\"                   \"Conversion de videos d
 fi
             fi
 
-if ! $installed | grep "Arista Transcoder" > /dev/null; then
-if [ -f /usr/bin/arista-gtk ]; then
-                    im=$im"FALSE \"Arista Transcoder\"                   \"Conversion de video para dispositivos\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Arista Transcoder\"                   \"Conversion de video para dispositivos\" \"NO INSTALADO  \"  "
-fi
-            fi
 
 if ! $installed | grep "Qwinff" > /dev/null; then
 if [ -f /usr/bin/qwinff ]; then
@@ -725,6 +717,15 @@ if [ -f /usr/bin/clementine ]; then
                     im=$im"FALSE \"Clementine\"    \"Reproductor musical multiplataforma. Está inspirado en Amarok\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Clementine\"    \"Reproductor musical multiplataforma. Está inspirado en Amarok\" \"NO INSTALADO  \"  "
+fi
+            fi
+
+
+if ! $installed | grep "Spotify" > /dev/null; then
+if [ -f /usr/bin/spotify ]; then
+                    im=$im"FALSE \"Spotify\"    \"Spotify es una aplicación empleada para la reproducción de musica vía streaming\" \"INSTALADO  \"  "
+else
+im=$im"FALSE \"Spotify\"    \"Reproductor musical multiplataforma. Está inspirado en Amarok\" \"NO INSTALADO  \"  "
 fi
             fi
  
@@ -1187,11 +1188,11 @@ if ! $installed | grep "Informacion del Sistema" > /dev/null; then
             fi
 
 
-if ! $installed | grep "Hardinfo" > /dev/null; then
-if [ -f /usr/bin/hardinfo ]; then
-                    im=$im"FALSE \"Hardinfo\"    \"Muestra información sobre el hardware del sistema y el sistema operativo\" \"INSTALADO  \"  "
+if ! $installed | grep "I-nex" > /dev/null; then
+if [ -f /usr/bin/i-nex ]; then
+                    im=$im"FALSE \"I-nex\"    \"Muestra información sobre el hardware del sistema y el sistema operativo\" \"INSTALADO  \"  "
 else
-im=$im"FALSE \"Hardinfo\"    \"Muestra información sobre el hardware del sistema y el sistema operativo\" \"NO INSTALADO  \"  "
+im=$im"FALSE \"I-nex\"    \"Muestra información sobre el hardware del sistema y el sistema operativo\" \"NO INSTALADO  \"  "
 fi
             fi
 
@@ -1611,14 +1612,6 @@ fi
             fi
 
 
-if ! $installed | grep "Arista Transcoder" > /dev/null; then
-if [ -f /usr/bin/arista-gtk ]; then
-                    im=$im"FALSE \"Arista Transcoder\"                   \"A easy to use multimedia transcoder for the GNOME Desktop.\" \"INSTALLED  \"  "
-else
-im=$im"FALSE \"Arista Transcoder\"                   \"A easy to use multimedia transcoder for the GNOME Desktop.\" \"NO INSTALLED  \"  "
-fi
-            fi
-
 if ! $installed | grep "Qwinff" > /dev/null; then
 if [ -f /usr/bin/qwinff ]; then
                     im=$im"FALSE \"Qwinff\"                   \"QWinFF is a cross-platform, easy-to-use media converter frontend to FFmpeg.\" \"INSTALADO  \"  "
@@ -1879,6 +1872,17 @@ else
 im=$im"FALSE \"Clementine\"    \"A music player and library organizer.\" \"NO INSTALLED  \"  "
 fi
             fi
+
+
+if ! $installed | grep "Spotify" > /dev/null; then
+if [ -f /usr/bin/spotify ]; then
+                    im=$im"FALSE \"Spotify\"    \"A commercial music streaming service providing digital rights management-restricted content.\" \"INSTALLED  \"  "
+else
+im=$im"FALSE \"Spotify\"    \"A commercial music streaming service providing digital rights management-restricted content.\" \"NO INSTALLED  \"  "
+fi
+            fi
+
+
  
 if ! $installed | grep "Sound converter" > /dev/null; then
 if [ -f /usr/bin/soundconverter ]; then
@@ -2342,11 +2346,11 @@ if ! $installed | grep "System Information" > /dev/null; then
             fi
 
 
-if ! $installed | grep "Hardinfo" > /dev/null; then
-if [ -f /usr/bin/hardinfo ]; then
-                    im=$im"FALSE \"Hardinfo\"    \" A system information and benchmark tool.\" \"INSTALLED  \"  "
+if ! $installed | grep "I-nex" > /dev/null; then
+if [ -f /usr/bin/i-nex ]; then
+                    im=$im"FALSE \"I-nex\"    \" A system information and benchmark tool.\" \"INSTALLED  \"  "
 else
-im=$im"FALSE \"Hardinfo\"    \" A system information and benchmark tool.\" \"NO INSTALLED  \"  "
+im=$im"FALSE \"I-nex\"    \" A system information and benchmark tool.\" \"NO INSTALLED  \"  "
 fi
             fi
 
@@ -2595,9 +2599,7 @@ if echo $choice | grep "Java JDK Oracle" > /dev/null; then
             if echo $choice | grep "Miro Video Converter" > /dev/null; then
                     mvcon
             fi
-            if echo $choice | grep "Arista Transcoder" > /dev/null; then
-                    arista
-            fi
+            
 
             if echo $choice | grep "Qwinff" > /dev/null; then
                     qwinf
@@ -2725,6 +2727,10 @@ if echo $choice | grep "XBMC" > /dev/null; then
 
 if echo $choice | grep "Clementine" > /dev/null; then
                     clementine
+            fi
+
+if echo $choice | grep "Spotify" > /dev/null; then
+                    spotify
             fi
 
 
@@ -2999,8 +3005,8 @@ if echo $choice | grep "System Information" > /dev/null; then
             fi
 
 
-if echo $choice | grep "Hardinfo" > /dev/null; then
-                    hardinfo
+if echo $choice | grep "I-nex" > /dev/null; then
+                    inex
             fi
 
 
@@ -4103,31 +4109,6 @@ fi
 
     }
 
-     
-    arista(){
-
-if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "19" ]; then
-zenity --info --title="PostInstallerF" --text="Arista Transcoder is not compatible with Fedora 19, sorry"
-elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "20" ]; then
-zenity --info --title="PostInstallerF" --text="Arista Transcoder is not compatible with Fedora 20, sorry"
-else
-yum -y install arista | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Instalando Arista Transcoder" --text="Por favor espere...." --pulsate --auto-close --width=350
-           
-if [ -f /usr/bin/arista-gtk ]; then
-$changelog
-echo "Arista Transcoder" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Arista Transcoder" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Arista Transcoder" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
- else 
-zenity --info --title="PostInstallerF" --text="For some reason Arista Transcoder not installed, please try again"
-fi
-
-fi
-
-    }
 
     qwinf(){
 
@@ -4797,6 +4778,21 @@ fi
 echo "Clementine" >> installed.log
 
     }
+
+
+spotify(){
+            yum -y install spotify | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Spotify" --text="Please wait...." --pulsate --auto-close --width=350
+
+if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Spotify" -i "/usr/share/icons/pinguino.png" -t 5000'
+else
+su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Spotify" -i "/usr/share/icons/pinguino.png" -t 5000'
+fi
+
+echo "Spotify" >> installed.log
+
+    }
+
 
 
 sound(){
@@ -5698,16 +5694,16 @@ $(uptime)" --ok-label="Ok"
     }
 
 
-hardinfo(){
-            yum -y install hardinfo | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Hardinfo" --text="Please wait...." --pulsate --auto-close --width=350
+inex(){
+            yum -y install i-nex | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing I-nex" --text="Please wait...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Hardinfo" -i "/usr/share/icons/sistema.png" -t 5000'
+su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de I-nex" -i "/usr/share/icons/sistema.png" -t 5000'
 else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Hardinfo" -i "/usr/share/icons/sistema.png" -t 5000'
+su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of I-nex" -i "/usr/share/icons/sistema.png" -t 5000'
 fi
 
-echo "Hardinfo" >> installed.log
+echo "I-nex" >> installed.log
 
     }
 
@@ -5748,11 +5744,9 @@ fi
 
 
 truetype(){
-            if [ -d /usr/share/fonts/msttcorefonts ]; then
-zenity --info --title="PostInstallerF" --text="Ya tenes instalado Microsoft TrueType core fonts, nada que hacer"
-else
-yum -y install http://sourceforge.net/projects/postinstaller/files/fuduntu/msttcorefonts-2.0-2.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Microsoft TrueType core fonts" --text="Please wait...." --pulsate --auto-close --width=350
-fi
+            
+yum -y install msttcorefonts | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Microsoft TrueType core fonts" --text="Please wait...." --pulsate --auto-close --width=350
+
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Microsoft TrueType core fonts" -i "/usr/share/icons/sistema.png" -t 5000'
