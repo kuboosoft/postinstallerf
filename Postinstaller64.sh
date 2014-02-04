@@ -355,7 +355,7 @@ clear
 
 
 
-P_RUN=$(yad --image="/usr/share/icons/acciones/topicon.png" --image-on-top --icons --class="PostInstallerF" --name="PostInstallerF" --window-icon="/usr/share/icons/Postinstaller1.svg" --item-width="110" --read-dir="/usr/share/Postdesktopfiles64" --width="435" --height="435" --title="PostInstallerF" --auto-kill --text="\n<b>Double click</b> an item to select an action:" --button="Website:0" --button="Close:1")
+P_RUN=$(yad --center --image="/usr/share/icons/acciones/topicon.png" --image-on-top --icons --class="PostInstallerF" --name="PostInstallerF" --window-icon="/usr/share/icons/Postinstaller1.svg" --item-width="110" --read-dir="/usr/share/Postdesktopfiles64" --width="435" --height="435" --title="PostInstallerF" --auto-kill --text="\n<b>Double click</b> an item to select an action:" --button="Website:0" --button="Close:1")
 
 if [ $? -eq 0 ]; then
 	su $noti3 -c '/usr/bin/firefox http://sourceforge.net/projects/postinstaller/' &
