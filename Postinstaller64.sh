@@ -264,7 +264,6 @@ fi
 
 
 
-
 # UPDATING THE SYSTEM
 
 if [ ! -f /usr/bin/postinstallerf/update_system ]; then
@@ -276,24 +275,11 @@ if [ ! -f /usr/share/icons/logview.png ]; then
 wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/icons/logview.png
 fi
 
-check_up= yum -e0 -d0 check-update > /tmp/yum.results.XXXXXX
-
-WORK=/tmp/yum.results.XXXXXX
-
-YUMHIS=`yum history | grep -n "U" | head -n 1 | cut -f3 -d'|' | sed 's/^ //g' | cut -f1 -d' '`
-
+check=2
 updatenow=/usr/bin/postinstallerf/update_system
 
+find /var/log/ -name yum.log -ctime +$check -exec $updatenow {} \;
 
-
-# If there are updates available, Ask to user if want update 
-
-if [ -s $WORK ] && [ -z $YUMHIS ]; then "sh $updatenow" 
-wait ${!}
-cat /dev/null > /tmp/yum.results.XXXXXX
- else
-echo 'no updates'
-fi
  
 
 # CHECKING SUBMENUS OF POSTINSTALLERF
