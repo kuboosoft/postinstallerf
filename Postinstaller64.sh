@@ -262,7 +262,7 @@ fi
  fi
 fi
 
-
+wait ${!}
 
 # UPDATING THE SYSTEM
 
@@ -280,7 +280,7 @@ updatenow=/usr/bin/postinstallerf/update_system
 
 find /var/log/ -name yum.log -ctime +$check -exec $updatenow {} \;
 
- 
+wait ${!} 
 
 # CHECKING SUBMENUS OF POSTINSTALLERF
 
