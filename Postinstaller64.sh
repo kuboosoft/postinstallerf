@@ -332,6 +332,9 @@ wget -c -P/usr/bin/postinstallerf/ http://sourceforge.net/projects/postinstaller
 fi
 
 
+wait ${!}
+
+
 clear
 
 # +--------------------------------------------------------------------------------------------------+
