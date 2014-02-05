@@ -329,6 +329,8 @@ else
 wget -c -P/usr/bin/postinstallerf/ http://sourceforge.net/projects/postinstaller/files/data/sound21.ogg
 fi
 
+wait ${!}
+
 clear
 
 # +--------------------------------------------------------------------------------------------------+
