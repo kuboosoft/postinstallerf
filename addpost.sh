@@ -375,7 +375,7 @@ fi
 
 
 if ! $installed | grep "Cmap Tools" > /dev/null; then
-if [ -f $HOME/IHMC_CmapTools/bin/update ]; then
+if [ -f /usr/bin/cmaptools ]; then
                     im=$im"FALSE \"Cmap Tools\"             \"Construir, navegar, compartir y criticar modelos de conocimiento representados como mapas conceptuales.\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Cmap Tools\"             \"Construir, navegar, compartir y criticar modelos de conocimiento representados como mapas conceptuales.\" \"NO INSTALADO  \"  "
@@ -466,7 +466,7 @@ fi
             fi
 
 if ! $installed | grep "Transcoder" > /dev/null; then
-if [ -f /usr/share/applications/Transcoder.desktop ] && [ -f /usr/local/bin/Transcoder/Transcoder ]; then
+if [ -f /usr/bin/transcoder ]; then
                     im=$im"FALSE \"Transcoder\"                \"Simple conversion de video y audio\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Transcoder\"                \"Simple conversion de video y audio\" \"NO INSTALADO  \"  "
@@ -1044,15 +1044,6 @@ fi
             fi
 
 
-if ! $installed | grep "GrooveDown" > /dev/null; then
-if [ -f /usr/bin/groovedown ]; then
-                    im=$im"FALSE \"GrooveDown\"    \"Herramienta simple descarga para Grooveshark.com\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"GrooveDown\"    \"Herramienta simple descarga para Grooveshark.com\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
 if ! $installed | grep "GrooveOff" > /dev/null; then
 if [ -f /usr/bin/grooveoff ]; then
                     im=$im"FALSE \"GrooveOff\"    \"Cliente no oficial para grooveshark.com.\" \"INSTALADO  \"  "
@@ -1529,7 +1520,7 @@ fi
 
 
 if ! $installed | grep "Cmap Tools" > /dev/null; then
-if [ -f $HOME/IHMC_CmapTools/bin/update ]; then
+if [ -f /usr/bin/cmaptools ]; then
                     im=$im"FALSE \"Cmap Tools\"             \"Program empowers users to construct, navigate, share and criticize knowledge models represented as concept maps.\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"Cmap Tools\"             \"Program empowers users to construct, navigate, share and criticize knowledge models represented as concept maps.\" \"NO INSTALLED  \"  "
@@ -1621,7 +1612,7 @@ fi
             fi
 
 if ! $installed | grep "Transcoder" > /dev/null; then
-if [ -f /usr/share/applications/Transcoder.desktop ] && [ -f /usr/local/bin/Transcoder/Transcoder ]; then
+if [ -f /usr/bin/transcoder ]; then
                     im=$im"FALSE \"Transcoder\"                \"Video converter for Linux using GTK+ as GUI toolkit and ffmpeg as backend.\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"Transcoder\"                \"Video converter for Linux using GTK+ as GUI toolkit and ffmpeg as backend.\" \"NO INSTALLED  \"  "
@@ -2198,15 +2189,6 @@ if [ -f /usr/bin/gtk-gnutella ]; then
                     im=$im"FALSE \"Gtk-Gnutella\"    \"GUI based Gnutella Client(frostwire)\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"Gtk-Gnutella\"    \"GUI based Gnutella Client (frostwire)\" \"NO INSTALLED  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "GrooveDown" > /dev/null; then
-if [ -f /usr/bin/groovedown ]; then
-                    im=$im"FALSE \"GrooveDown\"    \"Simple Downloadtool for Grooveshark.com.\" \"INSTALLED  \"  "
-else
-im=$im"FALSE \"GrooveDown\"    \"Simple Downloadtool for Grooveshark.com.\" \"NO INSTALLED  \"  "
 fi
             fi
 
@@ -2905,11 +2887,6 @@ if echo $choice | grep "Aquaria" > /dev/null; then
 
 if echo $choice | grep "Gtk-Gnutella" > /dev/null; then
                     Gnutella
-            fi
-
-
-if echo $choice | grep "GrooveDown" > /dev/null; then
-                    grooveDown
             fi
 
 
@@ -3854,9 +3831,7 @@ fi
      
      
     wine(){
-            yum -y install wine cabextract | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Wine" --text="Please wait...." --pulsate --auto-close --width=350
-
- yum -y install ftp://ftp.pbone.net/mirror/cachalot.mine.nu/RPMS/winetricks-20110429-0.fc15.noarch.rpm | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Winetricks" --text="Please wait...." --pulsate --auto-close --width=350
+            yum -y install wine cabextract winetricks | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Wine" --text="Please wait...." --pulsate --auto-close --width=350
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Wine y winetricks" -i "/usr/share/icons/pinguino.png" -t 5000'
@@ -4131,33 +4106,12 @@ fi
     acoder(){
 if [ -f /usr/share/applications/Transcoder.desktop ] && [ -f /usr/local/bin/Transcoder/Transcoder ]; then
 rm -f /usr/share/applications/Transcoder.desktop
-else
-echo "ya esta instalado"
+rm -rf /usr/local/bin/Transcoder/
 fi
-            yum -y install gstreamer-plugins-bad gstreamer-plugins-bad-free-extras gstreamer-plugins-bad-nonfree gstreamer-plugins-ugly gstreamer-ffmpeg ffmpeg mencoder ffmpeg2theora mplayer | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing codecs de video y audio" --text="Please wait...." --pulsate --auto-close --width=350
-wait ${!}
-cd /usr/local/bin/
-wget -c -P/usr/local/bin/ http://sourceforge.net/projects/transcoder84/files/0.0.6/Transcoder_0.0.6_i386.tar.gz 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:Transcoder  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
-cd /usr/local/bin/
-tar -xvzf Transcoder_0.0.6_i386.tar.gz 2>&1 | zenity --progress --title "Extrayendo e Installing Transcoder " --text="Please wait...." --pulsate --auto-close --width=350
-cp -f /usr/local/bin/Transcoder/data/transcoder.png /usr/share/icons/
+            yum -y install transcoder | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing Transcoder" --text="Please wait...." --pulsate --auto-close --width=350
 
-echo "[Desktop Entry]
-Version=1.0
-Type=Application
-Terminal=false
-Icon[en_US]=/usr/share/icons/transcoder.png
-Name[en_US]=Transcoder
-Exec=/usr/local/bin/Transcoder/Transcoder
-Comment[en_US]=video convert
-Name=Transcoder
-Comment=video convert
-Icon=/usr/share/icons/transcoder.png
-Categories=GTK;Application;AudioVideo;Video;" >> /usr/share/applications/Transcoder.desktop
 
-chmod +x /usr/share/applications/Transcoder.desktop
-
-if [ -f /usr/local/bin/Transcoder/Transcoder ]; then
+if [ -f /usr/bin/transcoder ]; then
 $changelog
 echo "Transcoder" >> installed.log
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
@@ -5343,33 +5297,6 @@ echo "Gtk-Gnutella" >> installed.log
 
     }
 
-
-grooveDown(){
-
-rm -f /usr/share/applications/GrooveDown.desktop
-rm -rf /usr/share/GrooveDown/
-rm -R /usr/local/bin/GrooveDown/
-rm -f /usr/local/bin/GrooveDown/GrooveDown.sh
-rm -rf /home/$noti/.GroveDown/
-rm -f /opt/Groovedown.zip
-
-yum -y install groovedown | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/icoinstall2.png" --image-on-top --progress --title "Installing GroveDown" --text="Please wait...." --pulsate --auto-close --width=350
-
-
-
-if [ -f /usr/bin/groovedown ]; then
-$changelog
-echo "GrooveDown" >> installed.log
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de GrooveDown" -i "/usr/share/icons/gd_logo.png" -t 5000'
-else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of GrooveDown" -i "/usr/share/icons/gd_logo.png" -t 5000'
-fi
- else 
-zenity --info --title="PostInstallerF" --text="For some reason GrooveDown not installed, please try again"
-fi
-
-    }
 
 
 veOff(){
