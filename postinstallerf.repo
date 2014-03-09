@@ -1,0 +1,50 @@
+[postinstallerf]
+name=PostInstallerF
+baseurl=http://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/
+        ftp://heanet.dl.sourceforge.net/mirrors/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/
+        http://ftp.jaist.ac.jp/pub/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/
+        ftp://ftp.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/p/po/postinstaller/fedora/releases/releases/$releasever/$basearch/
+        http://www.mirrorservice.org/sites/ftp.sourceforge.net/pub/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/
+        http://ftp.pbone.net/mirror/ftp.sourceforge.net/pub/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/
+	http://download2.polytechnic.edu.na/pub4/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/
+enable=1
+metadata_expire=2d
+gpgcheck=0
+gpgkey=http://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/RPM-GPG-KEY-postinstallerf
+skip_if_unavailable=1
+
+
+
+[postinstallerf-source]
+name=PostInstallerF-Source
+baseurl=http://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/SRPM/
+        ftp://heanet.dl.sourceforge.net/mirrors/sourceforge/p/po/postinstaller/files/fedora/releases/$releasever/SRPM/
+        http://ftp.jaist.ac.jp/pub/sourceforge/p/po/postinstaller/files/fedora/releases/$releasever/SRPM/
+        ftp://ftp.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/p/po/postinstaller/files/fedora/releases/$releasever/SRPM/
+        http://www.mirrorservice.org/sites/ftp.sourceforge.net/pub/sourceforge/p/po/postinstaller/files/fedora/releases/$releasever/SRPM/
+        http://ftp.pbone.net/mirror/ftp.sourceforge.net/pub/sourceforge/p/po/postinstaller/files/fedora/releases/$releasever/SRPM/
+	http://download2.polytechnic.edu.na/pub4/sourceforge/p/po/postinstaller/files/fedora/releases/$releasever/SRPM/
+enabled=0
+metadata_expire=2d
+gpgcheck=0
+gpgkey=http://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/RPM-GPG-KEY-postinstallerf
+skip_if_unavailable=1
+
+
+
+
+[postinstallerf-updates]
+name=PostInstallerF-updates
+baseurl=http://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/updates/
+ftp://heanet.dl.sourceforge.net/mirrors/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/updates/
+        http://ftp.jaist.ac.jp/pub/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/updates/
+        ftp://ftp.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/p/po/postinstaller/fedora/releases/releases/$releasever/$basearch/updates/
+        http://www.mirrorservice.org/sites/ftp.sourceforge.net/pub/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/updates/
+        http://ftp.pbone.net/mirror/ftp.sourceforge.net/pub/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/updates/
+	http://download2.polytechnic.edu.na/pub4/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/updates/
+enabled=1
+metadata_expire=2d
+gpgcheck=1
+gpgkey=http://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/RPM-GPG-KEY-postinstallerf
+skip_if_unavailable=1
+
