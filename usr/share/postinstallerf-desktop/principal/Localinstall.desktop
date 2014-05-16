@@ -1,0 +1,11 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/localinstall
+Version=1.0
+Type=Application
+Name=Local Install
+GenericName=Local Install
+GenericName[pt]=Local Install
+Comment=Install Packages locally
+Icon=/usr/share/icons/acciones/SOFTWARE.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

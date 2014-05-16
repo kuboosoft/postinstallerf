@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ $# -gt 0 ] ; then
+    echo "$*"
+else
+    echo "No input"
+fi
+
+PASSWD="$(zenity --password --title=Authentication)\n"
+
+echo -e $PASSWD | su -c "$*"

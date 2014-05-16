@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon[es_GT]=/usr/share/icons/acciones/conf.png
+Exec=/usr/bin/postinstallerf/confpost
+Name=Configure Tuning
+Comment[es_GT]=Configura y amplia funcionalidades del sistema
+Comment=Configure system functionality
+Icon=/usr/share/icons/acciones/conf.png
+Name[es_GT.UTF-8]=ConfigureTuning

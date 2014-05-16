@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/categorias/Office
+Version=1.0
+Type=Application
+Name=Office
+GenericName=Office
+Comment=Office programs
+Icon=/usr/share/icons/acciones/Writing.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=postinstaller -n gimp
+Version=1.0
+Type=Application
+Name=Gimp
+GenericName=Gimp
+Comment=Image Manipulation Program
+Icon=/usr/share/icons/acciones/GIMP.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

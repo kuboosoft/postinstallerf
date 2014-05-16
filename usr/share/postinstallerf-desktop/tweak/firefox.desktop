@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/tweek/firefox-lang-es 
+Version=1.0
+Type=Application
+Name=Firefox spanish lenguaje
+GenericName=Firefox spanish lenguaje
+Comment=Install Firefox spanish lenguaje
+Icon=/usr/share/icons/acciones/fire-icon.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

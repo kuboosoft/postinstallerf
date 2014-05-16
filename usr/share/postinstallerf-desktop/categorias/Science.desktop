@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/categorias/Science
+Version=1.0
+Type=Application
+Name=Science
+GenericName=Science
+Comment=Science programs
+Icon=/usr/share/icons/acciones/science.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

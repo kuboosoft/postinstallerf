@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/auntenticacion /usr/bin/postinstallerf/codecs
+Version=1.0
+Type=Application
+Name=Codecs audio and video
+GenericName=Codecs audio and video
+Comment=Install all codecs, audio and video
+Icon=/usr/share/icons/acciones/codecs.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

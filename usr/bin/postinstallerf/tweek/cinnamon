@@ -1,0 +1,35 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+if [ $(rpm -qa cinnamon | grep -c cinnamon) -gt 0 ]; then
+status='INSTALLED'
+tarea='Update'
+else
+status='NO INSTALLED'
+tarea='Install'
+fi
+
+Comment='<span size="xx-large">Cinnamon Desktop Environment</span>'
+
+yad --title="PostInstallerF - Cinnamon Desktop Environment" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/cinnamon.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A GTK+-based desktop environment. Started as a fork of the GNOME Shell, and was initially developed by (and for) Linux Mint."  \
+--button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then
+
+if [[ $tarea = Update ]]; then
+echo 'installed Cinnamon Desktop Environment'
+postinstaller -u
+elif [[ $tarea = Install ]]; then
+postinstaller -g @cinnamon
+fi
+   fi

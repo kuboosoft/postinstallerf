@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/categorias/Graphics
+Version=1.0
+Type=Application
+Name=Graphics
+GenericName=Graphics
+Comment=Graphics programs
+Icon=/usr/share/icons/acciones/3D-Design-Alt.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/auntenticacion /usr/bin/postinstallerf/tweek/enable-sudo
+Version=1.0
+Type=Application
+Name=Enable/Disable Sudo
+GenericName=Enable/Disable Sudo
+Comment=Add or remove the currect user to group sudo
+Icon=/usr/share/icons/acciones/sudo-logo.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

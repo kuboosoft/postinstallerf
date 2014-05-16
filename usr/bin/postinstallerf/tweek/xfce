@@ -1,0 +1,36 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+if [ $(rpm -qa xfce4-panel | grep -c xfce4-panel) -gt 0 ]; then
+status=INSTALLED
+tarea=Update
+else
+status='NO INSTALLED'
+tarea=Install
+fi
+
+Comment='<span size="xx-large">Xfce Desktop Environment</span>'
+
+yad --title="PostInstallerF - Xfce Desktop Environment" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/xfce.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Xfce is a lightweight desktop environment for UNIX-like operating systems. 
+It aims to be fast and low on system resources, while still being visually appealing and user friendly."  \
+--button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then
+
+if [[ $tarea = Update ]]; then
+echo 'installed Xfce Desktop Environment'
+postinstaller -u
+elif [[ $tarea = Install ]]; then
+postinstaller -g @xfce
+fi
+   fi

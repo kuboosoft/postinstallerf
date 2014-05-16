@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/categorias/Multimedia
+Version=1.0
+Type=Application
+Name=Multimedia
+GenericName=Multimedia
+Comment=Multimedia programs
+Icon=/usr/share/icons/acciones/codecs.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

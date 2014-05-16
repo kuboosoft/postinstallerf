@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=PostIntallerF
+GenericName=postinstallerf
+Comment=PostInstallerF will install all the software that Fedora doesn't include by default, after running Fedora for the first time
+Icon=/usr/share/icons/Postinstaller1.svg
+Type=Application
+Categories=GTK;Utility;System;
+Exec=/usr/bin/postinstallerf/principal-menu
+StartupNotify=false

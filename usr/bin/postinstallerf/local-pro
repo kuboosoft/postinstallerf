@@ -1,0 +1,16 @@
+#!/bin/bash
+
+tee -a /tmp/yumlocal-url-tmp | stdbuf -oL sed -nrue '/refresh-packagekit/ s/^/# /p' -e '/var/ s/^/# /p' -e '/-->/ s/^/# /p' -e '/--->/ s/^/# /p' -e '/: / s/^/# /p' -e '/[0-9]:[0-9]$/ s/^/# Installed /p' | yad --progress \
+--title="PostInstallerF" \
+--center \
+--image="$HOME/Dropbox/new_designe_postinstallerf/localinstall.png" --image-on-top \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--width=800 --height=500 \
+--text='<span size="xx-large">Installing locally, please wait...</span>'  \
+--pulsate   \
+--auto-close  \
+--button="Cancel (Not recommended):0" 
+
+rm -f /tmp/yumlocal-url-tmp
+
+

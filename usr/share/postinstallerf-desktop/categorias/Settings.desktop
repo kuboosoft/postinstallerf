@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/categorias/Settings
+Version=1.0
+Type=Application
+Name=Settings
+GenericName=Settings
+Comment=Settings programs
+Icon=/usr/share/icons/acciones/Wrench.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

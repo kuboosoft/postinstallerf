@@ -1,0 +1,66 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+enablesu="Defaults:ALL timestamp_timeout=0"
+krozker=$(grep "Defaults:ALL timestamp_timeout=0" /etc/sudoers); echo "krozker = $krozker"
+disablesu=""
+
+if [[ "$krozker" = "$enablesu" ]]; then 
+status='DISABLED'
+tarea='Enable'
+elif [[ "$krozker" = "$disablesu" ]]; then
+status='ENABLED'
+tarea='Disable'
+fi
+
+Comment='<span size="xx-large">Gracia Sudo</span>'
+
+yad --title="PostInstallerF - Gracia Sudo" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/sudo-gracia.png" \
+--width=800 --height=500  --image-on-top \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+The concept behind sudo is to give non root users access to perform specific tasks, the problem is that sudo gives a period of time without the user have to enter the root password this is dangerousif there are multiple users."  \
+--button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then 
+
+
+if [ -f /etc/sudoers.bak ]; then
+echo 'el backup ya fue creado'
+else
+cp -f /etc/sudoers /etc/sudoers.bak
+fi
+
+if [[ "$krozker" = "$enablesu" ]]; then 
+zenity --question --title="PostInstallerF" --text="Do you want enable Sudo grace period?" --ok-label "Yes" --cancel-label "No"
+
+if [[ $? -eq 0 ]]; then
+sed -i '/Defaults:ALL timestamp_timeout=0/d' /etc/sudoers
+yad --class="ATENCIÓN" --window-icon="/usr/share/icons/Postinstaller1.svg" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Se ha activado el Período de gracia sudo"
+else
+echo 'Cuando quieras puedes activar de nuevo el periodo de gracia sudo'
+fi
+
+elif [ "$krozker" = "$disablesu" ]; then
+zenity --question --title="PostInstallerF" --text="Do you want disable sudo Grace period?" --ok-label "Yes" --cancel-label "No"
+
+if [[ $? -eq 0 ]]; then
+echo "Defaults:ALL timestamp_timeout=0" >> /etc/sudoers
+yad --class="ATENCIÓN" --window-icon="/usr/share/icons/Postinstaller1.svg" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Se ha desactivado el Período de gracia sudo"
+else
+echo 'Cuando usted quiera podra desactivar el periodo de gracia sudo'
+fi
+
+fi
+
+else
+	echo "Nothing to do"
+	fi
+
+fi

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/categorias/Education
+Version=1.0
+Type=Application
+Name=Education
+GenericName=Education
+Comment=Education programs
+Icon=/usr/share/icons/acciones/BOOK.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

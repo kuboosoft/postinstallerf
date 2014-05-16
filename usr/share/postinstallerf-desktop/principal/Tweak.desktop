@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/tweak-menu
+Version=1.0
+Type=Application
+Name=Tweak
+GenericName=Tweak
+Comment=Tweak the system
+Icon=/usr/share/icons/acciones/TOOLS.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

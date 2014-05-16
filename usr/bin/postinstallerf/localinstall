@@ -1,0 +1,14 @@
+#!/bin/sh
+
+source /usr/bin/postinstallerf/pid
+
+Packagelocal=$(yad --file-selection --window-icon="/usr/share/icons/acciones/topicon.png" --title="Select a rpm/deb/pkg.tar.xz file" --width=800 --height=500 --center)
+
+case $? in
+         0)
+		postinstaller -l $Packagelocal ;;
+         1)
+                echo "No file selected.";;
+        -1)
+                echo "An unexpected error has occurred.";;
+esac

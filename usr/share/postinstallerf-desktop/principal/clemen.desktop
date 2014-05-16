@@ -1,0 +1,11 @@
+[Desktop Entry]
+Exec=postinstaller -n clementine
+Version=1.0
+Type=Application
+Name=Clementine
+GenericName=Clementine
+GenericName[pt]=Clementine
+Comment=Multiplatform music player, focusing on a fast and easy-to-use interface
+Icon=/usr/share/icons/acciones/clementine-logo2.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

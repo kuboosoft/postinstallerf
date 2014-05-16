@@ -1,0 +1,64 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+#
+# Cambiar lenguaje a español de Firefox
+#
+
+#VARIABLES
+
+loca=$(locale | sed -n '1p'); echo "loca = $loca"
+loca2=""
+loca3="LANG=es_MX.utf8"
+loca4=" LANG=es_ES.utf8 "
+loca5="LANG=es_AR.utf8"
+loca6="LANG=es_CL.utf8"
+
+CADENA2=$(firefox -v | awk '{print $3}')
+
+
+# COMPARACIONES
+
+# MEXICO
+if [ $loca != $loca3 ]; 
+then
+echo "No sos de mexico"
+else
+/usr/bin/firefox ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$CADENA2/linux-i686/xpi/es-MX.xpi
+fi
+ 
+
+# ESPAÑA
+if [ $loca != $loca4 ]; 
+then
+echo "no sos de españa"
+else
+/usr/bin/firefox ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$CADENA2/linux-i686/xpi/es-ES.xpi
+fi
+ 
+
+# ARGENTINA
+if [ $loca != $loca5 ]; 
+then
+echo "no sos de argentina"
+else
+/usr/bin/firefox ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$CADENA2/linux-i686/xpi/es-AR.xpi
+fi
+ 
+             
+# CHILE
+if [ $loca != $loca6 ]; 
+then
+echo "no sos de chile"
+else
+/usr/bin/firefox ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$CADENA2/linux-i686/xpi/es-CL.xpi
+fi
+ 
+                 
+# NINGUNO
+
+if [ $loca != $loca3 ] && [ $loca != $loca4 ] && [ $loca != $loca5 ] && [ $loca != $loca6 ]; 
+then
+/usr/bin/firefox ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$CADENA2/linux-i686/xpi/es-MX.xpi
+fi

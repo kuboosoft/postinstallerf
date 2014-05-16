@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/categorias/Games
+Version=1.0
+Type=Application
+Name=Games
+GenericName=Games
+Comment=Games programs
+Icon=/usr/share/icons/acciones/GAMECONTROLLER.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

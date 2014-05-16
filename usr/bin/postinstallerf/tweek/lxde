@@ -1,0 +1,35 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+if [ $(rpm -qa lxde-common | grep -c lxde-common) -gt 0 ]; then
+status=INSTALLED
+tarea=Update
+else
+status='NO INSTALLED'
+tarea=Install
+fi
+
+Comment='<span size="xx-large">Lxde Desktop Environment</span>'
+
+yad --title="PostInstallerF - Lxde Desktop Environment" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/lxde.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+The Lightweight X11 Desktop Environment is an extremely fast-performing and energy-saving desktop environment." \
+--button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then
+
+if [[ $tarea = Update ]]; then
+echo 'installed Lxde Desktop Environment'
+postinstaller -u
+elif [[ $tarea = Install ]]; then
+postinstaller -g @gnome
+fi
+   fi

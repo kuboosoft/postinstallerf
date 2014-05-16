@@ -1,0 +1,164 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+PKGSINSTALLED=$(rpm -qa akmod-nvidia*)
+	if [[ -n "$PKGSINSTALLED" ]]; then
+
+status='INSTALLED'
+tarea='Remove'
+else
+status='NO INSTALLED'
+tarea='Install'                   
+fi
+
+Comment='<span size="xx-large">Nvidia propietary drivers</span>'
+
+yad --title="PostInstallerF - Nvidia propietary drivers" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/nvidia-logo.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Installation of Propietary NVIDIA drivers, Experimental"  \
+--button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then 
+
+if [[ $tarea = Install ]]; then
+
+if [ $(rpm -qa rpmfusion-free-release | grep -c rpmfusion-free-release) -gt 0 ] && [ $(rpm -qa rpmfusion-nonfree-release | grep -c rpmfusion-nonfree-release) -gt 0 ]; then
+echo 'installed rpmfusion free and nonfree repository'
+else
+zenity --password | su -c "yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$version.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$version.noarch.rpm | $localprogress"    
+fi
+
+targra=$(lspci | grep -i nvidia | awk -F'[' '{print $2}' | awk -F']' '{print $1}' | tee -a /tmp/targra2.txt)
+
+
+# Check if user really has a nvidia video card
+	VGA=$(lspci | grep -i 'nvidia') > /dev/null
+	if [[ "$?" != 0 ]]; then
+echo 'No nVidia card detected'
+zenity --info --title="PostInstallerF" --text="No nVidia card detected"
+exit
+else
+echo 'nVidia card detected'
+fi
+
+	# HERE INSTALLATION
+
+
+foo8=$(wget --no-check-certificate -q ftp://download.nvidia.com/XFree86/Linux-x86_64/290.10/README/supportedchips.html -O - | grep -e 'GeForce 6' -e 'GeForce 7' -e 'GeForce 8' -e 'GeForce 2' -e 'GeForce 3' -e 'GeForce 4' -e 'GeForce 5' -e 'GeForce FX' -e 'GeForce4' -e 'GeForce2' | sed '1d' | awk -F'<td>' '{print $2}' | awk -F'</td>' '{print $1}' | tee -a /tmp/lastest_nvdia.txt)
+
+wait ${!}
+
+VGA=$(grep "$targra" /tmp/lastest_nvdia.txt) > /dev/null
+	if [[ "$?" != 0 ]]; then
+echo 'No nVidia card compatible'
+cat /dev/null > /tmp/nvdia.txt
+cat /dev/null > /tmp/lastest_nvdia.txt
+cat /dev/null > /tmp/targra2.txt
+zenity --info --title="PostInstallerF" --text="No nVidia card compatible"
+  exit
+else
+echo 'ya la hiciste rey'
+zenity --question --title="Do you want install Nvidia Drivers?" --text="Remember this funtion is experimental" --ok-label "Yes" --cancel-label "No"
+
+if [[ $? -eq 0 ]]; then
+
+VGA3=$(grep 'GeForce FX' /tmp/targra2.txt) > /dev/null
+	if [[ "$?" = 0 ]]; then
+echo '173.14.xx driver'
+
+postinstaller -u
+
+postinstaller -i akmod-nvidia-173xx -i xorg-x11-drv-nvidia-173xx-libs
+
+
+xterm -e 'nvidia-xconfig'
+
+cat /dev/null > /tmp/nvdia.txt
+cat /dev/null > /tmp/lastest_nvdia.txt
+cat /dev/null > /tmp/targra2.txt
+
+su $noti -c 'notify-send "PostInstallerF" "Se ha instalado los drivers Nvidia, por favor reinicie el sistema" -i "/usr/share/icons/sistema.png" -t 5000'
+fi
+
+
+VGA4=$(grep -e 'GeForce4' -e 'GeForce2' /tmp/targra2.txt) > /dev/null
+	if [[ "$?" = 0 ]]; then
+echo '96.43.xx driver'
+
+postinstaller -u
+
+postinstaller -i akmod-nvidia-96xx -i xorg-x11-drv-nvidia-96xx-libs
+
+
+xterm -e 'nvidia-xconfig'
+
+cat /dev/null > /tmp/nvdia.txt
+cat /dev/null > /tmp/lastest_nvdia.txt
+cat /dev/null > /tmp/targra2.txt
+
+su $noti -c 'notify-send "PostInstallerF" "Se ha instalado los drivers Nvidia, por favor reinicie el sistema" -i "/usr/share/icons/sistema.png" -t 5000'
+fi
+
+
+VGA7=$(grep -e 'GeForce 2' -e 'GeForce 3' -e 'GeForce 4' -e 'GeForce 5' -e 'GeForce 6' -e 'GeForce 7' /tmp/targra2.txt) > /dev/null
+	if [[ "$?" = 0 ]]; then
+echo 'Series 304'
+
+postinstaller -u
+
+postinstaller -i akmod-nvidia-304xx -i xorg-x11-drv-nvidia-304xx-libs
+
+xterm -e 'nvidia-xconfig'
+
+cat /dev/null > /tmp/nvdia.txt
+cat /dev/null > /tmp/lastest_nvdia.txt
+cat /dev/null > /tmp/targra2.txt
+
+su $noti -c 'notify-send "PostInstallerF" "Se ha instalado los drivers Nvidia, por favor reinicie el sistema" -i "/usr/share/icons/sistema.png" -t 5000'
+fi
+
+
+
+VGA8=$(grep -e 'GeForce 8' -e 'GeForce 9' -e 'GeForce 10' /tmp/targra2.txt) > /dev/null
+	if [[ "$?" = 0 ]]; then
+echo 'Nuevos controladores'
+postinstaller -u
+
+postinstaller -i akmod-nvidia -i xorg-x11-drv-nvidia-libs
+
+xterm -e 'nvidia-xconfig'
+
+cat /dev/null > /tmp/nvdia.txt
+cat /dev/null > /tmp/lastest_nvdia.txt
+cat /dev/null > /tmp/targra2.txt
+
+su $noti -c 'notify-send "PostInstallerF" "Se ha instalado los drivers Nvidia, por favor reinicie el sistema" -i "/usr/share/icons/sistema.png" -t 5000'
+fi
+  fi
+fi
+
+elif [[ $tarea=Remove ]]; then
+yum -y remove xorg-x11-drv-nvidia\* | $localprogress
+fi
+
+fi
+
+    # Especific rpm
+    especific='yum -y install'
+
+    # Local Progress
+    localprogress='/usr/bin/postinstallerf/local-pro'
+
+    # Progress
+    progress='/usr/bin/postinstallerf/progress'
+
+    # Define version Fedora
+    version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)

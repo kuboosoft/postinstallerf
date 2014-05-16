@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon[es_GT]=/usr/share/icons/acciones/system-shutdown.svg
+Exec=/usr/bin/postinstallerf/Logout
+Name=Shutdown Logout
+Comment[es_GT]=Apagado o cierre de sesion del ordenador
+Comment=Shutdown or Logout Computer
+Icon=/usr/share/icons/acciones/system-shutdown.svg

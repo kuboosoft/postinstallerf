@@ -1,0 +1,189 @@
+#!/bin/bash
+# Licensed under the GNU General Public License Version 3
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+# http://sourceforge.net/projects/postinstaller/
+# Contact: https://plus.google.com/u/0/communities/118230919321773121406
+
+source /usr/bin/postinstallerf/pid
+
+Name='skype'
+Version='4.2.0.13'
+tmp_download_dir="/tmp/skype-$Version"
+License='Proprietary'
+installdir='/tmp/installdir'
+Url='http://www.skype.com'
+Source="http://download.skype.com/linux/skype-$Version.tar.bz2"
+Packer='None'
+Emailpacker='none at gmail dot com'
+Destiny='rpm'
+Architecture=$(uname -m)
+Release='1'
+Distribution='fc20'
+Group='Applications/Internet'
+Checksum='b4d1dcc5290be92225b400ea877db874'
+
+#BuildRequires
+BR='ruby-fpm'
+BR2='wget'
+BR3='tar'
+BR4='binutils'
+BR5='packagekit'
+BR6='ruby-devel'
+
+
+# Requires
+A='libv4l'
+B='libasound.so.2'
+C='libXv.so.1'
+D='libXss.so.1'
+E='librt.so.1'
+F='libdl.so.2'
+G='libX11.so.6'
+H='libXext.so.6'
+I='libQtDBus.so.4'
+J='libQtWebKit.so.4'
+K='libQtXml.so.4'
+L='libQtGui.so.4'
+M='libQtNetwork.so.4'
+N='libQtCore.so.4'
+O='libpthread.so.0'
+P='libpulse.so.0'
+Q='libstdc++.so.6'
+R='libm.so.6'
+S='libgcc_s.so.1'
+T='libc.so.6'
+
+# prep
+echo '=> Preparing package'
+
+echo '=> Checking Build Requires'
+
+if [ $(rpm -qa | grep -c $BR6) -gt 0 ]; then
+    echo "$BR6 is present"
+else
+pkcon -p -y install $BR6
+fi
+
+if [ $(rpm -qa | grep -c $BR2) -gt 0 ]; then
+    echo "$BR2 is present"
+else
+pkcon -p -y install $BR2
+fi
+
+if [ ! -f $HOME/bin/fpm ]; then
+gem install fpm
+fi
+
+wait ${!}
+
+install -dm 755 /tmp/installdir/
+cd /tmp/
+echo '=> Downloading sources'
+wget -c --timeout=30 --tries=3 "$Source"
+
+wait ${!}
+check=$(md5sum /tmp/skype-$Version.tar.bz2 | awk '{print $1}')
+
+wait ${!}
+ if [[ ! -f "/tmp/$Name-$Version.tar.bz2" ]] || [[ $check != $Checksum ]]; then
+echo ':: corrupt download'
+rm -f /tmp/$Name-$Version.tar.bz2
+exit
+else
+echo '=> Extracting sources'
+tar -xjvf $Name-$Version.tar.bz2
+fi
+
+# Description
+
+description='This is an installer for Skype.
+This package does not contain any program files as the Skype license does
+not allow distribution. By installing this package you will download and
+install Skype from skype.com.
+You must accept the Skype EULA before using it.
+Please be patient, this is a 16 MB download and may take some time.
+Removing this package will uninstall Skype from your system'
+
+
+# build
+echo '=> Building package'
+cd $tmp_download_dir
+
+# Executable
+  install -D skype $installdir/usr/bin/skype
+
+  # Data
+  mkdir -p $installdir/usr/share/skype/{avatars,lang,sounds}
+  install -m 644 avatars/* $installdir/usr/share/skype/avatars
+  install -m 644 lang/*    $installdir/usr/share/skype/lang
+  install -m 644 sounds/*  $installdir/usr/share/skype/sounds
+
+  # DBus Service
+  install -Dm 644 skype.conf \
+    $installdir/etc/dbus-1/system.d/skype.conf
+
+  # Icons
+  for _i in 16 32 48; do
+    install -Dm 644 icons/SkypeBlue_${_i}x${_i}.png \
+      $installdir/usr/share/icons/hicolor/${_i}x${_i}/skype.png
+  done
+  install -Dm 644 icons/SkypeBlue_48x48.png \
+    $installdir/usr/share/pixmaps/skype.png
+
+  # Desktop file
+  install -Dm 644 skype.desktop \
+    $installdir/usr/share/applications/skype.desktop
+
+wait ${!}
+
+# install
+
+if [ ! -f $HOME/bin/fpm ]; then
+echo 'fmp no found, try: gem install fpm '
+exit
+fi
+
+cd $installdir
+
+fpm -s dir -t $Destiny -n $Name -v $Version --iteration "$Release.$Distribution" --category "$Group" -m "$Packer <$Emailpacker>" -a "$Architecture" --license "$License" --url "$Url" --description "$description" -d "$A" -d "$B" -d "$C" -d "$D" -d "$E" -d "$F" -d "$G" -d "$H" -d "$I" -d "$J" -d "$K" -d "$L" -d "$M" -d "$N" -d "$O" -d "$P" -d "$Q" -d "$R" -d "$S" -d "$T" -C $installdir usr/ etc/
+wait ${!}
+echo '=> Building done'
+
+echo '=> Installing package'
+
+pkcon -p -y install-local "$installdir/$Name-$Version-$Release.$Distribution.$Architecture.$Destiny"
+
+echo '=> Installation completed'
+
+# Do you need help? 
+
+# packing with fpm
+# https://github.com/jordansissel/fpm 
+
+# groups fedora/centos/redhat
+# http://fedoraproject.org/wiki/RPMGroups
+
+# groups opensuse
+# http://en.opensuse.org/openSUSE:Package_group_guidelines
+
+# groups mageia
+# https://wiki.mageia.org/en/RPM_groups_policy
+
+# groups Openmandriva
+# http://wiki.mandriva.com/en/Development/Packaging/Groups
+
+# Distributions
+# Fedora = fc20, fc21...
+# RedHat/Centos= el6...
+# Mageia = mga4...
+# Openmandriva= omv2014.0
+# Rosa = mib2012.1
+
+# Architecture
+# Fedora/centos/redhat= i686, x86_64
+# Opensuse, Mageia, openmandriva, rosa = i586, x86_64
+# Use uname if you want actual architecture $(uname -p)
+

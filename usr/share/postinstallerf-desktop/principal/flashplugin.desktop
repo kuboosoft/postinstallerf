@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/flash
+Version=1.0
+Type=Application
+Name=Flash plugin
+GenericName=Flash plugin
+Comment=Install flash and hal plugin
+Icon=/usr/share/icons/acciones/FlashPlayer.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

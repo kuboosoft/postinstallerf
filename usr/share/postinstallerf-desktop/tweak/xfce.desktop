@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/auntenticacion /usr/bin/postinstallerf/tweek/xfce
+Version=1.0
+Type=Application
+Name=Xfce Desktop
+GenericName=Xfce Desktop
+Comment=Install Xfce Desktop
+Icon=/usr/share/icons/acciones/xfce-logo.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

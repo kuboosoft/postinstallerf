@@ -1,0 +1,35 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+if [ $(rpm -qa gnome-desktop3 | grep -c gnome-desktop3) -gt 0 ]; then
+status='INSTALLED'
+tarea='Update'
+else
+status='NO INSTALLED'
+tarea='Install'
+fi
+
+Comment='<span size="xx-large">Gnome Desktop Environment</span>'
+
+yad --title="PostInstallerF - Gnome Desktop Environment" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/gnome.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GNOME 3 is an easy and elegant way to use your computer. It is designed to put you in control and bring freedom to everybody. GNOME 3 is developed by the GNOME community, a diverse, international group of contributors that is supported by an independent, non-profit foundation."  \
+--button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then
+
+if [[ $tarea = Update ]]; then
+echo 'installed Gnome Desktop Environment'
+postinstaller -u
+elif [[ $tarea = Install ]]; then
+postinstaller -g @gnome
+fi
+   fi

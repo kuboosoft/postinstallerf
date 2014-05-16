@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/unrar-7zip
+Version=1.0
+Type=Application
+Name=Unrar and p7zip
+GenericName=Unrar and p7zip
+Comment=Install Unrar and p7zip
+Icon=/usr/share/icons/acciones/compress.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

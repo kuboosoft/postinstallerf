@@ -1,0 +1,52 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+if [ $(rpm -qa russianfedora-free-release | grep -c russianfedora-free-release) -gt 0 ] && [ $(rpm -qa russianfedora-nonfree-release | grep -c russianfedora-nonfree-release) -gt 0 ]; then
+status=INSTALLED
+tarea=Uninstall
+else
+status='NO INSTALLED'
+tarea=Install
+fi
+
+Comment='<span size="xx-large">Russian Fedora Repository</span>'
+
+yad --title="PostInstallerF - Russian Fedora Repository" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/russian.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Russian Fedora Remix is made by Russian Fedora team. It was produced since Fedora 10 and released simultaneously with Fedora distribution.
+
+Url: https://fedoraproject.org/wiki/Russian_Fedora_Remix"  \
+--button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then 
+
+if [[ "$tarea" = Install ]]; then 
+
+russianfree=$(wget --no-check-certificate -q http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/$version/Everything/x86_64/os -O - | grep 'russianfedora-free-release' | awk -F'<a href="' '{print $2}' | awk -F'">' '{print $1}' )
+
+russiannonfree=$(wget --no-check-certificate -q http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/releases/$version/Everything/x86_64/os -O - | grep 'russianfedora-nonfree-release' | awk -F'<a href="' '{print $2}' | awk -F'">' '{print $1}' )
+
+wait ${!}
+
+zenity --password | su -c "yum -y localinstall --nogpgcheck http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/$version/Everything/x86_64/os/$russianfree http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/releases/$version/Everything/x86_64/os/$russiannonfree | $localprogress"   
+
+elif [[ "$tarea" = Uninstall ]]; then  
+postinstaller -e russianfedora-free-release -e russianfedora-nonfree-release
+fi
+  fi
+
+
+
+    # Local Progress
+    localprogress='/usr/bin/postinstallerf/local-pro'
+
+    # Define version Fedora
+    version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)

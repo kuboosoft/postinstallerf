@@ -1,0 +1,54 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+user=$(loginctl show-session $XDG_SESSION_ID | grep 'Name' | cut -d= -f2 | tail -n 1)
+SER=$(grep "$user ALL=(ALL) ALL" /etc/sudoers) > /dev/null
+	if [[ "$?" != 0 ]]; then
+
+        	status="[$user] NO ADDED"
+		tarea="Add $user"
+else
+            	status="[$user] ADDED"
+		tarea="Remove $user"
+fi
+            
+
+Comment='<span size="xx-large">Add or remove the current user to group Sudo</span>'
+
+yad --title="PostInstallerF - Add or remove the current user to group Sudo" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/add-sudo.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Sudo (su "do") allows a system administrator to delegate authority to give certain users (or groups of users) the ability to run some (or all) commands as root or another user while providing an audit trail of the commands and their arguments."  \
+--button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then 
+
+SER=$(grep "$user ALL=(ALL) ALL" /etc/sudoers) > /dev/null
+	if [[ "$?" != 0 ]]; then
+
+zenity --question --title="Add you to sudoers list?" --text="Adding yourself to sudoers will enable you to perform operations as root. Do you want PostInstallerF to add $user to the sudoers list?" --ok-label "Yes" --cancel-label "No"
+if [[ $? -eq 0 ]]; then
+echo "$user ALL=(ALL) ALL" >> /etc/sudoers
+su $noti -c 'notify-send "PostInstallerF" "$user fue incluido al grupo sudo" -i "/usr/share/icons/sistema.png" -t 5000'
+	else
+echo "Cuando tu quieras, aqui estaremos para agregarte al archivo sudoers..."
+fi
+
+else
+zenity --question --title="Do you want remove $user from sudoers file?" --text="$user already in sudoers file" --ok-label "Yes" --cancel-label "No"
+if [[ $? -eq 0 ]]; then
+sed -i "s/[$user ALL=(ALL) ALL]//g" /etc/sudoers
+else
+echo 'cuando quiera podra eliminar el corriente usuario del archivo sudoers'
+fi
+fi
+
+
+fi

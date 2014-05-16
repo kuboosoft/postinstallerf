@@ -1,0 +1,204 @@
+#!/bin/bash
+#
+# +--------------------------------------------------------------------------------+
+# | Copyright (C) 2014 Kuboosoft                                                   |
+# |                                                                                |
+# |This program is free software; You can distribute it and / or                   |
+# |modify it under the terms of the GNU General Public License                     |
+# |as published by the Free Software Foundation; any                               |
+# |version 3 of the License, or (optionally) any version                           |
+# |later. http://www.gnu.org/licenses/gpl-3.0.html                                 |
+# |This program is distributed in the hope that it will be useful,                 |
+# |but WITHOUT ANY WARRANTY. See the GNU General Public License                    |
+# |for details.                                                                    |
+# +--------------------------------------------------------------------------------+
+# |This code is designed, written and maintained by David Vasquez                  |
+# |This code was translated by Max M                                               |
+# |Any questions, comments or advice on this code                                  |
+# |should be addressed to:                                                         |
+# |https://plus.google.com/communities/118230919321773121406                       |
+# +--------------------------------------------------------------------------------+
+# FEDORA 20, 21 POSTINSTALLER V.1.5.0 
+
+
+
+hora=$(date +"%H")
+
+
+if [ $(echo $LANG | cut -b1-2) = "es" ]; then
+
+if test $hora -lt 12; then
+
+yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Bienvenido a PostInstallerF
+
+Buen dia, PostInstallerF es un programa que instala todo lo necesario en Fedora"
+
+
+elif test $hora -gt 12 & test $hora -le 18; then
+
+  yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Bienvenido a PostInstallerF
+
+Buena tarde, PostInstallerF es un programa que instala todo lo necesario en Fedora"
+
+else
+
+	yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Bienvenido a PostInstallerF
+
+Buena noche, PostInstallerF es un programa que instala todo lo necesario en Fedora"
+
+fi
+
+else
+
+if test $hora -lt 12; then
+
+yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
+
+Good day, PostInstallerF is a program that installs everything you need in Fedora"
+
+
+elif test $hora -gt 12 & test $hora -le 18; then
+
+	yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
+
+Good afternoon, PostInstallerF is a program that installs everything you need in Fedora"
+
+else
+
+	yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
+
+Good night, PostInstallerF is a program that installs everything you need in Fedora"
+
+fi
+ fi
+
+
+# CHECKING REPOSITORIES  
+
+relea=$(rpm -q --queryformat '%{VERSION}\n' fedora-release); echo "relea=$relea"
+
+if [ -f /etc/yum.repos.d/rpmfusion-nonfree.repo ] && [ -f /etc/yum.repos.d/rpmfusion-free.repo ]; then
+echo "RPM Fusion free and nonfree repo is present"
+else
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$relea.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$relea.noarch.rpm 2>&1 | zenity --progress --title "Checking Repository and Adding RPMFusion" --text="Please wait...." --pulsate --auto-close --width=400
+fi
+
+
+if [ -f /etc/yum.repos.d/russianfedora-free.repo ]; then
+echo 'Russian Fedora Free repository is installed'
+else
+yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/russianfedora-free-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Checking Repository and Adding Community 3rd party Free" --text="Please wait...." --pulsate --auto-close --width=400
+fi
+
+if [ -f /etc/yum.repos.d/russianfedora-nonfree.repo ]; then
+echo 'Russian Fedora Non Free repository is installed'
+else
+yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/russianfedora-nonfree-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Checking Repository and Adding Community 3rd party Free" --text="Please wait...." --pulsate --auto-close --width=400
+fi
+
+if [ -f /etc/yum.repos.d/postinstallerf.repo ]; then
+echo 'postinstallerf repository is installed'
+else
+echo '[postinstallerf]
+name=PostInstallerF
+baseurl=http://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/
+        ftp://heanet.dl.sourceforge.net/mirrors/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/
+        http://ftp.jaist.ac.jp/pub/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/
+        ftp://ftp.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/p/po/postinstaller/fedora/releases/releases/$releasever/$basearch/
+        http://www.mirrorservice.org/sites/ftp.sourceforge.net/pub/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/
+        http://ftp.pbone.net/mirror/ftp.sourceforge.net/pub/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/
+enable=1
+metadata_expire=2d
+gpgcheck=0
+gpgkey=http://sourceforge.net/projects/postinstaller/files/data/repodata/repomd.xml.key
+skip_if_unavailable=1
+exclude=ffmpeg ffmpeg-devel ffmpeg-libs
+
+
+[postinstallerf-source]
+name=PostInstallerF-Source
+baseurl=http://sourceforge.net/projects/postinstaller/files/SRPM/
+        ftp://heanet.dl.sourceforge.net/mirrors/sourceforge/p/po/postinstaller/SRPM/
+        http://ftp.jaist.ac.jp/pub/sourceforge/p/po/postinstaller/SRPM/
+        ftp://ftp.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/p/po/postinstaller/SRPM/
+        http://www.mirrorservice.org/sites/ftp.sourceforge.net/pub/sourceforge/p/po/postinstaller/SRPM/
+        http://ftp.pbone.net/mirror/ftp.sourceforge.net/pub/sourceforge/p/po/postinstaller/SRPM/
+enabled=0
+metadata_expire=2d
+gpgcheck=0
+gpgkey=http://sourceforge.net/projects/postinstaller/files/data/repodata/repomd.xml.key
+skip_if_unavailable=1
+exclude=ffmpeg ffmpeg-devel ffmpeg-libs' >> /etc/yum.repos.d/postinstallerf.repo
+fi
+ 
+
+wait ${!}
+
+
+# CLEANING THE REPOSITORY METADATA.
+
+nuday=$(date +%u); echo "nuday=$nuday"
+
+time=$(date +%H); echo "time=$time"
+time2=$(date +%R); echo "time2=$time2"
+
+setime=08
+setimea=16:00
+setimeb=12:00
+setimec=0
+
+Mon=1
+Tue=2
+Wed=3
+Thu=4
+Fri=5
+Sat=6
+Sun=7
+
+if [ ""$nuday = $Fri"" ] && [ ""$time = $setime"" ]; then
+yum clean metadata
+elif [ ""$nuday = $Fri"" ] && [ ""$time2 = $setimea"" ]; then
+yum clean metadata
+elif [ ""$nuday = $Fri"" ] && [ ""$time2 = $setimeb"" ]; then
+yum clean metadata
+elif [ ""$nuday = $Fri"" ] && [ ""$time = $setimec"" ]; then
+yum clean metadata
+fi
+
+
+
+# TESTING THE SOUND IN POSTINSTALLERF.
+sound=/usr/bin/postinstallerf/sound21.ogg
+if [ -f $sound ]; then
+echo "sound esta presente"
+else
+wget -c -P/usr/bin/postinstallerf/ http://sourceforge.net/projects/postinstaller/files/data/sound21.ogg
+fi
+
+
+wait ${!}
+
+
+clear
+
+# +--------------------------------------------------------------------------------------------------+
+# |HERE BEGINS THE MENU                                                                              |
+# +--------------------------------------------------------------------------------------------------+
+
+
+
+
+yad --center --image="/usr/share/icons/acciones/topicon.png" --image-on-top --icons --class="PostInstallerF" --name="PostInstallerF" --window-icon="/usr/share/icons/Postinstaller1.svg" --item-width="110" --read-dir="/usr/share/postinstallerf-desktop/Postdesktopfiles/" --width="435" --height="435" --title="PostInstallerF" --auto-kill --text="\n<b>Click</b> an item to select an action:" --single-click --button="Close:1"
+
+
+#initialising notification
+    noti=$(who -u | awk '{print $1}'); echo "noti = $noti"
+    noti3=$(loginctl show-session $XDG_SESSION_ID | cut -d= -f2 | tail -n 1); echo "noti3 = $noti3"
+
+    #initialising change directory default log
+    changelog="cd /usr/share/.postinstallerf/"
+
+
+# its others alternative similar initialising other users or notification 
+# noti=$(who am i | awk '{print $1}'); echo "noti = $noti"
+# username=$(zenity --entry --text="Username"); echo "username = $username"

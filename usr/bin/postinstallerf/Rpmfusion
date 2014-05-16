@@ -1,0 +1,46 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+if [ $(rpm -qa rpmfusion-free-release | grep -c rpmfusion-free-release) -gt 0 ] && [ $(rpm -qa rpmfusion-nonfree-release | grep -c rpmfusion-nonfree-release) -gt 0 ]; then
+status=INSTALLED
+tarea=Uninstall
+else
+status='NO INSTALLED'
+tarea=Install
+fi
+
+Comment='<span size="xx-large">RPM Fusion Repository</span>'
+
+yad --title="PostInstallerF - RPM Fusion Repository" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/rpm_fusion_v.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RPM Fusion provides software that the Fedora Project or Red Hat does not want to ship
+That software is provided as precompiled RPMs for all current Fedora versions and Red Hat Enterprise Linux 5 and 6."  \
+--button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then 
+
+if [[ "$tarea" = Install ]]; then 
+
+zenity --password | su -c "yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$version.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$version.noarch.rpm | $localprogress" 
+
+elif [[ "$tarea" = Uninstall ]]; then 
+postinstaller -e rpmfusion-free-release -e rpmfusion-nonfree-release
+fi
+
+  fi
+
+
+
+    # Local Progress
+    localprogress='/usr/bin/postinstallerf/local-pro'
+
+    # Define version Fedora
+    version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)

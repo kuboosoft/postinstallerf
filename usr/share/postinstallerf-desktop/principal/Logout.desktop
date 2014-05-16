@@ -1,0 +1,11 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/Logout
+Version=1.0
+Type=Application
+Name=Logout
+GenericName=Logout
+Comment=Logout and shutdown
+Comment[es_GT]=Apagado o cierre de sesion del ordenador
+Icon=/usr/share/icons/acciones/shut.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

@@ -1,0 +1,58 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+enable='SELINUX=enforcing'
+disable='SELINUX=disabled'
+
+seconfig=$(sed -n '7p' /etc/selinux/config)
+if [[ $seconfig = $enable ]]; then
+status='SELINUX ENABLED'
+tarea='Disable'
+elif [[ $seconfig = $disable ]]; then
+status='SELINUX DISABLED'
+tarea='Enable'
+fi
+
+Comment='<span size="xx-large">Enable or disable SELINUX</span>'
+
+yad --title="PostInstallerF - Enable or disable SELINUX" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/selinux.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELinux is a set of kernel modifications and user-space tools that can be added to various Linux distributions, Its architecture strives to separate enforcement of security decisions from the security policy itself and streamlines the volume of software charged with security policy enforcement."  \
+--button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then 
+
+if [ ! -f /etc/selinux/config.bak ]; then
+cp -f /etc/selinux/config /etc/selinux/config.bak
+fi
+
+
+if [[ "$seconfig" = "$enable" ]]; then 
+zenity --question --title="Do you want disable SELinux?" --text="Detected enable SELinux" --ok-label "Yes" --cancel-label "No"
+if [[ $? -eq 0 ]]; then
+sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
+yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Se ha desactivado SELinux"
+else
+echo 'Cuando tu quieras'
+fi
+
+elif [[ "$seconfig" = "$disable" ]]; then
+zenity --question --title="Do you want enable SELinux?" --text="Detected disable SELinux" --ok-label "Yes" --cancel-label "No"
+if [[ $? -eq 0 ]]; then
+sed -i s/SELINUX=disabled/SELINUX=enforcing/g /etc/selinux/config
+yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Se ha activado SELinux"
+else
+echo 'cuando tu quieras'
+fi
+
+fi   
+
+  fi      

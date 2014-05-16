@@ -1,0 +1,11 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/categories
+Version=1.0
+Type=Application
+Name=Categories
+GenericName=Categories
+GenericName[pt]=Categories
+Comment=Display all categories, multimedia, education, games...
+Icon=/usr/share/icons/acciones/categories.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

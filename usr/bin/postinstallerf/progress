@@ -1,0 +1,13 @@
+#!/bin/bash
+
+tee /tmp/yum-url-tmp | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+	--title="PostInstallerF - Installing/Unistalling" \
+	--center \
+	--image="$HOME/Dropbox/new_designe_postinstallerf/localinstall.png" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--width=800 --height=500 \
+	--text='<span size="xx-large">Installing packages, please wait...</span>'  \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+--button="Cancel (Not recommended):0" 

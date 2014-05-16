@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon[es_GT]=/usr/share/icons/acciones/add.png
+Exec=/usr/bin/postinstallerf/addpost
+Name[es_GT]=Install
+Comment[es_GT]=Instala los mejores programas
+Name=Install
+Comment=Install the best programs
+Icon=/usr/share/icons/acciones/add.png

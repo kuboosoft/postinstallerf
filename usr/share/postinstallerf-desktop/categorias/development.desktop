@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/categorias/Development
+Version=1.0
+Type=Application
+Name=Development
+GenericName=Development
+Comment=Development programs
+Icon=/usr/share/icons/acciones/developers.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

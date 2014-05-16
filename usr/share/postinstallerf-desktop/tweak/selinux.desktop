@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/auntenticacion /usr/bin/postinstallerf/tweek/selinux-on-of 
+Version=1.0
+Type=Application
+Name=Enable or Disable SeLinux
+GenericName=Enable or Disable SeLinux
+Comment=Enable or Disable SeLinux.
+Icon=/usr/share/icons/acciones/selinux-logo.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

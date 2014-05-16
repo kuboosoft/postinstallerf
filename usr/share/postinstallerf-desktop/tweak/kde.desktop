@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/auntenticacion /usr/bin/postinstallerf/tweek/kde 
+Version=1.0
+Type=Application
+Name=Kde Desktop
+GenericName=Kde Desktop
+Comment=Install Kde Desktop
+Icon=/usr/share/icons/acciones/logokde.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

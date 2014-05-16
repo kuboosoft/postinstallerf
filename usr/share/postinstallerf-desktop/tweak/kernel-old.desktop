@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/auntenticacion 'package-cleanup --oldkernels -y' 
+Version=1.0
+Type=Application
+Name=Remove old kernel
+GenericName=Remove old kernel
+Comment=Remove all old kernel
+Icon=/usr/share/icons/acciones/old-kernel.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

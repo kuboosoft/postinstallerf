@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/tweek/cinnamon 
+Version=1.0
+Type=Application
+Name=Cinnamon
+GenericName=Cinnamon
+Comment=Install Cinnamon
+Icon=/usr/share/icons/acciones/cinnamon-logo.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

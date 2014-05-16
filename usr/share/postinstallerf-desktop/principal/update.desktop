@@ -1,0 +1,11 @@
+[Desktop Entry]
+Exec=postinstaller -u
+Version=1.0
+Type=Application
+Name=Update
+GenericName=Update
+GenericName[pt]=Update the system
+Comment=Update the system
+Icon=/usr/share/icons/acciones/updates.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

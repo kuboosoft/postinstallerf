@@ -1,0 +1,47 @@
+#!/bin/bash
+#
+# +--------------------------------------------------------------------------------+
+# | Copyright (C) 2014 Kuboosoft                                                   |
+# |                                                                                |
+# |This program is free software; You can distribute it and / or                   |
+# |modify it under the terms of the GNU General Public License                     |
+# |as published by the Free Software Foundation; any                               |
+# |version 3 of the License, or (optionally) any version                           |
+# |later. http://www.gnu.org/licenses/gpl-3.0.html                                 |
+# |This program is distributed in the hope that it will be useful,                 |
+# |but WITHOUT ANY WARRANTY. See the GNU General Public License                    |
+# |for details.                                                                    |
+# +--------------------------------------------------------------------------------+
+# |This code is designed, written and maintained by David Vasquez                  |
+# |Any questions, comments or advice on this code                                  |
+# |should be addressed to:                                                         |
+# |https://plus.google.com/communities/118230919321773121406                       |
+# +--------------------------------------------------------------------------------+
+
+
+# +--------------------------------------------------------------------------------------------------+
+# |HERE BEGINS THE MENU                                                                              |
+# +--------------------------------------------------------------------------------------------------+
+
+source /usr/bin/postinstallerf/pid
+
+
+yad --center --image="/usr/share/icons/acciones/menuprincipal.png" --image-on-top --icons --name="PostInstallerF - Settings" --window-icon="/usr/share/icons/acciones/topicon.png" --width=800 --height=500  --read-dir="/usr/share/app-install-data-postinstallerf/applications/Settings/" --title="PostInstallerF - Settings" --item-width=90 --compact --button="Donate:0" --button="Repositories:2" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then
+
+	xdg-open http://www.kuboosoft.blogspot.com/ 
+elif [[ $ret -eq 2 ]]; then
+gpk-prefs 
+elif [[ $ret -eq 1 ]]; then
+	echo "Nothing to do"
+	fi
+	 
+
+
+#initialising notification
+
+    noti3=$(loginctl show-session $XDG_SESSION_ID | cut -d= -f2 | tail -n 1); echo "noti3 = $noti3"
+

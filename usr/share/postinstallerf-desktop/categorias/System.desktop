@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/categorias/System
+Version=1.0
+Type=Application
+Name=System
+GenericName=System
+Comment=System programs
+Icon=/usr/share/icons/acciones/Settings.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

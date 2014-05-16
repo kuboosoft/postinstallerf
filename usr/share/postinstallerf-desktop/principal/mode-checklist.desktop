@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/lanzador-list
+Version=1.0
+Type=Application
+Name=Check list mode
+GenericName=Check list mode
+Comment=PostInstallerF Check List mode
+Icon=/usr/share/icons/acciones/check.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

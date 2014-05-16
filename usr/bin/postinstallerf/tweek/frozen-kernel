@@ -1,0 +1,62 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+enable='exclude=kernel*'
+krozker=$(grep 'exclude=kernel*' /etc/yum.conf)
+disable=''
+
+if [[ $krozker = $enable ]]; then 
+status='KERNEL CONGELADO'
+tarea='Enable updates kernel'
+
+elif [[ $krozker = $disable ]]; then
+status='KERNEL NO CONGELADO'
+tarea='Disable updates kernel'
+fi
+
+Comment='<span size="xx-large">Enable or disable updates kernel</span>'
+
+yad --title="PostInstallerF - Enable or disable updates kernel" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/linux-kernel.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+The Linux kernel is a Unix-like operating system kernel used by a variety of operating systems based on it, which are usually in the form of Linux distributions. The Linux kernel is a prominent example of free and open source software.
+
+Updates are good, the problem is that the system is not updated to the rhythm of the kernel. One of the common problems are the video drivers. You can avoid kernel updates easily."  \
+--button="$status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then 
+
+if [ ! -f /etc/yum.conf.bak ]; then
+cp -f /etc/yum.conf /etc/yum.conf.bak
+fi
+
+if [[ "$krozker" = "$enable" ]]; then 
+echo "posiblemente ya este congelado el kernel"
+zenity --question --title="Do you want enable updates kernel?" --text="Detected disable updates kernel" --ok-label "Yes" --cancel-label "No"
+if [[ $? -eq 0 ]]; then
+sed -i '/exclude=kernel*/d' /etc/yum.conf
+yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Se ha activado las actualizaciones del kernel"
+else
+echo 'Estamos para servirte'
+fi
+
+elif [[ "$krozker" = "$disable" ]]; then 
+echo "No esta congelado el kernel"
+zenity --question --title="Do you want disable updates kernel?" --text="Detected enable updates kernel" --ok-label "Yes" --cancel-label "No"
+if [[ $? -eq 0 ]]; then
+echo "exclude=kernel*" >> /etc/yum.conf
+yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Se han desactivado las actualizaciones del kernel"
+else
+echo 'cuando quieras'
+fi
+
+fi
+
+  fi

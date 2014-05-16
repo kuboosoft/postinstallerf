@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/Rpmfusion
+Version=1.0
+Type=Application
+Name=Rpmfusion
+GenericName=Rpmfusion
+Comment=Install and enable Rpmfusion repositories
+Icon=/usr/share/icons/acciones/rpmfusion.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

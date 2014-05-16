@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/categorias/Utility
+Version=1.0
+Type=Application
+Name=Utility
+GenericName=Utility
+Comment=Utility programs
+Icon=/usr/share/icons/acciones/Applications.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

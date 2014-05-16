@@ -1,0 +1,61 @@
+#! /bin/bash
+#
+# +--------------------------------------------------------------------------------+
+# | Copyright (C) 2013 Kuboosoft                                                   |
+# |                                                                                |
+# | Este programa es Software Libre; Puedes distribuirlo y/o                       |
+# | modificarlo bajo los términos de la GNU General Public License                 |
+# | como está publicada por la Free Software Foundation; cualquier                 |
+# | versión 3 de la Licencia, o (opcionalmente) cualquier versión                  |
+# | posterior. http://www.gnu.org/licenses/lgpl.html                               |
+# |                                                                                |
+# | Este programa es distribuido con la esperanza de que sea útil,                 |
+# | pero SIN NINGUNA GARANTÍA. Vea la GNU General Public License                   |
+# | para más detalles.                                                             |
+# +--------------------------------------------------------------------------------+
+# | Este código ha sido diseñado,escrito y mantenido por Kuboode y David Vásquez   |
+# | Cualquier pregunta, comentario o consejo sobre este código                     |
+# | debe dirigirse a:                                                              |
+# | http:www.kuboosoft.blogspot.com                                                |
+# +--------------------------------------------------------------------------------+
+# FEDORA 17, 18, 19 SHUTDOWN 1.2.0 32&64 BITS
+
+source /usr/bin/postinstallerf/pid
+
+noti=$(logname); echo "noti = $noti"
+
+action=$(yad --window-icon="/usr/share/icons/acciones/system-shutdown.svg" --class="PostInstallerF" --name="PostInstallerF" --width 300 --entry --title "System Logout" \
+    --image=gnome-shutdown \
+    --button="Switch User:2" \
+    --button="gtk-ok:0" --button="gtk-close:1" \
+    --text "Choose action:" \
+    --entry-text \
+    "Power Off" "Reboot" "Suspend" "Logout")
+ret=$?
+
+[[ $ret -eq 1 ]] && exit 0
+
+if [[ $ret -eq 2 ]]; then
+    gdmflexiserver --startnew &
+    exit 0
+fi
+
+case $action in
+    Power*) cmd="/sbin/poweroff" ;;
+    Reboot*) cmd="/sbin/reboot" ;;
+    Suspend*) cmd="/bin/sh -c 'echo disk > /sys/power/state'" ;;
+    Logout*) 
+        case $(wmctrl -m | grep Name) in
+            *Openbox) cmd="su $noti -c 'openbox --exit' " ;;
+            *FVWM) cmd="su $noti -c 'FvwmCommand Quit' " ;;
+            *Metacity) cmd="su $noti -c 'gnome-save-session --kill' " ;; 
+            *Mutter) cmd="skill -KILL -u $noti " ;;
+            *Muffin) cmd="skill -KILL -u $noti " ;;
+            *Xfwm4) cmd="su $noti -c 'xfce4-session-logout --logout' " ;;
+            *) exit 1 ;;
+        esac
+        ;;
+    *) exit 1 ;;        
+esac
+
+eval exec $cmd

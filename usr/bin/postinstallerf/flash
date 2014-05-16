@@ -1,0 +1,52 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+if [ $(rpm -qa flash-plugin | grep -c flash-plugin) -gt 0 ] && [ $(rpm -qa hal-flash | grep -c hal-flash) -gt 0 ]; then
+status=INSTALLED
+tarea=Uninstall
+else
+status='NO INSTALLED'
+tarea=Install
+fi
+
+Comment='<span size="xx-large">Flash plugin and hal-flash</span>'
+
+yad --title="PostInstallerF - Flash plugin and hal-flash" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/flash.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Adobe Flash (formerly Macromedia Flash) is a multimedia platform used to add animation, video, and interactivity to Web pages."  \
+--button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then 
+
+if [[ "$tarea" = Install ]]; then 
+
+if [ $(rpm -qa adobe-release-x86_64 | grep -c adobe-release-x86_64) -gt 0 ] || [ $(rpm -qa adobe-release-i386 | grep -c adobe-release-i386) -gt 0 ]; then
+echo 'installed adobe repository'
+ else
+if [[ $architecture = x86_64 ]]; then
+zenity --password | su -c "yum -y localinstall http://linuxdownload.adobe.com/linux/x86_64/adobe-release-x86_64-1.0-1.noarch.rpm"
+else
+zenity --password | su -c "yum -y localinstall http://linuxdownload.adobe.com/adobe-release/adobe-release-i386-1.0-1.noarch.rpm"
+fi
+  fi
+
+postinstaller -i flash-plugin -i hal-flash
+
+elif [[ "$tarea" = Uninstall ]]; then 
+postinstaller -e flash-plugin -e hal-flash
+fi
+
+
+fi
+
+
+architecture=$(uname -m)
+

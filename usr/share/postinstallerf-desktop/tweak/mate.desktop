@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/auntenticacion /usr/bin/postinstallerf/tweek/mate 
+Version=1.0
+Type=Application
+Name=Mate Desktop
+GenericName=Mate Desktop
+Comment=Install Mate Desktop
+Icon=/usr/share/icons/acciones/Mate-logo.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

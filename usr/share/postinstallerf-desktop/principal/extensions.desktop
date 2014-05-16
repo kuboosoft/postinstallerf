@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=firefox https://extensions.gnome.org/
+Version=1.0
+Type=Application
+Name=GNOME Shell extensions
+GenericName=GNOME Shell extensions
+Comment=small pieces of code written by third party developers that modify the way GNOME works
+Icon=/usr/share/icons/acciones/gnome-extensions.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

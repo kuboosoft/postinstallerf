@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/auntenticacion /usr/bin/postinstallerf/tweek/gnome 
+Version=1.0
+Type=Application
+Name=Gnome
+GenericName=Gnome
+Comment=Install Gnome
+Icon=/usr/share/icons/acciones/gnome-logo.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

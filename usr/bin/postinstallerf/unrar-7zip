@@ -1,0 +1,42 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+if [ $(rpm -qa unrar | grep -c unrar) -gt 0 ] && [ $(rpm -qa p7zip | grep -c p7zip) -gt 0 ]; then
+status=INSTALLED
+tarea=Uninstall
+else
+status='NO INSTALLED'
+tarea=Install
+fi
+
+Comment='<span size="xx-large">Unrar and p7zip</span>'
+
+yad --title="PostInstallerF - Unrar and p7zip" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/unrar.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+The unrar utility is a freeware program for extracting, testing and viewing the contents of archives created with the RAR archiver version 1.50 and above; p7zip is a port of 7za.exe for Unix."  \
+--button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then 
+
+if [[ "$tarea" = Install ]]; then 
+
+postinstaller -i unrar -i p7zip
+
+elif [[ "$tarea" = Uninstall ]]; then 
+postinstaller -e unrar -e p7zip
+fi
+
+
+fi
+
+
+architecture=$(uname -m)
+

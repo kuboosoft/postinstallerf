@@ -1,0 +1,35 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+if [ $(rpm -qa mate-desktop | grep -c mate-desktop) -gt 0 ]; then
+status='INSTALLED'
+tarea='Update'
+else
+status='NO INSTALLED'
+tarea='Install'
+fi
+
+Comment='<span size="xx-large">Mate Desktop Environment</span>'
+
+yad --title="PostInstallerF - Mate Desktop Environment" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/mate.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+The MATE Desktop Environment is the continuation of GNOME 2. It provides an intuitive and attractive desktop environment using traditional metaphors for Linux and other Unix-like operating systems."  \
+--button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then
+
+if [[ $tarea = Update ]]; then
+echo 'installed Mate Desktop Environment'
+postinstaller -u
+elif [[ $tarea = Install ]]; then
+postinstaller -g @mate
+fi
+   fi

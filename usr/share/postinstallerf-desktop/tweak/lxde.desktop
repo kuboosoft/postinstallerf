@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/auntenticacion /usr/bin/postinstallerf/tweek/lxde
+Version=1.0
+Type=Application
+Name=Lxde Desktop
+GenericName=Lxde Desktop
+Comment=Install Lxde Desktop
+Icon=/usr/share/icons/acciones/lxde_logo.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false
