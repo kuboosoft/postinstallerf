@@ -683,7 +683,7 @@ else
 
 if [[ $architecture = x86_64 ]]; then
 
-		RES_BUSCA_I=$(pkcon search name $BUSCA_I | grep -ve 'i686' -e 'meta' -e 'debug' | grep -w "$BUSCA_I" | awk '{print $1, $2}' | awk -F'-[0-9]' '{print $1}' | sed '/^$/d' | uniq -c)
+		RES_BUSCA_I=$(pkcon search name $BUSCA_I | grep -ve 'i686' -e 'meta' -e 'debug' -e '(updates)' | grep -w "$BUSCA_I" | awk '{print $1, $2}' | awk -F'-[0-9]' '{print $1}' | sed '/^$/d' | uniq -c)
 
 else
 
