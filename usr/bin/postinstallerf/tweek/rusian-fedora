@@ -2,6 +2,12 @@
 
 source /usr/bin/postinstallerf/pid
 
+    # Local Progress
+    localprogress='/usr/bin/postinstallerf/local-pro'
+
+    # Define version Fedora
+    version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
+
 if [ $(rpm -qa russianfedora-free-release | grep -c russianfedora-free-release) -gt 0 ] && [ $(rpm -qa russianfedora-nonfree-release | grep -c russianfedora-nonfree-release) -gt 0 ]; then
 status=INSTALLED
 tarea=Uninstall
@@ -45,8 +51,4 @@ fi
 
 
 
-    # Local Progress
-    localprogress='/usr/bin/postinstallerf/local-pro'
 
-    # Define version Fedora
-    version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)

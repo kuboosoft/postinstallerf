@@ -2,6 +2,12 @@
 
 source /usr/bin/postinstallerf/pid
 
+    # Local Progress
+    localprogress='/usr/bin/postinstallerf/local-pro'
+
+    # Define version Fedora
+    version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
+
 if [ $(rpm -qa rpmfusion-free-release | grep -c rpmfusion-free-release) -gt 0 ] && [ $(rpm -qa rpmfusion-nonfree-release | grep -c rpmfusion-nonfree-release) -gt 0 ]; then
 status=INSTALLED
 tarea=Uninstall
@@ -36,11 +42,3 @@ postinstaller -e rpmfusion-free-release -e rpmfusion-nonfree-release
 fi
 
   fi
-
-
-
-    # Local Progress
-    localprogress='/usr/bin/postinstallerf/local-pro'
-
-    # Define version Fedora
-    version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
