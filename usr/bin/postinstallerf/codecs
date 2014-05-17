@@ -2,6 +2,16 @@
 
 source /usr/bin/postinstallerf/pid
 
+    # Local install
+    locainst='yum -y localinstall'
+
+    # Local Progress
+    localprogress='/usr/bin/postinstallerf/local-pro'
+
+    # Define version Fedora
+    version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
+
+
 if [ $(rpm -qa gstreamer-plugins-bad | grep -c gstreamer-plugins-bad) -gt 0 ] && [ $(rpm -qa gstreamer-plugins-bad-free-extras | grep -c gstreamer-plugins-bad-free-extras) -gt 0 ] && [ $(rpm -qa gstreamer-plugins-ugly | grep -c gstreamer-plugins-ugly) -gt 0 ]; then
 status=INSTALLED
 tarea=Update
@@ -50,13 +60,3 @@ fi
 
 # end
 fi
-
-    # Local install
-    locainst='yum -y localinstall'
-
-    # Local Progress
-    localprogress='/usr/bin/postinstallerf/local-pro'
-
-    # Define version Fedora
-    version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
-
