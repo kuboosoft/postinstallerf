@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd">
+<policyconfig>
+  <vendor>PostInstallerF</vendor>
+  <vendor_url>http://sourceforge.net/projects/postinstaller/</vendor_url>
+  <icon_name>postinstaller</icon_name>
+
+  <action id="org.freedesktop.pkexec.postinstallerf">
+    <description>Install or Uninstall software Postinstallerf</description>
+    <message>Authentication is required to install programs and configure the system.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/postinstaller</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+  <action id="org.freedesktop.pkexec.postinstallerf.selinux-on-of">
+    <description>Selinux on-of Postinstallerf</description>
+    <message>Authentication is required to install programs and configure the system.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/postinstallerf/tweek/selinux-on-of</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+  <action id="org.freedesktop.pkexec.postinstallerf.frozen-kernel">
+    <description>frozen kernel Postinstallerf</description>
+    <message>Authentication is required to install programs and configure the system.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/postinstallerf/tweek/frozen-kernel</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+
+  <action id="org.freedesktop.pkexec.postinstallerf.enable-sudo">
+    <description>Enable-sudo Postinstallerf</description>
+    <message>Authentication is required to install programs and configure the system.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/postinstallerf/tweek/enable-sudo</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+
+  <action id="org.freedesktop.pkexec.postinstallerf.gracia-sudo">
+    <description>Gracia-sudo Postinstallerf</description>
+    <message>Authentication is required to install programs and configure the system.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/postinstallerf/tweek/gracia-sudo</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+
+  <action id="org.freedesktop.pkexec.postinstallerf.codecs">
+    <description>Codecs Postinstallerf</description>
+    <message>Authentication is required to install programs and configure the system.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/postinstallerf/codecs</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+  <action id="org.freedesktop.pkexec.postinstallerf.list-menu">
+    <description>Menu list Postinstallerf</description>
+    <message>Authentication is required to install programs and configure the system.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/postinstallerf/postinstaller-list-menu</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+  <action id="org.freedesktop.pkexec.postinstallerf.packer">
+    <description>Packer Postinstallerf</description>
+    <message>Authentication is required to install programs and configure the system.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/packer-postinstaller</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+  <action id="org.freedesktop.pkexec.postinstallerf.searchppa">
+    <description>Search PPA Postinstallerf</description>
+    <message>Authentication is required to install programs and configure the system.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/postinstallerf/searchppa</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+</policyconfig>

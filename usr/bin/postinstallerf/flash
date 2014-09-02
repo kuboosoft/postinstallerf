@@ -2,8 +2,10 @@
 
 source /usr/bin/postinstallerf/pid
 
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
+
     # Local install
-    locainst='yum -y localinstall'
+    locainst='dnf -y install'
 
     # Local Progress
     localprogress='/usr/bin/postinstallerf/local-pro'
@@ -11,20 +13,32 @@ source /usr/bin/postinstallerf/pid
     # Architecture
     architecture=$(uname -m)
 
-
-if [ $(rpm -qa flash-plugin | grep -c flash-plugin) -gt 0 ] && [ $(rpm -qa hal-flash | grep -c hal-flash) -gt 0 ]; then
+if [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+# Ubuntu
+if [ $(dpkg-query -Wf'${db:Status-abbrev}' "*flashplugin-installer") = ii ] || [ $(dpkg-query -Wf'${db:Status-abbrev}' "*adobe-flashplugin") = ii ] ; then
 status=INSTALLED
 tarea=Uninstall
 else
 status='NO INSTALLED'
 tarea=Install
 fi
+# Fedora
+else
+if [ $(rpm -qa flash-plugin | grep -c flash-plugin) -gt 0 ] && [ $(rpm -qa libhal1-flash | grep -c libhal1-flash) -gt 0 ]; then
+status=INSTALLED
+tarea=Uninstall
+else
+status='NO INSTALLED'
+tarea=Install
+fi
+  fi
 
 Comment='<span size="xx-large">Flash plugin and hal-flash</span>'
 
 yad --title="PostInstallerF - Flash plugin and hal-flash" \
 --center \
 --window-icon="/usr/share/icons/acciones/topicon.png" \
+--class="PostInstallerF" \
 --image="/usr/share/icons/acciones/flash.png" --image-on-top \
 --width=800 --height=500 \
 --text="$Comment
@@ -42,17 +56,24 @@ if [ $(rpm -qa adobe-release-x86_64 | grep -c adobe-release-x86_64) -gt 0 ] || [
 echo 'installed adobe repository'
  else
 if [[ $architecture = x86_64 ]]; then
-zenity --password | su -c "yum -y localinstall http://linuxdownload.adobe.com/linux/x86_64/adobe-release-x86_64-1.0-1.noarch.rpm | $localprogress"
+pkexec dnf -y install http://linuxdownload.adobe.com/linux/x86_64/adobe-release-x86_64-1.0-1.noarch.rpm | $localprogress
 else
-zenity --password | su -c "yum -y localinstall http://linuxdownload.adobe.com/adobe-release/adobe-release-i386-1.0-1.noarch.rpm | $localprogress"
+pkexec dnf -y install http://linuxdownload.adobe.com/adobe-release/adobe-release-i386-1.0-1.noarch.rpm | $localprogress
 fi
   fi
 
-postinstaller -i flash-plugin -i hal-flash
-
-elif [[ "$tarea" = Uninstall ]]; then 
-postinstaller -e flash-plugin -e hal-flash
+if [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+postinstaller -i flashplugin-installer -i adobe-flashplugin
+elif [ -f /etc/fedora-release ]; then
+pkexec postinstaller -i flash-plugin -i libhal1-flash
 fi
 
+elif [[ "$tarea" = Uninstall ]]; then 
+if [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+postinstaller -e flashplugin-installer -e adobe-flashplugin
+else
+pkexec postinstaller -e flash-plugin -e hal-flash
+fi
 
+fi
 fi

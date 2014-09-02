@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=/usr/bin/postinstallerf/auntenticacion /usr/bin/postinstallerf/tweek/gnome 
+Exec=/usr/bin/postinstallerf/tweek/gnome 
 Version=1.0
 Type=Application
 Name=Gnome

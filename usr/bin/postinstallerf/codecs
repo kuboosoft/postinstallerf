@@ -1,9 +1,9 @@
 #!/bin/bash
 
 source /usr/bin/postinstallerf/pid
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
+currentdesk=${XDG_CURRENT_DESKTOP}
 
-    # Local install
-    locainst='yum -y localinstall'
 
     # Local Progress
     localprogress='/usr/bin/postinstallerf/local-pro'
@@ -11,7 +11,17 @@ source /usr/bin/postinstallerf/pid
     # Define version Fedora
     version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
 
-
+if [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+# Ubuntu
+if [ $(dpkg-query -Wf'${db:Status-abbrev}' "*ubuntu-restricted-extras") = ii ]; then
+status=INSTALLED
+tarea=Update
+else
+status='NO INSTALLED'
+tarea=Install
+fi
+# Fedora
+else
 if [ $(rpm -qa gstreamer-plugins-bad | grep -c gstreamer-plugins-bad) -gt 0 ] && [ $(rpm -qa gstreamer-plugins-bad-free-extras | grep -c gstreamer-plugins-bad-free-extras) -gt 0 ] && [ $(rpm -qa gstreamer-plugins-ugly | grep -c gstreamer-plugins-ugly) -gt 0 ]; then
 status=INSTALLED
 tarea=Update
@@ -19,12 +29,14 @@ else
 status='NO INSTALLED'
 tarea=Install
 fi
+  fi
 
 Comment='<span size="xx-large">Codecs audio and video</span>'
 
 yad --title="PostInstallerF - Codecs audio and video" \
 --center \
 --window-icon="/usr/share/icons/acciones/topicon.png" \
+--class="PostInstallerF" \
 --image="/usr/share/icons/acciones/video-formats-codecs.png" --image-on-top \
 --width=800 --height=500 \
 --text="$Comment
@@ -34,29 +46,52 @@ A video codec is a device or software that enables compression or decompression 
 
 ret=$?
 
-if [[ $ret -eq 0 ]]; then 
+if [ "$ret" != 0 ]; then 
+exit
+fi
 
-if [[ $tarea = Install ]]; then
+# If the user only need install
+
+if [ "$tarea" = Install ]; then
+
+# UBUNTU
+if [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+
+if [ $currentdesk = XFCE ]; then
+postinstaller -i xubuntu-restricted-extras
+elif [ $currentdesk = LXDE ]; then
+postinstaller -i lubuntu-restricted-extras
+elif [ $currentdesk = KDE ]; then
+postinstaller -i kubuntu-restricted-extras
+else
+postinstaller -i ubuntu-restricted-extras
+fi
+
+# FEDORA
+elif [ -f /etc/fedora-release ]; then
 
 # Checking rpmfusion
 if [ $(rpm -qa rpmfusion-free-release | grep -c rpmfusion-free-release) -gt 0 ] && [ $(rpm -qa rpmfusion-nonfree-release | grep -c rpmfusion-nonfree-release) -gt 0 ]; then
 echo 'rpmfusion installed'
 else
-zenity --password | su -c "yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$version.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$version.noarch.rpm | $localprogress"    
+pkexec dnf -y install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$version.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$version.noarch.rpm | $localprogress    
 fi
 
 wait ${!}
 
-postinstaller -i gstreamer-plugins-bad -i gstreamer-plugins-bad-free-extras -i gstreamer-plugins-bad-nonfree -i gstreamer-plugins-ugly -i gstreamer-ffmpeg -i ffmpeg -i mencoder -i ffmpeg2theora -i mplayer -i libdvdcss -i faac -i vo-aacenc
+pkexec postinstaller -i gstreamer-plugins-bad -i gstreamer-plugins-bad-free-extras -i gstreamer-plugins-bad-nonfree -i gstreamer-plugins-ugly -i gstreamer-ffmpeg -i ffmpeg -i mencoder -i ffmpeg2theora -i mplayer -i libdvdcss -i faac -i vo-aacenc
 
 
 if [ $(rpm -qa k3b | grep -c k3b) -gt 0 ]; then
 postinstaller -i k3b-extras-freeworld
 fi
 
-elif [[ $tarea = Update ]]; then
+  fi 
+    fi 
+
+
+# If the user only need Update
+if [ "$tarea" = Update ]; then
 postinstaller -u
 fi
 
-# end
-fi

@@ -25,18 +25,57 @@
 
 source /usr/bin/postinstallerf/pid
 
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
 
-yad --center --image="/usr/share/icons/acciones/menuprincipal2.png" --image-on-top --icons --name="PostInstallerF - Principal Menu" --window-icon="/usr/share/icons/Postinstaller1.svg" --width=800 --height=500  --read-dir="/usr/share/postinstallerf-desktop/principal/" --item-width=90 --title="PostInstallerF - Principal Menu" --button="Donate:0" --button="Repositories:2" --button="Close:1" 
+if [ "$dist" = Ubuntu ]; then
+postversion=$(dpkg -s postinstallerf | grep 'Version' | awk '{print $2}')
+elif [ "$dist" = MANJARO ]; then
+postversion=$(pacman -Q postinstallerf | awk '{print $2}')
+else
+postversion=$(rpm -q postinstallerf | awk -F '[a-z]-' '{print $2}' | awk -F '.fc[0-9]' '{print $1}')
+fi
+
+
+#check if the user has an active internet connection
+
+testconnection=`wget --no-check-certificate --tries=3 --timeout=15 www.google.com -O /tmp/.testinternet &>/dev/null 2>&1`
+	if [[ $? != 0 ]]; then
+		echo  "You are not connected to the Internet. Please check your Internet connection and try again."
+		yad --class="PostInstallerF" --image="/usr/share/icons/acciones/no-global-internet.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --form --title="Internet connection error" --text="   You don't seem to be connected to the Internet.   \n   This function needs a working internet connection" --button="gtk-ok:0"
+	else
+		echo Internet connection - ok
+		rm /tmp/.testinternet  > /dev/null 2>&1
+	fi
+
+yad --center --image="/usr/share/icons/acciones/menuprincipal2.png" --image-on-top --icons --name="PostInstallerF - Principal Menu" --window-icon="/usr/share/icons/Postinstaller1.svg" --class="PostInstallerF" --width=800 --height=500  --read-dir="/usr/share/postinstallerf-desktop/principal/" --item-width=90 --title="PostInstallerF - $postversion - Principal Menu" --sort-by-name --button="Donate:0" --button="Repositories:2" --button="About:3" --button="Close:1" 
 
 ret=$?
 
 if [[ $ret -eq 0 ]]; then
 
-	xdg-open http://www.kuboosoft.blogspot.com/ 
+	xdg-open http://kuboosoft.blogspot.com/p/blog-page.html 
 elif [[ $ret -eq 2 ]]; then
+if [ "$dist" = Ubuntu ]; then
+software-properties-gtk
+else
 gpk-prefs
+fi
+rm -f /tmp/principal-menu..lck
+/usr/bin/postinstallerf/principal-menu
 elif [[ $ret -eq 1 ]]; then
 	echo "Nothing to do"
+exit
+elif [[ $ret -eq 3 ]]; then
+yad --class="PostInstallerF" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --form --title="About" --center --text="
+PostInstallerF will install all the software that doesn't include by default after running your OS for the first time. 
+PostInstallerF contains everything that you need for your daily computing.
+
+Url:http://sourceforge.net/projects/postinstaller/" --width=400 --height=100 --undecorated --button="gtk-ok:0"
+ret=$?
+if [[ $ret -eq 0 ]]; then
+rm -f /tmp/principal-menu..lck
+/usr/bin/postinstallerf/principal-menu 
+fi
 	fi
-	 
+rm -f /tmp/principal-menu..lck	 
 

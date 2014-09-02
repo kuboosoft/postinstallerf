@@ -5,6 +5,7 @@ tee -a /tmp/yumlocal-url-tmp | stdbuf -oL sed -nrue '/refresh-packagekit/ s/^/# 
 --center \
 --image="/usr/share/icons/acciones/localinstall.png" --image-on-top \
 --window-icon="/usr/share/icons/acciones/topicon.png" \
+--class="PostInstallerF" \
 --width=800 --height=500 \
 --text='<span size="xx-large">Installing locally, please wait...</span>'  \
 --pulsate   \

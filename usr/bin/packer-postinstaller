@@ -81,13 +81,30 @@ usage() {
 runasroot() {
   if [[ $UID -eq 0 ]]; then
     "$@"
-  elif zenity --password | sudo -S -v &>/dev/null && sudo -l "$@" &>/dev/null; then
+  elif zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | sudo -S -v &>/dev/null && sudo -l "$@" &>/dev/null; then
     sudo -E "$@"
   else
     echo -n "root "
-    zenity --password | su -c "$(printf '%q ' "$@")"
+    zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | su -c "$(printf '%q ' "$@")"
   fi
 }
+
+
+# Called whenever anything needs unblock pacman
+unlockpac() {
+while [ -f /var/lib/pacman/db.lck ]
+do
+zenity --question --title="The database is locked!" --window-icon="/usr/share/icons/acciones/topicon.png" --text="A package manager is in use 
+if not correct
+Do you want to unlock? " --ok-label "Yes" --cancel-label "No"
+if [[ $? -eq 0 ]]; then
+zenity --password | sudo -S rm -f /var/lib/pacman/db.lck
+else
+exit
+fi
+ done
+}
+
 
 # Source makepkg.conf file
 sourcemakepkgconf() {
@@ -552,25 +569,32 @@ fi
 
 # Install (-S) handling
 if [[ $option = install ]]; then
+
+unlockpac
   installhandling "${packageargs[@]}"
   exit
 fi
 
 # Install (-L) local
 if [[ $option = localinstall ]]; then
-  runasroot $PACMAN -U --noconfirm "${packageargs[@]}"
+
+unlockpac
+
+  runasroot pacman -U --noconfirm "${packageargs[@]}"
   exit
 fi
 
 # Remove (-D) 
 if [[ $option = remove ]]; then
 #  zenity --password | sudo -S pacman -R --noconfirm "${packageargs[@]}"
-  runasroot $PACMAN -Rs --noconfirm "${packageargs[@]}"
+unlockpac
+  runasroot pacman -Rs --noconfirm "${packageargs[@]}"
 exit
 fi
 
 # Update (-Su) handling
 if [[ $option = update ]]; then
+unlockpac
   getignoredpackages
   sourcemakepkgconf
   # Pacman update

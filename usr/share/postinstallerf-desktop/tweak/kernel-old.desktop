@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=/usr/bin/postinstallerf/auntenticacion 'package-cleanup --oldkernels -y' 
+Exec=postinstaller -o 
 Version=1.0
 Type=Application
 Name=Remove old kernel

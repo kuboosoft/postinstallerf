@@ -42,7 +42,7 @@ russiannonfree=$(wget --no-check-certificate -q http://mirror.yandex.ru/fedora/r
 
 wait ${!}
 
-zenity --password | su -c "yum -y localinstall --nogpgcheck http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/$version/Everything/x86_64/os/$russianfree http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/releases/$version/Everything/x86_64/os/$russiannonfree | $localprogress"   
+pkexec dnf -y install --nogpgcheck http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/$version/Everything/x86_64/os/$russianfree http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/releases/$version/Everything/x86_64/os/$russiannonfree | $localprogress   
 
 elif [[ "$tarea" = Uninstall ]]; then  
 postinstaller -e russianfedora-free-release -e russianfedora-nonfree-release

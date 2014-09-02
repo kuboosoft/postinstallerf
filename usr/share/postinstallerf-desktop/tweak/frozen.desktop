@@ -1,10 +1,10 @@
 [Desktop Entry]
-Exec=/usr/bin/postinstallerf/auntenticacion /usr/bin/postinstallerf/tweek/frozen-kernel 
+Exec=postinstaller -f
 Version=1.0
 Type=Application
 Name=Frozen kernel
 GenericName=Frozen kernel
-Comment=Enable or Disable updates kernel.
+Comment=Enable or Disable updates kernel
 Icon=/usr/share/icons/acciones/frozen-kernel.png
 Categories=AudioVideo;Player;Qt;
 StartupNotify=false

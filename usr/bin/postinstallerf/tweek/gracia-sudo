@@ -1,17 +1,12 @@
 #!/bin/bash
 
-source /usr/bin/postinstallerf/pid
 
-enablesu="Defaults:ALL timestamp_timeout=0"
-krozker=$(grep "Defaults:ALL timestamp_timeout=0" /etc/sudoers); echo "krozker = $krozker"
-disablesu=""
-
-if [[ "$krozker" = "$enablesu" ]]; then 
-status='DISABLED'
-tarea='Enable'
-elif [[ "$krozker" = "$disablesu" ]]; then
-status='ENABLED'
+if [ $(cat /etc/sudoers | grep -c 'Defaults:ALL timestamp_timeout=0') -gt 0 ] ; then
+status='NO VULNERABLE'
 tarea='Disable'
+else
+status='VULNERABLE'
+tarea='Enable'
 fi
 
 Comment='<span size="xx-large">Gracia Sudo</span>'
@@ -37,8 +32,8 @@ else
 cp -f /etc/sudoers /etc/sudoers.bak
 fi
 
-if [[ "$krozker" = "$enablesu" ]]; then 
-zenity --question --title="PostInstallerF" --text="Do you want enable Sudo grace period?" --ok-label "Yes" --cancel-label "No"
+if [[ "$tarea" = Disable ]]; then 
+zenity --question --title="PostInstallerF" --text="Do you want permit Sudo grace period?" --ok-label "Yes" --cancel-label "No"
 
 if [[ $? -eq 0 ]]; then
 sed -i '/Defaults:ALL timestamp_timeout=0/d' /etc/sudoers
@@ -47,8 +42,8 @@ else
 echo 'Cuando quieras puedes activar de nuevo el periodo de gracia sudo'
 fi
 
-elif [ "$krozker" = "$disablesu" ]; then
-zenity --question --title="PostInstallerF" --text="Do you want disable sudo Grace period?" --ok-label "Yes" --cancel-label "No"
+elif [ "$tarea" = Enable ]; then
+zenity --question --title="PostInstallerF" --text="Do you want avoid sudo Grace period?" --ok-label "Yes" --cancel-label "No"
 
 if [[ $? -eq 0 ]]; then
 echo "Defaults:ALL timestamp_timeout=0" >> /etc/sudoers
@@ -63,4 +58,16 @@ else
 	echo "Nothing to do"
 	fi
 
+rm -f /tmp/gracia-sudo..lck
+
 fi
+
+
+# Clean lck 
+if [[ "$(id -u)" -eq 0 ]]; then
+rm -f /tmp/gracia-sudo..lck
+else
+cat /dev/null > /tmp/gracia-sudo..lck
+fi
+
+

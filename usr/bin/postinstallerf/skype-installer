@@ -10,7 +10,7 @@
 source /usr/bin/postinstallerf/pid
 
 Name='skype'
-Version='4.2.0.13'
+Version='4.3.0.37'
 tmp_download_dir="/tmp/skype-$Version"
 License='Proprietary'
 installdir='/tmp/installdir'
@@ -23,7 +23,7 @@ Architecture=$(uname -m)
 Release='1'
 Distribution='fc20'
 Group='Applications/Internet'
-Checksum='b4d1dcc5290be92225b400ea877db874'
+Checksum='95db8f2072b9acd6f79ed42da3d6db79'
 
 #BuildRequires
 BR='ruby-fpm'
@@ -32,6 +32,9 @@ BR3='tar'
 BR4='binutils'
 BR5='packagekit'
 BR6='ruby-devel'
+BR7='libffi'
+BR8='glibc'
+BR9='rpm-build'
 
 
 # Requires
@@ -71,6 +74,24 @@ if [ $(rpm -qa | grep -c $BR2) -gt 0 ]; then
     echo "$BR2 is present"
 else
 pkcon -p -y install $BR2
+fi
+
+if [ $(rpm -qa | grep -c $BR7) -gt 0 ]; then
+    echo "$BR7 is present"
+else
+pkcon -p -y install $BR7
+fi
+
+if [ $(rpm -qa | grep -c $BR8) -gt 0 ]; then
+    echo "$BR8 is present"
+else
+pkcon -p -y install $BR8
+fi
+
+if [ $(rpm -qa | grep -c $BR9) -gt 0 ]; then
+    echo "$BR9 is present"
+else
+pkcon -p -y install $BR9
 fi
 
 if [ ! -f $HOME/bin/fpm ]; then
@@ -154,9 +175,13 @@ echo '=> Building done'
 
 echo '=> Installing package'
 
-pkcon -p -y install-local "$installdir/$Name-$Version-$Release.$Distribution.$Architecture.$Destiny"
+postinstaller -l "$installdir/$Name-$Version-$Release.$Distribution.$Architecture.$Destiny"
 
+if [[ $(rpm -qa skype | grep -c skype) -gt 0 ]] ; then
 echo '=> Installation completed'
+else
+echo '=> Installation failed'
+fi
 
 # Do you need help? 
 
@@ -185,5 +210,5 @@ echo '=> Installation completed'
 # Architecture
 # Fedora/centos/redhat= i686, x86_64
 # Opensuse, Mageia, openmandriva, rosa = i586, x86_64
-# Use uname if you want actual architecture $(uname -p)
+# Use uname if you want actual architecture $(uname -m)
 

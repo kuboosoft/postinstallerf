@@ -15,6 +15,7 @@ Comment='<span size="xx-large">Unrar and p7zip</span>'
 yad --title="PostInstallerF - Unrar and p7zip" \
 --center \
 --window-icon="/usr/share/icons/acciones/topicon.png" \
+--class="PostInstallerF" \
 --image="/usr/share/icons/acciones/unrar.png" --image-on-top \
 --width=800 --height=500 \
 --text="$Comment

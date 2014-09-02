@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 kuboosoft <davidjeremias82 AT gmail DOT com> -->
+<application>
+    <id type="desktop">postinstallerf.desktop</id>
+    <licence>GPLv3</licence>
+    <name>PostInstallerF</name>
+    <summary>Install software, codecs and more...</summary>
+    <description>
+        <p>
+        PostInstallerF will install all the software that doesn't include by default, after running 		
+	your OS for the first time. Its easy for a new user. PostInstallerF contains everything that 
+	you need for your daily computing.
+        </p>
+        <p>Features:</p>
+        <ul>
+            <li>Simple and easy to use GUI</li>
+	    <li>You can add Third party repositories automatically: RPMFusion, Google, Adobe, Chromium, Skype, Opera, Oracle Virtualbox, Google Earth, Lives...</li>
+            <li>Always installs latest versions of software</li>
+        </ul>
+    </description>
+    <screenshots>
+        <screenshot type="default" width="1360" height="765">http://sourceforge.net/projects/postinstaller/files/screenshots/postinstallerf.png</screenshot>
+        <screenshot width="1360" height="765">http://sourceforge.net/projects/postinstaller/files/screenshots/categories.png</screenshot>
+        <screenshot width="1360" height="765">http://sourceforge.net/projects/postinstaller/files/screenshots/postinstallerf.png</screenshot>
+        <screenshot width="1360" height="765">http://sourceforge.net/projects/postinstaller/files/screenshots/postinstallerf.png</screenshot>
+        <screenshot width="1360" height="765">http://sourceforge.net/projects/postinstaller/files/screenshots/postinstallerf.png</screenshot>
+    </screenshots>
+    <url type="homepage">http://sourceforge.net/projects/postinstaller/</url>
+    <updatecontact>davidjeremias82 AT gmail DOT com</updatecontact>
+</application>

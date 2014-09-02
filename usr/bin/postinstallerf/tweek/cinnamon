@@ -2,6 +2,43 @@
 
 source /usr/bin/postinstallerf/pid
 
+# Called whenever anything needs to be run as root ($@ is the command)
+runasroot() {
+  if [[ $UID -eq 0 ]]; then
+    "$@"
+  elif zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | sudo -S -v &>/dev/null && sudo -l "$@" &>/dev/null; then
+    sudo -E "$@"
+  else
+    echo -n "root "
+    zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | su -c "$(printf '%q ' "$@")"
+  fi
+}
+
+
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian')
+
+if [ $dist = Ubuntu ]; then
+
+if [ $(dpkg-query -Wf '${db:Status-abbrev}' cinnamon) = ii ]; then
+status='INSTALLED'
+tarea='Update'
+else
+status='NO INSTALLED'
+tarea='Install'
+fi
+
+elif [ "$dist" = MANJARO ]; then
+           
+if (pacman -Q cinnamon >/dev/null) ; then 
+status='INSTALLED'
+tarea='Update'
+else
+status='NO INSTALLED'
+tarea='Install'
+fi
+
+elif [ -f /etc/fedora-release ]; then
+
 if [ $(rpm -qa cinnamon | grep -c cinnamon) -gt 0 ]; then
 status='INSTALLED'
 tarea='Update'
@@ -9,6 +46,7 @@ else
 status='NO INSTALLED'
 tarea='Install'
 fi
+  fi
 
 Comment='<span size="xx-large">Cinnamon Desktop Environment</span>'
 
@@ -29,7 +67,27 @@ if [[ $ret -eq 0 ]]; then
 if [[ $tarea = Update ]]; then
 echo 'installed Cinnamon Desktop Environment'
 postinstaller -u
+
 elif [[ $tarea = Install ]]; then
-postinstaller -g @cinnamon
+
+if [ $dist = Ubuntu ]; then
+pkexec add-apt-repository -y ppa:gwendal-lebihan-dev/cinnamon-nightly
+sudo apt-get -y update
+postinstaller -i cinnamon
+
+elif [ -f /etc/fedora-release ]; then
+pkexec postinstaller -g cinnamon
+
+elif [ $dist = MANJARO ]; then 
+postinstaller -i cinnamon
+fi
+
 fi
    fi
+
+# Clean lck 
+if [[ "$(id -u)" -eq 0 ]]; then
+rm -f /tmp/cinnamon..lck
+else
+cat /dev/null > /tmp/cinnamon..lck
+fi

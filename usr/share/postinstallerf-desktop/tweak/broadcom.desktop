@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/tweek/broadcom 
+Version=1.0
+Type=Application
+Name=Broadcom wireless drivers
+GenericName=Broadcom wireless drivers
+Comment=Broadcom Linux hybrid wireless driver
+Icon=/usr/share/icons/acciones/broadcom-icon.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

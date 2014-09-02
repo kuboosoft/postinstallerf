@@ -26,6 +26,23 @@
 
 source /usr/bin/postinstallerf/pid
 
+cleanlist() {
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/confpost..lck
+else
+cat /dev/null > /tmp/confpost..lck
+fi
+}
+
+
+if [ "$(id -u)" -eq 0 ]; then
+echo 'root'
+else
+echo 'no root'
+cleanlist
+exit
+fi
+
     generateInstallMenu(){ 
             im="yad --image="/usr/share/icons/acciones/conf.png" --image-on-top --class="Configure-Tuning" --window-icon="/usr/share/icons/acciones/conf.png" --list --radiolist  --width=800 --height=600 --title \"PostInstallerF for Fedora 64bit (Ver 1.2.0)\" --text \"Select items from the list below\" "
             im=$im"--column=\"\" --column \"Application\" --column \"Description\"    --column \"Status\"  		     "
@@ -40,39 +57,24 @@ if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 
 if ! $installed | grep "Activar sudo" > /dev/null; then
 
-SER=$(grep "$noti3 ALL=(ALL) ALL" /etc/sudoers) > /dev/null
+SER=$(grep "$user ALL=(ALL) ALL" /etc/sudoers) > /dev/null
 	if [[ "$?" != 0 ]]; then
 
-                    im=$im"FALSE \"Activar sudo\"    \"Permite a un administrador del sistema delegar autoridad a ciertos usuarios la capacidad de ejecutar comandos como root u otro usuario\" \"[$noti3] NO AGREGADO  \"  "
+                    im=$im"FALSE \"Activar sudo\"    \"Permite a un administrador del sistema delegar autoridad a ciertos usuarios la capacidad de ejecutar comandos como root u otro usuario\" \"[$user] NO AGREGADO  \"  "
 else
-                    im=$im"FALSE \"Activar sudo\"    \"Permite a un administrador del sistema delegar autoridad a ciertos usuarios la capacidad de ejecutar comandos como root u otro usuario\" \"[$noti3] AGREGADO  \"  "
+                    im=$im"FALSE \"Activar sudo\"    \"Permite a un administrador del sistema delegar autoridad a ciertos usuarios la capacidad de ejecutar comandos como root u otro usuario\" \"[$user] AGREGADO  \"  "
 fi
             fi
 
 
 if ! $installed | grep "Periodo de gracia sudo" > /dev/null; then
 
-enablesu="Defaults:ALL timestamp_timeout=0"
-krozker=$(grep "Defaults:ALL timestamp_timeout=0" /etc/sudoers); echo "krozker = $krozker"
-disablesu=""
-
-if [ "$krozker" = "$enablesu" ]; then 
-im=$im"FALSE \"Periodo de gracia sudo\"    \"Credenciales para permitir/no permitir al usuario ejecutar sudo de nuevo por un período de tiempo sin necesidad de autenticación.\" \"NO ACTIVADO  \"  "
-elif [ "$krozker" = "$disablesu" ]; then
-im=$im"FALSE \"Periodo de gracia sudo\"    \"Credenciales para permitir/no permitir al usuario ejecutar sudo de nuevo por un período de tiempo sin necesidad de autenticación.\" \"ACTIVADO  \"  "
+if [ $(cat /etc/sudoers | grep -c 'Defaults:ALL timestamp_timeout=0') -gt 0 ] ; then
+im=$im"FALSE \"Periodo de gracia sudo\"    \"Credenciales para permitir/no permitir al usuario ejecutar sudo de nuevo por un período de tiempo sin necesidad de autenticación.\" \"NO VULNERABLE  \"  "
+else
+im=$im"FALSE \"Periodo de gracia sudo\"    \"Credenciales para permitir/no permitir al usuario ejecutar sudo de nuevo por un período de tiempo sin necesidad de autenticación.\" \"VULNERABLE  \"  "
 fi
  fi
-
-           
-if ! $installed | grep "Cambiar Mozilla Firefox a español" > /dev/null; then
-
-if [ -f /usr/bin/firefox ]; then
-
-                    im=$im"FALSE \"Cambiar Mozilla Firefox a español\"    \"Cambia el lenguage de Firefox actual a español, desde la version 12\" \"ACTIVO  \"  "
-else
-                    im=$im"FALSE \"Cambiar Mozilla Firefox a español\"    \"Cambia el lenguage de Firefox actual a español, desde la version 12\" \"NO ACTIVO  \"  "
-fi
-            fi
 
 
 if ! $installed | grep "Eliminar Kernels Antiguos" > /dev/null; then
@@ -169,15 +171,6 @@ fi
             fi
 
 
-if ! $installed | grep "Entorno de escritorio Razor-qt" > /dev/null; then
-if [ -f /usr/bin/razor-desktop ]; then
-                    im=$im"FALSE \"Entorno de escritorio Razor-qt\"    \"Razor-qt es un avanzado entorno de escritorio fácil de usar y rápido basado en las tecnologías de Qt.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Entorno de escritorio Razor-qt\"    \"Razor-qt es un avanzado entorno de escritorio fácil de usar y rápido basado en las tecnologías de Qt.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
 if ! $installed | grep "Desactivacion o Activacion de SELinux" > /dev/null; then
 
 enable="SELINUX=enforcing"
@@ -248,12 +241,12 @@ else
 
 if ! $installed | grep "Enable sudo" > /dev/null; then
 
-SER=$(grep "$noti3 ALL=(ALL) ALL" /etc/sudoers) > /dev/null
+SER=$(grep "$user ALL=(ALL) ALL" /etc/sudoers) > /dev/null
 	if [[ "$?" != 0 ]]; then
 
-                    im=$im"FALSE \"Enable sudo\"    \"Allows a system administrator to delegate authority to give certain users (or groups of users) the ability to run some (or all) commands as root or another user\" \"[$noti3] NO ADDED  \"  "
+                    im=$im"FALSE \"Enable sudo\"    \"Allows a system administrator to delegate authority to give certain users (or groups of users) the ability to run some (or all) commands as root or another user\" \"[$user] NO ADDED  \"  "
 else
-                    im=$im"FALSE \"Enable sudo\"    \"Allows a system administrator to delegate authority to give certain users (or groups of users) the ability to run some (or all) commands as root or another user\" \"[$noti3] ADDED  \"  "
+                    im=$im"FALSE \"Enable sudo\"    \"Allows a system administrator to delegate authority to give certain users (or groups of users) the ability to run some (or all) commands as root or another user\" \"[$user] ADDED  \"  "
 fi
             fi
 
@@ -270,17 +263,6 @@ elif [ "$krozker" = "$disablesu" ]; then
 im=$im"FALSE \"Grace period sudo\"    \"Credentials to allow/disallow the user to run sudo again for a period of time without authentication..\" \"ACTIVATED  \"  "
 fi
  fi
-
-           
-if ! $installed | grep "Change to Spanish Mozilla Firefox" > /dev/null; then
-
-if [ -f /usr/bin/firefox ]; then
-
-                    im=$im"FALSE \"Change to Spanish Mozilla Firefox\"    \"Change the language to Spanish Current Firefox from version 12\" \"ACTIVO  \"  "
-else
-                    im=$im"FALSE \"Change to Spanish Mozilla Firefox\"    \"Change the language to Spanish Current Firefox from version 12\" \"NO ACTIVO  \"  "
-fi
-            fi
 
 
 if ! $installed | grep "Remove old kernels" > /dev/null; then
@@ -373,15 +355,6 @@ if [ -x /usr/share/doc/mate-desktop* ]; then
                     im=$im"FALSE \"Desktop environment MATE\"    \"The MATE Desktop Environment is a fork of GNOME 2 that aims to provide an attractive and intuitive desktop to Linux.\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"Desktop environment MATE\"    \"The MATE Desktop Environment is a fork of GNOME 2 that aims to provide an attractive and intuitive desktop to Linux.\" \"NO INSTALLED  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Desktop environment Razor-qt" > /dev/null; then
-if [ -f /usr/bin/razor-desktop ]; then
-                    im=$im"FALSE \"Desktop environment Razor-qt\"    \"Razor-qt is an advanced, easy-to-use, and fast desktop environment based on Qt technologies.\" \"INSTALLED  \"  "
-else
-im=$im"FALSE \"Desktop environment Razor-qt\"    \"Razor-qt is an advanced, easy-to-use, and fast desktop environment based on Qt technologies.\" \"NO INSTALLED  \"  "
 fi
             fi
 
@@ -481,16 +454,6 @@ if echo $choice | grep "Grace period sudo" > /dev/null; then
                     graciasudo
             fi          
            
-if echo $choice | grep "Cambiar Mozilla Firefox a español" > /dev/null; then
-                    firefoxes
-            fi
-
-
-if echo $choice | grep "Change to Spanish Mozilla Firefox" > /dev/null; then
-                    firefoxes
-            fi
-
-
 if echo $choice | grep "Eliminar Kernels Antiguos" > /dev/null; then
                     kernelold
             fi
@@ -573,13 +536,6 @@ if echo $choice | grep "Desktop environment MATE" > /dev/null; then
                     mat
             fi
 
-if echo $choice | grep "Entorno de escritorio Razor-qt" > /dev/null; then
-                    razor
-            fi
-
-if echo $choice | grep "Desktop environment Razor-qt" > /dev/null; then
-                    razor
-            fi
 
 if echo $choice | grep "Desactivacion o Activacion de SELinux" > /dev/null; then
                     SLinux
@@ -640,137 +596,21 @@ if echo $choice | grep "UPDATE SYSTEM" > /dev/null; then
 
 
 sudouser(){
-SER=$(grep "$noti3 ALL=(ALL) ALL" /etc/sudoers) > /dev/null
-	if [[ "$?" != 0 ]]; then
 
-zenity --question --title="Add you to sudoers list?" --text="Adding yourself to sudoers will enable you to perform operations as root. Do you want PostInstallerF to add $noti3 to the sudoers list?" --ok-label "Yes" --cancel-label "No"
-if [[ $? -eq 0 ]]; then
-echo "$noti3 ALL=(ALL) ALL" >> /etc/sudoers
-su $noti -c 'notify-send "PostInstallerF" "$noti3 fue incluido al grupo sudo" -i "/usr/share/icons/sistema.png" -t 5000'
-	else
-echo "Cuando tu quieras, aqui estaremos para agregarte al archivo sudoers..."
-fi
-
-else
-zenity --question --title="Do you want remove $noti3 from sudoers file?" --text="$noti3 already in sudoers file" --ok-label "Yes" --cancel-label "No"
-if [[ $? -eq 0 ]]; then
-sed -i "s/[$noti3 ALL=(ALL) ALL]//g" /etc/sudoers
-else
-echo 'cuando quiera podra eliminar el corriente usuario del archivo sudoers'
-fi
-fi
+postinstaller -d
 
     }
 
 graciasudo(){
 
-enablesu="Defaults:ALL timestamp_timeout=0"
-krozker=$(grep "Defaults:ALL timestamp_timeout=0" /etc/sudoers); echo "krozker = $krozker"
-disablesu=""
-
-if [ -f /etc/sudoers.bak ]; then
-echo 'el backup ya fue creado'
-else
-cp -f /etc/sudoers /etc/sudoers.bak
-fi
-
-if [ "$krozker" = "$enablesu" ]; then 
-zenity --question --title="PostInstallerF" --text="Do you want enable Grace period Again?" --ok-label "Yes" --cancel-label "No"
-
-if [[ $? -eq 0 ]]; then
-sed -i '/Defaults:ALL timestamp_timeout=0/d' /etc/sudoers
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/Postinstaller1.svg" --image="/usr/share/icons/acciones/topiconubu.png" --image-on-top --info --title="PostInstallerF" --text="Se ha activado el Período de gracia sudo"
-else
-echo 'Cuando quieras puedes activar de nuevo el periodo de gracia sudo'
-fi
-
-elif [ "$krozker" = "$disablesu" ]; then
-zenity --question --title="PostInstallerF" --text="Do you want disable Grace period Again?" --ok-label "Yes" --cancel-label "No"
-
-if [[ $? -eq 0 ]]; then
-echo "Defaults:ALL timestamp_timeout=0" >> /etc/sudoers
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/Postinstaller1.svg" --image="/usr/share/icons/acciones/topiconubu.png" --image-on-top --info --title="PostInstallerF" --text="Se ha desactivado el Período de gracia sudo"
-else
-echo 'Cuando usted quiera podra desactivar el periodo de gracia sudo'
-fi
-
-fi
-
-    }
-
-firefoxes(){
-#
-# Cambiar lenguaje a español de Firefox
-#
-
-#VARIABLES
-
-loca=$(locale | sed -n '1p'); echo "loca = $loca"
-loca2=""
-loca3="LANG=es_MX.utf8"
-loca4=" LANG=es_ES.utf8 "
-loca5="LANG=es_AR.utf8"
-loca6="LANG=es_CL.utf8"
-
-CADENA2=$(firefox -v | awk '{print $3}'); echo "CADENA2 = $CADENA2"
-
-
-# COMPARACIONES
-
-# MEXICO
-if [ $loca != $loca3 ]; 
-then
-echo "No sos de mexico"
-else
-su $noti -c "/usr/bin/firefox ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$CADENA2/linux-i686/xpi/es-MX.xpi"
-fi
- 
-
-# ESPAÑA
-if [ $loca != $loca4 ]; 
-then
-echo "no sos de españa"
-else
-su $noti -c "/usr/bin/firefox ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$CADENA2/linux-i686/xpi/es-ES.xpi"
-fi
- 
-
-# ARGENTINA
-if [ $loca != $loca5 ]; 
-then
-echo "no sos de argentina"
-else
-su $noti -c "/usr/bin/firefox ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$CADENA2/linux-i686/xpi/es-AR.xpi"
-fi
- 
-             
-# CHILE
-if [ $loca != $loca6 ]; 
-then
-echo "no sos de chile"
-else
-su $noti -c "/usr/bin/firefox ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$CADENA2/linux-i686/xpi/es-CL.xpi"
-fi
- 
-                 
-# NINGUNO
-
-if [ $loca != $loca3 ] && [ $loca != $loca4 ] && [ $loca != $loca5 ] && [ $loca != $loca6 ]; 
-then
-su $noti -c "/usr/bin/firefox ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$CADENA2/linux-i686/xpi/es-MX.xpi"
-fi
-          
-
-su $noti -c 'notify-send "PostInstallerF" "Completado Cambiar Mozilla Firefox a español" -i "/usr/share/icons/pinguino.png" -t 5000'
+postinstaller -b
 
     }
 
 
 kernelold(){
 
-            package-cleanup --oldkernels  --count=2 -y | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/trashito.png" --image-on-top --progress --title "Eliminando Kernels Antiguos" --text="Por favor espere...." --pulsate --auto-close --width=350
-
-su $noti -c 'notify-send "PostInstallerF" "Completada la eliminacion de Kernels Antiguos" -i "/usr/share/icons/user-trash-full.png" -t 5000'
+postinstaller -o
 
 
     }
@@ -779,7 +619,7 @@ su $noti -c 'notify-send "PostInstallerF" "Completada la eliminacion de Kernels 
 pendientes(){
             yum-complete-transaction | $localprogress
 
-su $noti -c 'notify-send "PostInstallerF" "Completado Instalaciones pendientes" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $user -c 'notify-send "PostInstallerF" "Completado Instalaciones pendientes" -i "/usr/share/icons/pinguino.png" -t 5000'
 
     }
 
@@ -795,7 +635,7 @@ $(lspci | grep -i network)\n\nUptime:
 $(uptime)" --ok-label="Ok"
 
 
-su $noti -c 'notify-send "PostInstallerF" "Completado informacion del sistema" -i "/usr/share/icons/sistema.png" -t 5000'
+su $user -c 'notify-send "PostInstallerF" "Completado informacion del sistema" -i "/usr/share/icons/sistema.png" -t 5000'
 
 
     }
@@ -804,13 +644,12 @@ su $noti -c 'notify-send "PostInstallerF" "Completado informacion del sistema" -
 
 cinnamon(){
 
-$postlist cinnamon | $progress
+postinstaller -i cinnamon
 
 
 if [ -f /usr/bin/cinnamon ]; then
-$changelog
-echo "Cinnamon" >> installed.log
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Cinnamon" -i "/usr/share/icons/sistema.png" -t 5000'
+
+su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Cinnamon" -i "/usr/share/icons/sistema.png" -t 5000'
 else 
 zenity --info --title="PostInstallerF" --text="Por alguna razon Cinnamon no esta instalado, vuelva a intentar "
 fi
@@ -821,12 +660,12 @@ fi
 
 dreamd(){
 
-$postlist plasma-wallpaper-dreamdesktop | $progress
+postinstaller -i plasma-wallpaper-dreamdesktop 
 
 if [ -f /usr/lib/kde4/dreamdesktop.so ]; then
-$changelog
-echo "Cinnamon" >> installed.log
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Plasma-wallpaper-dreamdesktop" -i "/usr/share/icons/sistema.png" -t 5000'
+
+
+su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Plasma-wallpaper-dreamdesktop" -i "/usr/share/icons/sistema.png" -t 5000'
 else 
 zenity --info --title="PostInstallerF" --text="Por alguna razon Plasma-wallpaper-dreamdesktop no esta instalado, vuelva a intentar "
 fi
@@ -838,8 +677,8 @@ gnodesk(){
             $especific @gnome-desktop | $localprogress
 
 
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion Entorno de escritorio GNOME/SHELL" -i "/usr/share/icons/sistema.png" -t 5000'
-echo "Entorno de escritorio GNOME/SHELL" >> installed.log
+su $user -c 'notify-send "PostInstallerF" "Completada la instalacion Entorno de escritorio GNOME/SHELL" -i "/usr/share/icons/sistema.png" -t 5000'
+
 
     }
 
@@ -848,8 +687,8 @@ kdesk(){
             $especific @kde-desktop | $localprogress
 
 
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion Entorno de escritorio KDE" -i "/usr/share/icons/sistema.png" -t 5000'
-echo "Entorno de escritorio KDE" >> installed.log
+su $user -c 'notify-send "PostInstallerF" "Completada la instalacion Entorno de escritorio KDE" -i "/usr/share/icons/sistema.png" -t 5000'
+
 
     }
 
@@ -860,8 +699,8 @@ xfdesk(){
 $postlist greybird-gtk2-theme greybird-gtk2-theme greybird-xfwm4-theme greybird-xfce4-notifyd-theme xfce4-volumed | $progress
 
 
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Entorno de escritorio XFCE" -i "/usr/share/icons/sistema.png" -t 5000'
-echo "Entorno de escritorio XFCE" >> installed.log
+su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Entorno de escritorio XFCE" -i "/usr/share/icons/sistema.png" -t 5000'
+
 
     }
 
@@ -869,8 +708,8 @@ echo "Entorno de escritorio XFCE" >> installed.log
 lxdesk(){
             $especific @lxde-desktop | $localprogress
 
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Entorno de escritorio LXDE" -i "/usr/share/icons/sistema.png" -t 5000'
-echo "Entorno de escritorio LXDE" >> installed.log
+su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Entorno de escritorio LXDE" -i "/usr/share/icons/sistema.png" -t 5000'
+
 
     }
 
@@ -881,113 +720,33 @@ yum -y groupinstall mate-desktop | $localprogress
 $postlist mate-media | $progress
 
 
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Entorno de escritorio MATE" -i "/usr/share/icons/sistema.png" -t 5000'
-echo "Entorno de escritorio MATE" >> installed.log
+su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Entorno de escritorio MATE" -i "/usr/share/icons/sistema.png" -t 5000'
+
 
     }
 
-razor(){
-
-if [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "17" ]
-then
-xterm -e 'wget -c -P/etc/yum.repos.d/ http://download.opensuse.org/repositories/X11:/QtDesktop/Fedora_17/X11:QtDesktop.repo'
-wait ${!}
-postinstaller -u
-
-$postlist razorqt | $progress
-
-elif [ $(rpm -q --queryformat '%{VERSION}\n' fedora-release) = "16" ]; then
-xterm -e 'wget -c -P/etc/yum.repos.d/ http://download.opensuse.org/repositories/X11:/QtDesktop/Fedora_16/X11:QtDesktop.repo'
-wait ${!}
-yum -y --exclude=kernel* update | pv -n 2>&1 | yad --class="Installing" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando nuevos repositorios" --text="Por favor espere...." --pulsate --auto-close --width=350
-
-$postlist razorqt | $progress
-fi
-
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Entorno de escritorio Razor-qt" -i "/usr/share/icons/sistema.png" -t 5000'
-echo "Entorno de escritorio Razor-qt" >> installed.log
-
-    }
 
 SLinux(){
             
-enable="SELINUX=enforcing"
-disable="SELINUX=disabled"
-seconfig=$(sed -n '7p' /etc/selinux/config); echo "seconfig = $seconfig"
-
-cp -f /etc/selinux/config /etc/selinux/config.bak
-
-if [ "$seconfig" = "$enable" ]; then 
-zenity --question --title="Do you want disable SELinux?" --text="Detected enable SELinux" --ok-label "Yes" --cancel-label "No"
-if [[ $? -eq 0 ]]; then
-sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Se ha desactivado SELinux"
-else
-echo 'Cuando tu quieras'
-fi
-
-elif [ "$seconfig" = "$disable" ]; then
-zenity --question --title="Do you want enable SELinux?" --text="Detected disable SELinux" --ok-label "Yes" --cancel-label "No"
-if [[ $? -eq 0 ]]; then
-sed -i s/SELINUX=disabled/SELINUX=enforcing/g /etc/selinux/config
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Se ha activado SELinux"
-else
-echo 'cuando tu quieras'
-fi
-
-fi
-
-su $noti -c 'notify-send "PostInstallerF" "Completada la Desactivacion o Activacion de SELinux" -i "/usr/share/icons/sistema.png" -t 5000'
-
+postinstaller -a
 
     }
 
 
 frozen(){
             
-enable="exclude=kernel*"; echo "enable = $enable"
-krozker=$(grep "exclude=kernel*" /etc/yum.conf); echo "krozker = $krozker"
-disable=""
-
-if [ -f /etc/yum.conf.bak ]; then
-echo 'el backup ya fue creado'
-else
-cp -f /etc/yum.conf /etc/yum.conf.bak
-fi
-
-if [ "$krozker" = "$enable" ]; then 
-echo "posiblemente ya este congelado el kernel"
-zenity --question --title="Do you want enable updates kernel?" --text="Detected disable updates kernel" --ok-label "Yes" --cancel-label "No"
-if [[ $? -eq 0 ]]; then
-sed -i '/exclude=kernel*/d' /etc/yum.conf
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Se ha activado las actualizaciones del kernel"
-else
-echo 'Estamos para servirte'
-fi
-
-elif [ "$krozker" = "$disable" ]; then 
-echo "No esta congelado el kernel"
-zenity --question --title="Do you want disable updates kernel?" --text="Detected enable updates kernel" --ok-label "Yes" --cancel-label "No"
-if [[ $? -eq 0 ]]; then
-echo "exclude=kernel*" >> /etc/yum.conf
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Se han desactivado las actualizaciones del kernel"
-else
-echo 'cuando quieras'
-fi
-
-fi
+postinstaller -f
 
     }
 
 grubcus(){
             
-$postlist grub-customizer | $progress
+postinstaller -i grub-customizer
 
 
 if [ -f /usr/bin/grub-customizer ]; then
-$changelog
-echo "Grub Customizer" >> installed.log
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Grub Customizer" -i "/usr/share/icons/sistema.png" -t 5000'
+
+su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Grub Customizer" -i "/usr/share/icons/sistema.png" -t 5000'
 else 
 zenity --info --title="PostInstallerF" --text="Por alguna razon Grub Customizer no esta instalado, vuelva a intentar "
 fi
@@ -1014,7 +773,7 @@ yad --title="Log viewer" --window-icon=logviewer \
     --column @font@ --column @back@
 
 exit $?
-su $noti -c 'notify-send "PostInstallerF" "Acabas de ver los errores del sistema" -i "/usr/share/icons/sistema.png" -t 5000'
+su $user -c 'notify-send "PostInstallerF" "Acabas de ver los errores del sistema" -i "/usr/share/icons/sistema.png" -t 5000'
 
 }
 
@@ -1023,149 +782,14 @@ reposi(){
 
 gpk-prefs
 
-su $noti -c 'notify-send "PostInstallerF" "Recuerde los cambios hechos en los repositorios" -i "/usr/share/icons/sistema.png" -t 5000'
+su $user -c 'notify-send "PostInstallerF" "Recuerde los cambios hechos en los repositorios" -i "/usr/share/icons/sistema.png" -t 5000'
 
 }
 
 
 nvidia(){
 
-PKGSINSTALLED=$(rpm -qa *kmod-nvidia*)
-targra=$(lspci | grep -i nvidia | grep VGA |grep -i GeForce | awk '{print $8,$9,$10}' | sed 's/[[]//g' | sed 's/[]]//g'); echo "targra=$targra"
-
-lspci | grep -i nvidia | grep VGA | awk '{print $8,$9,$10}' | sed 's/[[]//g' | sed 's/[]]//g' >> /tmp/targra2.txt
-
-# Check if user really has a nvidia video card
-	VGA=$(lspci | grep -i nvidia | grep VGA) > /dev/null
-	if [[ "$?" != 0 ]]; then
-echo 'No nVidia card detected'
-zenity --info --title="PostInstallerF" --text="No nVidia card detected"
-else
-
-	if [[ -n "$PKGSINSTALLED" ]]; then
-
-		echo 'nVidia driver seems to be already installed'
-zenity --info --title="PostInstallerF" --text="nVidia driver seems to be already installed"
-else
-
-foo8=$(w3m -dump ftp://download.nvidia.com/XFree86/Linux-x86_64/290.10/README/supportedchips.html); echo "foo8=$foo8" >> /tmp/nvdia.txt
-
-
-egrep 'GeForce 6' /tmp/nvdia.txt | sed '1d' | awk '{print $1,$2,$3,$4,$5}' >> /tmp/lastest_nvdia.txt
-egrep 'GeForce 7' /tmp/nvdia.txt | sed '1d' | awk '{print $1,$2,$3,$4,$5}' >> /tmp/lastest_nvdia.txt
-egrep 'GeForce 8' /tmp/nvdia.txt | sed '1d' | awk '{print $1,$2,$3,$4,$5}' >> /tmp/lastest_nvdia.txt
-egrep 'GeForce 2' /tmp/nvdia.txt | sed '1d' | awk '{print $1,$2,$3,$4,$5}' >> /tmp/lastest_nvdia.txt
-egrep 'GeForce 3' /tmp/nvdia.txt | sed '1d' | awk '{print $1,$2,$3,$4,$5}' >> /tmp/lastest_nvdia.txt
-egrep 'GeForce 4' /tmp/nvdia.txt | sed '1d' | awk '{print $1,$2,$3,$4,$5}' >> /tmp/lastest_nvdia.txt
-egrep 'GeForce 5' /tmp/nvdia.txt | sed '1d' | awk '{print $1,$2,$3,$4,$5}' >> /tmp/lastest_nvdia.txt
-egrep 'GeForce FX' /tmp/nvdia.txt | sed '1d' | awk '{print $1,$2,$3,$4,$5}' >> /tmp/lastest_nvdia.txt
-egrep 'GeForce4' /tmp/nvdia.txt | sed '1d' | awk '{print $1,$2,$3,$4,$5}' >> /tmp/lastest_nvdia.txt
-egrep 'GeForce2' /tmp/nvdia.txt | sed '1d' | awk '{print $1,$2,$3,$4,$5}' >> /tmp/lastest_nvdia.txt
-
-wait ${!}
-
-VGA=$(grep "$targra" /tmp/lastest_nvdia.txt) > /dev/null
-	if [[ "$?" != 0 ]]; then
-echo 'No nVidia card compatible'
-cat /dev/null > /tmp/nvdia.txt
-cat /dev/null > /tmp/lastest_nvdia.txt
-cat /dev/null > /tmp/targra2.txt
-zenity --info --title="PostInstallerF" --text="No nVidia card compatible"
-else
-echo 'ya la hiciste rey'
-zenity --question --title="Do you want install Nvidia Drivers?" --text="Remember this funtion is experimental" --ok-label "Yes" --cancel-label "No"
-
-if [[ $? -eq 0 ]]; then
-
-VGA3=$(grep 'GeForce FX' /tmp/targra2.txt) > /dev/null
-	if [[ "$?" = 0 ]]; then
-echo '173.14.xx driver'
-yum -y update kernel | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando el kernel" --text="Por favor espere puede tardar mucho...." --pulsate --auto-close --width=350
-
-$postlist akmod-nvidia-173xx xorg-x11-drv-nvidia-173xx-libs.i686 | $progress
-
-mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img
-
-dracut /boot/initramfs-$(uname -r).img $(uname -r)
-
-xterm -e 'nvidia-xconfig'
-
-cat /dev/null > /tmp/nvdia.txt
-cat /dev/null > /tmp/lastest_nvdia.txt
-cat /dev/null > /tmp/targra2.txt
-
-su $noti -c 'notify-send "PostInstallerF" "Se ha instalado los drivers Nvidia, por favor reinicie el sistema" -i "/usr/share/icons/sistema.png" -t 5000'
-fi
-
-VGA4=$(grep -e 'GeForce4' -e 'GeForce2' /tmp/targra2.txt) > /dev/null
-	if [[ "$?" = 0 ]]; then
-echo '96.43.xx driver'
-yum -y update kernel | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando el kernel" --text="Por favor espere puede tardar mucho...." --pulsate --auto-close --width=350
-
-$postlist akmod-nvidia-96xx xorg-x11-drv-nvidia-96xx-libs.i686 | $progress
-
-mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img
-
-dracut /boot/initramfs-$(uname -r).img $(uname -r)
-
-xterm -e 'nvidia-xconfig'
-
-cat /dev/null > /tmp/nvdia.txt
-cat /dev/null > /tmp/lastest_nvdia.txt
-cat /dev/null > /tmp/targra2.txt
-
-su $noti -c 'notify-send "PostInstallerF" "Se ha instalado los drivers Nvidia, por favor reinicie el sistema" -i "/usr/share/icons/sistema.png" -t 5000'
-fi
-
-
-VGA7=$(grep -e 'GeForce 2' -e 'GeForce 3' -e 'GeForce 4' -e 'GeForce 5' -e 'GeForce 6' -e 'GeForce 7' /tmp/targra2.txt) > /dev/null
-	if [[ "$?" = 0 ]]; then
-echo 'Series 304'
-yum -y update kernel | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando el kernel" --text="Por favor espere puede tardar mucho...." --pulsate --auto-close --width=350
-
-$postlist akmod-nvidia-304xx xorg-x11-drv-nvidia-304xx-libs | $progress
-
-mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img
-
-dracut /boot/initramfs-$(uname -r).img $(uname -r)
-
-xterm -e 'nvidia-xconfig'
-
-cat /dev/null > /tmp/nvdia.txt
-cat /dev/null > /tmp/lastest_nvdia.txt
-cat /dev/null > /tmp/targra2.txt
-
-su $noti -c 'notify-send "PostInstallerF" "Se ha instalado los drivers Nvidia, por favor reinicie el sistema" -i "/usr/share/icons/sistema.png" -t 5000'
-fi
-
-
-
-VGA8=$(grep -e 'GeForce 8' -e 'GeForce 9' /tmp/targra2.txt) > /dev/null
-	if [[ "$?" = 0 ]]; then
-echo 'Nuevos controladores'
-yum -y update kernel | pv -n 2>&1 | yad --class="Actualizando" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/updatep.png" --image-on-top --progress --title "Actualizando el kernel" --text="Por favor espere puede tardar mucho...." --pulsate --auto-close --width=350
-
-$postlist akmod-nvidia xorg-x11-drv-nvidia-libs | $progress
-
-mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img
-
-dracut /boot/initramfs-$(uname -r).img $(uname -r)
-
-xterm -e 'nvidia-xconfig'
-
-cat /dev/null > /tmp/nvdia.txt
-cat /dev/null > /tmp/lastest_nvdia.txt
-cat /dev/null > /tmp/targra2.txt
-
-su $noti -c 'notify-send "PostInstallerF" "Se ha instalado los drivers Nvidia, por favor reinicie el sistema" -i "/usr/share/icons/sistema.png" -t 5000'
-fi
-
-
-fi
-echo 'cuando tu quieras'
-fi
-fi
- fi
+/usr/bin/postinstallerf/tweek/nvidia
 
 }
 
@@ -1186,6 +810,7 @@ yum-complete-transaction --cleanup-only -y | $localprogress
 yum clean all 
 
 postinstaller -u
+
 setenforce 1
 
 
@@ -1202,7 +827,7 @@ yum clean all
 postinstaller -u
 fi
 
-su $noti -c 'notify-send "PostInstallerF" "Se ha actualizado el sistema" -i "/usr/share/icons/sistema.png" -t 5000'
+su $user -c 'notify-send "PostInstallerF" "Se ha actualizado el sistema" -i "/usr/share/icons/sistema.png" -t 5000'
 
     }
     
@@ -1211,9 +836,6 @@ su $noti -c 'notify-send "PostInstallerF" "Se ha actualizado el sistema" -i "/us
     ## Initialising PostInstallerF
     ##
 
-
-    installed="cat /usr/share/.postinstallerf/installed.log"
-    cd /usr/share/.postinstallerf
      
     #initialising pkcon install-list
     postlist='pkcon -p -y install'
@@ -1225,7 +847,7 @@ su $noti -c 'notify-send "PostInstallerF" "Se ha actualizado el sistema" -i "/us
     especific='yum -y install'
    
     # Define Architecture
-    architecture=$(uname -p)
+    architecture=$(uname -m)
 
     # Define version Fedora
     version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
@@ -1243,16 +865,7 @@ su $noti -c 'notify-send "PostInstallerF" "Se ha actualizado el sistema" -i "/us
     postRoot="exit; "
      
     #initialising notification
-    noti=$(logname); echo "noti = $noti"
-    noti3=$(loginctl show-session $XDG_SESSION_ID | grep 'Name' | cut -d= -f2 | tail -n 1); echo "noti3 = $noti3"
-
-    #initialising change directory default log
-    changelog="cd /usr/share/.postinstallerf/"
-
-
-# its others alternative similar initialising other users or notification 
-# noti=$(who am i | awk '{print $1}'); echo "noti = $noti"
-# username=$(zenity --entry --text="Username"); echo "username = $username"
+    user=$(loginctl show-session $XDG_SESSION_ID | grep 'Name' | cut -d= -f2 | tail -n 1)
 
 
 # running PostInstallerF...
@@ -1279,9 +892,8 @@ su $noti -c 'notify-send "PostInstallerF" "Se ha actualizado el sistema" -i "/us
      
     #if there was something to do
     if test ${#choice} -gt 0; then
-       /usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg
-       su $noti -c 'notify-send "Terminado!" "Todo está completado" -i "/usr/share/icons/pinguino.png" -t 10000'
-       
+       echo 'todo terminado'
+       cleanlist	 
             
     fi
 

@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=/usr/bin/postinstallerf/auntenticacion /usr/bin/postinstallerf/tweek/mate 
+Exec=/usr/bin/postinstallerf/tweek/mate 
 Version=1.0
 Type=Application
 Name=Mate Desktop

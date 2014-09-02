@@ -2,6 +2,43 @@
 
 source /usr/bin/postinstallerf/pid
 
+# Called whenever anything needs to be run as root ($@ is the command)
+runasroot() {
+  if [[ $UID -eq 0 ]]; then
+    "$@"
+  elif zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | sudo -S -v &>/dev/null && sudo -l "$@" &>/dev/null; then
+    sudo -E "$@"
+  else
+    echo -n "root "
+    zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | su -c "$(printf '%q ' "$@")"
+  fi
+}
+
+
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian')
+
+if [ $dist = Ubuntu ]; then
+
+if [ $(dpkg-query -Wf '${db:Status-abbrev}' mate-desktop-environment) = ii ]; then
+status='INSTALLED'
+tarea='Update'
+else
+status='NO INSTALLED'
+tarea='Install'
+fi
+
+elif [ "$dist" = MANJARO ]; then
+           
+if (pacman -Q mate >/dev/null) ; then 
+status='INSTALLED'
+tarea='Update'
+else
+status='NO INSTALLED'
+tarea='Install'
+fi
+
+elif [ -f /etc/fedora-release ]; then
+
 if [ $(rpm -qa mate-desktop | grep -c mate-desktop) -gt 0 ]; then
 status='INSTALLED'
 tarea='Update'
@@ -9,6 +46,7 @@ else
 status='NO INSTALLED'
 tarea='Install'
 fi
+  fi
 
 Comment='<span size="xx-large">Mate Desktop Environment</span>'
 
@@ -30,6 +68,26 @@ if [[ $tarea = Update ]]; then
 echo 'installed Mate Desktop Environment'
 postinstaller -u
 elif [[ $tarea = Install ]]; then
-postinstaller -g @mate
+if [ $dist = Ubuntu ]; then
+echo "deb http://repo.mate-desktop.org/archive/1.8/ubuntu $(lsb_release -cs) main" | pkexec tee /etc/apt/sources.list.d/mate-desktop.list
+wget -qO - http://mirror1.mate-desktop.org/debian/mate-archive-keyring.gpg | sudo apt-key add -
+sudo apt-get -y update
+postinstaller -i mate-core -i mate-desktop-environment -i mate-notification-daemon
+elif [ -f /etc/fedora-release ]; then
+pkexec postinstaller -g mate
+fi
+
+elif [ $dist = MANJARO ]; then 
+postinstaller -i mate -i mate-extra
+fi
+
 fi
    fi
+
+
+# Clean lck 
+if [[ "$(id -u)" -eq 0 ]]; then
+rm -f /tmp/mate..lck
+else
+cat /dev/null > /tmp/mate..lck
+fi

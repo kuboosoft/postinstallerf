@@ -1,15 +1,12 @@
 #!/bin/bash
 
-source /usr/bin/postinstallerf/pid
-
 enable='SELINUX=enforcing'
 disable='SELINUX=disabled'
 
-seconfig=$(sed -n '7p' /etc/selinux/config)
-if [[ $seconfig = $enable ]]; then
+if [ $(cat /etc/selinux/config | grep -c 'SELINUX=enforcing') -gt 0 ] ; then
 status='SELINUX ENABLED'
 tarea='Disable'
-elif [[ $seconfig = $disable ]]; then
+elif [ $(cat /etc/selinux/config | grep -c 'SELINUX=disabled') -gt 0 ] ; then
 status='SELINUX DISABLED'
 tarea='Enable'
 fi
@@ -35,8 +32,9 @@ cp -f /etc/selinux/config /etc/selinux/config.bak
 fi
 
 
-if [[ "$seconfig" = "$enable" ]]; then 
-zenity --question --title="Do you want disable SELinux?" --text="Detected enable SELinux" --ok-label "Yes" --cancel-label "No"
+if [[ "$tarea" = Disable ]]; then 
+zenity --question --title="Atention" --text="Do you want disable SELinux?
+Detected enable SELinux" --ok-label "Yes" --cancel-label "No"
 if [[ $? -eq 0 ]]; then
 sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
 yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Se ha desactivado SELinux"
@@ -44,8 +42,9 @@ else
 echo 'Cuando tu quieras'
 fi
 
-elif [[ "$seconfig" = "$disable" ]]; then
-zenity --question --title="Do you want enable SELinux?" --text="Detected disable SELinux" --ok-label "Yes" --cancel-label "No"
+elif [[ "$tarea" = Enable ]]; then
+zenity --question --title="Atention" --text="Do you want enable SELinux?
+Detected disable SELinux" --ok-label "Yes" --cancel-label "No"
 if [[ $? -eq 0 ]]; then
 sed -i s/SELINUX=disabled/SELINUX=enforcing/g /etc/selinux/config
 yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Se ha activado SELinux"
@@ -53,6 +52,16 @@ else
 echo 'cuando tu quieras'
 fi
 
-fi   
+fi 
 
-  fi      
+rm -f /tmp/selinux-on-of..lck  
+
+  fi  
+
+# Clean lck 
+if [[ "$(id -u)" -eq 0 ]]; then
+rm -f /tmp/selinux-on-of..lck
+else
+cat /dev/null > /tmp/selinux-on-of..lck
+fi 
+ 

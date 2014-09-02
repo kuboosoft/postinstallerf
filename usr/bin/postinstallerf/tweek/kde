@@ -1,6 +1,44 @@
 #!/bin/bash
 
 source /usr/bin/postinstallerf/pid
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
+
+# Called whenever anything needs to be run as root ($@ is the command)
+runasroot() {
+  if [[ $UID -eq 0 ]]; then
+    "$@"
+  elif zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | sudo -S -v &>/dev/null && sudo -l "$@" &>/dev/null; then
+    sudo -E "$@"
+  else
+    echo -n "root "
+    zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | su -c "$(printf '%q ' "$@")"
+  fi
+}
+
+
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian')
+
+if [ $dist = Ubuntu ]; then
+
+if [ $(dpkg-query -Wf '${db:Status-abbrev}' kubuntu-desktop) = ii ]; then
+status='INSTALLED'
+tarea='Update'
+else
+status='NO INSTALLED'
+tarea='Install'
+fi
+
+elif [ "$dist" = MANJARO ]; then
+           
+if (pacman -Q kde >/dev/null) ; then 
+status='INSTALLED'
+tarea='Update'
+else
+status='NO INSTALLED'
+tarea='Install'
+fi
+
+elif [ -f /etc/fedora-release ]; then
 
 if [ $(rpm -qa kde-workspace | grep -c kde-workspace) -gt 0 ]; then
 status='INSTALLED'
@@ -9,6 +47,7 @@ else
 status='NO INSTALLED'
 tarea='Install'
 fi
+ fi
 
 Comment='<span size="xx-large">Kde Desktop Environment</span>'
 
@@ -29,7 +68,29 @@ if [[ $ret -eq 0 ]]; then
 if [[ $tarea = Update ]]; then
 echo 'installed Kde Desktop Environment'
 postinstaller -u
+
 elif [[ $tarea = Install ]]; then
-postinstaller -g @kde
+
+if [ $dist = Ubuntu ]; then
+postinstaller -i kubuntu-desktop 
+
+elif [ -f /etc/fedora-release ]; then
+pkexec postinstaller -g kde
+
+elif [ $dist = MANJARO ]; then 
+postinstaller -i kde -i kdeplasma-applets-plasma-nm
+fi
+
 fi
    fi
+
+
+
+
+
+# Clean lck 
+if [[ "$(id -u)" -eq 0 ]]; then
+rm -f /tmp/kde..lck
+else
+cat /dev/null > /tmp/kde..lck
+fi

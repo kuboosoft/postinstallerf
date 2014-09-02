@@ -24,6 +24,7 @@
 # +--------------------------------------------------------------------------------------------------+
 
 source /usr/bin/postinstallerf/pid
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
 
 
 yad --center --image="/usr/share/icons/acciones/Multimedia.png" --image-on-top --icons --name="PostInstallerF - Multimedia" --window-icon="/usr/share/icons/acciones/topicon.png" --width=800 --height=500  --read-dir="/usr/share/app-install-data-postinstallerf/applications/Multimedia/" --title="PostInstallerF - Multimedia" --item-width=90 --compact --button="Donate:0" --button="Repositories:2" --button="Close:1" 
@@ -31,10 +32,20 @@ yad --center --image="/usr/share/icons/acciones/Multimedia.png" --image-on-top -
 ret=$?
 
 if [[ $ret -eq 0 ]]; then
-
+rm -f /tmp/Multimedia..lck
 	xdg-open http://www.kuboosoft.blogspot.com/ 
+
+/usr/bin/postinstallerf/categorias/Multimedia
+
 elif [[ $ret -eq 2 ]]; then
-gpk-prefs 
+if [ "$dist" = Ubuntu ]; then
+software-properties-gtk
+else
+gpk-prefs
+fi 
+rm -f /tmp/Multimedia..lck
+/usr/bin/postinstallerf/categorias/Multimedia
+
 elif [[ $ret -eq 1 ]]; then
 	echo "Nothing to do"
 	fi

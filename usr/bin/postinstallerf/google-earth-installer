@@ -1,0 +1,316 @@
+#!/bin/bash
+# Licensed under the GNU General Public License Version 3
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+# http://sourceforge.net/projects/postinstaller/
+# Contact: https://plus.google.com/u/0/communities/118230919321773121406
+
+
+
+Name='google-earth'
+Version='7.1.2.2041'
+tmp_download_dir="/tmp/$Name-$Version"
+License='Proprietary'
+installdir='/tmp/installdir'
+Url='https://www.google.com/earth/index.html'
+
+if [ `getconf LONG_BIT` = "64" ]; then
+Source="https://dl.google.com/earth/client/current/google-earth-stable_current_amd64.deb"
+package='google-earth-stable_current_amd64.deb'
+else
+Source="https://dl.google.com/earth/client/current/google-earth-stable_current_i386.deb"
+package='google-earth-stable_current_i386.deb'
+fi
+
+Packer='None'
+Emailpacker='none at gmail dot com'
+Destiny='rpm'
+Architecture=$(uname -m)
+Release='4'
+Distribution='fc20'
+Group='Applications/Internet'
+
+if [ `getconf LONG_BIT` = "64" ]; then
+Checksum='6979fd255895891fea8c98fa02fd243d'
+else
+Checksum='c9675d0078d1b188188c9d3b616de6fa'
+fi
+
+#BuildRequires
+BR='ruby-fpm'
+BR2='wget'
+BR3='bsdtar'
+BR4='binutils'
+BR5='packagekit'
+BR6='ruby-devel'
+BR7='libffi'
+BR8='glibc'
+BR9='rpm-build'
+BR10='qt-x11'
+BR11='proj'
+
+
+# Requires
+if [ `getconf LONG_BIT` = "64" ]; then
+A='desktop-file-utils' 
+B='fontconfig' 
+C='fontconfig(x86-32)'
+D='hicolor-icon-theme' 
+E='redhat-lsb' 
+F='libSM' 
+G='libXrender' 
+H='libXrender(x86-32)'
+I='mesa-libGL' 
+J='mesa-libGL(x86-32)'
+L='shared-mime-info' 
+M='xdg-utils' 
+N='ncurses'
+O='libSM'
+P='libSM(x86-32)'
+Q='nss-mdns' 
+R='nss-mdns(x86-32)' 
+S='qt-x11'
+T='proj'
+else
+A='desktop-file-utils' 
+B='fontconfig' 
+D='hicolor-icon-theme' 
+E='redhat-lsb' 
+F='libSM' 
+G='libXrender' 
+I='mesa-libGL' 
+L='shared-mime-info' 
+M='xdg-utils' 
+N='ncurses'
+O='libSM'
+Q='nss-mdns' 
+S='qt-x11'
+T='proj'
+fi
+
+# prep
+echo '=> Preparing package'
+
+echo '=> Checking Build Requires'
+
+if [ $(rpm -qa | grep -c $BR6) -gt 0 ]; then
+    echo "$BR6 is present"
+else
+pkcon -p -y install $BR6
+fi
+
+if [ $(rpm -qa | grep -c $BR2) -gt 0 ]; then
+    echo "$BR2 is present"
+else
+pkcon -p -y install $BR2
+fi
+
+if [ $(rpm -qa | grep -c $BR3) -gt 0 ]; then
+    echo "$BR3 is present"
+else
+pkcon -p -y install $BR3
+fi
+
+if [ $(rpm -qa | grep -c $BR7) -gt 0 ]; then
+    echo "$BR7 is present"
+else
+pkcon -p -y install $BR7
+fi
+
+if [ $(rpm -qa | grep -c $BR8) -gt 0 ]; then
+    echo "$BR8 is present"
+else
+pkcon -p -y install $BR8
+fi
+
+if [ $(rpm -qa | grep -c $BR9) -gt 0 ]; then
+    echo "$BR9 is present"
+else
+pkcon -p -y install $BR9
+fi
+
+if [ $(rpm -qa | grep -c $BR10) -gt 0 ]; then
+    echo "$BR10 is present"
+else
+pkcon -p -y install $BR10
+fi
+
+
+if [ $(rpm -qa | grep -c $BR11) -gt 0 ]; then
+    echo "$BR11 is present"
+else
+pkcon -p -y install $BR11
+fi
+
+
+if [ ! -f $HOME/bin/fpm ]; then
+gem install fpm
+fi
+
+wait ${!}
+
+install -dm 755 /tmp/installdir/
+
+cd /tmp/
+echo '=> Downloading sources'
+wget -c --timeout=30 --tries=3 "$Source"
+
+wait ${!}
+check=$(md5sum /tmp/$package | awk '{print $1}')
+
+wait ${!}
+ if [[ ! -f "/tmp/$package" ]] || [[ $check != $Checksum ]]; then
+echo ':: corrupt download'
+rm -f /tmp/$package
+wget -c --timeout=30 --tries=3 "$Source"
+bsdtar -xf $package -C $installdir
+bsdtar -xf $installdir/data.tar.lzma -C $installdir
+else
+echo '=> Extracting sources'
+bsdtar -xf $package -C $installdir
+bsdtar -xf $installdir/data.tar.lzma -C $installdir
+fi
+
+# Description
+
+description='A 3D interface to view satellite images of Earth and other objects'
+
+
+# build
+echo '=> Building package'
+
+install -dm 755 $installdir/usr/share/applications/
+install -dm 755 $installdir/usr/share/mime/packages/
+
+	# The .desktop
+	mv $installdir/opt/google/earth/free/google-earth.desktop $installdir/usr/share/applications/
+ 
+	# Icons
+	for i in 16 22 24 32 48 64 128 256; do
+		install -Dm644 $installdir/opt/google/earth/free/product_logo_${i}.png $installdir/usr/share/icons/hicolor/${i}x${i}/apps/google-earth.png
+	done
+ 
+	# The MIME package
+
+cat > $installdir/usr/share/mime/packages/google-earth-mimetypes.xml << EOF
+<?xml version="1.0"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+  <mime-type type="application/vnd.google-earth.kml+xml">
+    <comment>Keyhole Markup Language data</comment>
+    <glob pattern="*.kml"/>
+  </mime-type>
+
+  <mime-type type="application/vnd.google-earth.kmz">
+    <comment>Keyhole Markup Language archive</comment>
+    <glob pattern="*.kmz"/>
+  </mime-type>
+
+  <mime-type type="application/keyhole">
+    <comment>Keyhole Markup Language data</comment>
+  </mime-type>
+
+  <mime-type type="application/earthviewer">
+    <comment>Keyhole Markup Language data</comment>
+  </mime-type>
+</mime-info>
+EOF
+
+ 
+	# "Removing the Debian-intended cron job and duplicated images"
+	rm -rf $installdir/etc/cron.daily
+	rm -rf $installdir/opt/google/earth/free/product_logo_*.png
+	rm -rf $installdir/usr/share/man
+ 
+# Fix Rpath problems
+
+if [ `getconf LONG_BIT` = "64" ]; then
+rm -f $installdir/opt/google/earth/free/libproj.so.0 
+ln -s /usr/lib64/libproj.so.0 $installdir/opt/google/earth/free/
+
+rm -f $installdir/opt/google/earth/free/plugins/imageformats/libqjpeg.so
+ln -s /usr/lib64/qt4/plugins/imageformats/libqjpeg.so $installdir/opt/google/earth/free/plugins/imageformats/
+
+rm -f $installdir/opt/google/earth/free/plugins/imageformats/libqgif.so
+ln -s /usr/lib64/qt4/plugins/imageformats/libqgif.so $installdir/opt/google/earth/free/plugins/imageformats/
+
+else
+rm -f $installdir/opt/google/earth/free/libproj.so.0 
+ln -s /usr/lib/libproj.so.0 $installdir/opt/google/earth/free/
+
+rm -f $installdir/opt/google/earth/free/plugins/imageformats/libqjpeg.so
+ln -s /usr/lib/qt4/plugins/imageformats/libqjpeg.so $installdir/opt/google/earth/free/plugins/imageformats/
+
+
+rm -f $installdir/opt/google/earth/free/plugins/imageformats/libqgif.so
+ln -s /usr/lib/qt4/plugins/imageformats/libqgif.so $installdir/opt/google/earth/free/plugins/imageformats/
+
+fi
+
+
+# Removing the Debian package files 
+rm -f $installdir/control.tar.gz
+rm -f $installdir/debian-binary
+rm -f $installdir/data.tar.lzma
+
+
+wait ${!}
+
+# install
+
+if [ ! -f $HOME/bin/fpm ]; then
+echo 'fmp no found, try: gem install fpm '
+exit
+fi
+
+cd $installdir
+
+if [ `getconf LONG_BIT` = "64" ]; then
+fpm -s dir -t $Destiny -n $Name -v $Version --iteration "$Release.$Distribution" --category "$Group" -m "$Packer <$Emailpacker>" -a "$Architecture" --license "$License" --url "$Url" --description "$description" -d "$A" -d "$B" -d "$C" -d "$D" -d "$E" -d "$F" -d "$G" -d "$H" -d "$I" -d "$J" -d "$L" -d "$M" -d "$N" -d "$O" -d "$P" -d "$Q" -d "$R" -d "$S" -d "$T" -C $installdir usr/ opt/ 
+else
+fpm -s dir -t $Destiny -n $Name -v $Version --iteration "$Release.$Distribution" --category "$Group" -m "$Packer <$Emailpacker>" -a "$Architecture" --license "$License" --url "$Url" --description "$description" -d "$A" -d "$B" -d "$D" -d "$E" -d "$F" -d "$G" -d "$I" -d "$L" -d "$M" -d "$N" -d "$O" -d "$Q" -d "$S" -d "$T" -C $installdir usr/ opt/
+fi
+
+wait ${!}
+echo '=> Building done'
+
+echo '=> Installing package'
+
+postinstaller -l "$installdir/$Name-$Version-$Release.$Distribution.$Architecture.$Destiny"
+
+if [[ $(rpm -qa skype | grep -c skype) -gt 0 ]] ; then
+echo '=> Installation completed'
+else
+echo '=> Installation failed'
+fi
+
+# Do you need help? 
+
+# packing with fpm
+# https://github.com/jordansissel/fpm 
+
+# groups fedora/centos/redhat
+# http://fedoraproject.org/wiki/RPMGroups
+
+# groups opensuse
+# http://en.opensuse.org/openSUSE:Package_group_guidelines
+
+# groups mageia
+# https://wiki.mageia.org/en/RPM_groups_policy
+
+# groups Openmandriva
+# http://wiki.mandriva.com/en/Development/Packaging/Groups
+
+# Distributions
+# Fedora = fc20, fc21...
+# RedHat/Centos= el6...
+# Mageia = mga4...
+# Openmandriva= omv2014.0
+# Rosa = mib2012.1
+
+# Architecture
+# Fedora/centos/redhat= i686, x86_64
+# Opensuse, Mageia, openmandriva, rosa = i586, x86_64
+# Use uname if you want actual architecture $(uname -p)
+

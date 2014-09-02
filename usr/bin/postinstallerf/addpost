@@ -25,6 +25,24 @@
 
 source /usr/bin/postinstallerf/pid
 
+
+cleanlist() {
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/addpost..lck
+else
+cat /dev/null > /tmp/addpost..lck
+fi
+}
+
+
+if [ "$(id -u)" -eq 0 ]; then
+echo 'root'
+else
+echo 'no root'
+cleanlist
+exit
+fi
+
     generateInstallMenu(){ 
             im="yad --center --image="/usr/share/icons/acciones/add.png" --image-on-top --class="Install" --window-icon="/usr/share/icons/acciones/add.png" --list --checklist  --width=700 --height=500 --title \"PostInstallerF (Ver 1.5.0)\" --text \"Select items from the list below\" "
             im=$im"--column=\"\" --column \"Application\" --column \"Description\"    --column \"Status\"                           "
@@ -229,13 +247,6 @@ im=$im"FALSE \"ProjectLibre\"         \"ProjectLibre es la alternativa de códig
 fi
             fi
 
-if ! $installed | grep "Adobe Reader" > /dev/null; then
-                    if [ -f /usr/bin/acroread ]; then
-                    im=$im"FALSE \"Adobe Reader\"             \"Visor de PDF fácil de ver, buscar, imprimir\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Adobe Reader\"             \"Visor de PDF fácil de ver, buscar, imprimir\" \"NO INSTALADO  \"  "
-fi
-            fi
 
 if ! $installed | grep "PDF Mod" > /dev/null; then
 if [ -f /usr/bin/pdfmod ]; then
@@ -250,14 +261,6 @@ if [ -f /usr/bin/pdfsam ]; then
                     im=$im"FALSE \"PDF Split and Merge\"                \"Herramienta fácil de usar para combinar y dividir documentos en formato pdf\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"PDF Split and Merge\"                \"Herramienta fácil de usar para combinar y dividir documentos en formato pdf\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-if ! $installed | grep "YAGF" > /dev/null; then
-if [ -f /usr/bin/yagf ]; then
-                    im=$im"FALSE \"YAGF\"                \"Herramienta de reconocimiento de texto con interfaz gráfica para la escritura cuneiforme y Tesseract.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"YAGF\"                \"Herramienta de reconocimiento de texto con interfaz gráfica para la escritura cuneiforme y Tesseract.\" \"NO INSTALADO  \"  "
 fi
             fi
 
@@ -721,15 +724,6 @@ if [ -f /usr/bin/celestia ]; then
                     im=$im"FALSE \"Celestia\"    \"Simulación de espacio visual de tiempo real OpenGL\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Celestia\"    \"Simulación de espacio visual de tiempo real OpenGL\" \"NO INSTALADO  \"  "
-fi
-            fi
-
-
-if ! $installed | grep "Google Earth" > /dev/null; then
-if [ -f /usr/bin/google-earth ]; then
-                    im=$im"FALSE \"Google Earth\"    \"Programa informático similar a un Sistema de Información Geográfica (SIG)\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Google Earth\"    \"Programa informático similar a un Sistema de Información Geográfica (SIG)\" \"NO INSTALADO  \"  "
 fi
             fi
 
@@ -1271,13 +1265,6 @@ im=$im"FALSE \"ProjectLibre\"         \"ProjectLibre is the open source alternat
 fi
             fi
 
-if ! $installed | grep "Adobe Reader" > /dev/null; then
-if [ -f /usr/bin/acroread ]; then
-                    im=$im"FALSE \"Adobe Reader\"             \"Trusted standard for reliably viewing and interacting with PDF files.\" \"INSTALLED  \"  "
-else
-im=$im"FALSE \"Adobe Reader\"             \"Trusted standard for reliably viewing and interacting with PDF files.\" \"NO INSTALLED  \"  "
-fi
-            fi
 
 if ! $installed | grep "PDF Mod" > /dev/null; then
 if [ -f /usr/bin/pdfmod ]; then
@@ -1292,14 +1279,6 @@ if [ -f /usr/bin/pdfsam ]; then
                     im=$im"FALSE \"PDF Split and Merge\"                \"Very simple, easy to use, free, open source utility to split and merge pdf files.\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"PDF Split and Merge\"                \"Very simple, easy to use, free, open source utility to split and merge pdf files.\" \"NO INSTALLED  \"  "
-fi
-            fi
-
-if ! $installed | grep "YAGF" > /dev/null; then
-if [ -f /usr/bin/yagf ]; then
-                    im=$im"FALSE \"YAGF\"                \"Graphical interface for cuneiform and tesseract text recognition tools on the Linux platform.\" \"INSTALLED  \"  "
-else
-im=$im"FALSE \"YAGF\"                \"Graphical interface for cuneiform and tesseract text recognition tools on the Linux platform.\" \"NO INSTALLED  \"  "
 fi
             fi
 
@@ -1769,15 +1748,6 @@ fi
             fi
 
 
-if ! $installed | grep "Google Earth" > /dev/null; then
-if [ -f /usr/bin/google-earth ]; then
-                    im=$im"FALSE \"Google Earth\"    \"3D planet viewer that lets you interactively navigate satellite imagery, maps, terrain, and so forth.\" \"INSTALALED  \"  "
-else
-im=$im"FALSE \"Google Earth\"    \"3D planet viewer that lets you interactively navigate satellite imagery, maps, terrain, and so forth.\" \"NO INSTALLED  \"  "
-fi
-            fi
-
-
 if ! $installed | grep "Gcompris" > /dev/null; then
 if [ -f /usr/bin/gcompris ]; then
                     im=$im"FALSE \"Gcompris\"    \" Educational suite for kids 2-10 years old.\" \"INSTALLED  \"  "
@@ -2128,9 +2098,9 @@ chooseInstalls(){
             choice=`echo $im | sh -`
            
 #installing dependency stdc++-33
-            if test ${#choice} -gt 0; then
-                    libstdc
-            fi
+#            if test ${#choice} -gt 0; then
+#                    libstdc
+#            fi
      
             if echo $choice | grep "Repositorios RPM Fusion" > /dev/null; then
                     extraRepos
@@ -2245,19 +2215,13 @@ if echo $choice | grep "Mozilla Firefox" > /dev/null; then
                     project
             fi
 
-            if echo $choice | grep "Adobe Reader" > /dev/null; then
-                    reader
-            fi
+
             if echo $choice | grep "PDF Mod" > /dev/null; then
                     pdfmod
             fi
 
             if echo $choice | grep "PDF Split and Merge" > /dev/null; then
                     pdfsam
-            fi
-
-            if echo $choice | grep "YAGF" > /dev/null; then
-                    yagsca
             fi
 
             if echo $choice | grep "Scribus" > /dev/null; then
@@ -2495,11 +2459,6 @@ if echo $choice | grep "Celestia" > /dev/null; then
             fi
 
 
-if echo $choice | grep "Google Earth" > /dev/null; then
-                    Earth
-            fi
-
-
 if echo $choice | grep "Gcompris" > /dev/null; then
                     gcompris
             fi
@@ -2705,19 +2664,11 @@ if echo $choice | grep "Microsoft TrueType core fonts" > /dev/null; then
     ## Tweak/Install functions
     ##
 
-libstdc(){
-            #Checking for libstdc++-33
-            if ! $installed | grep "libstdc++-33" > /dev/null; then
-                    #zenity --notification --text "Installing dependency compat-libstdc++-33" &
-                    echo "Installing dependency compat-libstdc++-33..."
-                    $postlist compat-libstdc++-33 | $progress
-            fi
-    }
      
     extraRepos(){
             echo "Adding rpmfusion repositories..."    
             
-$locainst --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$version.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$version.noarch.rpm | $localprogress 
+yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$version.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$version.noarch.rpm | $localprogress 
 
   
     }
@@ -2725,38 +2676,38 @@ $locainst --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free
     lenguaje(){
 
 if [ -x /usr/share/doc/kdesdk* ] && [ $(echo $LANG | cut -b1-2) = "es" ]; then
-$postlist kde-l10n-Spanish | $progress
+postinstaller -i kde-l10n-Spanish 
 
 elif [ -x /usr/share/doc/kdesdk* ] && [ $(echo $LANG | cut -b1-2) = "pt" ]; then
-$postlist kde-l10n-Portuguese | $progress
+postinstaller -i kde-l10n-Portuguese 
 
 
 elif [ -x /usr/share/doc/kdesdk* ] && [ $(echo $LANG | cut -b1-2) = "fr" ]; then
-$postlist kde-l10n-French | $progress
+postinstaller -i kde-l10n-French 
 
 
 
 elif [ -x /usr/share/doc/kdesdk* ] && [ $(echo $LANG | cut -b1-2) = "ja" ]; then
-$postlist kde-l10n-Japanese | $progress
+postinstaller -i kde-l10n-Japanese 
 
 
 
 elif [ -x /usr/share/doc/kdesdk* ] && [ $(echo $LANG | cut -b1-2) = "zh" ]; then
-$postlist kde-l10n-Chinese | $progress
+postinstaller -i kde-l10n-Chinese 
 
 
 
 elif [ -x /usr/share/doc/kdesdk* ] && [ $(echo $LANG | cut -b1-2) = "it" ]; then
-$postlist kde-l10n-Italian | $progress
+postinstaller -i kde-l10n-Italian 
 fi    
     
-            $postlist system-config-language | $progress
+            postinstaller -i system-config-language 
 system-config-language
 
     }
      
     basicompile(){
-            $postlist kernel-headers kernel-devel hg git | $progress
+            postinstaller -i kernel-headers kernel-devel hg git 
 
 yum -y groupinstall "Development Tools" "Legacy Software Development" | $localprogress
 
@@ -2770,17 +2721,17 @@ yum -y groupinstall "x-software-development" | $localprogress
 
 
     zorrito(){
-        $postlist firefox | $progress 
+        postinstaller -i firefox  
 
     }
 
      
     multimediaCodecs(){
 
-$postlist gstreamer-plugins-bad gstreamer-plugins-bad-free-extras gstreamer-plugins-bad-nonfree gstreamer-plugins-ugly gstreamer-ffmpeg ffmpeg mencoder ffmpeg2theora mplayer libdvdcss faac vo-aacenc | $progress
+postinstaller -i gstreamer-plugins-bad -i gstreamer-plugins-bad-free-extras -i gstreamer-plugins-bad-nonfree -i gstreamer-plugins-ugly -i gstreamer-ffmpeg -i ffmpeg -i mencoder -i ffmpeg2theora -i mplayer -i libdvdcss -i faac -i vo-aacenc 
 
 if [ -f /usr/bin/k3b ]; then
-$postlist k3b-extras-freeworld | $progress
+postinstaller -i k3b-extras-freeworld 
 fi
 
 
@@ -2797,18 +2748,18 @@ fi
 
 
 
-$postlist flash-plugin hal-flash | $progress
+postinstaller -i flash-plugin -i hal-flash 
 
     }
      
     comprimir(){
-            $postlist unrar p7zip p7zip-plugins | $progress
+            postinstaller -i unrar -i p7zip -i p7zip-plugins 
 
             
     }
      
     java(){
-            $postlist java icedtea-web | $progress
+            postinstaller -i java icedtea-web 
 
     }
 
@@ -2822,11 +2773,10 @@ if [ -f /usr/lib/IcedTeaPlugin.so ] || [ -f /usr/lib64/IcedTeaPlugin.so ]; then
 xterm -e 'yum -y remove icedtea-web'
 fi
 
-PKGSINSTALLED=$(rpm -qa jdk*-linux-*.rpm)  
 
- if [[ -n "$PKGSINSTALLED" ]]; then
+if [[ $(rpm -qa jdk*-linux-*.rpm | grep -c jdk*-linux-*.rpm) -gt 0 ]]; then
 
-zenity --question --title="Detected jkd oracle java installed" --text="You need uninstall jdk oracle java, Do you want uninstall" --ok-label "Yes" --cancel-label "No"
+zenity --question --title="Detected jdk oracle java installed" --text="You need uninstall jdk oracle java, Do you want uninstall" --ok-label "Yes" --cancel-label "No"
 if [[ $? -eq 0 ]]; then
 
 xterm -e 'yum -y remove jdk'
@@ -2842,14 +2792,14 @@ fi
            
 if [ `getconf LONG_BIT` = "64" ]
 then
-xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajre*-linux-x64.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
+xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jre*-linux-x64.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
 wait ${!}
 
-xterm -e '$postlist /tmp/jre*-linux-x64.rpm'
+xterm -e 'postinstaller -i /tmp/jre*-linux-x64.rpm'
 else
-xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajre*-linux-i586.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
+xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jre*-linux-i586.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
 wait ${!}
-xterm -e '$postlist /tmp/jre*-linux-i586.rpm'
+xterm -e 'postinstaller -i /tmp/jre*-linux-i586.rpm'
 fi
 
 
@@ -2877,13 +2827,13 @@ fi
 
 if [ `getconf LONG_BIT` = "64" ]
 then
-xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajre*-linux-x64.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
+xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jre*-linux-x64.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
 wait ${!}
-xterm -e '$postlist /tmp/jre*-linux-x64.rpm'
+xterm -e 'postinstaller -i /tmp/jre*-linux-x64.rpm'
 else
-xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajre*-linux-i586.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
+xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jre*-linux-i586.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
 wait ${!}
-xterm -e '$postlist /tmp/jre*-linux-i586.rpm'
+xterm -e 'postinstaller -i /tmp/jre*-linux-i586.rpm'
 fi
 
 if [ -f /usr/lib64/mozilla/plugins/libnpjp2.so ] || [ -f /usr/lib/mozilla/plugins/libnpjp2.so ]; then
@@ -2913,9 +2863,9 @@ fi
 
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Java JRE Oracle" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Java JRE Oracle" -i "/usr/share/icons/pinguino.png" -t 5000'
 else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Java JRE Oracle" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $user -c 'notify-send "PostInstallerF" "Has been completed installation of Java JRE Oracle" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
      
     }
@@ -2927,10 +2877,7 @@ if [ -f /usr/lib/IcedTeaPlugin.so ] || [ -f /usr/lib64/IcedTeaPlugin.so ]; then
 xterm -e 'yum -y remove icedtea-web'
 fi
 
-
-PKGSINSTALLED=$(rpm -qa jdk*-linux-*.rpm)  
-
-	if [[ -n "$PKGSINSTALLED" ]]; then
+if [[ $(rpm -qa jre*-linux-*.rpm | grep -c jre*-linux-*.rpm) -gt 0 ]]; then
 
 zenity --question --title="Detected jre oracle java installed" --text="You need uninstall jre oracle java, Do you want uninstall" --ok-label "Yes" --cancel-label "No"
 if [[ $? -eq 0 ]]; then
@@ -2948,13 +2895,13 @@ fi
 
 if [ `getconf LONG_BIT` = "64" ]
 then
-xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajdk*-linux-x64.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
+xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jdk*-linux-x64.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
 wait ${!}
-xterm -e '$postlist /tmp/jdk*-linux-x64.rpm'
+xterm -e 'postinstaller -i /tmp/jdk*-linux-x64.rpm'
 else
-xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajdk*-linux-i586.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
+xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jdk*-linux-i586.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
 wait ${!}
-xterm -e '$postlist /tmp/jdk*-linux-i586.rpm'
+xterm -e 'postinstaller -i /tmp/jdk*-linux-i586.rpm'
 fi
 
 
@@ -2984,13 +2931,13 @@ echo 'en otra ocacion'
           
 if [ `getconf LONG_BIT` = "64" ]
 then
-xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajdk*-linux-x64.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
+xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jdk*-linux-x64.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
 wait ${!}
-xterm -e '$postlist /tmp/jdk*-linux-x64.rpm'
+xterm -e 'postinstaller -i /tmp/jdk*-linux-x64.rpm'
 else
-xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -Ajdk*-linux-i586.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
+xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jdk*-linux-i586.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
 wait ${!}
-xterm -e '$postlist /tmp/jdk*-linux-i586.rpm'
+xterm -e 'postinstaller -i /tmp/jdk*-linux-i586.rpm'
 fi
 
 if [ -f /usr/lib64/mozilla/plugins/libnpjp2.so ] || [ -f /usr/lib/mozilla/plugins/libnpjp2.so ]; then
@@ -3022,151 +2969,134 @@ fi
    fi
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Java JDK Oracle" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Java JDK Oracle" -i "/usr/share/icons/pinguino.png" -t 5000'
 else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Java JKD Oracle" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $user -c 'notify-send "PostInstallerF" "Has been completed installation of Java JKD Oracle" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi   
 
     }
 
      
     gimp(){
-	$postlist gimp | $progress
+	postinstaller -i gimp 
 
     }
 
     hugp(){
-	$postlist hugin | $progress
+	postinstaller -i hugin 
 
     }
 
 
      converseen(){
-	$postlist converseen | $progress 
+	postinstaller -i converseen  
 
     }
 
      
     mipaint(){
-	$postlist mypaint | $progress
+	postinstaller -i mypaint 
 
     }
 
 
     pint(){
-	$postlist pinta | $progress
+	postinstaller -i pinta 
 
     }
 
 
     pencil(){
-    	$postlist pencil | $progress
+    	postinstaller -i pencil 
     }
 
     
     fotoxx(){
-      	$postlist fotoxx | $progress
+      	postinstaller -i fotoxx 
 
     }
      
     shutter(){
-      	$postlist shutter | $progress
+      	postinstaller -i shutter 
 
     }
      
     glabels(){
-      	$postlist glabels | $progress
+      	postinstaller -i glabels 
 
     }
      
     kover(){
-     	$postlist kover | $progress
+     	postinstaller -i kover 
 
     }
      
     office(){
-     	$postlist | $progress
+     	postinstaller -i libreoffice
 
     }
 
 
     basquet(){ 
 
-	$postlist basket | $progress
+	postinstaller -i basket 
 
     }
 
 
     caligra(){
-	$postlist calligra | $progress
+	postinstaller -i calligra 
 
     }
 
 
 project(){
             
-	$postlist projectlibre | $progress
+	postinstaller -i projectlibre 
      
 
     }
      
-    reader(){
-
-if [[ $architecture = x86_64 ]]; then
-$locainst http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm
-else
-$locainst http://linuxdownload.adobe.com/adobe-release/adobe-release-i386-1.0-1.noarch.rpm
-fi
-
-$postlist nspluginwrapper AdobeReader_enu | $progress
-
-    }
      
     pdfmod(){
-	$postlist pdfmod | $progress
+	postinstaller -i pdfmod 
     }
 
    pdfsam(){
 
-	$postlist pdfsam | $progress
+	postinstaller -i pdfsam 
 
     }
 
-
-yagsca(){
-	$postlist yagf | $progress
-
-    }
      
     scribus(){
-	$postlist scribus | $progress
+	postinstaller -i scribus 
     }
      
     adia(){
-	$postlist dia | $progress
+	postinstaller -i dia 
 
     }
      
     gnu(){
-	$postlist gnumeric | $progress
+	postinstaller -i gnumeric 
     }
      
     planner(){
-	$postlist planner | $progress
+	postinstaller -i planner 
     }
      
     vym(){
-	$postlist vym | $progress
+	postinstaller -i vym 
 
     }
      
     freemind(){
-	$postlist freemind | $progress
+	postinstaller -i freemind 
     }
 
 
 yEdt(){
-	$postlist java | $progress
 
 wget -c -P/tmp/ http://www.yworks.com/products/yed/demo/yEd-3.9.2_setup.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: yEd  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 
@@ -3174,9 +3104,9 @@ xterm -e 'sh /tmp/yEd-3.9.2_setup.sh'
 
 if [ -f /opt/yEd/yEd ]; then
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de yEd" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de yEd" -i "/usr/share/icons/pinguino.png" -t 5000'
 else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of yEd" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $user -c 'notify-send "PostInstallerF" "Has been completed installation of yEd" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
 
 else
@@ -3188,19 +3118,19 @@ fi
 
 cmap(){
 
-	$postlist cmaptools | $progress
+	postinstaller -i cmaptools 
 
     }
 
      
     anki(){
-	$postlist anki | $progress
+	postinstaller -i anki 
 
     }
      
      
     wine(){
-	$postlist wine cabextract winetricks | $progress
+	postinstaller -i wine -i cabextract -i winetricks 
 
     }
      
@@ -3216,33 +3146,33 @@ lastest=$(cat /tmp/LATEST.TXT ); echo lastest=$lastest
 
 
             if [ -f '/etc/yum.repos.d/virtualbox.repo' ]; then
-$postlist kernel-headers kernel-devel dkms gcc 2>&1 | zenity --progress  --title="Instalando dependencias de Virtual Box" --text="Please wait...." --pulsate --auto-close --width=350
+postinstaller -i kernel-headers kernel-devel dkms gcc 2>&1 | zenity --progress  --title="Instalando dependencias de Virtual Box" --text="Please wait...." --pulsate --auto-close --width=350
 
 postinstaller -u
 
-xterm -e '$postlist --enablerepo=virtualbox VirtualBox-4.2'
+xterm -e 'postinstaller -i --enablerepo=virtualbox VirtualBox-4.2'
 xterm -e '/etc/init.d/vboxdrv setup'
 cd /tmp/
 wget -c  http://download.virtualbox.org/virtualbox/$lastest/Oracle_VM_VirtualBox_Extension_Pack-$lastest.vbox-extpack 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Virtual Box  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 wait ${!}
 xterm -e "VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-$lastest.vbox-extpack"
-usermod -a -G vboxusers $noti
-groups $noti
+usermod -a -G vboxusers $user
+groups $user
 zenity --info --title="PostInstallerF" --text="Para obtener soporte usb en Oracle Virtual Box es necesario reiniciar el sistema "
 else
 wget -c -P/etc/yum.repos.d/ http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
-$postlist kernel-headers kernel-devel dkms gcc | $progress
+postinstaller -i kernel-headers kernel-devel dkms gcc 
 
 postinstaller -u
 
-xterm -e '$postlist --enablerepo=virtualbox VirtualBox-4.2'
+xterm -e 'postinstaller -i --enablerepo=virtualbox VirtualBox-4.2'
 xterm -e '/etc/init.d/vboxdrv setup'
 cd /tmp/
 wget -c  http://download.virtualbox.org/virtualbox/$lastest/Oracle_VM_VirtualBox_Extension_Pack-$lastest.vbox-extpack 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Virtual Box  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 wait ${!}
 xterm -e "VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-$lastest.vbox-extpack"
-usermod -a -G vboxusers $noti
-groups $noti
+usermod -a -G vboxusers $user
+groups $user
 zenity --info --title="PostInstallerF" --text="Para obtener soporte usb en Oracle Virtual Box es necesario reiniciar el sistema "
 fi
 
@@ -3251,9 +3181,9 @@ rm -f /tmp/Oracle_VM_VirtualBox_Extension_Pack-*.vbox-extpack
 
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Oracle Virtual Box" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Oracle Virtual Box" -i "/usr/share/icons/pinguino.png" -t 5000'
 else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Oracle Virtual Box" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $user -c 'notify-send "PostInstallerF" "Has been completed installation of Oracle Virtual Box" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
  else 
 zenity --info --title="PostInstallerF" --text="For some reason Oracle Virtual Box not installed, please try again"
@@ -3262,13 +3192,13 @@ fi
     }
      
     play(){
-	$postlist wine cabextract | $progress
+	postinstaller -i wine -i cabextract 
 
-$locainst http://rpm.playonlinux.com/PlayOnLinux_yum-3.3.rpm 
+$locainst http://rpm.playonlinux.com/playonlinux-yum-4-1.noarch.rpm 
 
 postinstaller -u
 
-	$postlist playonlinux winetricks | $progress
+	postinstaller -i playonlinux -i winetricks 
 
 
     }
@@ -3282,7 +3212,7 @@ postinstaller -u
 
 if [ -f /etc/yum.repos.d/dropbox.repo ]; then
 echo 'el repositorio esta incluido'
-$postlist nautilus-dropbox | $progress
+postinstaller -i nautilus-dropbox 
 echo 'skip_if_unavailable=1' >> /etc/yum.repos.d/dropbox.repo
 else
 echo '[Dropbox]
@@ -3291,7 +3221,7 @@ baseurl=http://linux.dropbox.com/fedora/$releasever/
 gpgkey=https://linux.dropbox.com/fedora/rpm-public-key.asc
 skip_if_unavailable=1' >> /etc/yum.repos.d/dropbox.repo
 postinstaller -u
-$postlist nautilus-dropbox | $progress
+postinstaller -i nautilus-dropbox 
 echo 'skip_if_unavailable=1' >> /etc/yum.repos.d/dropbox.repo
 fi
             
@@ -3301,33 +3231,33 @@ fi
 
     mvcon(){
 
-	$postlist mvc | $progress
+	postinstaller -i mvc 
 
     }
      
 
     qwinf(){
 
-	$postlist qwinff | $progress
+	postinstaller -i qwinff 
            
     }
      
     transcoder(){
 
 
-	$postlist transcoder | $progress
+	postinstaller -i transcoder 
 
     }
      
     Mobilmedia(){
-	$postlist mmc | $progress
+	postinstaller -i mmc 
 
     }
      
 
 ffmulticonverter(){
 
-	$postlist ffmulticonverter | $progress
+	postinstaller -i ffmulticonverter 
  
 
     }
@@ -3335,27 +3265,27 @@ ffmulticonverter(){
             
     gtkPod(){
             
-	$postlist gtkpod | $progress
+	postinstaller -i gtkpod 
 
     }
      
     easyTag(){
-	$postlist easytag | $progress
+	postinstaller -i easytag 
 
     }
      
     avidemux(){
-	$postlist avidemux | $progress
+	postinstaller -i avidemux 
 
     }
      
     blender(){
-	$postlist blender 
+	postinstaller -i blender 
     }
 
 
     tupapi(){
-	$postlist tupi 
+	postinstaller -i tupi 
     }
 
 brlcad(){
@@ -3383,8 +3313,8 @@ if [ -f /usr/bin/sweethome3d ]; then
 rm -f /usr/bin/sweethome3d 
 fi
 
-if [ -d /home/$noti/.sweethome/ ]; then
-rm -R /home/$noti/.sweethome/
+if [ -d /home/$user/.sweethome/ ]; then
+rm -R /home/$user/.sweethome/
 fi
 
 if [ -f /opt/SweetHome3D-linux-x64.tgz ]; then
@@ -3433,9 +3363,9 @@ cat /dev/null > /tmp/lastest_sweethome.txt
 if [ -f /usr/bin/sweethome3d.sh ] && [ -f /opt/SweetHome3D-linux-x86.tgz ]; then
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completada la instalacion de Sweet Home 3D" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Sweet Home 3D" -i "/usr/share/icons/pinguino.png" -t 5000'
 else
-su $noti -c 'notify-send "PostInstallerF" "Has been completed installation of Sweet Home 3D" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $user -c 'notify-send "PostInstallerF" "Has been completed installation of Sweet Home 3D" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
  else 
 zenity --info --title="PostInstallerF" --text="For some reason Sweet Home 3D not installed, please try again"
@@ -3445,12 +3375,12 @@ fi
      
     libreCAD(){
 
-	$postlist librecad | $progress
+	postinstaller -i librecad 
 
     }
 
 freecad(){
-	$postlist freecad | $progress
+	postinstaller -i freecad 
 
     }
 
@@ -3463,19 +3393,19 @@ $locainst http://dl-ak.solidworks.com/nonsecure/draftsight/V1R2.0/draftSight.rpm
 
      
     inkscape(){
-	$postlist inkscape | $progress
+	postinstaller -i inkscape 
 
     }
 
      
     openshot(){
-	$postlist blender inkscape openshot | $progress
+	postinstaller -i blender -i inkscape -i openshot 
 
     }
 
 
 kden(){
-	$postlist kdenlive | $progress
+	postinstaller -i kdenlive 
 
     }
 
@@ -3483,33 +3413,33 @@ kden(){
 lives(){
             
 
-	$postlist lives | $progress
+	postinstaller -i lives 
 
 
     }
 
 
 imagination(){
-	$postlist imagination | $progress
+	postinstaller -i imagination 
 
     }
 
 
 deveDe(){
-	$postlist devede | $progress
+	postinstaller -i devede 
 
     }
 
 
 dVDStyler(){
-	$postlist dvdstyler | $progress
+	postinstaller -i dvdstyler 
 
     }
 
 
 ffaporama(){
 
-	$postlist ffdiaporama | $progress
+	postinstaller -i ffdiaporama 
 
 
     }
@@ -3517,63 +3447,63 @@ ffaporama(){
 
 wnk(){
             
-	$postlist wink | $progress
+	postinstaller -i wink 
 
     }
 
 
 Virtual(){
-	$postlist darktable | $progress
+	postinstaller -i darktable 
 
     }
 
 
 GnomeSubtitles(){
-	$postlist gnome-subtitles | $progress
+	postinstaller -i gnome-subtitles 
 
     }
 
 
 vlc(){
-	$postlist vlc | $progress
+	postinstaller -i vlc 
 
     }
 
 flix(){
 
-	$postlist pipelight | $progress
+	postinstaller -i pipelight 
 
     }
 
 
 xbm(){
 
-	$postlist xbmc | $progress
+	postinstaller -i xbmc 
 
     }
 
 
 clementine(){
-	$postlist qtwebkit clementine | $progress
+	postinstaller -i qtwebkit -i clementine 
 
 
     }
 
 
 spotify(){
-	$postlist spotify-client | $progress
+	postinstaller -i spotify-client 
 
     }
 
 
 sound(){
-	$postlist soundconverter | $progress
+	postinstaller -i soundconverter 
 
     }
 
 
 audacity(){
-	$postlist audacity | $progress
+	postinstaller -i audacity 
 
     }
 
@@ -3590,178 +3520,171 @@ fi
 
 
 mix(){
-	$postlist mixxx | $progress
+	postinstaller -i mixxx 
 
     }
 
 
 
 skype(){
-	sh /usr/bin/postinstallerf/skype-installer
+	xterm -e 'sh /usr/bin/postinstallerf/skype-installer'
 
 
     }
 
 turpial(){
-	$postlist turpial | $progress
+	postinstaller -i turpial 
 
     }
 
 
 gwibber(){
-	$postlist gwibber | $progress
+	postinstaller -i gwibber 
 
     }
 
 
 bible(){
-	$postlist bibletime | $progress
+	postinstaller -i bibletime 
 
     }
 
 
 tuxpaint(){
-	$postlist tuxpaint | $progress
+	postinstaller -i tuxpaint 
 
 
     }
 
 
 Stellar(){
-	$postlist stellarium | $progress
+	postinstaller -i stellarium 
 
     }
 
 
 celestia(){
-	$postlist celestia | $progress
-
-    }
-
-
-Earth(){
-
-	$postlist google-earth | $progress
+	postinstaller -i celestia 
 
     }
 
 
 gcompris(){
-	$postlist gcompris | $progress
+	postinstaller -i gcompris 
     }
 
 
 tuxMath(){
-	$postlist tuxmath | $progress
+	postinstaller -i tuxmath 
 
     }
 
 
 tuxType(){
-	$postlist tuxtype2 | $progress
+	postinstaller -i tuxtype2 
 
     }
 
 
 childsplay(){
-	$postlist childsplay | $progress
+	postinstaller -i childsplay 
 
     }
 
 
 scratch(){
 
-	$postlist scratch | $progress
+	postinstaller -i scratch 
             
     }
 
 
 ri(){
-	$postlist Ri-li | $progress
+	postinstaller -i Ri-li 
 
     }
 
 
 Frozen(){
-	$postlist frozen-bubble | $progress
+	postinstaller -i frozen-bubble 
 
     }
 
 
 Extreme(){
-	$postlist extremetuxracer | $progress
+	postinstaller -i extremetuxracer 
 
     }
 
 
 Super(){
-	$postlist supertuxkart | $progress
+	postinstaller -i supertuxkart 
     }
 
 
 
 wormux(){
-	$postlist wormux | $progress
+	postinstaller -i wormux 
 
     }
 
 
 tremulous(){
-	$postlist tremulous | $progress
+	postinstaller -i tremulous 
 
     }
 
 
 Methane(){
-	$postlist methane | $progress
+	postinstaller -i methane 
 
     }
 
 
 pingus(){
-	$postlist pingus | $progress
+	postinstaller -i pingus 
 
     }
 
 
 hedgewars(){
-	$postlist hedgewars | $progress
+	postinstaller -i hedgewars 
 
     }
 
 
 glaxium(){
-	$postlist glaxium | $progress
+	postinstaller -i glaxium 
 
     }
 
 
 amoebax(){
-	$postlist amoebax | $progress
+	postinstaller -i amoebax 
 
     }
 
 
 AlienArena(){
-	$postlist alienarena | $progress
+	postinstaller -i alienarena 
 
     }
 
 
 tORCS(){
-	$postlist torcs | $progress
+	postinstaller -i torcs 
 
     }
 
 
 flightGear(){
-	$postlist FlightGear | $progress
+	postinstaller -i FlightGear 
     }
 
 
 perfo(){
 
-	$postlist performous | $progress
+	postinstaller -i performous 
 
 
     }
@@ -3783,12 +3706,12 @@ fi
 
 wait ${!}
 
-	$postlist steam | $progress
+	postinstaller -i steam 
 
     }
 
 Gnutella(){
-	$postlist gtk-gnutella | $progress
+	postinstaller -i gtk-gnutella 
 
     }
 
@@ -3806,68 +3729,72 @@ skip_if_unavailable=1' >> /etc/yum.repos.d/home:gcala.repo
 
 wait ${!}
 
-	$postlist grooveoff | $progress
+	postinstaller -i grooveoff 
 
     }
 
 
 wirefro(){
 
-	$postlist frostwire | $progress
+	postinstaller -i frostwire 
 
     }
 
 
 uget(){
-    	$postlist uget | $progress
+    	postinstaller -i uget 
 
     }
 
 
 YumExtender(){
-	$postlist yumex | $progress
+	postinstaller -i yumex 
 
     }
 
 
 blue(){
-	$postlist blueman | $progress
+	postinstaller -i blueman 
 
     }
 
 
 Chrome(){
-            $locainst https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm | $localprogress
+if [[ $architecture = x86_64 ]]; then
+$locainst https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm | $localprogress
+else
+$locainst https://dl.google.com/linux/direct/google-chrome-stable_current_i386.rpm | $localprogress
+fi
 
     }
 
 
 chromium(){
             
-	$postlist chromium | $progress
+	postinstaller -i chromium 
 
     }
 
 
 opera(){
-	$postlist opera | $progress
+	postinstaller -i opera 
 
     }
 
 
 bleachBit(){
-	$postlist bleachbit | $progress
+	postinstaller -i bleachbit 
 
     }
 
 
 GnomeTweak(){
-	$postlist python-devel gnome-tweak-tool dconf-editor gconf-editor | $progress
+	postinstaller -i python-devel -i gnome-tweak-tool -i dconf-editor -i gconf-editor 
 
     }
 
 mlibre(){
-	$postlist menulibre | $progress
+	postinstaller -i menulibre 
 
     }
 
@@ -3875,9 +3802,9 @@ pendientes(){
             yum-complete-transaction -y | $localprogress
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "PostInstallerF" "Completado Instalaciones pendientes" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $user -c 'notify-send "PostInstallerF" "Completado Instalaciones pendientes" -i "/usr/share/icons/pinguino.png" -t 5000'
 else
-su $noti -c 'notify-send "PostInstallerF" "Completed Installations pending" -i "/usr/share/icons/pinguino.png" -t 5000'
+su $user -c 'notify-send "PostInstallerF" "Completed Installations pending" -i "/usr/share/icons/pinguino.png" -t 5000'
 fi
 
     }
@@ -3919,19 +3846,19 @@ $(uptime)" --ok-label="Ok"
 
 
 inex(){
-     	$postlist i-nex | $progress
+     	postinstaller -i i-nex 
 
     }
 
 
 alien(){
-    	$postlist alien | $progress
+    	postinstaller -i alien 
     }
 
 
 truetype(){
             
-	$postlist msttcorefonts | $progress
+	postinstaller -i msttcorefonts 
 
     }
      
@@ -3940,9 +3867,7 @@ truetype(){
     ## Initialising PostInstallerF
     ##
 
-     
-    #initialising pkcon install-list
-    postlist='pkcon -p -y install'
+    
 
     # Local install
     locainst='yum -y localinstall'
@@ -3969,20 +3894,14 @@ truetype(){
     postRoot="exit; "
      
     #initialising notification
-    noti=$(logname); echo "noti = $noti"
-    noti3=$(loginctl show-session $XDG_SESSION_ID | cut -d= -f2 | tail -n 1); echo "noti3 = $noti3"
-
-    #initialising change directory default log
-    changelog="cd /usr/share/.postinstallerf/"
+    user=$(loginctl show-session $XDG_SESSION_ID | grep 'Name' | cut -d= -f2 | tail -n 1)
 
     #variables deteccion JRE o JDK java Oracle
-    versionjava=$(rpm -qi jre | sed -n '2p' | cut -b1-40); echo "versionjava=$versionjava"
-    versionjkd=$(head -1 /usr/java/latest/release); echo "versionjdk=$versionjdk"
+    versionjava=$(rpm -qi jre | sed -n '2p' | cut -b1-40)
 
-
-# its others alternative similar initialising other users or notification 
-# noti=$(who am i | awk '{print $1}'); echo "noti = $noti"
-# username=$(zenity --entry --text="Username"); echo "username = $username"
+if [ -f /usr/java/latest/release ]; then
+    versionjkd=$(head -1 /usr/java/latest/release)
+fi
 
 
 # running PostInstallerF...
@@ -4000,14 +3919,9 @@ truetype(){
      
     #if there was something to do
     if test ${#choice} -gt 0; then
-       /usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg
-       if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $noti -c 'notify-send "Terminado!" "Todo está completado" -i "/usr/share/icons/pinguino.png" -t 10000'
-else
-       su $noti -c 'notify-send "Finish!" "All tasks were completed" -i "/usr/share/icons/pinguino.png" -t 10000'
-fi
-       
-            
+       echo 'todo terminado'
+       cleanlist	 
+                 
     fi
 
      

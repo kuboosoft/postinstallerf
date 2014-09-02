@@ -25,16 +25,26 @@
 
 source /usr/bin/postinstallerf/pid
 
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
 
-yad --center --image="/usr/share/icons/acciones/menuprincipal.png" --image-on-top --icons --name="PostInstallerF - Science" --window-icon="/usr/share/icons/acciones/topicon.png" --width=800 --height=500  --read-dir="/usr/share/app-install-data-postinstallerf/applications/Science/" --title="PostInstallerF - Science" --item-width=90 --compact --button="Donate:0" --button="Repositories:2" --button="Close:1" 
+
+yad --center --image="/usr/share/icons/acciones/Science-bar.png" --image-on-top --icons --name="PostInstallerF - Science" --window-icon="/usr/share/icons/acciones/topicon.png" --width=800 --height=500  --read-dir="/usr/share/app-install-data-postinstallerf/applications/Science/" --title="PostInstallerF - Science" --item-width=90 --compact --button="Donate:0" --button="Repositories:2" --button="Close:1" 
 
 ret=$?
 
 if [[ $ret -eq 0 ]]; then
-
+rm -f /tmp/Science..lck
 	xdg-open http://www.kuboosoft.blogspot.com/ 
+
+/usr/bin/postinstallerf/categorias/Science
 elif [[ $ret -eq 2 ]]; then
+if [ "$dist" = Ubuntu ]; then
+software-properties-gtk
+else
 gpk-prefs 
+fi
+rm -f /tmp/Science..lck
+/usr/bin/postinstallerf/categorias/Science
 elif [[ $ret -eq 1 ]]; then
 	echo "Nothing to do"
 	fi

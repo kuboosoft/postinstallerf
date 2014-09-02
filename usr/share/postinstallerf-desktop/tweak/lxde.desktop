@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=/usr/bin/postinstallerf/auntenticacion /usr/bin/postinstallerf/tweek/lxde
+Exec=/usr/bin/postinstallerf/tweek/lxde
 Version=1.0
 Type=Application
 Name=Lxde Desktop

@@ -1,0 +1,27 @@
+#!/bin/sh
+
+SERVICE='wget'
+SERVICE2='curl'
+SERVICE3='postinstaller'
+user=$(loginctl show-session $XDG_SESSION_ID | grep 'Name' | cut -d= -f2 | tail -n 1)
+
+while [ $(ps ax | grep -v grep | grep -c $SERVICE3) -gt 0 ]
+do
+if [ $(ps ax | grep -v grep | grep -c $SERVICE3) -gt 0 ] && [ $(ps ax | grep -v grep | grep -c $SERVICE) -gt 0 ] || [ $(ps ax | grep -v grep | grep -c $SERVICE2) -gt 0 ] ; then 
+
+if [ "$(id -u)" -eq 0 ]; then
+su $user -c 'notify-send "Loading screnshot
+and information 
+Please wait" -i "/usr/share/icons/acciones/loadingimage2.png"' 
+exit
+ else
+notify-send "Loading screnshot
+and information 
+Please wait" -i "/usr/share/icons/acciones/loadingimage2.png" 
+exit
+fi
+
+ fi
+#   sleep 1
+
+done

@@ -1,17 +1,11 @@
 #!/bin/bash
 
-source /usr/bin/postinstallerf/pid
 
-enable='exclude=kernel*'
-krozker=$(grep 'exclude=kernel*' /etc/yum.conf)
-disable=''
-
-if [[ $krozker = $enable ]]; then 
-status='KERNEL CONGELADO'
+if [ $(cat /etc/yum.conf | grep -c 'exclude=kernel*') -gt 0 ] ; then
+status='KERNEL FROSTED'
 tarea='Enable updates kernel'
-
-elif [[ $krozker = $disable ]]; then
-status='KERNEL NO CONGELADO'
+else
+status='KERNEL DEFROSTED'
 tarea='Disable updates kernel'
 fi
 
@@ -37,9 +31,10 @@ if [ ! -f /etc/yum.conf.bak ]; then
 cp -f /etc/yum.conf /etc/yum.conf.bak
 fi
 
-if [[ "$krozker" = "$enable" ]]; then 
+if [[ "$tarea" = 'Enable updates kernel'  ]]; then 
 echo "posiblemente ya este congelado el kernel"
-zenity --question --title="Do you want enable updates kernel?" --text="Detected disable updates kernel" --ok-label "Yes" --cancel-label "No"
+zenity --question --title="Atention!" --text="Do you want enable updates kernel?
+Detected disable updates kernel" --ok-label "Yes" --cancel-label "No"
 if [[ $? -eq 0 ]]; then
 sed -i '/exclude=kernel*/d' /etc/yum.conf
 yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Se ha activado las actualizaciones del kernel"
@@ -47,9 +42,10 @@ else
 echo 'Estamos para servirte'
 fi
 
-elif [[ "$krozker" = "$disable" ]]; then 
+elif [[ "$tarea" = 'Disable updates kernel' ]]; then 
 echo "No esta congelado el kernel"
-zenity --question --title="Do you want disable updates kernel?" --text="Detected enable updates kernel" --ok-label "Yes" --cancel-label "No"
+zenity --question --title="Atention!" --text="Do you want disable updates kernel?
+Detected enable updates kernel" --ok-label "Yes" --cancel-label "No"
 if [[ $? -eq 0 ]]; then
 echo "exclude=kernel*" >> /etc/yum.conf
 yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Se han desactivado las actualizaciones del kernel"
@@ -59,4 +55,14 @@ fi
 
 fi
 
+rm -f /tmp/frozen-kernel..lck
+
   fi
+
+# Clean lck 
+if [[ "$(id -u)" -eq 0 ]]; then
+rm -f /tmp/frozen-kernel..lck
+else
+cat /dev/null > /tmp/frozen-kernel..lck
+fi
+

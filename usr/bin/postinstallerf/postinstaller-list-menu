@@ -21,61 +21,32 @@
 # FEDORA 20, 21 POSTINSTALLER V.1.5.0 
 
 
-
-hora=$(date +"%H")
-
-
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-
-if test $hora -lt 12; then
-
-yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Bienvenido a PostInstallerF
-
-Buen dia, PostInstallerF es un programa que instala todo lo necesario en Fedora"
-
-
-elif test $hora -gt 12 & test $hora -le 18; then
-
-  yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Bienvenido a PostInstallerF
-
-Buena tarde, PostInstallerF es un programa que instala todo lo necesario en Fedora"
-
+cleanlist() {
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/postinstaller-list-menu..lck
+rm -f /tmp/addpost..lck
+rm -f /tmp/confpost..lck
 else
-
-	yad --class="ATENCIÓN" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="Bienvenido a PostInstallerF
-
-Buena noche, PostInstallerF es un programa que instala todo lo necesario en Fedora"
-
+cat /dev/null > postinstaller-list-menu..lck
+cat /dev/null > /tmp/addpost..lck
+cat /dev/null > /tmp/confpost..lck
 fi
+}
 
+
+if [ "$(id -u)" -eq 0 ]; then
+echo 'root'
 else
-
-if test $hora -lt 12; then
-
-yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
-
-Good day, PostInstallerF is a program that installs everything you need in Fedora"
-
-
-elif test $hora -gt 12 & test $hora -le 18; then
-
-	yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
-
-Good afternoon, PostInstallerF is a program that installs everything you need in Fedora"
-
-else
-
-	yad --class="ATENTION" --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/topicon.png" --image-on-top --info --title="PostInstallerF" --text="
-
-Good night, PostInstallerF is a program that installs everything you need in Fedora"
-
+echo 'no root'
+cleanlist
+exit
 fi
- fi
-
 
 # CHECKING REPOSITORIES  
 
-relea=$(rpm -q --queryformat '%{VERSION}\n' fedora-release); echo "relea=$relea"
+relea=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
+
+if [ -f /etc/fedora-release ]; then
 
 if [ -f /etc/yum.repos.d/rpmfusion-nonfree.repo ] && [ -f /etc/yum.repos.d/rpmfusion-free.repo ]; then
 echo "RPM Fusion free and nonfree repo is present"
@@ -130,7 +101,7 @@ gpgkey=http://sourceforge.net/projects/postinstaller/files/data/repodata/repomd.
 skip_if_unavailable=1
 exclude=ffmpeg ffmpeg-devel ffmpeg-libs' >> /etc/yum.repos.d/postinstallerf.repo
 fi
- 
+   fi
 
 wait ${!}
 
@@ -167,17 +138,6 @@ fi
 
 
 
-# TESTING THE SOUND IN POSTINSTALLERF.
-sound=/usr/bin/postinstallerf/sound21.ogg
-if [ -f $sound ]; then
-echo "sound esta presente"
-else
-wget -c -P/usr/bin/postinstallerf/ http://sourceforge.net/projects/postinstaller/files/data/sound21.ogg
-fi
-
-
-wait ${!}
-
 
 clear
 
@@ -188,17 +148,7 @@ clear
 
 
 
-yad --center --image="/usr/share/icons/acciones/topicon.png" --image-on-top --icons --class="PostInstallerF" --name="PostInstallerF" --window-icon="/usr/share/icons/Postinstaller1.svg" --item-width="110" --read-dir="/usr/share/postinstallerf-desktop/Postdesktopfiles/" --width="435" --height="435" --title="PostInstallerF" --auto-kill --text="\n<b>Click</b> an item to select an action:" --single-click --button="Close:1"
+yad --center --image="/usr/share/icons/acciones/topicon.png" --image-on-top --icons --class="PostInstallerF" --name="PostInstallerF" --window-icon="/usr/share/icons/Postinstaller1.svg" --item-width="110" --read-dir="/usr/share/postinstallerf-desktop/Postdesktopfiles/" --width="435" --height="435" --title="PostInstallerF" --auto-kill --text="\n<b>Click</b> an item to select an action:" --button="Close:1"
 
+cleanlist
 
-#initialising notification
-    noti=$(who -u | awk '{print $1}'); echo "noti = $noti"
-    noti3=$(loginctl show-session $XDG_SESSION_ID | cut -d= -f2 | tail -n 1); echo "noti3 = $noti3"
-
-    #initialising change directory default log
-    changelog="cd /usr/share/.postinstallerf/"
-
-
-# its others alternative similar initialising other users or notification 
-# noti=$(who am i | awk '{print $1}'); echo "noti = $noti"
-# username=$(zenity --entry --text="Username"); echo "username = $username"

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # +--------------------------------------------------------------------------------+
 # | Copyright (C) 2014 Kuboosoft                                                   |
@@ -18,16 +18,18 @@
 # |https://plus.google.com/communities/118230919321773121406                       |
 # +--------------------------------------------------------------------------------+
 
-source /usr/bin/postinstallerf/pid
 
-while getopts ":i:e:n:l:g:su" option;
+
+while getopts ":i:e:n:l:g:opsuhabfdm" option;
 do
  case $option in
   i)
    echo received -i with $OPTARG
-dist=$(uname -a | grep -o 'MANJARO')
-if [[ "$dist" = MANJARO ]]; then
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
+if [ "$dist" = MANJARO ]; then
 ang='packer-postinstaller -S --noconfirm --noedit'
+elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+ang='apt-get -y install'
 else
 ang='pkcon -p -y install'
 fi
@@ -35,9 +37,11 @@ task=Installing
    ;;
   e)
    echo received -e with $OPTARG
-dist=$(uname -a | grep -o 'MANJARO')
-if [[ "$dist" = MANJARO ]]; then
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
+if [ "$dist" = MANJARO ]; then
 ang='packer-postinstaller -D'
+elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+ang='apt-get -y remove'
 else
 ang='pkcon -p -y remove' 
 fi
@@ -45,9 +49,12 @@ task=Uninstalling
    ;;
   l)
    echo received -l with $OPTARG
-dist=$(uname -a | grep -o 'MANJARO')
-if [[ "$dist" = MANJARO ]]; then
+. /usr/bin/postinstallerf/pid
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
+if [ "$dist" = MANJARO ]; then
 ang='packer-postinstaller -L'
+elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+ang='dpkg -i'
 else
 ang='pkcon -p -y install-local' 
 fi
@@ -55,25 +62,87 @@ task=Localinstall
    ;;
   g)
    echo received -g with $OPTARG
-task=Installgroup
+. /usr/bin/postinstallerf/pid
+task=Install-group
+if [ "$(id -u)" -eq 0 ]; then
+echo 'You are root, well'
+else
+echo "Authentication is required to install programs and configure the system"
+exit
+fi
    ;;
   n)
    echo received -n with $OPTARG
+. /usr/bin/postinstallerf/pid
 task=Information
+   ;;
+  o)
+   echo received -o 
+. /usr/bin/postinstallerf/pid
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
+task=Remove-old-kernel
+ang='package-cleanup --oldkernels -y'
+else
+echo 'OS no compatible'
+exit
+fi
+   ;;
+  p)
+   echo received -p
+dist=$(uname -a | grep -o 'Ubuntu')
+if [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+task=ppa-install
+else
+echo 'OS no compatible'
+exit
+fi
    ;;
   u)
    echo received -u
+# source /usr/bin/postinstallerf/pid
 task=Update
-dist=$(uname -a | grep -o 'MANJARO')
-if [[ "$dist" = MANJARO ]]; then
-ang='packer-postinstaller -Syu --noconfirm --noedit'
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
+if [ "$dist" = MANJARO ]; then
+ang='packer-postinstaller -Suu --noconfirm --noedit'
+elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+ang='apt-get -y dist-upgrade'
 else
 ang='pkcon -p -y update'
 fi
    ;;
   s)
    echo received -s 
+. /usr/bin/postinstallerf/pid
 task=Search
+   ;;
+  h)
+   echo received -h 
+task=Help
+   ;;
+  a)
+   echo received -a
+. /usr/bin/postinstallerf/pid
+task=seli
+   ;;
+  b)
+   echo received -b
+. /usr/bin/postinstallerf/pid
+task=gra
+   ;;
+  f)
+   echo received -f
+. /usr/bin/postinstallerf/pid
+task=frozkernel
+   ;;
+  d)
+   echo received -d
+. /usr/bin/postinstallerf/pid
+task=enasudo
+   ;;
+  m)
+   echo received -m
+. /usr/bin/postinstallerf/pid
+task=plistm
    ;;
   :)
    echo "option -$OPTARG needs an argument"
@@ -86,20 +155,235 @@ exit
  esac
 
 
+
 #cleaning variables info
 
 rm -f /tmp/packagekit-url-tmp
 rm -f /tmp/packer-url-tmp
 
-# Init check if task isn't equal to install o remove, exlude local install and update.
+# Called whenever anything needs to be run as root ($@ is the command)
+runasroot() {
+  if [[ $UID -eq 0 ]]; then
+    "$@"
+  elif zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | sudo -S -v &>/dev/null && sudo -l "$@" &>/dev/null; then
+    sudo -E "$@"
+  else
+    echo -n "root "
+    zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | su -c "$(printf '%q ' "$@")"
+  fi
+}
 
-if [[ "$task" = Installing ]] || [[ "$task" = Uninstalling ]] || [[ "$task" = Information ]]; then
+
+# called whenever anything needs inform all task
+fnotify() {
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian')
+
+if [ "$task" = Localinstall ]; then
+cutting=$(basename $OPTARG)
+namecut="${cutting%%-[0-9]*}"
+globalnoti=$namecut
+else
+globalnoti=$OPTARG
+fi
+
+if [ "$task" = Update ]; then
+    body="Your system is updated now"
+elif [ "$task" = Remove-old-kernel ]; then
+    body="Old kernel erased"
+elif [ "$task" = Install-group ]; then
+    body="Group $OPTARG installed"
+elif [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Localinstall ]; then
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
+
+if [ $(rpm -qa $globalnoti | grep -c $globalnoti) -gt 0 ]; then
+    body="$globalnoti is installed"
+else
+    body="Sorry $globalnoti is not installed"
+fi
+
+elif [ "$dist" = Debian ] || [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+if [ $(dpkg-query -Wf '${db:Status-abbrev}' $OPTARG) = ii ]; then
+body="$globalnoti is installed"
+else
+    body="Sorry $globalnoti is not installed"
+fi
+
+elif [ "$dist" = MANJARO ]; then
+if (pacman -Q $globalnoti >/dev/null) ; then 
+body="$globalnoti is installed"
+else
+    body="Sorry $globalnoti is not installed"
+fi
+
+fi
+  fi
+
+	/usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg &
+
+    # Usage: notify "title" "description" [options to pass to send-notify"
+    title="Finished"
+#    body="$OPTARG is installed"
+    shift 2
+    opts="$*"
+
+if [ "$dist" = Debian ] || [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+notify-send "$title" "$body" -i "/usr/share/icons/pinguino.png" -t 10000
+else
+if [ "$(id -u)" -eq 0 ]; then    
+    # Send messages to users listed by the 'users' command, but only once
+    # Maybe sh has a better way of doing set operations, but this works:
+    SENT=""
+    for USER in $(users); do
+        case $SENT in
+            "$USER") ;;
+            *" $USER") ;;
+            "$USER "*) ;;
+            *" $USER "*) ;;
+            # use 'su USER' to send the message
+            *) SENT="$SENT $USER"; su $USER -c "notify-send $opts \"$title\" \"$body\" -i "/usr/share/icons/pinguino.png" -t 10000" ;;
+        esac
+    done
+else
+notify-send "$title" "$body" -i "/usr/share/icons/pinguino.png" -t 10000
+fi 
+  fi
+
+}
+
+
+# called whenever anything needs install group
+
+groupgress() {
+
+tee -a /tmp/summary-group | stdbuf -oL sed -ne '/Installed/ s/^/# /p' -e '/Installing/ s/^/# /p' | yad --progress \
+	--title="PostInstallerF - $task" \
+	--center \
+	--image="/usr/share/icons/acciones/ingroup.png" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--width=400 --height=200 \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+	--no-buttons
+
+}
+
+
+ubugres() {
+
+tee -a /tmp/summary-group | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+	--title="PostInstallerF - $task" \
+	--center \
+	--image="/usr/share/icons/acciones/uppa.png" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--width=400 --height=200 \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+--button="Cancel (Not recommended):0"  
+
+}
+
+
+# Clean package info ppa
+cleanppa() {
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/summary-group
+rm -f /tmp/*.lck
+rm -f /tmp/ppalist
+rm -f /tmp/ppa-url-tmp
+rm -f /tmp/gress
+rm -f /tmp/$BUSCA_I.temp
+else
+cat /dev/null > /tmp/summary-group
+cat /dev/null > /tmp/ppalist
+cat /dev/null > /tmp/ppa-url-tmp
+cat /dev/null > /tmp/gress
+cat /dev/null > /tmp/$BUSCA_I.temp
+fi
+}
+
+cleanlock() {
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/packagekit-url-$OPTARG
+rm -rf /tmp/.pictures/
+rm -f /tmp/postinstaller.$OPTARG.lck
+else
+rm -f /tmp/.pictures/$OPTARG.png
+fi
+}
+
+usage() {
+  echo 'usage: postinstaller [option] [package] [option] [package] [...]'
+  echo
+  echo '    -i           - installs package'
+  echo '    -l           - install locally package, requires specific path'
+  echo '    -e           - uninstall package'
+  echo '    -u     	 - updates all packages'
+  echo '    -s    	 - searches for package'
+  echo '    -p           - search ppa, only Ubuntu'
+  echo '    -o           - erase old kernels, only Fedora'
+  echo
+  echo '    -n      	 - outputs info for package'
+  echo '    -g     	 - install group, only for Fedora'
+  echo '    -h           - outputs this message'
+  exit
+}
+
+# If the user need help
+
+if [ "$task" = Help ]; then
+usage
+fi
+
+
+# If the user enable or disable sudo
+
+if [ "$task" = enasudo ]; then
+pkexec /usr/bin/postinstallerf/tweek/enable-sudo
+fi
+
+
+# If the user enable or disable Selinux
+
+if [ "$task" = seli ]; then
+pkexec /usr/bin/postinstallerf/tweek/selinux-on-of
+fi
+
+
+# If the user enable or disable kernel updates
+
+if [ "$task" = frozkernel ]; then
+pkexec /usr/bin/postinstallerf/tweek/frozen-kernel
+fi
+
+
+# If the user fix vulnerability sudo
+
+if [ "$task" = gra ]; then
+pkexec /usr/bin/postinstallerf/tweek/gracia-sudo 
+fi
+
+
+# If the user need menu list
+
+if [ "$task" = plistm ]; then
+pkexec /usr/bin/postinstallerf/postinstaller-list-menu
+fi
+
+
+# Init check if task isn't equal to install or remove, exlude local install and update.
+
+if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Information ]; then
+
+/usr/bin/postinstallerf/notifier & 
 
 # Import local metadata
-if [[ -f "/usr/share/app-install-data-postinstallerf/index/$OPTARG.in" ]]; then
+if [ -f "/usr/share/app-install-data-postinstallerf/index/$OPTARG.in" ] ; then
 #source /usr/share/app-install-data-postinstallerf/index/$OPTARG.in
-. /usr/share/app-install-data-postinstallerf/index/$OPTARG.in 
-fi
+source /usr/share/app-install-data-postinstallerf/index/$OPTARG.in 
+else
+
 
 # Import metadata from other sites
 
@@ -109,19 +393,20 @@ sourceinfo3=$(curl -s -k --head -w %{http_code} https://apps.ubuntu.com/cat/appl
 wait ${!}
 
 
-if [[ "$sourceinfo3" -eq 301 ]]; then
+if [ "$sourceinfo3" -eq 301 ]; then
 Comment2=$(wget --no-check-certificate -q https://apps.ubuntu.com/cat/applications/$OPTARG -O - | sed -n 's/.*<p><p tabindex="0">\([^<]*\).*/\1/p' ) 
 
 wait ${!}
 
-elif [[ "$sourceinfo3" -eq 404 ]]; then
+elif [ "$sourceinfo3" -eq 404 ]; then
 Comment2='Information not avaiable'
 
-elif [[ "$sourceinfo3" -eq 000 ]]; then
+elif [ "$sourceinfo3" -eq 000 ]; then
 Comment2='Please check you internet conexion!'
 fi
-   
-wait ${!}
+# end metadata import  
+   fi
+  
 
 #DEFINE VARIABLE INFO
 
@@ -141,11 +426,16 @@ lic="${License:-$kwno}"
 # DOWLOADING SCREENSHOT
 
 url='http://screenshots.debian.net/screenshot/'
+urlscreen2="http://sourceforge.net/projects/postinstaller/files/screenshots/$OPTARG.png"
 format=png
-code=$(curl -s -k --head -w %{http_code} http://screenshots.debian.net/screenshot/$OPTARG | grep 'HTTP' | awk '{print $2}' )
-wait ${!}
 load=/usr/share/icons/acciones/loadingimage.png
+secondscreen="${Screenshot:-$urlscreen2}"
 
+code=$(curl -s -k --head -w %{http_code} http://screenshots.debian.net/screenshot/$OPTARG | grep 'HTTP' | awk '{print $2}' )
+
+code2=$(curl -s -k --head -w %{http_code} $secondscreen | grep 'HTTP' | awk '{print $2}' )
+
+wait ${!}
 
 if [ ! -d "/tmp/.pictures/" ]; then
 mkdir /tmp/.pictures/
@@ -155,16 +445,18 @@ fi
 
 wait ${!}
 
-if [[ "$code" -eq 200 ]] && [[ ! -f /tmp/.pictures/$OPTARG.png ]]; then 
+if [ "$code" = 200 ] && [ ! -f /tmp/.pictures/$OPTARG.png ]; then 
  
 cd /tmp/.pictures/
 
-wget -c -O $OPTARG.png http://screenshots.debian.net/screenshot/$OPTARG 2>&1 | \
+wget --no-check-certificate -c -O $OPTARG.png http://screenshots.debian.net/screenshot/$OPTARG 2>&1 | \
 sed -u 's/^[a-zA-Z\-].*//; s/.* \{1,2\}\([0-9]\{1,3\}\)%.*/\1\n#Downloading... \1%/; s/^20[0-9][0-9].*/#Done./' | \
 yad --progress --image="$load" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --undecorated --percentage=0 --title=Download dialog --width=200 --height=200 --no-buttons --auto-close --auto-kill
 
 wait ${!}
-if [[ -f /tmp/.pictures/$OPTARG.png ]]; then
+find /tmp/.pictures/ -name $OPTARG.png -size 0 -print0 | xargs -0 rm -f
+
+if [ -f /tmp/.pictures/$OPTARG.png ]; then
 mogrify -resize 55% /tmp/.pictures/$OPTARG.png
 fi
   fi
@@ -172,24 +464,25 @@ fi
 wait ${!}
 
 
-if [[ "$Screenshot" -eq 200 ]] && [[ "$code" -eq 404 ]] ||  [[ "$code" -eq 000 ]] ||  [[ ! -f "/tmp/.pictures/$OPTARG.png" ]]; then
+if [ "$code2" = 200 ] && [ "$code" = 404 ] || [ "$code" = 000 ] || [ ! -f "/tmp/.pictures/$OPTARG.png" ]; then
 echo 'screenshot not avaible in source 1'
 cd /tmp/.pictures/
 
-wget -c -O $OPTARG.png $Screenshot 2>&1 | \
+wget --no-check-certificate -c -O $OPTARG.png $secondscreen 2>&1 | \
 sed -u 's/^[a-zA-Z\-].*//; s/.* \{1,2\}\([0-9]\{1,3\}\)%.*/\1\n#Downloading... \1%/; s/^20[0-9][0-9].*/#Done./' | \
-yad --progress --image="$load" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --undecorated --percentage=0 --title=Download dialog --width=200 --height=200 --no-buttons --auto-close --auto-kill 
+yad --progress --image="$load" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --undecorated --percentage=0 --title="Download dialog" --width=200 --height=200 --no-buttons --auto-close --auto-kill 
 
+find /tmp/.pictures/ -name $OPTARG.png -size 0 -print0 | xargs -0 rm -f
 
 wait ${!}
-if [[ -f /tmp/.pictures/$OPTARG.png ]]; then
+if [ -f /tmp/.pictures/$OPTARG.png ]; then
 mogrify -resize 55% /tmp/.pictures/$OPTARG.png
 fi
  fi
 
 wait ${!}
 
-if [[ -f "/tmp/.pictures/$OPTARG.png" ]]; then
+if [ -f "/tmp/.pictures/$OPTARG.png" ]; then
 screenshot="/tmp/.pictures/$OPTARG.png"
 else
 echo 'screenshot not avaible'
@@ -200,13 +493,12 @@ cd
 
 # CHECKING IF PROGRAM IS INSTALLED AND DEFINE OS
 
-dist=$(uname -a | grep -o 'MANJARO')
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian')
 
-if [ -f /etc/debian_version ];  then 
+if [ "$dist" = Debian ]; then
            echo " System is running Debian Linux"
            DISTRO=DEBIAN
-dpkg-query -Wf'${db:Status-abbrev}' $OPTARG
-if [ $? = 0 ] ; then
+if [ $(dpkg-query -Wf'${db:Status-abbrev}' $OPTARG) = ii ]; then
 echo "$OPTARG is present"
 tarea=Uninstall
 status=INSTALLED
@@ -233,7 +525,7 @@ fi
 
     elif [ -f /etc/fedora-release ]; then
            echo " System is running Fedora Linux"  
-          DISTRO=FEDORA
+          version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
 
 if [ $(rpm -qa $OPTARG | grep -c $OPTARG) -gt 0 ]; then
     echo "$OPTARG is present"
@@ -259,7 +551,7 @@ tarea=Install
 status="NO INSTALLED"
 fi
 
-    elif [[ "$dist" = MANJARO ]]; then
+    elif [ "$dist" = MANJARO ]; then
             echo "System is running MANJARO Linux"
             DISTRO=MANJARO
 
@@ -273,12 +565,11 @@ tarea=Install
 status="NO INSTALLED"
 fi
 
-    elif [ "$dist" = ubuntu ]; then
+    elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
             echo "System is running Ubuntu Linux"
             DISTRO=UBUNTU
 
-dpkg-query -Wf'${db:Status-abbrev}' $OPTARG
-if [ $? = 0 ] ; then
+if [ $(dpkg-query -Wf '${db:Status-abbrev}' $OPTARG) = ii ]; then
 echo "$OPTARG is present"
 tarea=Uninstall
 status=INSTALLED
@@ -300,7 +591,7 @@ fi
 
 # If user only need see information
 
-if [[ "$task" = Information ]]; then
+if [ "$task" = Information ]; then
 
 yad --title="PostInstallerF - $OPTARG" \
 --center \
@@ -319,44 +610,28 @@ $Url"  \
 
 ret=$?
 
-if [[ $ret -eq 0 ]]; then 
+if [ $ret -eq 0 ]; then 
 
-if [[ "$tarea" = Install ]]; then
-
-if [[ "$dist" = MANJARO ]]; then
-/usr/bin/postinstaller -i $OPTARG
-
-else
+if [ "$tarea" = Install ]; then
 bash /usr/bin/postinstaller -i $OPTARG
-fi
-
-
-elif [[ "$tarea" = Uninstall ]]; then
-
-if [[ "$dist" = MANJARO ]]; then
-/usr/bin/postinstaller -e $OPTARG
-
-else
+elif [ "$tarea" = Uninstall ]; then
 bash /usr/bin/postinstaller -e $OPTARG
 fi
 
-fi
+elif [ $ret -eq 3 ]; then
+rm -f /tmp/postinstaller.$OPTARG.lck
+postinstaller -n $OPTARG
 
-elif [[ $ret -eq 4 ]]; then
+elif [ $ret -eq 4 ]; then
 Url2=https://duckduckgo.com/?q=$OPTARG+software; echo Url2=$Url2
 sitevar="${Url:-$Url2}"
-
-xdg-open $sitevar
-
-else
-	echo "Nothing to do"
-if [[ "$(id -u)" -eq 0 ]]; then
-rm -f /tmp/packagekit-url-tmp
-rm -rf /tmp/.pictures/
 rm -f /tmp/postinstaller.$OPTARG.lck
-else
-rm -f /tmp/.pictures/$OPTARG.png
-fi
+xdg-open $sitevar
+postinstaller -n $OPTARG
+
+elif [ $ret -eq 1 ]; then
+	echo "Nothing to do"
+cleanlock
 	fi
 
 fi
@@ -367,14 +642,15 @@ fi
 # If only need install or uninstall
 
 
-if [[ "$task" = Installing ]] || [[ "$task" = Uninstalling ]]; then
+if [ "$task" = Installing ] || [ "$task" = Uninstalling ]; then
 
-if [[ "$dist" = MANJARO ]]; then
+if [ "$dist" = MANJARO ]; then
 echo > /tmp/packer-url-tmp
 
+# MANJARO Y ARCH LINUX
 
-if [[ "$dist" = MANJARO ]] && [[ "$task" = Installing ]] ; then
-$ang $OPTARG 2>&1 | tee -a /tmp/packer-url-tmp | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' | yad --progress \
+if [ "$dist" = MANJARO ] && [ "$task" = Installing ] ; then
+pkexec $ang $OPTARG 2>&1 | tee -a /tmp/packer-url-$OPTARG | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' | yad --progress \
 --title="PostInstallerF - $task $OPTARG" \
 --center \
 --image="$screenshot" --image-on-top \
@@ -390,7 +666,7 @@ License: $lic
 $Url"  \
 --pulsate   \
 --auto-close  \
---button="Cancel (Not recommended):0" 
+--no-buttons
 
 wait ${!}
 
@@ -402,75 +678,82 @@ else
 checking='is not' 
 fi
 
-Result=$(grep -e '==>' -e 'failed' -e 'ERROR' -e 'error' -e '/var/lib/pacman/db.lck' /tmp/packer-url-tmp) 
+Result=$(grep -e '==>' -e 'failed' -e 'ERROR' -e 'error' -e '/var/lib/pacman/db.lck' /tmp/packer-url-$OPTARG | tail -10) 
 
-yad --info --title="PostInstallerF Log" --text="$Result
+yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
 
-$OPTARG $checking installed now" --width=350 --height=350 --timeout=5
+$OPTARG $checking installed now
+Done" --width=350 --height=350 --timeout=5
 
-elif [[ "$dist" = MANJARO ]] && [[ "$task" = Uninstalling ]] ; then
-$ang $OPTARG 2>&1 | tee -a /tmp/packer-url-tmp | stdbuf -oL sed -nru '/\.\.\.$/ s/^/# /p' | yad --progress \
---title="PostInstallerF - $task $OPTARG" \
---center \
---image="$screenshot" --image-on-top \
---window-icon="/usr/share/icons/acciones/topicon.png" \
---width=800 --height=500 \
---text="$names 
-$resume
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-$pvar 
-
-License: $lic
-
-$Url"  \
---pulsate   \
---auto-close  \
---button="Cancel (Not recommended):0" 
-
-wait ${!}
-
-if (pacman -Q $OPTARG >/dev/null) ; then 
-echo "$OPTARG is installed"
-checking='is' 
-else
-    echo "none $OPTARG is present"
-checking='is not' 
-fi
-
-Result=$(grep -e '==>' -e 'failed' -e 'ERROR' -e 'error' -e '/var/lib/pacman/db.lck' -e '...' /tmp/packer-url-tmp | tail -20) 
-
-yad --info --title="PostInstallerF Log" --text="$Result
-
-$OPTARG $checking installed now" --width=350 --height=350 --timeout=5
-
-fi
-
-
-	/usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg
-
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-	notify-send "Terminado!" "Todo está completado" -i "/usr/share/icons/pinguino.png" -t 10000
-else
-        notify-send "Finish!" "All tasks were completed" -i "/usr/share/icons/pinguino.png" -t 10000
-fi       	 
+fnotify 
 
 # Clean capture
 rm -f /tmp/.pictures/$OPTARG.png
 
-# Clean pacaur results
-if [[ "$(id -u)" -eq 0 ]]; then
+# Clean packer results
+if [ "$(id -u)" -eq 0 ]; then
 rm -f /tmp/packer-url-tmp
 rm -f /tmp/postinstaller.$OPTARG.lck
 else
-cat /dev/null > /tmp/packer-url-tmp
+cat /dev/null > /tmp/packer-url-$OPTARG
 fi
 
+elif [ "$dist" = MANJARO ] && [ "$task" = Uninstalling ] ; then
+pkexec $ang $OPTARG 2>&1 | tee -a /tmp/packer-url-$OPTARG | stdbuf -oL sed -nru '/\.\.\.$/ s/^/# /p' | yad --progress \
+--title="PostInstallerF - $task $OPTARG" \
+--center \
+--image="$screenshot" --image-on-top \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--width=800 --height=500 \
+--text="$names 
+$resume
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+$pvar 
 
-# TODAS LAS DISTRIBUCIONES #
+License: $lic
+
+$Url"  \
+--pulsate   \
+--auto-close  \
+--no-buttons
+
+wait ${!}
+
+if (pacman -Q $OPTARG >/dev/null) ; then 
+echo "$OPTARG is installed"
+checking='is' 
 else
+    echo "none $OPTARG is present"
+checking='is not' 
+fi
 
+Result=$(grep -e '==>' -e 'failed' -e 'ERROR' -e 'error' -e '/var/lib/pacman/db.lck' -e '...' /tmp/packer-url-$OPTARG | tail -10) 
+
+yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
+
+$OPTARG $checking installed now
+Done" --width=350 --height=350 --timeout=5
+
+
+fnotify
+
+# Clean capture
+rm -f /tmp/.pictures/$OPTARG.png
+
+# Clean packer results
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/packer-url-tmp
+rm -f /tmp/postinstaller.$OPTARG.lck
+else
+cat /dev/null > /tmp/packer-url-$OPTARG
+fi
+   fi
+
+#UBUNTU
+
+elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
 echo > /tmp/packagekit-url-tmp
-$ang $OPTARG | tee /tmp/packagekit-url-tmp | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+pkexec $ang $OPTARG | tee /tmp/packagekit-url-$OPTARG | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 	--title="PostInstallerF - $task $OPTARG" \
 	--center \
 	--image="$screenshot" --image-on-top \
@@ -487,7 +770,59 @@ $Url"  \
 	--justify=fill \
 	--pulsate   \
 	--auto-close  \
---button="Cancel (Not recommended):0"  
+	--no-buttons
+
+wait ${!}
+
+
+if [ $(dpkg-query -Wf '${db:Status-abbrev}' $OPTARG) = ii ]; then
+checking='is' 
+else
+checking='is not' 
+fi
+
+Result=$(grep -e 'Resultados:' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'installed' -e 'status' -e 'erased' -e 'freedesktop.PackageKit:' -e ':' /tmp/packagekit-url-$OPTARG | tail -10) 
+
+yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
+
+$OPTARG $checking installed now
+Done" --width=350 --height=350 --timeout=5
+
+fnotify
+
+# Clean package info
+
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/packagekit-url-tmp
+rm -rf /tmp/.pictures/
+rm -f /tmp/postinstaller.$OPTARG.lck
+else
+cat /dev/null > /tmp/packagekit-url-$OPTARG
+fi
+
+
+# TODAS LAS DISTRIBUCIONES #
+else
+
+echo > /tmp/packagekit-url-tmp
+$ang $OPTARG | tee /tmp/packagekit-url-$OPTARG | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+	--title="PostInstallerF - $task $OPTARG" \
+	--center \
+	--image="$screenshot" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--width=800 --height=500 \
+	--text="$names 
+$resume
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+$pvar 
+
+License: $lic 
+
+$Url"  \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+	--no-buttons
 
 wait ${!}
 
@@ -500,31 +835,24 @@ checking='is not'
 fi
 
 
-Result=$(grep -e 'Resultados:' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'installed' -e 'status' -e 'erased' /tmp/packagekit-url-tmp | tail -20) 
+Result=$(grep -e 'Resultados:' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'installed' -e 'status' -e 'erased' -e 'freedesktop.PackageKit:' /tmp/packagekit-url-$OPTARG | tail -10) 
 
-yad --info --title="PostInstallerF Log" --text="$Result
+yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
 
-$OPTARG $checking installed now" --width=350 --height=350 --timeout=5
+$OPTARG $checking installed now
+Done" --width=350 --height=350 --timeout=5
 
-if [[ "$(id -u)" -eq 0 ]]; then
-	/usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg
-else
-/usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-       notify-send "Terminado!" "Todo está completado" -i "/usr/share/icons/pinguino.png" -t 10000
-else
-       notify-send "Finish!" "All tasks were completed" -i "/usr/share/icons/pinguino.png" -t 10000
-fi
-  fi
+
+fnotify
 
 # Clean package info
 
-if [[ "$(id -u)" -eq 0 ]]; then
+if [ "$(id -u)" -eq 0 ]; then
 rm -f /tmp/packagekit-url-tmp
 rm -rf /tmp/.pictures/
 rm -f /tmp/postinstaller.$OPTARG.lck
 else
-cat /dev/null > /tmp/packagekit-url-tmp
+cat /dev/null > /tmp/packagekit-url-$OPTARG
 fi
    
 
@@ -541,12 +869,11 @@ fi
 # If only need install local
 
 
-if [[ "$task" = Localinstall ]]; then
+if [ "$task" = Localinstall ]; then
 
-if [[ "$dist" = MANJARO ]]; then
-echo > /tmp/packer-url-tmp
+if [ "$dist" = MANJARO ]; then
 
-$ang $OPTARG 2>&1 | tee -a /tmp/packer-url-tmp | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' -e '/\.\.\.$/ s/^/# /p' | yad --progress \
+pkexec $ang $OPTARG 2>&1 | tee -a /tmp/packer-local-$OPTARG | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' -e '/\.\.\.$/ s/^/# /p' | yad --progress \
 --title="PostInstallerF - $task $OPTARG" \
 --center \
 --image="/usr/share/icons/acciones/localinstall.png" --image-on-top \
@@ -555,37 +882,30 @@ $ang $OPTARG 2>&1 | tee -a /tmp/packer-url-tmp | stdbuf -oL sed -nrue '/==>/ s/^
 --text='<span size="xx-large">Installing locally, please wait...</span>'  \
 --pulsate   \
 --auto-close  \
---button="Cancel (Not recommended):0" 
+--no-buttons
 
 wait ${!}
 
-Result=$(grep -e '==>' -e 'failed' -e 'ERROR' -e 'error' -e '/var/lib/pacman/db.lck' -e '...' /tmp/packer-url-tmp | tail -20) 
+Result=$(grep -e '==>' -e 'failed' -e 'ERROR' -e 'error' -e '/var/lib/pacman/db.lck' -e '...' -e 'Actualizado' -e 'Updated' /tmp/packer-local-$OPTARG | tail -10) 
 
-yad --info --title="PostInstallerF Log" --text="$Result" --width=350 --height=350 
+yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result 
+Done" --width=350 --height=350 
 
 
-	/usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg
+fnotify
 
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-	notify-send "Terminado!" "Todo está completado" -i "/usr/share/icons/pinguino.png" -t 10000
-else
-        notify-send "Finish!" "All tasks were completed" -i "/usr/share/icons/pinguino.png" -t 10000
-fi       	 
-
-# Clean pacaur results
-if [[ "$(id -u)" -eq 0 ]]; then
+# Clean packer results
+if [ "$(id -u)" -eq 0 ]; then
 rm -f /tmp/packer-url-tmp
 rm -f /tmp/postinstaller.$OPTARG.lck
 else
-cat /dev/null > /tmp/packer-url-tmp
+cat /dev/null > /tmp/packer-local-$OPTARG
 fi
 
+#UBUNTU
+elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
 
-# TODAS LAS DISTRIBUCIONES #
-else
-
-echo > /tmp/packagekit-url-tmp
-$ang $OPTARG | tee /tmp/packagekit-url-tmp | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+pkexec $ang $OPTARG | tee /tmp/local-url-$OPTARG | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 	--title="PostInstallerF - $task $OPTARG" \
 	--center \
 	--image="/usr/share/icons/acciones/localinstall.png" --image-on-top \
@@ -595,33 +915,60 @@ $ang $OPTARG | tee /tmp/packagekit-url-tmp | stdbuf -oL sed -n 's/^/# /p' | yad 
 	--justify=fill \
 	--pulsate   \
 	--auto-close  \
---button="Cancel (Not recommended):0"  
+	--no-buttons
 
 wait ${!}
 
 
-Result=$(grep -e 'Resultados:' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' /tmp/packagekit-url-tmp | tail -20) 
+Result=$(grep -e 'Resultados:' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'freedesktop.PackageKit:' -e 'Actualizado' -e 'Updated' -e '(local)' /tmp/local-url-$OPTARG | tail -10) 
 
-yad --info --title="PostInstallerF Log" --text="$Result" --width=350 --height=350 --timeout=5
+yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
+Done" --width=350 --height=350 --timeout=5
 
       	 
-if [[ "$(id -u)" -eq 0 ]]; then
-	/usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg
-else
-/usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-       notify-send "Terminado!" "Todo está completado" -i "/usr/share/icons/pinguino.png" -t 10000
-else
-       notify-send "Finish!" "All tasks were completed" -i "/usr/share/icons/pinguino.png" -t 10000
-fi
-  fi
+fnotify
 
 # Clean package info
-if [[ "$(id -u)" -eq 0 ]]; then
-rm -f /tmp/packagekit-url-tmp
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/local-url-tmp
 rm -f /tmp/postinstaller.$OPTARG.lck
 else
-cat /dev/null > /tmp/packagekit-url-tmp
+cat /dev/null > /tmp/local-url-tmp
+fi
+
+
+# TODAS LAS DISTRIBUCIONES #
+else
+
+$ang $OPTARG | tee /tmp/local-url-$OPTARG | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+	--title="PostInstallerF - $task $OPTARG" \
+	--center \
+	--image="/usr/share/icons/acciones/localinstall.png" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--width=800 --height=500 \
+	--text='<span size="xx-large">Installing locally, please wait...</span>'  \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+	--no-buttons
+
+wait ${!}
+
+
+Result=$(grep -e 'Resultados:' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'freedesktop.PackageKit:' -e 'Actualizado' -e 'Updated' -e '(local)' /tmp/local-url-$OPTARG | tail -10) 
+
+yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
+Done" --width=350 --height=350 --timeout=5
+
+      	 
+fnotify
+
+# Clean package info
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/local-url-tmp
+rm -f /tmp/postinstaller.$OPTARG.lck
+else
+cat /dev/null > /tmp/local-url-$OPTARG
 fi
 
    
@@ -631,72 +978,124 @@ fi
  fi
 
 
-
-
 # MENU 4 #
+# If only need search ppa (only Ubuntu and Mint)
+
+if [ "$task" = ppa-install ]; then
+cleanppa
+pkexec /usr/bin/postinstallerf/searchppa
+fi
+
+
+# MENU 5 #
 # If only need search
 
-if [[ "$task" = Search ]]; then
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
+
+#Define Architecture
+architecture=$(uname -m)
+
+if [ "$task" = Search ]; then
+
 #check if synaptic update-manager software-center apt-get dpkg aptitude yum pkcon is locking the system
 
-for lock in synaptic update-manager software-center apt-get dpkg aptitude yum pkcon zypper
+for lock in synaptic update-manager software-center apt-get dpkg aptitude yum pkcon zypper dnf
 	do
-		if ps -U root -u root u | grep $lock | grep -v grep > /dev/null;
+		if ps -U root -u root u | grep "$lock" | grep -v grep > /dev/null;
 			then 
 				echo "Installation won't work. Please close $lock first then try again.";
-				yad --class="PostInstallerF" --window-icon="/usr/share/icons/acciones/topicon.png" --form --title="Warning - PostInstallerF" --text="\n\n  Selected action won't work.  \n\n  Please close / wait for <b>$lock</b> to finish and try again!   \n" --button="gtk-ok:0"
+				yad --class="PostInstallerF" --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/wait-lock.png --image-on-top --form --title="Warning - PostInstallerF" --text="\n\n  Selected action won't work.  \n\n  Please close / wait for <b>$lock</b> to finish and try again!   \n" --button="gtk-ok:0"
 				exit
 		fi
 	done
 
-#Define Architecture
 
-architecture=$(uname -m)
-
-
-dist=$(uname -a | grep -o 'MANJARO')
-if [[ "$dist" = MANJARO ]]; then
+if [ "$dist" = MANJARO ]; then
 
 BUSCA_I=$(yad --entry --center --title="Repository search." --window-icon="/usr/share/icons/acciones/topicon.png" --width=350 --text="Type in as many keywords as you want to search for." --image=/usr/share/icons/acciones/searchpackage.png --image-on-top) 
 
-if [[ "$?" != 0 ]]; then
+if [ "$?" != 0 ]; then
 exit
 else
 
-	RES_BUSCA_I=$(packer-postinstaller -Ss $BUSCA_I | grep -e '^extra' -e '^community' -e '^aur' -e '^core' -e '^local' -e '^multilib' -e '^testing' -e '^community-testing' -e '^multilib-testing' | sed 's:/: :g' | awk '{print $1, $2, $3}' | awk 'NR == 1 || NF >= max{ print;max=NF}' | sed '/,/d' | sed '/:/d' | uniq -c)
+notify-send -t 500000 "Searching $BUSCA_I
+Please wait" -i "/usr/share/icons/acciones/loadingimage2.png"
 
+	RES_BUSCA_I=$(packer-postinstaller -Ss $BUSCA_I | grep -e '^extra' -e '^community' -e '^aur' -e '^core' -e '^local' -e '^multilib' -e '^testing' -e '^community-testing' -e '^multilib-testing' | sed 's:/: :g' | awk '{print $1, $2, $3}' | uniq -c)
 
-	CHECK=$(yad --list --radiolist --center --title="Package installation." --text="Select packages to be installed" --width=600 --height=500 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/searchpackage.png --image-on-top --column=Install-Un --column=Repository --column=Package --column=Version $RES_BUSCA_I) 
-	
+ps aux | grep notify | awk '{print $2}' | xargs kill -9	
+
+	CHECK=$(yad --list --radiolist --center --title="Search package." --text="You've searched for $BUSCA_I" --width=600 --height=500 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/searchpackage.png --image-on-top --column=ide --column=Repository --column=Package --column=Version $RES_BUSCA_I) 
+
 	
 	CHECK_INST=$(echo $CHECK | awk -F'|' '{print $3}')
 
-sh /usr/bin/postinstaller -n $CHECK_INST
+/usr/bin/postinstaller -n $CHECK_INST
 fi
+
+
+# UBUNTU
+
+elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+BUSCA_I=$(yad --entry --center --title="Repository search." --window-icon="/usr/share/icons/acciones/topicon.png" --width=350 --text="Type in as many keywords as you want to search for." --image=/usr/share/icons/acciones/searchpackage.png --image-on-top) 
+
+if [ "$?" != 0 ]; then
+exit
+else
+
+notify-send -t 500000 "Searching $BUSCA_I
+Please wait" -i "/usr/share/icons/acciones/loadingimage2.png"
+
+if [ $architecture = x86_64 ]; then
+
+	RES_BUSCA_I=$(pkcon search name $BUSCA_I | grep 'x86_64' -e '_all' -e '.all' | grep -ve '===' -e 'i386' | grep $BUSCA_I | uniq -c )
+
+else
+
+	RES_BUSCA_I=$(pkcon search name $BUSCA_I | grep -e 'i386' -e '_all' -e '.all' | grep -ve '===' -e 'x86_64' | grep $BUSCA_I | uniq -c )
+fi
+
+ps aux | grep notify | awk '{print $2}' | xargs kill -9 
+
+	CHECK=$(yad --list --radiolist --center --title="Search package" --text="You've searched for $BUSCA_I" --width=600 --height=500 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/searchpackage.png --image-on-top --column=In --column=Status --column=Package $RES_BUSCA_I)
+	
+CHECK_INST=$(echo $CHECK | awk -F'|' '{print $3}' | awk -F'-[0-9]' '{print $1}')
+	
+/usr/bin/postinstaller -n $CHECK_INST
+fi
+
+
 else
 # TODAS LAS DISTRIBUCIONES
 BUSCA_I=$(yad --entry --center --title="Repository search." --window-icon="/usr/share/icons/acciones/topicon.png" --width=350 --text="Type in as many keywords as you want to search for." --image=/usr/share/icons/acciones/searchpackage.png --image-on-top) 
 
-if [[ "$?" != 0 ]]; then
+if [ "$?" != 0 ]; then
 exit
 else
 
-if [[ $architecture = x86_64 ]]; then
+notify-send -t 500000 "Searching $BUSCA_I
+Please wait" -i "/usr/share/icons/acciones/loadingimage2.png"
 
-		RES_BUSCA_I=$(pkcon search name $BUSCA_I | grep -ve 'i686' -e 'meta' -e 'debug' -e '(updates)' | grep -w "$BUSCA_I" | awk '{print $1, $2}' | awk -F'-[0-9]' '{print $1}' | sed '/^$/d' | uniq -c)
+if [ $architecture = x86_64 ]; then
+
+		RES_BUSCA_I=$(pkcon search name $BUSCA_I | grep -e 'x86_64' -e 'noarch' | grep -ve 'i686' -e 'i586' -e 'meta' -e 'debug' | grep $BUSCA_I | uniq -c )
 
 else
 
-		RES_BUSCA_I=$(pkcon search name $BUSCA_I | grep -ve 'meta' -e 'debug' | grep -w "$BUSCA_I" | awk '{print $1, $2}' | awk -F'-[0-9]' '{print $1}' | sed '/^$/d' | uniq -c)
+		RES_BUSCA_I=$(pkcon search name $BUSCA_I | grep -e 'i686' -e 'noarch' | grep -ve 'i586' -e 'meta' -e 'debug' | grep -w $BUSCA_I | uniq -c)
 fi
        
+# lines=("${lines[@]}" "$RES_BUSCA_I")
 
+ps aux | grep notify | awk '{print $2}' | xargs kill -9 
 
-	CHECK=$(yad --list --radiolist --center --title="Package installation." --text="Select package to be installed" --width=350 --height=500 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/searchpackage.png --image-on-top --column=Install-Un --column=Status --column=Package $RES_BUSCA_I) 
+	CHECK=$(yad --list --radiolist --center --title="Search package" --text="You've searched for $BUSCA_I" --width=600 --height=500 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/searchpackage.png --image-on-top --column=In --column=Status --column=Package --column=Respository $RES_BUSCA_I)  
+
+ps aux | grep notify | awk '{print $2}' | xargs kill -9
 	
-	CHECK_INST=$(echo $CHECK | awk -F'|' '{print $3}')
+	CHECK_INST=$(echo $CHECK | awk -F'|' '{print $3}' | awk -F'-[0-9]' '{print $1}')
 	
-sh /usr/bin/postinstaller -n $CHECK_INST
+/usr/bin/postinstaller -n $CHECK_INST
 fi
 
 fi
@@ -704,43 +1103,40 @@ fi
   fi
 
 
-# MENU 5 #
+# MENU 6 #
 # If only need install group
 
-if [[ "$task" = Installgroup ]]; then
+if [ "$task" = Install-group ]; then
 
-groups=$(yum groupinfo "$OPTARG" | tr -d '+' | sed '/:/d'  | tr -d '=' | tr -d '[:blank:]' | sed '/^-/ s/^-//p' | sed '/^$/d' | tee /tmp/group-install)
+groups=$(dnf groupinfo "$OPTARG" | tr -d '+' | sed '/:/d'  | tr -d '=' | tr -d '[:blank:]' | sed '/^-/ s/^-//p' | sed '/^$/d' | tee /tmp/group-install)
 
 file="/tmp/group-install"
 while IFS= read -r line; do
         # display $line or do somthing with $line
-	if [[ $(rpm -qa $line | grep -c $line ) -gt 0 ]]; then
-echo "$line installed"
+	if [ $(rpm -qa $line | grep -c $line) -gt 0 ] ; then
+echo "$line Installed"
+elif [ $(grep -c 'UnabletosendmessagetoPackageKit' /tmp/group-install) -gt 0 ] ; then
+echo 'exist problems in packagekit'
+exit
 else
- postinstaller -i $line
-#exit 1;
+echo "Installing $line"
+postinstaller -i $line
+echo "$line installed"
 fi
-done <"$file"
+done <"$file" | groupgress
 
 echo '=> Installation group completed'
+fnotify
 
-if [[ "$(id -u)" -eq 0 ]]; then
-	/usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg
-else
-/usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-       notify-send "Terminado!" "Todo está completado" -i "/usr/share/icons/pinguino.png" -t 10000
-else
-       notify-send "Finish!" "All tasks were completed" -i "/usr/share/icons/pinguino.png" -t 10000
-fi
-  fi
 
 # Clean package info
-if [[ "$(id -u)" -eq 0 ]]; then
+if [ "$(id -u)" -eq 0 ]; then
 rm -f /tmp/group-install
-rm -rf /tmp/postinstaller.*.lck
+rm -f /tmp/*.lck
+rm -f /tmp/summary-group
 else
 cat /dev/null > /tmp/group-install
+cat /dev/null > /tmp/summary-group
 fi
 
 #end install group
@@ -748,15 +1144,53 @@ fi
 
 
 
-# MENU 6 #
+# MENU 7 #
+# If only need remove old kernels
+
+if [ "$task" = Remove-old-kernel ]; then
+
+pkexec $ang | tee /tmp/old-url-tmp | stdbuf -oL sed -nrue '/--->/ s/^/# /p' -e '/ :/ s/^/# /p' | yad --progress \
+--title="PostInstallerF - $task" \
+--center \
+--image="/usr/share/icons/acciones/deleteold.png" --image-on-top \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--width=800 --height=500 \
+--text='<span size="xx-large">Removing old kernels, please wait...</span>'  \
+--pulsate   \
+--auto-close  \
+--no-buttons
+
+wait ${!}
+
+Result=$(grep -e '-->' -e '--->' -e ':' -e 'kernel' /tmp/old-url-tmp | tail -15) 
+
+yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
+Done"
+
+fnotify
+
+# Clean packer results
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/old-url-tmp
+rm -f /tmp/*.lck
+else
+cat /dev/null > /tmp/old-url-tmp
+fi
+	
+	fi
+
+
+
+
+# MENU 8 #
 # If only need update
 
-if [[ "$task" = Update ]]; then
+if [ "$task" = Update ]; then
 
-if [[ "$dist" = MANJARO ]]; then
-echo > /tmp/packer-url-tmp
+if [ "$dist" = MANJARO ]; then
 
-$ang 2>&1 | tee -a /tmp/packer-url-tmp | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' | yad --progress \
+
+pkexec $ang 2>&1 | tee -a /tmp/packer-url-tmp | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' -e '/^descargando/ s/^/# /p' -e '/^downloading/ s/^/# /p' | yad --progress \
 --title="PostInstallerF - $task" \
 --center \
 --image="/usr/share/icons/acciones/update.png" --image-on-top \
@@ -765,28 +1199,32 @@ $ang 2>&1 | tee -a /tmp/packer-url-tmp | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -
 --text='<span size="xx-large">Updating, please wait...</span>'  \
 --pulsate   \
 --auto-close  \
---button="Cancel (Not recommended):0" 
+--no-buttons
 
 wait ${!}
 
-Result=$(grep -e '==> ' -e 'failed' -e 'ERROR' -e 'error' -e '/var/lib/pacman/db.lck' -e 'extra' -e 'community' -e 'core' -e 'Starting full' -e 'local database' /tmp/packer-url-tmp | tail -20) 
+Result=$(grep -e '==> ' -e 'failed' -e 'ERROR' -e 'error' -e '/var/lib/pacman/db.lck' -e 'extra' -e 'community' -e 'core' -e 'Starting full' -e 'local database' /tmp/packer-url-tmp | tail -10) 
 
-yad --info --title="PostInstallerF Log" --text="$Result"
+yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
+Done"
 
-# Clean pacaur results
-if [[ "$(id -u)" -eq 0 ]]; then
+fnotify
+
+# Clean packer results
+if [ "$(id -u)" -eq 0 ]; then
 rm -f /tmp/packer-url-tmp
-rm -rf /tmp/postinstaller.*.lck
+rm -f /tmp/*.lck
 else
 cat /dev/null > /tmp/packer-url-tmp
 fi
 
 
-# TODAS LAS DISTRIBUCIONES #
-else
 
-echo > /tmp/packagekit-url-tmp
-$ang | tee /tmp/packagekit-url-tmp | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+
+# UBUNTU
+
+elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+pkexec $ang | tee /tmp/apt-url-tmp | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 	--title="PostInstallerF - $task" \
 	--center \
 	--image="/usr/share/icons/acciones/update.png" --image-on-top \
@@ -796,34 +1234,61 @@ $ang | tee /tmp/packagekit-url-tmp | stdbuf -oL sed -n 's/^/# /p' | yad --progre
 	--justify=fill \
 	--pulsate   \
 	--auto-close  \
---button="Cancel (Not recommended):0"  
+	--no-buttons
 
 wait ${!}
 
-Result=$(grep -e 'Resultados:' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'updated' /tmp/packagekit-url-tmp | tail -20) 
+Result=$(grep '^[0-9]' /tmp/apt-url-tmp | tail -10) 
 
-yad --info --title="PostInstallerF Log" --text="$Result"
+yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
+Done"
 
 
-	if [[ "$(id -u)" -eq 0 ]]; then
-	/usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg
-else
-/usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-       notify-send "Terminado!" "Todo está completado" -i "/usr/share/icons/pinguino.png" -t 10000
-else
-       notify-send "Finish!" "All tasks were completed" -i "/usr/share/icons/pinguino.png" -t 10000
-fi
-  fi
+fnotify
 
 # Clean package info
-if [[ "$(id -u)" -eq 0 ]]; then
-rm -f /tmp/packagekit-url-tmp
-rm -rf /tmp/postinstaller.*.lck
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/apt-url-tmp
+rm -f /tmp/*.lck
 else
-cat /dev/null > /tmp/packagekit-url-tmp
+cat /dev/null > /tmp/apt-url-tmp
 fi
-   
+
+
+# TODAS LAS DISTRIBUCIONES #
+else
+
+$ang | tee /tmp/update-url-tmp | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+	--title="PostInstallerF - $task" \
+	--center \
+	--image="/usr/share/icons/acciones/update.png" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--width=800 --height=500 \
+	--text='<span size="xx-large">Updating, please wait...</span>'  \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+	--no-buttons
+
+wait ${!}
+
+Result=$(grep -e 'Resultados:' -e '(updates)' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'updated' -e 'Actualizado' -e 'paquetes' -e 'Updated' -e 'freedesktop.PackageKit:' -e 'actualizarse' -e 'operación' -e 'operation' /tmp/update-url-tmp | tail -10) 
+
+yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
+Done"
+
+
+fnotify
+
+# Clean package info
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/update-url-tmp
+rm -f /tmp/*.lck
+else
+cat /dev/null > /tmp/update-url-tmp
+fi
+
+
 
 # End options basics
 fi

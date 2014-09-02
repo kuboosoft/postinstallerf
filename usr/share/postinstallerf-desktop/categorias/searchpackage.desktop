@@ -1,0 +1,11 @@
+[Desktop Entry]
+Exec=postinstaller -s
+Version=1.0
+Type=Application
+Name=Search Package
+GenericName=Search Package
+GenericName[pt]=Search Package
+Comment=Search Package
+Icon=/usr/share/icons/acciones/SEARCH.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

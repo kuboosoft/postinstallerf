@@ -1,7 +1,5 @@
 #!/bin/bash
 
-source /usr/bin/postinstallerf/pid
-
 user=$(loginctl show-session $XDG_SESSION_ID | grep 'Name' | cut -d= -f2 | tail -n 1)
 SER=$(grep "$user ALL=(ALL) ALL" /etc/sudoers) > /dev/null
 	if [[ "$?" != 0 ]]; then
@@ -52,3 +50,12 @@ fi
 
 
 fi
+
+
+# Clean lck 
+if [[ "$(id -u)" -eq 0 ]]; then
+rm -f /tmp/enable-sudo..lck
+else
+cat /dev/null > /tmp/enable-sudo..lck
+fi
+

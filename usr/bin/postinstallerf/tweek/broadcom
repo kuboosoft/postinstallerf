@@ -1,0 +1,117 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+
+    # Local Progress
+    localprogress='/usr/bin/postinstallerf/local-pro'
+
+    # Progress
+    progress='/usr/bin/postinstallerf/progress'
+
+    # Define version Fedora
+    version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
+
+
+
+cleaninfo() {
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/lastest_broadcom.txt
+rm -f /tmp/tarbroad.txt
+rm -f /tmp/broadcom..lck
+else
+cat /dev/null > /tmp/lastest_broadcom.txt
+cat /dev/null > /tmp/tarbroad.txt
+cat /dev/null > /tmp/broadcom..lck
+fi
+}
+
+
+PKGSINSTALLED=$(rpm -qa broadcom-wl)
+	if [ -n "$PKGSINSTALLED" ]; then
+
+status='INSTALLED'
+tarea='Remove'
+else
+status='NO INSTALLED'
+tarea='Install'                   
+fi
+
+Comment='<span size="xx-large">Broadcom Linux hybrid wireless driver</span>'
+
+yad --title="PostInstallerF - Broadcom 802.11 STA driver" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/broadcom.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Installation of Propietary Broadcom drivers, Experimental"  \
+--button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [ $ret -eq 0 ]; then 
+
+targra=$(lspci | grep -i broadcom | awk -F'Broadcom Corporation' '{print $2}' | awk -F' ' '{print $1}' | tr -d 'BCM' | tee -a /tmp/tarbroad.txt)
+
+wait ${!}
+
+
+foo8=$(wget --no-check-certificate -q http://www.broadcom.com/docs/linux_sta/README.txt -O - | grep '43'| awk '{print $1}'| grep [0-9] | tee -a /tmp/lastest_broadcom.txt)
+
+wait ${!}
+
+	# HERE INSTALLATION
+
+if [ $tarea = Install ]; then
+
+# Check if user really has a broadcom wireless card
+	WIFI=$(lspci -n | grep 14e4) > /dev/null
+	if [ "$?" != 0 ]; then
+echo 'No Broadcom card detected'
+zenity --info --title="PostInstallerF" --text="No Broadcom card detected"
+cleaninfo
+exit
+else
+echo 'Broadcom card detected'
+fi
+
+WIFI=$(grep "$targra" /tmp/lastest_broadcom.txt) > /dev/null
+	if [ "$?" != 0 ]; then
+echo 'No Broadcom card compatible'
+zenity --info --title="PostInstallerF" --text="No Broadcom card compatible"
+cleaninfo
+  exit
+else
+echo 'ya la hiciste rey'
+zenity --question --title="Do you want install Broadcom Drivers?" --text="Do you want install Broadcom Drivers?
+Remember this funtion is experimental" --ok-label "Yes" --cancel-label "No"
+
+if [ $? -eq 0 ]; then
+
+if [ $(rpm -qa rpmfusion-free-release | grep -c rpmfusion-free-release) -gt 0 ] && [ $(rpm -qa rpmfusion-nonfree-release | grep -c rpmfusion-nonfree-release) -gt 0 ]; then
+echo 'installed rpmfusion free and nonfree repository'
+else
+pkexec dnf -y install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$version.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$version.noarch.rpm | $localprogress    
+fi
+
+if [ $(rpm -qa kernel-devel | grep -c kernel-devel) -gt 0 ]; then
+echo 'installed kernel-devel'
+else
+postinstaller -i kernel-devel
+fi
+
+postinstaller -i broadcom-wl -i akmod-wl
+fi
+ fi
+   fi
+
+
+if [ $tarea = Uninstall ]; then
+postinstaller -e broadcom-wl -e akmod-wl
+fi
+#end
+  fi
+
+cleaninfo

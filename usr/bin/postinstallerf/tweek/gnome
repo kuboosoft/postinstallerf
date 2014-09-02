@@ -2,6 +2,43 @@
 
 source /usr/bin/postinstallerf/pid
 
+# Called whenever anything needs to be run as root ($@ is the command)
+runasroot() {
+  if [[ $UID -eq 0 ]]; then
+    "$@"
+  elif zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | sudo -S -v &>/dev/null && sudo -l "$@" &>/dev/null; then
+    sudo -E "$@"
+  else
+    echo -n "root "
+    zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | su -c "$(printf '%q ' "$@")"
+  fi
+}
+
+
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian')
+
+if [ $dist = Ubuntu ]; then
+
+if [ $(dpkg-query -Wf '${db:Status-abbrev}' ubuntu-gnome-desktop) = ii ]; then
+status='INSTALLED'
+tarea='Update'
+else
+status='NO INSTALLED'
+tarea='Install'
+fi
+
+elif [ "$dist" = MANJARO ]; then
+           
+if (pacman -Q gnome >/dev/null) ; then 
+status='INSTALLED'
+tarea='Update'
+else
+status='NO INSTALLED'
+tarea='Install'
+fi
+
+elif [ -f /etc/fedora-release ]; then
+
 if [ $(rpm -qa gnome-desktop3 | grep -c gnome-desktop3) -gt 0 ]; then
 status='INSTALLED'
 tarea='Update'
@@ -9,6 +46,7 @@ else
 status='NO INSTALLED'
 tarea='Install'
 fi
+  fi
 
 Comment='<span size="xx-large">Gnome Desktop Environment</span>'
 
@@ -29,7 +67,25 @@ if [[ $ret -eq 0 ]]; then
 if [[ $tarea = Update ]]; then
 echo 'installed Gnome Desktop Environment'
 postinstaller -u
+
 elif [[ $tarea = Install ]]; then
-postinstaller -g @gnome
+
+if [ $dist = Ubuntu ]; then
+postinstaller -i  gnome-shell ubuntu-gnome-desktop 
+
+elif [ -f /etc/fedora-release ]; then
+pkexec postinstaller -g gnome
+
+elif [ $dist = MANJARO ]; then 
+postinstaller -i gnome
+fi
+
 fi
    fi
+
+# Clean lck 
+if [[ "$(id -u)" -eq 0 ]]; then
+rm -f /tmp/gnome..lck
+else
+cat /dev/null > /tmp/gnome..lck
+fi

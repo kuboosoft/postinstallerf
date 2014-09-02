@@ -1,11 +1,25 @@
 #!/bin/bash
-
 if [ $# -gt 0 ] ; then
     echo "$*"
 else
     echo "No input"
+exit
 fi
 
-PASSWD="$(zenity --password --title=Authentication)\n"
+xhost +
 
-echo -e $PASSWD | su -c "$*"
+# Called whenever anything needs to be run as root ($@ is the command)
+runasroot() {
+  if [[ $UID -eq 0 ]]; then
+    "$@"
+  elif zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | sudo -S -v &>/dev/null && sudo -l "$@" &>/dev/null; then
+    sudo -E "$@"
+  else
+    echo -n "root "
+    zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | su -c "$(printf '%q ' "$@")"
+  fi
+}
+
+
+runasroot $*
+
