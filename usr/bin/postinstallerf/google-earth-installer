@@ -8,9 +8,13 @@
 # Contact: https://plus.google.com/u/0/communities/118230919321773121406
 
 
+ver=$(curl -s https://dl.google.com/dl/earth/client/current/google-earth-stable_current_x86_64.rpm | head -c96 | strings | cut -d "-" -f4)
+
+
+wait ${!}
 
 Name='google-earth'
-Version='7.1.2.2041'
+Version=$ver
 tmp_download_dir="/tmp/$Name-$Version"
 License='Proprietary'
 installdir='/tmp/installdir'
@@ -50,6 +54,12 @@ BR8='glibc'
 BR9='rpm-build'
 BR10='qt-x11'
 BR11='proj'
+BR12='freeimage-devel'
+BR13='qt-devel'
+BR14='qtwebkit'
+BR15='qt-x11'
+BR16='freeimage'
+BR17='qt'
 
 
 # Requires
@@ -144,6 +154,42 @@ else
 pkcon -p -y install $BR11
 fi
 
+if [ $(rpm -qa | grep -c $BR12) -gt 0 ]; then
+    echo "$BR12 is present"
+else
+pkcon -p -y install $BR12
+fi
+
+if [ $(rpm -qa | grep -c $BR13) -gt 0 ]; then
+    echo "$BR13 is present"
+else
+pkcon -p -y install $BR13
+fi
+
+if [ $(rpm -qa | grep -c $BR14) -gt 0 ]; then
+    echo "$BR14 is present"
+else
+pkcon -p -y install $BR14
+fi
+
+if [ $(rpm -qa | grep -c $BR15) -gt 0 ]; then
+    echo "$BR15 is present"
+else
+pkcon -p -y install $BR15
+fi
+
+if [ $(rpm -qa | grep -c $BR16) -gt 0 ]; then
+    echo "$BR16 is present"
+else
+pkcon -p -y install $BR16
+fi
+
+if [ $(rpm -qa | grep -c $BR17) -gt 0 ]; then
+    echo "$BR17 is present"
+else
+pkcon -p -y install $BR17
+fi
+
 
 if [ ! -f $HOME/bin/fpm ]; then
 gem install fpm
@@ -217,36 +263,27 @@ cat > $installdir/usr/share/mime/packages/google-earth-mimetypes.xml << EOF
 </mime-info>
 EOF
 
+
+echo '/* amirpli 2013/11/28 */
+#include <QtCore/QAtomicInt>
+extern "C" {
+        int _Z34QBasicAtomicInt_fetchAndAddOrderedPVii(QAtomicInt* a, int b) {
+                return a->fetchAndAddOrdered(b);
+        }
+}' > $installdir/opt/google/earth/free/baifaao.cpp 
+
  
 	# "Removing the Debian-intended cron job and duplicated images"
 	rm -rf $installdir/etc/cron.daily
 	rm -rf $installdir/opt/google/earth/free/product_logo_*.png
 	rm -rf $installdir/usr/share/man
  
-# Fix Rpath problems
-
-if [ `getconf LONG_BIT` = "64" ]; then
-rm -f $installdir/opt/google/earth/free/libproj.so.0 
-ln -s /usr/lib64/libproj.so.0 $installdir/opt/google/earth/free/
-
-rm -f $installdir/opt/google/earth/free/plugins/imageformats/libqjpeg.so
-ln -s /usr/lib64/qt4/plugins/imageformats/libqjpeg.so $installdir/opt/google/earth/free/plugins/imageformats/
-
-rm -f $installdir/opt/google/earth/free/plugins/imageformats/libqgif.so
-ln -s /usr/lib64/qt4/plugins/imageformats/libqgif.so $installdir/opt/google/earth/free/plugins/imageformats/
-
-else
-rm -f $installdir/opt/google/earth/free/libproj.so.0 
-ln -s /usr/lib/libproj.so.0 $installdir/opt/google/earth/free/
-
-rm -f $installdir/opt/google/earth/free/plugins/imageformats/libqjpeg.so
-ln -s /usr/lib/qt4/plugins/imageformats/libqjpeg.so $installdir/opt/google/earth/free/plugins/imageformats/
 
 
-rm -f $installdir/opt/google/earth/free/plugins/imageformats/libqgif.so
-ln -s /usr/lib/qt4/plugins/imageformats/libqgif.so $installdir/opt/google/earth/free/plugins/imageformats/
+cd $installdir/opt/google/earth/free/
+gcc -O3 -fPIC --shared baifaao.cpp -o baifaao.so
+echo 'LD_PRELOAD=/usr/lib64/libfreeimage.so.3:./baifaao.so:/usr/lib/libfreeimage.so.3 \' >> $installdir/opt/google/earth/free/googleearth
 
-fi
 
 
 # Removing the Debian package files 

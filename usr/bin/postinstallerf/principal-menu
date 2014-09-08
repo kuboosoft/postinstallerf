@@ -36,6 +36,39 @@ postversion=$(rpm -q postinstallerf | awk -F '[a-z]-' '{print $2}' | awk -F '.fc
 fi
 
 
+# CLEANING THE REPOSITORY METADATA.
+if [ -f /etc/fedora-release ]; then
+
+nuday=$(date +%u); echo "nuday=$nuday"
+
+time=$(date +%H); echo "time=$time"
+time2=$(date +%R); echo "time2=$time2"
+
+setime=08
+setimea=16:00
+setimeb=12:00
+setimec=0
+
+Mon=1
+Tue=2
+Wed=3
+Thu=4
+Fri=5
+Sat=6
+Sun=7
+
+if [ ""$nuday = $Fri"" ] && [ ""$time = $setime"" ]; then
+dnf clean metadata
+elif [ ""$nuday = $Fri"" ] && [ ""$time2 = $setimea"" ]; then
+dnf clean metadata
+elif [ ""$nuday = $Fri"" ] && [ ""$time2 = $setimeb"" ]; then
+dnf clean metadata
+elif [ ""$nuday = $Fri"" ] && [ ""$time = $setimec"" ]; then
+dnf clean metadata
+fi
+   fi
+
+
 #check if the user has an active internet connection
 
 testconnection=`wget --no-check-certificate --tries=3 --timeout=15 www.google.com -O /tmp/.testinternet &>/dev/null 2>&1`

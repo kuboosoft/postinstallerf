@@ -76,7 +76,7 @@ sudo apt-get -y update
 postinstaller -i cinnamon
 
 elif [ -f /etc/fedora-release ]; then
-pkexec postinstaller -g cinnamon
+pkexec postinstaller -g cinnamon-desktop
 
 elif [ $dist = MANJARO ]; then 
 postinstaller -i cinnamon

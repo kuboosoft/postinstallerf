@@ -28,7 +28,7 @@ do
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
 if [ "$dist" = MANJARO ]; then
 ang='packer-postinstaller -S --noconfirm --noedit'
-elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+elif [ "$dist" = Ubuntu ] ; then
 ang='apt-get -y install'
 else
 ang='pkcon -p -y install'
@@ -40,7 +40,7 @@ task=Installing
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
 if [ "$dist" = MANJARO ]; then
 ang='packer-postinstaller -D'
-elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+elif [ "$dist" = Ubuntu ] ; then
 ang='apt-get -y remove'
 else
 ang='pkcon -p -y remove' 
@@ -53,7 +53,7 @@ task=Uninstalling
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
 if [ "$dist" = MANJARO ]; then
 ang='packer-postinstaller -L'
-elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+elif [ "$dist" = Ubuntu ] ; then
 ang='dpkg -i'
 else
 ang='pkcon -p -y install-local' 
@@ -90,7 +90,7 @@ fi
   p)
    echo received -p
 dist=$(uname -a | grep -o 'Ubuntu')
-if [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+if [ "$dist" = Ubuntu ] ; then
 task=ppa-install
 else
 echo 'OS no compatible'
@@ -104,7 +104,7 @@ task=Update
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
 if [ "$dist" = MANJARO ]; then
 ang='packer-postinstaller -Suu --noconfirm --noedit'
-elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+elif [ "$dist" = Ubuntu ] ; then
 ang='apt-get -y dist-upgrade'
 else
 ang='pkcon -p -y update'
@@ -201,7 +201,7 @@ else
     body="Sorry $globalnoti is not installed"
 fi
 
-elif [ "$dist" = Debian ] || [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+elif [ "$dist" = Debian ] || [ "$dist" = Ubuntu ] ; then
 if [ $(dpkg-query -Wf '${db:Status-abbrev}' $OPTARG) = ii ]; then
 body="$globalnoti is installed"
 else
@@ -226,7 +226,7 @@ fi
     shift 2
     opts="$*"
 
-if [ "$dist" = Debian ] || [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+if [ "$dist" = Debian ] || [ "$dist" = Ubuntu ] ; then
 notify-send "$title" "$body" -i "/usr/share/icons/pinguino.png" -t 10000
 else
 if [ "$(id -u)" -eq 0 ]; then    
@@ -316,8 +316,13 @@ fi
 usage() {
   echo 'usage: postinstaller [option] [package] [option] [package] [...]'
   echo
-  echo '    -i           - installs package'
+  echo '    -a           - Disable/Enable SELinux'
+  echo '    -b           - Disable/Enable Gracia sudo'
+  echo '    -f           - Disable/Enable Kernel updates'
+  echo '    -d           - Enable/Disable sudo'
+  echo '    -i           - install package'
   echo '    -l           - install locally package, requires specific path'
+  echo '    -m           - Check list Menu'
   echo '    -e           - uninstall package'
   echo '    -u     	 - updates all packages'
   echo '    -s    	 - searches for package'
@@ -565,7 +570,7 @@ tarea=Install
 status="NO INSTALLED"
 fi
 
-    elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+    elif [ "$dist" = Ubuntu ] ; then
             echo "System is running Ubuntu Linux"
             DISTRO=UBUNTU
 
@@ -751,7 +756,7 @@ fi
 
 #UBUNTU
 
-elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+elif [ "$dist" = Ubuntu ] ; then
 echo > /tmp/packagekit-url-tmp
 pkexec $ang $OPTARG | tee /tmp/packagekit-url-$OPTARG | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 	--title="PostInstallerF - $task $OPTARG" \
@@ -775,7 +780,7 @@ $Url"  \
 wait ${!}
 
 
-if [ $(dpkg-query -Wf '${db:Status-abbrev}' $OPTARG) = ii ]; then
+if [ $(dpkg-query -Wf '${db:Status-abbrev}' $OPTARG ) = ii ]; then
 checking='is' 
 else
 checking='is not' 
@@ -903,7 +908,7 @@ cat /dev/null > /tmp/packer-local-$OPTARG
 fi
 
 #UBUNTU
-elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+elif [ "$dist" = Ubuntu ] ; then
 
 pkexec $ang $OPTARG | tee /tmp/local-url-$OPTARG | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 	--title="PostInstallerF - $task $OPTARG" \
@@ -1036,7 +1041,7 @@ fi
 
 # UBUNTU
 
-elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+elif [ "$dist" = Ubuntu ] ; then
 BUSCA_I=$(yad --entry --center --title="Repository search." --window-icon="/usr/share/icons/acciones/topicon.png" --width=350 --text="Type in as many keywords as you want to search for." --image=/usr/share/icons/acciones/searchpackage.png --image-on-top) 
 
 if [ "$?" != 0 ]; then
@@ -1223,7 +1228,7 @@ fi
 
 # UBUNTU
 
-elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+elif [ "$dist" = Ubuntu ] ; then
 pkexec $ang | tee /tmp/apt-url-tmp | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 	--title="PostInstallerF - $task" \
 	--center \

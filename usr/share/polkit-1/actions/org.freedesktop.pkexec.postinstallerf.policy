@@ -5,7 +5,6 @@
 <policyconfig>
   <vendor>PostInstallerF</vendor>
   <vendor_url>http://sourceforge.net/projects/postinstaller/</vendor_url>
-  <icon_name>postinstaller</icon_name>
 
   <action id="org.freedesktop.pkexec.postinstallerf">
     <description>Install or Uninstall software Postinstallerf</description>

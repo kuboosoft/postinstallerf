@@ -20,10 +20,10 @@
     </description>
     <screenshots>
         <screenshot type="default" width="1360" height="765">http://sourceforge.net/projects/postinstaller/files/screenshots/postinstallerf.png</screenshot>
-        <screenshot width="1360" height="765">http://sourceforge.net/projects/postinstaller/files/screenshots/categories.png</screenshot>
-        <screenshot width="1360" height="765">http://sourceforge.net/projects/postinstaller/files/screenshots/postinstallerf.png</screenshot>
-        <screenshot width="1360" height="765">http://sourceforge.net/projects/postinstaller/files/screenshots/postinstallerf.png</screenshot>
-        <screenshot width="1360" height="765">http://sourceforge.net/projects/postinstaller/files/screenshots/postinstallerf.png</screenshot>
+        <screenshot width="1360" height="765">http://sourceforge.net/projects/postinstaller/files/screenshots/postinstallerf1.png</screenshot>
+        <screenshot width="1360" height="765">http://sourceforge.net/projects/postinstaller/files/screenshots/postinstallerf2.png</screenshot>
+        <screenshot width="1360" height="765">http://sourceforge.net/projects/postinstaller/files/screenshots/postintallerf3.png</screenshot>
+        <screenshot width="1360" height="765">http://sourceforge.net/projects/postinstaller/files/screenshots/postinstaller4.png</screenshot>
     </screenshots>
     <url type="homepage">http://sourceforge.net/projects/postinstaller/</url>
     <updatecontact>davidjeremias82 AT gmail DOT com</updatecontact>

@@ -20,7 +20,7 @@ Packer='None'
 Emailpacker='none at gmail dot com'
 Destiny='rpm'
 Architecture=$(uname -m)
-Release='1'
+Release='4'
 Distribution='fc20'
 Group='Applications/Internet'
 Checksum='95db8f2072b9acd6f79ed42da3d6db79'
@@ -58,6 +58,9 @@ Q='libstdc++.so.6'
 R='libm.so.6'
 S='libgcc_s.so.1'
 T='libc.so.6'
+V='pulseaudio'
+W='gstreamer-plugins-base'
+X='libcanberra'
 
 # prep
 echo '=> Preparing package'
@@ -169,7 +172,7 @@ fi
 
 cd $installdir
 
-fpm -s dir -t $Destiny -n $Name -v $Version --iteration "$Release.$Distribution" --category "$Group" -m "$Packer <$Emailpacker>" -a "$Architecture" --license "$License" --url "$Url" --description "$description" -d "$A" -d "$B" -d "$C" -d "$D" -d "$E" -d "$F" -d "$G" -d "$H" -d "$I" -d "$J" -d "$K" -d "$L" -d "$M" -d "$N" -d "$O" -d "$P" -d "$Q" -d "$R" -d "$S" -d "$T" -C $installdir usr/ etc/
+fpm -s dir -t $Destiny -n $Name -v $Version --iteration "$Release.$Distribution" --category "$Group" -m "$Packer <$Emailpacker>" -a "$Architecture" --license "$License" --url "$Url" --description "$description" -d "$A" -d "$B" -d "$C" -d "$D" -d "$E" -d "$F" -d "$G" -d "$H" -d "$I" -d "$J" -d "$K" -d "$L" -d "$M" -d "$N" -d "$O" -d "$P" -d "$Q" -d "$R" -d "$S" -d "$T" -d "$V" -d "$W" -d "$X" -C $installdir usr/ etc/
 wait ${!}
 echo '=> Building done'
 

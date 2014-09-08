@@ -75,7 +75,7 @@ if [ $dist = Ubuntu ]; then
 postinstaller -i xubuntu-desktop 
 
 elif [ -f /etc/fedora-release ]; then
-pkexec postinstaller -g xfce
+pkexec postinstaller -g xfce-desktop
 if [ $(rpm -qa xfce4-volumed | grep -c xfce4-volumed) -gt 0 ]; then
 echo 'volumed is installed'
 else

@@ -35,16 +35,32 @@ fi
 }
 
 
-if [ "$(id -u)" -eq 0 ]; then
-echo 'root'
-else
-echo 'no root'
+title='Checking installed programs'
+body='Please wait'
+
+if [ "$(id -u)" -eq 0 ]; then  
 cleanlist
-exit
-fi
+    # Send messages to users listed by the 'users' command, but only once
+    # Maybe sh has a better way of doing set operations, but this works:
+    SENT=""
+    for USER in $(users); do
+        case $SENT in
+            "$USER") ;;
+            *" $USER") ;;
+            "$USER "*) ;;
+            *" $USER "*) ;;
+            # use 'su USER' to send the message
+            *) SENT="$SENT $USER"; su $USER -c "notify-send 'Checking installed programs 
+Please wait..' -i "/usr/share/icons/pinguino.png" -t 10000" ;;
+        esac
+    done
+else
+cleanlist
+notify-send "$title" "$body" -i "/usr/share/icons/pinguino.png" -t 10000
+fi 
 
     generateInstallMenu(){ 
-            im="yad --image="/usr/share/icons/acciones/conf.png" --image-on-top --class="Configure-Tuning" --window-icon="/usr/share/icons/acciones/conf.png" --list --radiolist  --width=800 --height=600 --title \"PostInstallerF for Fedora 64bit (Ver 1.2.0)\" --text \"Select items from the list below\" "
+            im="yad --image="/usr/share/icons/acciones/conf.png" --image-on-top --class="Configure-Tuning" --window-icon="/usr/share/icons/acciones/conf.png" --list --radiolist --center  --width=800 --height=600 --title \"PostInstallerF for Fedora 64bit (Ver 1.2.0)\" --text \"Select items from the list below\" "
             im=$im"--column=\"\" --column \"Application\" --column \"Description\"    --column \"Status\"  		     "
 
  # Building Install Menue
@@ -79,25 +95,12 @@ fi
 
 if ! $installed | grep "Eliminar Kernels Antiguos" > /dev/null; then
 
-if [ -f /usr/bin/yum ]; then
+if [ -f /usr/bin/yum ] || [ -f /usr/bin/dnf ]; then
 
                     im=$im"FALSE \"Eliminar Kernels Antiguos\"    \"Limpia kernels obsoletos\" \"ACTIVO  \"  "
 else
                     im=$im"FALSE \"Eliminar Kernels Antiguos\"    \"Limpia kernels obsoletos\" \"NO ACTIVO  \"  "
 fi
-            fi
-
-
-
-if ! $installed | grep "Completar Instalaciones pendientes" > /dev/null; then
-
-if [ -f /usr/bin/yum ]; then
-
-                    im=$im"FALSE \"Completar Instalaciones pendientes\"    \"Continua instalaciones no completadas por errores del sistema\" \"ACTIVO  \"  "
-else
-im=$im"FALSE \"Completar Instalaciones pendientes\"    \"Continua instalaciones no completadas por errores del sistema\" \"NO ACTIVO  \"  "
-fi
-
             fi
 
 
@@ -108,7 +111,7 @@ if ! $installed | grep "Informacion del Sistema" > /dev/null; then
 
 
 if ! $installed | grep "Cinnamon" > /dev/null; then
-if [ -x /usr/share/doc/cinnamon* ]; then
+if [ $(rpm -qa cinnamon | grep -c cinnamon) -gt 0 ]; then
                     im=$im"FALSE \"Cinnamon\"    \"Shell para Gnome 3, Diseño tradicional, funciones avanzadas y fáciles de usar, potente y flexible\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Cinnamon\"    \"Shell para Gnome 3, Diseño tradicional, funciones avanzadas y fáciles de usar, potente y flexible\" \"NO INSTALADO  \"  "
@@ -117,7 +120,7 @@ fi
             fi
 
 if ! $installed | grep "Plasma-wallpaper-dreamdesktop" > /dev/null; then
-if [ -f /usr/lib/kde4/dreamdesktop.so ]; then
+if [ -f /usr/lib/kde4/dreamdesktop.so ] || [ -f /usr/lib64/kde4/dreamdesktop.so ]; then
                     im=$im"FALSE \"Plasma-wallpaper-dreamdesktop\"    \"Un innovador fondo de escritorio animado para KDE.\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Plasma-wallpaper-dreamdesktop\"    \"Un innovador fondo de escritorio animado para KDE.\" \"NO INSTALADO  \"  "
@@ -127,7 +130,7 @@ fi
 
 
 if ! $installed | grep "Entorno de escritorio GNOME/SHELL" > /dev/null; then
-if [ "`ps -e | grep gdm`" ]; then
+if [ $(rpm -qa gnome-desktop3 | grep -c gnome-desktop3) -gt 0 ]; then
                     im=$im"FALSE \"Entorno de escritorio GNOME/SHELL\"    \"GNOME es un entorno de escritorio e infraestructura de desarrollo para GNU/Linux; compuesto enteramente de software libre.\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Entorno de escritorio GNOME/SHELL\"    \"GNOME es un entorno de escritorio e infraestructura de desarrollo para GNU/Linux; compuesto enteramente de software libre.\" \"NO INSTALADO  \"  "
@@ -136,7 +139,7 @@ fi
 
 
 if ! $installed | grep "Entorno de escritorio KDE" > /dev/null; then
-if [ -x /usr/share/doc/kdesdk* ]; then
+if [ $(rpm -qa kde-workspace | grep -c kde-workspace) -gt 0 ]; then
                     im=$im"FALSE \"Entorno de escritorio KDE\"    \"KDE es un proyecto de software libre para la creación de un entorno de escritorio\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Entorno de escritorio KDE\"    \"KDE es un proyecto de software libre para la creación de un entorno de escritorio\" \"NO INSTALADO  \"  "
@@ -145,7 +148,7 @@ fi
 
 
 if ! $installed | grep "Entorno de escritorio XFCE" > /dev/null; then
-if [ -x /usr/share/doc/xfce?-panel ]; then
+if [ $(rpm -qa xfce4-panel | grep -c xfce4-panel) -gt 0 ]; then
                     im=$im"FALSE \"Entorno de escritorio XFCE\"    \"Xfce es un entorno de escritorio ligero para sistemas tipo UNIX\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Entorno de escritorio XFCE\"    \"Xfce es un entorno de escritorio ligero para sistemas tipo UNIX\" \"NO INSTALADO  \"  "
@@ -154,7 +157,7 @@ fi
 
 
 if ! $installed | grep "Entorno de escritorio LXDE" > /dev/null; then
-if [ -x /usr/share/doc/lxde-common* ]; then
+if [ $(rpm -qa lxde-common | grep -c lxde-common) -gt 0 ]; then
                     im=$im"FALSE \"Entorno de escritorio LXDE\"    \"LXDE es un entorno de escritorio de código abierto y la solución de escritorio en ahorro de energía y velocidad extrema.\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Entorno de escritorio LXDE\"    \"LXDE es un entorno de escritorio de código abierto y la solución de escritorio en ahorro de energía y velocidad extrema.\" \"NO INSTALADO  \"  "
@@ -163,7 +166,7 @@ fi
 
 
 if ! $installed | grep "Entorno de escritorio MATE" > /dev/null; then
-if [ -x /usr/share/doc/mate-desktop* ]; then
+if [ $(rpm -qa mate-desktop | grep -c mate-desktop) -gt 0 ]; then
                     im=$im"FALSE \"Entorno de escritorio MATE\"    \"MATE es un ambiente de escritorio derivado del código base, actualmente descontinuado, de GNOME 2.\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Entorno de escritorio MATE\"    \"MATE es un ambiente de escritorio derivado del código base, actualmente descontinuado, de GNOME 2.\" \"NO INSTALADO  \"  "
@@ -203,18 +206,12 @@ fi
 
 
 if ! $installed | grep "Grub Customizer" > /dev/null; then
-if [ -f /usr/bin/grub-customizer ]; then
+if which grub-customizer >/dev/null; then
                     im=$im"FALSE \"Grub Customizer\"    \"Es una interfaz gráfica para configurar grub2/burg, sin perder el comportamiento dinámico.\" \"INSTALADO  \"  "
 else
 im=$im"FALSE \"Grub Customizer\"    \"Es una interfaz gráfica para configurar grub2/burg, sin perder el comportamiento dinámico.\" \"NO INSTALADO  \"  "
 fi
             fi
-
-
-if ! $installed | grep "Ver errores del sistema" > /dev/null; then
-                    im=$im"FALSE \"Ver errores del sistema\"    \"Muestra el contenido del archivo de registro especificado y marcarcando algunas cadenas especiales \" \"ACTIVO  \"  "
-            fi
-
 
 if ! $installed | grep "Activar/Desactivar Repositorios" > /dev/null; then
                     im=$im"FALSE \"Activar/Desactivar Repositorios\"    \"Activa o desactiva repositorios marcar un repo para activar, desmarcar para disactivar \" \"ACTIVO  \"  "
@@ -267,25 +264,12 @@ fi
 
 if ! $installed | grep "Remove old kernels" > /dev/null; then
 
-if [ -f /usr/bin/yum ]; then
+if [ -f /usr/bin/yum ] || [ -f /usr/bin/dnf ]; then
 
                     im=$im"FALSE \"Remove old kernels\"    \"Clean obsolete kernels\" \"ACTIVATED  \"  "
 else
                     im=$im"FALSE \"Remove old kernels\"    \"Clean obsolete kernels\" \"NO ACTIVATED  \"  "
 fi
-            fi
-
-
-
-if ! $installed | grep "Complete uncompleted installations" > /dev/null; then
-
-if [ -f /usr/bin/yum ]; then
-
-                    im=$im"FALSE \"Complete uncompleted installations\"    \"Complete uncompleted installations, for system errors\" \"ACTIVED  \"  "
-else
-im=$im"FALSE \"Complete uncompleted installations\"    \"Complete uncompleted installations, for system errors\" \"NO ACTIVATED  \"  "
-fi
-
             fi
 
 
@@ -296,7 +280,7 @@ if ! $installed | grep "System information" > /dev/null; then
 
 
 if ! $installed | grep "Cinnamon" > /dev/null; then
-if [ -f /usr/bin/cinnamon ]; then
+if [ $(rpm -qa cinnamon | grep -c cinnamon) -gt 0 ]; then
                     im=$im"FALSE \"Cinnamon\"    \"Cinnamon is a fork of GNOME Shell, initially developed by Linux Mint.\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"Cinnamon\"    \"Cinnamon is a fork of GNOME Shell, initially developed by Linux Mint.\" \"NO INSTALLED  \"  "
@@ -305,7 +289,7 @@ fi
             fi
 
 if ! $installed | grep "Plasma-wallpaper-dreamdesktop" > /dev/null; then
-if [ -f /usr/lib/kde4/dreamdesktop.so ]; then
+if [ -f /usr/lib/kde4/dreamdesktop.so ] || [ -f /usr/lib64/kde4/dreamdesktop.so ]; then
                     im=$im"FALSE \"Plasma-wallpaper-dreamdesktop\"    \"An innovative animated desktop wallpaper for KDE.\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"Plasma-wallpaper-dreamdesktop\"    \"An innovative animated desktop wallpaper for KDE.\" \"NO INSTALLED  \"  "
@@ -315,7 +299,7 @@ fi
 
 
 if ! $installed | grep "Desktop environment GNOME/SHELL" > /dev/null; then
-if [ "`ps -e | grep gdm`" ]; then
+if [ $(rpm -qa gnome-desktop3 | grep -c gnome-desktop3) -gt 0 ]; then
                     im=$im"FALSE \"Desktop environment GNOME/SHELL\"    \"GNOME is a desktop environment and graphical user interface that runs on top of a computer operating system.\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"Desktop environment GNOME/SHELL\"    \"GNOME is a desktop environment and graphical user interface that runs on top of a computer operating system.\" \"NO INSTALLED  \"  "
@@ -324,7 +308,7 @@ fi
 
 
 if ! $installed | grep "Desktop environment KDE" > /dev/null; then
-if [ -x /usr/share/doc/kdesdk* ]; then
+if [ $(rpm -qa kde-workspace | grep -c kde-workspace) -gt 0 ]; then
                     im=$im"FALSE \"Desktop environment KDE\"    \"KDE is a powerful graphical desktop environment for Unix workstations\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"Desktop environment KDE\"    \"KDE is a powerful graphical desktop environment for Unix workstations\" \"NO INSTALLED  \"  "
@@ -333,7 +317,7 @@ fi
 
 
 if ! $installed | grep "Desktop environment XFCE" > /dev/null; then
-if [ -x /usr/share/doc/xfce?-panel ]; then
+if [ $(rpm -qa xfce4-panel | grep -c xfce4-panel) -gt 0 ]; then
                     im=$im"FALSE \"Desktop environment XFCE\"    \"Xfce is a lightweight desktop environment for UNIX-like operating systems.\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"Desktop environment XFCE\"    \"Xfce is a lightweight desktop environment for UNIX-like operating systems.\" \"NO INSTALLED  \"  "
@@ -342,7 +326,7 @@ fi
 
 
 if ! $installed | grep "Desktop environment LXDE" > /dev/null; then
-if [ -x /usr/share/doc/lxde-common* ]; then
+if [ $(rpm -qa lxde-common | grep -c lxde-common) -gt 0 ]; then
                     im=$im"FALSE \"Desktop environment LXDE\"    \"LXDE is a free and open source desktop environment for Unix and other POSIX compliant platforms, such as Linux or BSD.\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"Desktop environment LXDE\"    \"LXDE is a free and open source desktop environment for Unix and other POSIX compliant platforms, such as Linux or BSD.\" \"NO INSTALLED  \"  "
@@ -351,7 +335,7 @@ fi
 
 
 if ! $installed | grep "Desktop environment MATE" > /dev/null; then
-if [ -x /usr/share/doc/mate-desktop* ]; then
+if [ $(rpm -qa mate-desktop | grep -c mate-desktop) -gt 0 ]; then
                     im=$im"FALSE \"Desktop environment MATE\"    \"The MATE Desktop Environment is a fork of GNOME 2 that aims to provide an attractive and intuitive desktop to Linux.\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"Desktop environment MATE\"    \"The MATE Desktop Environment is a fork of GNOME 2 that aims to provide an attractive and intuitive desktop to Linux.\" \"NO INSTALLED  \"  "
@@ -392,16 +376,11 @@ fi
 
 
 if ! $installed | grep "Grub Customizer" > /dev/null; then
-if [ -f /usr/bin/grub-customizer ]; then
+if which grub-customizer >/dev/null; then
                     im=$im"FALSE \"Grub Customizer\"    \"Graphical interface to configure the GRUB2/BURG settings and menuentries. \" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"Grub Customizer\"    \"Graphical interface to configure the GRUB2/BURG settings and menuentries.\" \"NO INSTALLED  \"  "
 fi
-            fi
-
-
-if ! $installed | grep "See system errors" > /dev/null; then
-                    im=$im"FALSE \"See system errors\"    \"Displays the contents of the specified log file, and mark some special strings \" \"ACTIVATED  \"  "
             fi
 
 
@@ -460,15 +439,6 @@ if echo $choice | grep "Eliminar Kernels Antiguos" > /dev/null; then
 
 if echo $choice | grep "Remove old kernels" > /dev/null; then
                     kernelold
-            fi
-
-
-if echo $choice | grep "Completar Instalaciones pendientes" > /dev/null; then
-                    pendientes
-            fi
-
-if echo $choice | grep "Complete uncompleted installations" > /dev/null; then
-                    pendientes
             fi
 
 
@@ -553,14 +523,6 @@ if echo $choice | grep "Grub Customizer" > /dev/null; then
                     grubcus
             fi
 
-if echo $choice | grep "Ver errores del sistema" > /dev/null; then
-                    errors
-            fi
-
-if echo $choice | grep "See system errors" > /dev/null; then
-                    errors
-            fi
-
 if echo $choice | grep "Activar/Desactivar Repositorios" > /dev/null; then
                     reposi
             fi
@@ -616,14 +578,6 @@ postinstaller -o
     }
 
 
-pendientes(){
-            yum-complete-transaction | $localprogress
-
-su $user -c 'notify-send "PostInstallerF" "Completado Instalaciones pendientes" -i "/usr/share/icons/pinguino.png" -t 5000'
-
-    }
-
-
 infosystem(){
             zenity --info --title="Informacion del Sistema" --text="Distribucion: 
 $(cat /etc/fedora-release)\n\nKernel: $(uname -s -r)\n\nArchitecture: 
@@ -635,24 +589,13 @@ $(lspci | grep -i network)\n\nUptime:
 $(uptime)" --ok-label="Ok"
 
 
-su $user -c 'notify-send "PostInstallerF" "Completado informacion del sistema" -i "/usr/share/icons/sistema.png" -t 5000'
-
-
     }
 
 
 
 cinnamon(){
 
-postinstaller -i cinnamon
-
-
-if [ -f /usr/bin/cinnamon ]; then
-
-su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Cinnamon" -i "/usr/share/icons/sistema.png" -t 5000'
-else 
-zenity --info --title="PostInstallerF" --text="Por alguna razon Cinnamon no esta instalado, vuelva a intentar "
-fi
+dnf group -y install cinnamon-desktop | $localprogress
 
 
     }
@@ -662,65 +605,56 @@ dreamd(){
 
 postinstaller -i plasma-wallpaper-dreamdesktop 
 
-if [ -f /usr/lib/kde4/dreamdesktop.so ]; then
-
-
-su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Plasma-wallpaper-dreamdesktop" -i "/usr/share/icons/sistema.png" -t 5000'
-else 
-zenity --info --title="PostInstallerF" --text="Por alguna razon Plasma-wallpaper-dreamdesktop no esta instalado, vuelva a intentar "
-fi
 
     }
 
 
 gnodesk(){
-            $especific @gnome-desktop | $localprogress
+            dnf group -y install gnome-desktop | $localprogress
 
 
-su $user -c 'notify-send "PostInstallerF" "Completada la instalacion Entorno de escritorio GNOME/SHELL" -i "/usr/share/icons/sistema.png" -t 5000'
+
 
 
     }
 
 
 kdesk(){
-            $especific @kde-desktop | $localprogress
+            dnf group -y install kde-desktop | $localprogress
 
 
-su $user -c 'notify-send "PostInstallerF" "Completada la instalacion Entorno de escritorio KDE" -i "/usr/share/icons/sistema.png" -t 5000'
+
 
 
     }
 
 
 xfdesk(){
-            $especific @xfce-desktop | $localprogress
+            dnf group -y install xfce-desktop | $localprogress
 
-$postlist greybird-gtk2-theme greybird-gtk2-theme greybird-xfwm4-theme greybird-xfce4-notifyd-theme xfce4-volumed | $progress
+postinstaller -i greybird-gtk2-theme -i greybird-gtk2-theme -i greybird-xfwm4-theme -i greybird-xfce4-notifyd-theme -i xfce4-volumed 
 
 
-su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Entorno de escritorio XFCE" -i "/usr/share/icons/sistema.png" -t 5000'
+
 
 
     }
 
 
 lxdesk(){
-            $especific @lxde-desktop | $localprogress
+            dnf group -y install lxde-desktop | $localprogress
 
-su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Entorno de escritorio LXDE" -i "/usr/share/icons/sistema.png" -t 5000'
+
 
 
     }
 
 mat(){
 
-yum -y groupinstall mate-desktop | $localprogress
+	dnf group -y install mate-desktop | $localprogress
 
-$postlist mate-media | $progress
+postinstaller -i mate-media 
 
-
-su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Entorno de escritorio MATE" -i "/usr/share/icons/sistema.png" -t 5000'
 
 
     }
@@ -744,45 +678,13 @@ grubcus(){
 postinstaller -i grub-customizer
 
 
-if [ -f /usr/bin/grub-customizer ]; then
-
-su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Grub Customizer" -i "/usr/share/icons/sistema.png" -t 5000'
-else 
-zenity --info --title="PostInstallerF" --text="Por alguna razon Grub Customizer no esta instalado, vuelva a intentar "
-fi
-
-
     }
-
-errors(){
-LOGFILE=${1:-/var/log/messages}
-
-PARSER='{font=""; color="#FFFFFF"}; \
-/kernel/ {font="italic"}; \
-/warn/ {color="#FFF4B8"}; \
-/error/ {color="#FFD0D8"}; \
-OFS="\n" {print $1 " " $2, $3, $4, substr($5,0,index($5,":")-1), \
-substr($0,index($0,$6)), font, color; fflush()}'
-
-tail -f $LOGFILE | awk "$PARSER" | \
-yad --title="Log viewer" --window-icon=logviewer \
-    --button=gtk-close --geometry 600x350 \
-    --list --text="Content of $LOGFILE" \
-    --column Date --column Time --column Host \
-    --column Tag --column Message:TIP \
-    --column @font@ --column @back@
-
-exit $?
-su $user -c 'notify-send "PostInstallerF" "Acabas de ver los errores del sistema" -i "/usr/share/icons/sistema.png" -t 5000'
-
-}
 
 
 reposi(){
 
 gpk-prefs
 
-su $user -c 'notify-send "PostInstallerF" "Recuerde los cambios hechos en los repositorios" -i "/usr/share/icons/sistema.png" -t 5000'
 
 }
 
@@ -816,18 +718,15 @@ setenforce 1
 
 else
 
-xterm -e 'rm -f /var/lib/rpm/_db*'
+rm -f /var/lib/rpm/_db*
 
 xterm -e 'rpm -vv --rebuilddb' 
 
-yum-complete-transaction --cleanup-only -y | $localprogress
-
-yum clean all 
+dnf clean all 
 
 postinstaller -u
 fi
 
-su $user -c 'notify-send "PostInstallerF" "Se ha actualizado el sistema" -i "/usr/share/icons/sistema.png" -t 5000'
 
     }
     
@@ -837,14 +736,12 @@ su $user -c 'notify-send "PostInstallerF" "Se ha actualizado el sistema" -i "/us
     ##
 
      
-    #initialising pkcon install-list
-    postlist='pkcon -p -y install'
 
     # Local install
-    locainst='yum -y localinstall'
+    locainst='dnf -y install'
 
     # Especific rpm
-    especific='yum -y install'
+    especific='dnf group -y install'
    
     # Define Architecture
     architecture=$(uname -m)

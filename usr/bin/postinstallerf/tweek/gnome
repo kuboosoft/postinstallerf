@@ -74,7 +74,7 @@ if [ $dist = Ubuntu ]; then
 postinstaller -i  gnome-shell ubuntu-gnome-desktop 
 
 elif [ -f /etc/fedora-release ]; then
-pkexec postinstaller -g gnome
+pkexec postinstaller -g gnome-desktop
 
 elif [ $dist = MANJARO ]; then 
 postinstaller -i gnome

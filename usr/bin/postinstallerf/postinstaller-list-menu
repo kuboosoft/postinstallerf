@@ -42,66 +42,39 @@ cleanlist
 exit
 fi
 
-# CHECKING REPOSITORIES  
+    # Local Progress
+    localprogress='/usr/bin/postinstallerf/local-pro'
 
-relea=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
+    # Define version Fedora
+    version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
+    relea=$version
+
+# CHECKING REPOSITORIES  
 
 if [ -f /etc/fedora-release ]; then
 
-if [ -f /etc/yum.repos.d/rpmfusion-nonfree.repo ] && [ -f /etc/yum.repos.d/rpmfusion-free.repo ]; then
+if [ $(rpm -qa rpmfusion-free-release | grep -c rpmfusion-free-release) -gt 0 ] && [ $(rpm -qa rpmfusion-nonfree-release | grep -c rpmfusion-nonfree-release) -gt 0 ]; then
 echo "RPM Fusion free and nonfree repo is present"
 else
-yum -y localinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$relea.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$relea.noarch.rpm 2>&1 | zenity --progress --title "Checking Repository and Adding RPMFusion" --text="Please wait...." --pulsate --auto-close --width=400
+pkexec dnf -y install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$version.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$version.noarch.rpm | $localprogress
 fi
+  
 
-
-if [ -f /etc/yum.repos.d/russianfedora-free.repo ]; then
+if [ $(rpm -qa russianfedora-free-release | grep -c russianfedora-free-release) -gt 0 ] && [ $(rpm -qa russianfedora-nonfree-release | grep -c russianfedora-nonfree-release) -gt 0 ]; then
 echo 'Russian Fedora Free repository is installed'
 else
-yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/russianfedora-free-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Checking Repository and Adding Community 3rd party Free" --text="Please wait...." --pulsate --auto-close --width=400
+russianfree=$(wget --no-check-certificate -q http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/$version/Everything/x86_64/os -O - | grep 'russianfedora-free-release' | awk -F'<a href="' '{print $2}' | awk -F'">' '{print $1}' )
+
+russiannonfree=$(wget --no-check-certificate -q http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/releases/$version/Everything/x86_64/os -O - | grep 'russianfedora-nonfree-release' | awk -F'<a href="' '{print $2}' | awk -F'">' '{print $1}' )
+
+wait ${!}
+
+pkexec dnf -y install --nogpgcheck http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/$version/Everything/x86_64/os/$russianfree http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/releases/$version/Everything/x86_64/os/$russiannonfree | $localprogress
 fi
-
-if [ -f /etc/yum.repos.d/russianfedora-nonfree.repo ]; then
-echo 'Russian Fedora Non Free repository is installed'
-else
-yum -y localinstall http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/russianfedora-nonfree-release-stable.noarch.rpm 2>&1 | zenity --progress --title "Checking Repository and Adding Community 3rd party Free" --text="Please wait...." --pulsate --auto-close --width=400
-fi
-
-if [ -f /etc/yum.repos.d/postinstallerf.repo ]; then
-echo 'postinstallerf repository is installed'
-else
-echo '[postinstallerf]
-name=PostInstallerF
-baseurl=http://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/
-        ftp://heanet.dl.sourceforge.net/mirrors/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/
-        http://ftp.jaist.ac.jp/pub/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/
-        ftp://ftp.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/p/po/postinstaller/fedora/releases/releases/$releasever/$basearch/
-        http://www.mirrorservice.org/sites/ftp.sourceforge.net/pub/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/
-        http://ftp.pbone.net/mirror/ftp.sourceforge.net/pub/sourceforge/p/po/postinstaller/fedora/releases/$releasever/$basearch/
-enable=1
-metadata_expire=2d
-gpgcheck=0
-gpgkey=http://sourceforge.net/projects/postinstaller/files/data/repodata/repomd.xml.key
-skip_if_unavailable=1
-exclude=ffmpeg ffmpeg-devel ffmpeg-libs
+  fi
+#--------
 
 
-[postinstallerf-source]
-name=PostInstallerF-Source
-baseurl=http://sourceforge.net/projects/postinstaller/files/SRPM/
-        ftp://heanet.dl.sourceforge.net/mirrors/sourceforge/p/po/postinstaller/SRPM/
-        http://ftp.jaist.ac.jp/pub/sourceforge/p/po/postinstaller/SRPM/
-        ftp://ftp.mirrorservice.org/sites/download.sourceforge.net/pub/sourceforge/p/po/postinstaller/SRPM/
-        http://www.mirrorservice.org/sites/ftp.sourceforge.net/pub/sourceforge/p/po/postinstaller/SRPM/
-        http://ftp.pbone.net/mirror/ftp.sourceforge.net/pub/sourceforge/p/po/postinstaller/SRPM/
-enabled=0
-metadata_expire=2d
-gpgcheck=0
-gpgkey=http://sourceforge.net/projects/postinstaller/files/data/repodata/repomd.xml.key
-skip_if_unavailable=1
-exclude=ffmpeg ffmpeg-devel ffmpeg-libs' >> /etc/yum.repos.d/postinstallerf.repo
-fi
-   fi
 
 wait ${!}
 
@@ -127,13 +100,13 @@ Sat=6
 Sun=7
 
 if [ ""$nuday = $Fri"" ] && [ ""$time = $setime"" ]; then
-yum clean metadata
+dnf clean metadata
 elif [ ""$nuday = $Fri"" ] && [ ""$time2 = $setimea"" ]; then
-yum clean metadata
+dnf clean metadata
 elif [ ""$nuday = $Fri"" ] && [ ""$time2 = $setimeb"" ]; then
-yum clean metadata
+dnf clean metadata
 elif [ ""$nuday = $Fri"" ] && [ ""$time = $setimec"" ]; then
-yum clean metadata
+dnf clean metadata
 fi
 
 

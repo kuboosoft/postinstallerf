@@ -75,7 +75,7 @@ if [ $dist = Ubuntu ]; then
 postinstaller -i kubuntu-desktop 
 
 elif [ -f /etc/fedora-release ]; then
-pkexec postinstaller -g kde
+pkexec postinstaller -g kde-desktop
 
 elif [ $dist = MANJARO ]; then 
 postinstaller -i kde -i kdeplasma-applets-plasma-nm

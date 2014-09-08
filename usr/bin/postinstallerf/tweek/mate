@@ -74,7 +74,7 @@ wget -qO - http://mirror1.mate-desktop.org/debian/mate-archive-keyring.gpg | sud
 sudo apt-get -y update
 postinstaller -i mate-core -i mate-desktop-environment -i mate-notification-daemon
 elif [ -f /etc/fedora-release ]; then
-pkexec postinstaller -g mate
+pkexec postinstaller -g mate-desktop
 fi
 
 elif [ $dist = MANJARO ]; then 
