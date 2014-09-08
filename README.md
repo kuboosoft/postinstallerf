@@ -1,4 +1,4 @@
-[![logo](http://sourceforge.net/projects/postinstaller/files/screenshots/postinstallerf1.png)](https://sourceforge.net/projects/postinstaller/)
+[(http://sourceforge.net/projects/postinstaller/files/screenshots/postinstallerf1.png)](https://sourceforge.net/projects/postinstaller/)
 
 
 PostInstallerF
