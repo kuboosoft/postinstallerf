@@ -60,17 +60,17 @@ pkexec dnf -y install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rp
 fi
   
 
-if [ $(rpm -qa russianfedora-free-release | grep -c russianfedora-free-release) -gt 0 ] && [ $(rpm -qa russianfedora-nonfree-release | grep -c russianfedora-nonfree-release) -gt 0 ]; then
-echo 'Russian Fedora Free repository is installed'
-else
-russianfree=$(wget --no-check-certificate -q http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/$version/Everything/x86_64/os -O - | grep 'russianfedora-free-release' | awk -F'<a href="' '{print $2}' | awk -F'">' '{print $1}' )
+#if [ $(rpm -qa russianfedora-free-release | grep -c russianfedora-free-release) -gt 0 ] && [ $(rpm -qa russianfedora-nonfree-release | grep -c russianfedora-nonfree-release) -gt 0 ]; then
+#echo 'Russian Fedora Free repository is installed'
+#else
+#russianfree=$(wget --no-check-certificate -q http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/$version/Everything/x86_64/os -O - | grep 'russianfedora-free-release' | awk -F'<a href="' '{print $2}' | awk -F'">' '{print $1}' )
 
-russiannonfree=$(wget --no-check-certificate -q http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/releases/$version/Everything/x86_64/os -O - | grep 'russianfedora-nonfree-release' | awk -F'<a href="' '{print $2}' | awk -F'">' '{print $1}' )
+#russiannonfree=$(wget --no-check-certificate -q http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/releases/$version/Everything/x86_64/os -O - | grep 'russianfedora-nonfree-release' | awk -F'<a href="' '{print $2}' | awk -F'">' '{print $1}' )
 
-wait ${!}
+#wait ${!}
 
-pkexec dnf -y install --nogpgcheck http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/$version/Everything/x86_64/os/$russianfree http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/releases/$version/Everything/x86_64/os/$russiannonfree | $localprogress
-fi
+#pkexec dnf -y install --nogpgcheck http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/$version/Everything/x86_64/os/$russianfree http://mirror.yandex.ru/fedora/russianfedora/russianfedora/nonfree/fedora/releases/$version/Everything/x86_64/os/$russiannonfree | $localprogress
+#fi
   fi
 #--------
 

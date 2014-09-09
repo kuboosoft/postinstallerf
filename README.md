@@ -24,5 +24,5 @@ su -c "yum -y install wget && wget -P /etc/yum.repos.d/ https://raw.github.com/k
 
 ----------------------------------------------------
 SOURCE CODE
-http://sourceforge.net/projects/postinstaller/files/fedora/releases/20/SRPM/postinstallerf-1.5-13.fc20.src.rpm
+http://sourceforge.net/projects/postinstaller/files/fedora/releases/20/SRPM/postinstallerf-1.5-14.fc20.src.rpm
 
