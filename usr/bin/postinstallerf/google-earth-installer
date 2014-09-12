@@ -201,7 +201,7 @@ install -dm 755 /tmp/installdir/
 
 cd /tmp/
 echo '=> Downloading sources'
-wget -c --timeout=30 --tries=3 "$Source"
+xterm -e "wget -c --timeout=30 --tries=3 $Source"
 
 wait ${!}
 check=$(md5sum /tmp/$package | awk '{print $1}')
@@ -210,7 +210,7 @@ wait ${!}
  if [[ ! -f "/tmp/$package" ]] || [[ $check != $Checksum ]]; then
 echo ':: corrupt download'
 rm -f /tmp/$package
-wget -c --timeout=30 --tries=3 "$Source"
+xterm -e "wget -c --timeout=30 --tries=3 $Source"
 bsdtar -xf $package -C $installdir
 bsdtar -xf $installdir/data.tar.lzma -C $installdir
 else

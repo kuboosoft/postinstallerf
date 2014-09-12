@@ -107,7 +107,7 @@ wait ${!}
 install -dm 755 /tmp/installdir/
 cd /tmp/
 echo '=> Downloading sources'
-wget -c --timeout=30 --tries=3 "$Source"
+xterm -e "wget -c --timeout=30 --tries=3 $Source"
 
 wait ${!}
 check=$(md5sum /tmp/skype-$Version.tar.bz2 | awk '{print $1}')

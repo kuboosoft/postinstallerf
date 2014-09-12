@@ -697,7 +697,7 @@ rm -f /tmp/.pictures/$OPTARG.png
 
 # Clean packer results
 if [ "$(id -u)" -eq 0 ]; then
-rm -f /tmp/packer-url-tmp
+rm -f /tmp/packer-url-$OPTARG
 rm -f /tmp/postinstaller.$OPTARG.lck
 else
 cat /dev/null > /tmp/packer-url-$OPTARG
@@ -747,7 +747,7 @@ rm -f /tmp/.pictures/$OPTARG.png
 
 # Clean packer results
 if [ "$(id -u)" -eq 0 ]; then
-rm -f /tmp/packer-url-tmp
+rm -f /tmp/packer-url-$OPTARG
 rm -f /tmp/postinstaller.$OPTARG.lck
 else
 cat /dev/null > /tmp/packer-url-$OPTARG
@@ -798,7 +798,7 @@ fnotify
 # Clean package info
 
 if [ "$(id -u)" -eq 0 ]; then
-rm -f /tmp/packagekit-url-tmp
+rm -f /tmp/packagekit-url-$OPTARG
 rm -rf /tmp/.pictures/
 rm -f /tmp/postinstaller.$OPTARG.lck
 else
@@ -853,7 +853,7 @@ fnotify
 # Clean package info
 
 if [ "$(id -u)" -eq 0 ]; then
-rm -f /tmp/packagekit-url-tmp
+rm -f /tmp/packagekit-url-$OPTARG
 rm -rf /tmp/.pictures/
 rm -f /tmp/postinstaller.$OPTARG.lck
 else
@@ -901,7 +901,7 @@ fnotify
 
 # Clean packer results
 if [ "$(id -u)" -eq 0 ]; then
-rm -f /tmp/packer-url-tmp
+rm -f /tmp/packer-local-$OPTARG
 rm -f /tmp/postinstaller.$OPTARG.lck
 else
 cat /dev/null > /tmp/packer-local-$OPTARG
@@ -935,10 +935,10 @@ fnotify
 
 # Clean package info
 if [ "$(id -u)" -eq 0 ]; then
-rm -f /tmp/local-url-tmp
 rm -f /tmp/postinstaller.$OPTARG.lck
+rm -f /tmp/local-url-$OPTARG
 else
-cat /dev/null > /tmp/local-url-tmp
+cat /dev/null > /tmp/local-url-$OPTARG
 fi
 
 
@@ -970,8 +970,8 @@ fnotify
 
 # Clean package info
 if [ "$(id -u)" -eq 0 ]; then
-rm -f /tmp/local-url-tmp
 rm -f /tmp/postinstaller.$OPTARG.lck
+rm -f /tmp/local-url-$OPTARG
 else
 cat /dev/null > /tmp/local-url-$OPTARG
 fi
