@@ -238,6 +238,7 @@ install -dm 755 $installdir/usr/share/mime/packages/
 		install -Dm644 $installdir/opt/google/earth/free/product_logo_${i}.png $installdir/usr/share/icons/hicolor/${i}x${i}/apps/google-earth.png
 	done
  
+wait ${!}
 	# The MIME package
 
 cat > $installdir/usr/share/mime/packages/google-earth-mimetypes.xml << EOF
@@ -284,7 +285,7 @@ cd $installdir/opt/google/earth/free/
 gcc -O3 -fPIC --shared baifaao.cpp -o baifaao.so
 echo 'LD_PRELOAD=/usr/lib64/libfreeimage.so.3:./baifaao.so:/usr/lib/libfreeimage.so.3 \' >> $installdir/opt/google/earth/free/googleearth
 
-
+wait ${!}
 
 # Removing the Debian package files 
 rm -f $installdir/control.tar.gz

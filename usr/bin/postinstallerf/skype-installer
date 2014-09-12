@@ -60,7 +60,8 @@ S='libgcc_s.so.1'
 T='libc.so.6'
 V='pulseaudio'
 W='gstreamer-plugins-base'
-X='libcanberra'
+X='libcanberra(x86-32)'
+Y='gtk-murrine-engine(x86-32)'
 
 # prep
 echo '=> Preparing package'
@@ -172,13 +173,14 @@ fi
 
 cd $installdir
 
-fpm -s dir -t $Destiny -n $Name -v $Version --iteration "$Release.$Distribution" --category "$Group" -m "$Packer <$Emailpacker>" -a "$Architecture" --license "$License" --url "$Url" --description "$description" -d "$A" -d "$B" -d "$C" -d "$D" -d "$E" -d "$F" -d "$G" -d "$H" -d "$I" -d "$J" -d "$K" -d "$L" -d "$M" -d "$N" -d "$O" -d "$P" -d "$Q" -d "$R" -d "$S" -d "$T" -d "$V" -d "$W" -d "$X" -C $installdir usr/ etc/
+fpm -s dir -t $Destiny -n $Name -v $Version --iteration "$Release.$Distribution" --category "$Group" -m "$Packer <$Emailpacker>" -a "$Architecture" --license "$License" --url "$Url" --description "$description" -d "$A" -d "$B" -d "$C" -d "$D" -d "$E" -d "$F" -d "$G" -d "$H" -d "$I" -d "$J" -d "$K" -d "$L" -d "$M" -d "$N" -d "$O" -d "$P" -d "$Q" -d "$R" -d "$S" -d "$T" -d "$V" -d "$W" -d "$X" -d "$Y" -C $installdir usr/ etc/
 wait ${!}
 echo '=> Building done'
 
 echo '=> Installing package'
 
 postinstaller -l "$installdir/$Name-$Version-$Release.$Distribution.$Architecture.$Destiny"
+wait ${!}
 
 if [[ $(rpm -qa skype | grep -c skype) -gt 0 ]] ; then
 echo '=> Installation completed'
