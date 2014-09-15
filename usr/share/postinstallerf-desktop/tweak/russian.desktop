@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/tweek/rusian-fedora 
+Version=1.0
+Type=Application
+Name=RU Fedora Repository
+GenericName=RU Fedora Repository
+Comment=Install Russian Fedora Repository
+Icon=/usr/share/icons/acciones/rflogo.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false
