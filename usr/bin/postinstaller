@@ -897,7 +897,7 @@ if [ "$task" = Localinstall ]; then
 
 if [ "$dist" = MANJARO ]; then
 
-pkexec $ang $OPTARG 2>&1 | tee -a /tmp/packer-local-$OPTARG | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' -e '/\.\.\.$/ s/^/# /p' | yad --progress \
+pkexec $ang $OPTARG 2>&1 | tee -a /tmp/packer-local-$cuttingname | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' -e '/\.\.\.$/ s/^/# /p' | yad --progress \
 --title="PostInstallerF - $task $OPTARG" \
 --center \
 --image="$screenshot" --image-on-top \
@@ -917,7 +917,7 @@ $Url"  \
 
 wait ${!}
 
-Result=$(grep -e '==>' -e 'failed' -e 'ERROR' -e 'error' -e '/var/lib/pacman/db.lck' -e '...' -e 'Actualizado' -e 'Updated' /tmp/packer-local-$OPTARG | tail -10) 
+Result=$(grep -e '==>' -e 'failed' -e 'ERROR' -e 'error' -e '/var/lib/pacman/db.lck' -e '...' -e 'Actualizado' -e 'Updated' /tmp/packer-local-$cuttingname | tail -10) 
 
 yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result 
 Done" --width=350 --height=350 
@@ -927,16 +927,16 @@ fnotify
 
 # Clean packer results
 if [ "$(id -u)" -eq 0 ]; then
-rm -f /tmp/packer-local-$OPTARG
-rm -f /tmp/postinstaller.$OPTARG.lck
+rm -f /tmp/packer-local-$cuttingname
+rm -f *.$OPTARG.lck
 else
-cat /dev/null > /tmp/packer-local-$OPTARG
+cat /dev/null > /tmp/packer-local-$cuttingname
 fi
 
 #UBUNTU
 elif [ "$dist" = Ubuntu ] ; then
 
-pkexec $ang $OPTARG | tee /tmp/local-url-$OPTARG | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+pkexec $ang $OPTARG | tee /tmp/local-url-$cuttingname | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 	--title="PostInstallerF - $task $OPTARG" \
 	--center \
 	--image="$screenshot" --image-on-top \
@@ -958,7 +958,7 @@ $Url"  \
 wait ${!}
 
 
-Result=$(grep -e 'Resultados:' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'freedesktop.PackageKit:' -e 'Actualizado' -e 'Updated' -e '(local)' /tmp/local-url-$OPTARG | tail -10) 
+Result=$(grep -e 'Resultados:' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'freedesktop.PackageKit:' -e 'Actualizado' -e 'Updated' -e '(local)' /tmp/local-url-$cuttingname | tail -10) 
 
 yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
 Done" --width=350 --height=350 --timeout=5
@@ -968,18 +968,17 @@ fnotify
 
 # Clean package info
 if [ "$(id -u)" -eq 0 ]; then
-rm -f /tmp/postinstaller.$OPTARG.lck
-rm -f /tmp/local-url-$OPTARG
+rm -f *.$OPTARG.lck
+rm -f /tmp/local-url-$cuttingname
 else
-cat /dev/null > /tmp/local-url-$OPTARG
+cat /dev/null > /tmp/local-url-$cuttingname
 fi
 
 
 # TODAS LAS DISTRIBUCIONES #
 else
 
-$ang $OPTARG | tee /tmp/local-url-$OPTARG | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
-	--title="PostInstallerF - $task $OPTARG" \
+$ang $OPTARG | tee /tmp/local-url-$cuttingname | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 	--title="PostInstallerF - $task $OPTARG" \
 	--center \
 	--image="$screenshot" --image-on-top \
@@ -1001,7 +1000,7 @@ $Url"  \
 wait ${!}
 
 
-Result=$(grep -e 'Resultados:' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'freedesktop.PackageKit:' -e 'Actualizado' -e 'Updated' -e '(local)' /tmp/local-url-$OPTARG | tail -10) 
+Result=$(grep -e 'Resultados:' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'freedesktop.PackageKit:' -e 'Actualizado' -e 'Updated' -e '(local)' /tmp/local-url-$cuttingname | tail -10) 
 
 yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
 Done" --width=350 --height=350 --timeout=5
@@ -1011,10 +1010,10 @@ fnotify
 
 # Clean package info
 if [ "$(id -u)" -eq 0 ]; then
-rm -f /tmp/postinstaller.$OPTARG.lck
-rm -f /tmp/local-url-$OPTARG
+rm -f *.$OPTARG.lck
+rm -f /tmp/local-url-$cuttingname
 else
-cat /dev/null > /tmp/local-url-$OPTARG
+cat /dev/null > /tmp/local-url-$cuttingname
 fi
 
    

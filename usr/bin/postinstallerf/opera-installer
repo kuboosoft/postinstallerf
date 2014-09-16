@@ -1,0 +1,201 @@
+#!/bin/bash
+# Licensed under the GNU General Public License Version 3
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+# http://sourceforge.net/projects/postinstaller/
+# Contact: https://plus.google.com/u/0/communities/118230919321773121406
+
+ver=$(curl -s http://get.geo.opera.com/pub/opera/linux/ | grep '<a href=' | grep -o '"[0-9]*/"' | tr -d '"' | tr -d '/' | tail -1)
+
+if [ `getconf LONG_BIT` = "64" ]; then
+libdir=lib64
+package=$(curl -s http://get.geo.opera.com/pub/opera/linux/$ver/ | grep 'xz' | grep 'x86_64' | awk -F '<a href="' '{print $2}' | awk -F '">' '{print $1}') 
+else
+libdir=lib
+package=$(curl -s http://get.geo.opera.com/pub/opera/linux/$ver/ | grep 'xz' | grep 'i386' | awk -F '<a href="' '{print $2}' | awk -F '">' '{print $1}')
+fi 
+
+Architecture=$(uname -m)
+
+
+wait ${!}
+
+Name='opera'
+Version='12.16'
+tmp_download_dir="/tmp/opera-12.16-1860.x86_64.linux/"
+License='custom:opera'
+installdir='/tmp/installdir'
+Url='http://www.opera.com/browser/'
+Source="http://get.geo.opera.com/pub/opera/linux/$ver/$package"
+Packer='None'
+Emailpacker='none at gmail dot com'
+Destiny='rpm'
+Release='1'
+Distribution='fc20'
+Group='Applications/Internet'
+if [ `getconf LONG_BIT` = "64" ]; then
+Checksum='ead647964ace52f44ced98adbc568ae7'
+else
+Checksum='08545c66ba00a568324b1a393c8782f7'
+fi
+
+#BuildRequires
+BR='ruby-fpm'
+BR2='wget'
+BR3='tar'
+BR4='binutils'
+BR5='packagekit'
+BR6='ruby-devel'
+BR7='libffi'
+BR8='glibc'
+BR9='rpm-build'
+BR10='curl'
+
+
+# Requires
+A='freetype'
+B='libXext'
+C='shared-mime-info'
+D='hicolor-icon-theme'
+E='gstreamer-plugins-base'
+F='gstreamer-plugins-good'
+G='libXt'
+H='gcc'
+
+# prep
+echo '=> Preparing package'
+
+echo '=> Checking Build Requires'
+
+if [ $(rpm -qa | grep -c $BR6) -gt 0 ]; then
+    echo "$BR6 is present"
+else
+pkcon -p -y install $BR6
+fi
+
+if [ $(rpm -qa | grep -c $BR2) -gt 0 ]; then
+    echo "$BR2 is present"
+else
+pkcon -p -y install $BR2
+fi
+
+if [ $(rpm -qa | grep -c $BR7) -gt 0 ]; then
+    echo "$BR7 is present"
+else
+pkcon -p -y install $BR7
+fi
+
+if [ $(rpm -qa | grep -c $BR8) -gt 0 ]; then
+    echo "$BR8 is present"
+else
+pkcon -p -y install $BR8
+fi
+
+if [ $(rpm -qa | grep -c $BR9) -gt 0 ]; then
+    echo "$BR9 is present"
+else
+pkcon -p -y install $BR9
+fi
+
+if [ $(rpm -qa | grep -c $BR10) -gt 0 ]; then
+    echo "$BR10 is present"
+else
+pkcon -p -y install $BR10
+fi
+
+if [ ! -f $HOME/bin/fpm ]; then
+gem install fpm
+fi
+
+wait ${!}
+
+install -dm 755 /tmp/installdir/
+cd /tmp/
+echo '=> Downloading sources'
+wget -c --timeout=30 --tries=3 $Source
+
+wait ${!}
+check=$(md5sum /tmp/$package | awk '{print $1}')
+
+wait ${!}
+ if [[ ! -f "$package" ]] || [[ $check != $Checksum ]]; then
+echo ':: corrupt download'
+rm -f /tmp/$package
+exit
+else
+echo '=> Extracting sources'
+tar -xf $package
+fi
+
+wait ${!}
+
+# Description
+
+description='Fast and secure web browser and Internet suite'
+
+
+# build
+echo '=> Building package'
+
+# install
+cd $tmp_download_dir
+./install --prefix /usr --repackage $installdir/usr
+
+wait ${!}
+
+sed -i 's:Icon=opera-browser:Icon=/usr/share/icons/hicolor/128x128/apps/opera-browser.png:g' $installdir/usr/share/applications/opera-browser.desktop
+
+
+if [ ! -f $HOME/bin/fpm ]; then
+echo 'fmp no found, try: gem install fpm '
+exit
+fi
+
+cd $installdir
+
+fpm -s dir -t $Destiny -n $Name -v $Version --iteration "$Release.$Distribution" --category "$Group" -m "$Packer <$Emailpacker>" -a "$Architecture" --license "$License" --url "$Url" --description "$description" -d "$A" -d "$B" -d "$C" -d "$D" -d "$E" -d "$F" -d "$G" -d "$H" -C $installdir usr/ 
+wait ${!}
+echo '=> Building done'
+
+echo '=> Installing package'
+
+postinstaller -l "$installdir/$Name-$Version-$Release.$Distribution.$Architecture.$Destiny"
+wait ${!}
+
+if [[ $(rpm -qa skype | grep -c skype) -gt 0 ]] ; then
+echo '=> Installation completed'
+else
+echo '=> Installation failed'
+fi
+
+# Do you need help? 
+
+# packing with fpm
+# https://github.com/jordansissel/fpm 
+
+# groups fedora/centos/redhat
+# http://fedoraproject.org/wiki/RPMGroups
+
+# groups opensuse
+# http://en.opensuse.org/openSUSE:Package_group_guidelines
+
+# groups mageia
+# https://wiki.mageia.org/en/RPM_groups_policy
+
+# groups Openmandriva
+# http://wiki.mandriva.com/en/Development/Packaging/Groups
+
+# Distributions
+# Fedora = fc20, fc21...
+# RedHat/Centos= el6...
+# Mageia = mga4...
+# Openmandriva= omv2014.0
+# Rosa = mib2012.1
+
+# Architecture
+# Fedora/centos/redhat= i686, x86_64
+# Opensuse, Mageia, openmandriva, rosa = i586, x86_64
+# Use uname if you want actual architecture $(uname -m)
+
