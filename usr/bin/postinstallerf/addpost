@@ -3137,7 +3137,7 @@ if [ -f '/tmp/LATEST.TXT' ]; then
 rm -f /tmp/LATEST.TXT
 fi
 
-wget -c -P/tmp/ http://download.virtualbox.org/virtualbox/LATEST.TXT
+wget -c -P /tmp/ http://download.virtualbox.org/virtualbox/LATEST.TXT
 
 lastest=$(cat /tmp/LATEST.TXT ); echo lastest=$lastest
 

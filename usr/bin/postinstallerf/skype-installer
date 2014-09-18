@@ -188,6 +188,9 @@ else
 echo '=> Installation failed'
 fi
 
+rm -rf $installdir
+rm -rf $tmp_download_dir
+
 # Do you need help? 
 
 # packing with fpm

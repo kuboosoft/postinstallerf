@@ -119,15 +119,15 @@ wget -c --timeout=30 --tries=3 $Source
 wait ${!}
 check=$(md5sum /tmp/$package | awk '{print $1}')
 
-wait ${!}
- if [[ ! -f "$package" ]] || [[ $check != $Checksum ]]; then
-echo ':: corrupt download'
-rm -f /tmp/$package
-exit
-else
+#wait ${!}
+#if [[ ! -f "$package" ]] || [[ $check != $Checksum ]]; then
+#echo ':: corrupt download'
+#rm -f /tmp/$package
+#exit
+#else
 echo '=> Extracting sources'
 tar -xf $package
-fi
+#fi
 
 wait ${!}
 
@@ -169,6 +169,9 @@ echo '=> Installation completed'
 else
 echo '=> Installation failed'
 fi
+
+rm -rf $installdir
+rm -rf $tmp_download_dir
 
 # Do you need help? 
 
