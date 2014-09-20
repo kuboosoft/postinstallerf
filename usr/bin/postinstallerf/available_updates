@@ -1,0 +1,70 @@
+#!/bin/bash
+
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian')
+
+if [ -f /tmp/availableu ]; then
+rm -f /tmp/availableu
+fi
+
+checkup() {
+
+tee -a /tmp/availableu | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+	--title="PostInstallerF - Checking updates" \
+	--center \
+	--image="/usr/share/icons/acciones/uppa.png" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--text="Please wait.." \
+	--width=400 --height=200 \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+	--no-buttons
+
+}
+
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
+
+pkcon get-updates | grep -e 'x86_64' -e 'i686' -e 'i586' -e 'i386' -e 'noarch' | checkup 
+
+elif [ "$dist" = Debian ] || [ "$dist" = Ubuntu ]; then
+
+apt-show-versions -u | checkup
+# apt-get --just-print upgrade | grep '[0-9]' | sed '/,/d' | awk '{print $2}' | checkup
+
+elif [ "$dist" = MANJARO ]; then
+
+pkexec packer-postinstaller --quickcheck | checkup 
+
+fi
+
+
+if [ $(grep -c '[a-z]' /tmp/availableu) -gt 0 ]; then
+
+
+listupdates=$(sed '/^\s*$/d' /tmp/availableu | head -20 )
+Numberup=$(wc -l /tmp/availableu | grep '[ 0-9 ]' | awk '{print $1}' )
+
+yad --class="PostInstallerF" --image="/usr/share/icons/acciones/software-update-available.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --form --width=500 --height=200 --title="Available updates" --center --text="\n<b>There are $Numberup updates!</b>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\n<b>Do You want update?</b>
+
+$listupdates ..." --width=400 --height=100 --button="gtk-ok:1" --button="gtk-cancel:0"
+ret=$?
+if [[ $ret -eq 1 ]]; then
+echo 'installing updates'
+postinstaller -u
+rm -f /tmp/availableu
+else
+rm -f /tmp/availableu
+exit
+fi
+
+else
+echo 'none updates'
+
+yad --class="PostInstallerF" --image="/usr/share/icons/acciones/noneup.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --form --width=500 --height=200 --title="Hi! no problem" --center --text="No updates found" --width=400 --height=100 --button="gtk-ok:1"
+
+rm -f /tmp/availableu
+exit
+fi
+

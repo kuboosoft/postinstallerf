@@ -171,7 +171,7 @@ wait ${!}
 
 ps aux | grep notify | awk '{print $2}' | xargs kill -9
 
-CHECK=$(yad --list --radiolist --center --title="PostInstallerF - PPA Install" --text="You've searched for $BUSCA_I" --width=800 --height=500 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/ppa-search.png --image-on-top --column=In --column=Name --column=Description --column=Compatible --column=PPA --column='PPA STATUS' "${lines[@]}" --button="Install:0" --button="Purge:1" --button="Remove PPA:2" --button="Close:3") 
+CHECK=$(yad --list --radiolist --center --title="PostInstallerF - PPA Install" --text="You've searched for \n<b>$BUSCA_I</b>" --width=800 --height=500 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/ppa-search.png --image-on-top --column=In --column=Name --column=Description --column=Compatible --column=PPA --column='PPA STATUS' "${lines[@]}" --button="Install:0" --button="Purge:1" --button="Remove PPA:2" --button="Close:3") 
 
 ret=$?
 

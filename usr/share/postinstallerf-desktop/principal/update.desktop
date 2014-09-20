@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=postinstaller -u
+Exec=/usr/bin/postinstallerf/available_updates
 Version=1.0
 Type=Application
 Name=Update
