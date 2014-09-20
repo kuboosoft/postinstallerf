@@ -193,6 +193,7 @@ elif [ "$task" = Remove-old-kernel ]; then
 elif [ "$task" = Install-group ]; then
     body="Group $OPTARG installed"
 elif [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Localinstall ]; then
+
 if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
 
 if [ $(rpm -qa $globalnoti | grep -c $globalnoti) -gt 0 ]; then
@@ -203,8 +204,13 @@ if [ "$task" = Uninstalling ]; then
 else
     body="Sorry $globalnoti is not installed"
 fi
+  fi
+     fi
+ # # #
 
-elif [ "$dist" = Debian ] || [ "$dist" = Ubuntu ] ; then
+
+if [ "$dist" = Debian ] || [ "$dist" = Ubuntu ]; then
+
 if [ $(dpkg-query -Wf '${db:Status-abbrev}' $globalnoti) = ii ]; then
 body="$globalnoti is installed"
 else
@@ -213,9 +219,14 @@ if [ "$task" = Uninstalling ]; then
 else
     body="Sorry $globalnoti is not installed"
 fi
-fi
+  fi
+    fi
 
-elif [ "$dist" = MANJARO ]; then
+ #  #  #
+
+
+if [ "$dist" = MANJARO ]; then
+
 if (pacman -Q $globalnoti >/dev/null) ; then 
 body="$globalnoti is installed"
 else
@@ -225,9 +236,10 @@ else
     body="Sorry $globalnoti is not installed"
 fi
 fi
-
-fi
   fi
+
+ #
+fi
 
 	/usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg &
 
