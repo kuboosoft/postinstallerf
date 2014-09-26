@@ -1,0 +1,186 @@
+#!/bin/bash
+
+architecture=$(uname -m)
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
+
+
+#FEDORA
+
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then 
+export LANG=C
+
+rm -rf /tmp/metadata/
+rm -rf /tmp/metadata-postinstaller/
+rm -f /tmp/dnflist
+
+mkdir /tmp/metadata/
+mkdir /tmp/metadata-postinstaller/
+
+if [[ ! -d $HOME/.local/share/app-install-data-postinstallerf/index/ ]]; then
+mkdir -p $HOME/.local/share/app-install-data-postinstallerf/index/
+fi
+
+cd /tmp/metadata/
+
+dnf list all | awk '{print $1}' | awk -F "." '{print $1}' | grep -ve 'Complementos' -e 'Complements' -e 'Paquetes' -e 'Packages' -e '@updates' -e 'updates' -e '$releasever' | tr -d '@' | sort | sed '/^[0-9]/d' | awk ' !x[$0]++' | tee /tmp/dnflist
+
+wait ${!}
+
+cd /tmp/metadata/
+
+
+file="/tmp/dnflist"
+while IFS= read -r line; do
+        # display $line or do somthing with $line
+if [ ! -f /usr/share/app-install-data-postinstallerf/index/$line.in ] && [ ! -f $HOME/.local/share/app-install-data-postinstallerf/index/$line.in ]; then
+echo "making metadata for $line"
+echo "Name=$line" >  $line.in
+
+repoquery -i $line | grep 'Summary' | tr -d "'" | sed "s/Summary     : /Comment=/g" >> $line.in
+
+repoquery -i $line | grep -A10 'Description' | tr -d "'" | sed "s/Description :/Comment3='/g" | tr -d ":" >>  $line.in
+#| sed "s/.$/'/"
+echo "'" >>  $line.in
+
+repoquery -i $line | grep 'License' | tr -d "'" | sed "s/License     : /License='/g" | sed "s/$/'/" >> $line.in
+
+echo "Screenshot=''" >> $line.in
+
+repoquery -i $line | grep 'URL' | sed "s/URL         : /Url='/g" | sed "s/$/'/" >> $line.in
+else
+echo "exist $line"
+	fi
+done <"$file"
+
+
+if [ -f /tmp/metadata/*.in ]; then
+
+fill1=`ls *.in`
+
+#fixing the Comment tag
+
+for i in $fill1; do sed -i '/Name /d' $i ; done
+for i in $fill1; do sed -i '/Version /d' $i ; done
+for i in $fill1; do sed -i '/Release /d' $i ; done
+for i in $fill1; do sed -i '/Architecture /d' $i ; done
+for i in $fill1; do sed -i '/--/d' $i ; done
+for i in $fill1; do sed -i '/Size /d' $i ; done
+for i in $fill1; do sed -i '/Packager /d' $i ; done
+for i in $fill1; do sed -i '/Group /d' $i ; done
+
+for i in $fill1 ; do sed -i '$!N; /^\(.*\)\n\1$/!P; D' $i ; done
+
+for i in $fill1; do awk ' !x[$0]++' $i > /tmp/metadata-postinstaller/$i ; done
+wait ${!}
+
+cd /tmp/metadata-postinstaller/
+
+fill2=`ls *.in`
+
+for i in $fill2; do sed  -i 's|Comment=|&'\''<span size="xx-large">|; s|Comment=.*|&</span>'\''|' $i ; done
+
+for i in $fill2; do sed  -i 's|Name=|&'\''<b>|; s|Name=.*|&</b>'\''|' $i ; done
+
+for i in $fill2; do echo "export Comment" >> $i ; done
+for i in $fill2; do echo "export Name" >> $i ; done
+for i in $fill2; do echo "export Comment3" >> $i ; done
+for i in $fill2; do echo "export License" >> $i ; done
+for i in $fill2; do echo "export Screenshot" >> $i ; done
+for i in $fill2; do echo "export Url" >> $i ; done
+
+for i in $fill2; do sed -i '1i#!/bin/sh\' $i ; done
+
+wait ${!}
+
+chmod a+x *.in
+
+wait ${!}
+cp -f /tmp/metadata-postinstaller/*.in $HOME/.local/share/app-install-data-postinstallerf/index/
+fi
+  fi
+
+# MANJARO
+
+if [ "$dist" = MANJARO ]; then
+export LANGUAGE="en_AU:en_GB:en"
+
+rm -rf /tmp/metadata/
+rm -rf /tmp/metadata-postinstaller/
+rm -f /tmp/metactual
+rm -f /tmp/metalocal
+rm -f /tmp/arpackages-tmp
+rm -f /tmp/packages-tmp
+rm -f /tmp/metadata-postinstaller/*.in
+rm -f /tmp/matches
+
+
+mkdir /tmp/metadata/
+mkdir /tmp/metadata-postinstaller/
+
+if [[ ! -d $HOME/.local/share/app-install-data-postinstallerf/index/ ]]; then
+mkdir -p $HOME/.local/share/app-install-data-postinstallerf/index/
+fi
+
+
+cd /tmp/
+
+pacman -Sl | awk '{print $2}' >> /tmp/arpackages-tmp
+pacman -Q | awk '{print $1}' >> /tmp/arpackages-tmp
+pacman -Qe | awk '{print $1}' >> /tmp/arpackages-tmp 
+
+wait ${!}
+
+sort /tmp/arpackages-tmp >> /tmp/metactual
+
+wait ${!}
+
+cd /tmp/metadata/
+
+file="/tmp/metactual"
+while IFS= read -r line; do
+        # display $line or do somthing with $line
+if [ ! -f /usr/share/app-install-data-postinstallerf/index/$line.in ] && [ ! -f $HOME/.local/share/app-install-data-postinstallerf/index/$line.in ]; then
+echo "making metadata for $line"
+echo "Name=$line" >  $line.in
+
+echo "Comment=''" >>  $line.in
+
+yaourt -Si $line | grep 'Description' | tr -d "'" | sed "s/Description    : /Comment3='/g" | tr -d ":" >>  $line.in
+#| sed "s/.$/'/"
+echo "'" >>  $line.in
+
+yaourt -Si $line | grep -i 'Licenses' | tr -d "'" | sed "s/Licenses       : /License='/g" | sed "s/$/'/" >> $line.in
+
+echo "Screenshot=''" >> $line.in
+
+yaourt -Si $line | grep 'URL' | sed "s/URL            : /Url='/g" | sed "s/$/'/" >> $line.in
+
+sed -i '/AUR/d' $line.in
+	fi
+done <"$file"
+
+if [ -f /tmp/metadata/*.in ]; then
+
+fill2=`ls *.in`
+
+for i in $fill2; do sed  -i 's|Name=|&'\''<b>|; s|Name=.*|&</b>'\''|' $i ; done
+
+for i in $fill2; do echo "export Comment" >> $i ; done
+for i in $fill2; do echo "export Name" >> $i ; done
+for i in $fill2; do echo "export Comment3" >> $i ; done
+for i in $fill2; do echo "export License" >> $i ; done
+for i in $fill2; do echo "export Screenshot" >> $i ; done
+for i in $fill2; do echo "export Url" >> $i ; done
+
+for i in $fill2; do sed -i '1i#!/bin/sh\' $i ; done
+
+wait ${!}
+
+chmod a+x *.in
+
+wait ${!}
+
+cp -f /tmp/metadata/*.in $HOME/.local/share/app-install-data-postinstallerf/index/
+fi
+
+  fi

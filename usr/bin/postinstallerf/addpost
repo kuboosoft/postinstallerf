@@ -425,14 +425,6 @@ im=$im"FALSE \"Mobilmedia Converter\"                  \"Conversion de video par
 fi
             fi
 
-if ! $installed | grep "FF Multi Converter" > /dev/null; then
-if which ffmulticonverter >/dev/null; then
-                    im=$im"FALSE \"FF Multi Converter\"               \"Sencilla aplicación que le permite convertir archivos de audio, vídeo, imágenes y documentos\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"FF Multi Converter\"               \"Sencilla aplicación que le permite convertir archivos de audio, vídeo, imágenes y documentos\" \"NO INSTALADO  \"  "
-fi
-            fi
-
 
 if ! $installed | grep "GtkPod" > /dev/null; then
 if which gtkpod >/dev/null; then
@@ -1442,14 +1434,6 @@ im=$im"FALSE \"Mobilmedia Converter\"                  \"Video converter for con
 fi
             fi
 
-if ! $installed | grep "FF Multi Converter" > /dev/null; then
-if which ffmulticonverter >/dev/null; then
-                    im=$im"FALSE \"FF Multi Converter\"               \"Simple graphical application which enables you to convert audio, video, image and document files\" \"INSTALLED  \"  "
-else
-im=$im"FALSE \"FF Multi Converter\"               \"Simple graphical application which enables you to convert audio, video, image and document files\" \"NO INSTALLED  \"  "
-fi
-            fi
-
 
 if ! $installed | grep "GtkPod" > /dev/null; then
 if which gtkpod >/dev/null; then
@@ -2298,11 +2282,7 @@ if echo $choice | grep "Wine and winetricks" > /dev/null; then
             fi
             if echo $choice | grep "Mobilmedia Converter" > /dev/null; then
                     Mobilmedia
-            fi    
-
-            if echo $choice | grep "FF Multi Converter" > /dev/null; then
-                    ffmulticonverter
-            fi
+            fi              
            
             if echo $choice | grep "GtkPod" > /dev/null; then
                     gtkPod
@@ -2792,11 +2772,11 @@ then
 xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jre*-linux-x64.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
 wait ${!}
 
-xterm -e 'postinstaller -i /tmp/jre*-linux-x64.rpm'
+xterm -e 'dnf -y install /tmp/jre*-linux-x64.rpm'
 else
 xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jre*-linux-i586.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
 wait ${!}
-xterm -e 'postinstaller -i /tmp/jre*-linux-i586.rpm'
+xterm -e 'dnf -y install /tmp/jre*-linux-i586.rpm'
 fi
 
 
@@ -2826,11 +2806,11 @@ if [ `getconf LONG_BIT` = "64" ]
 then
 xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jre*-linux-x64.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
 wait ${!}
-xterm -e 'postinstaller -i /tmp/jre*-linux-x64.rpm'
+xterm -e 'dnf -y install /tmp/jre*-linux-x64.rpm'
 else
 xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jre*-linux-i586.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
 wait ${!}
-xterm -e 'postinstaller -i /tmp/jre*-linux-i586.rpm'
+xterm -e 'dnf -y install /tmp/jre*-linux-i586.rpm'
 fi
 
 if [ -f /usr/lib64/mozilla/plugins/libnpjp2.so ] || [ -f /usr/lib/mozilla/plugins/libnpjp2.so ]; then
@@ -2894,11 +2874,11 @@ if [ `getconf LONG_BIT` = "64" ]
 then
 xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jdk*-linux-x64.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
 wait ${!}
-xterm -e 'postinstaller -i /tmp/jdk*-linux-x64.rpm'
+xterm -e 'dnf -y install /tmp/jdk*-linux-x64.rpm'
 else
 xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jdk*-linux-i586.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
 wait ${!}
-xterm -e 'postinstaller -i /tmp/jdk*-linux-i586.rpm'
+xterm -e 'dnf -y install /tmp/jdk*-linux-i586.rpm'
 fi
 
 
@@ -2930,11 +2910,11 @@ if [ `getconf LONG_BIT` = "64" ]
 then
 xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jdk*-linux-x64.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
 wait ${!}
-xterm -e 'postinstaller -i /tmp/jdk*-linux-x64.rpm'
+xterm -e 'dnf -y install /tmp/jdk*-linux-x64.rpm'
 else
 xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jdk*-linux-i586.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
 wait ${!}
-xterm -e 'postinstaller -i /tmp/jdk*-linux-i586.rpm'
+xterm -e 'dnf -y install /tmp/jdk*-linux-i586.rpm'
 fi
 
 if [ -f /usr/lib64/mozilla/plugins/libnpjp2.so ] || [ -f /usr/lib/mozilla/plugins/libnpjp2.so ]; then
@@ -3137,35 +3117,42 @@ if [ -f '/tmp/LATEST.TXT' ]; then
 rm -f /tmp/LATEST.TXT
 fi
 
-wget -c -P /tmp/ http://download.virtualbox.org/virtualbox/LATEST.TXT
 
-lastest=$(cat /tmp/LATEST.TXT ); echo lastest=$lastest
-
+lastest=$(curl -k http://download.virtualbox.org/virtualbox/LATEST.TXT | grep '[0-9]' | head -1)
+wait ${!}
 
             if [ -f '/etc/yum.repos.d/virtualbox.repo' ]; then
-postinstaller -i kernel-headers kernel-devel dkms gcc 2>&1 | zenity --progress  --title="Instalando dependencias de Virtual Box" --text="Please wait...." --pulsate --auto-close --width=350
+postinstaller -i kernel-headers -i kernel-devel -i dkms -i gcc 
 
 postinstaller -u
 
-xterm -e 'postinstaller -i --enablerepo=virtualbox VirtualBox-4.2'
+xterm -e 'dnf -y install --enablerepo=virtualbox VirtualBox-4.3'
 xterm -e '/etc/init.d/vboxdrv setup'
 cd /tmp/
-wget -c  http://download.virtualbox.org/virtualbox/$lastest/Oracle_VM_VirtualBox_Extension_Pack-$lastest.vbox-extpack 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Virtual Box  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
+wget -c  http://download.virtualbox.org/virtualbox/$lastest/Oracle_VM_VirtualBox_Extension_Pack-$lastest.vbox-extpack 2>&1 | sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Virtual Box  [\1]Speed:.........[\2B]_p' | zenity --progress --pulsate --auto-close --width 500
 wait ${!}
 xterm -e "VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-$lastest.vbox-extpack"
 usermod -a -G vboxusers $user
 groups $user
 zenity --info --title="PostInstallerF" --text="Para obtener soporte usb en Oracle Virtual Box es necesario reiniciar el sistema "
 else
-wget -c -P/etc/yum.repos.d/ http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
-postinstaller -i kernel-headers kernel-devel dkms gcc 
+echo '[virtualbox]
+name=Fedora $releasever - $basearch - VirtualBox
+baseurl=http://download.virtualbox.org/virtualbox/rpm/fedora/$releasever/$basearch
+enabled=1
+gpgcheck=1
+gpgkey=https://www.virtualbox.org/download/oracle_vbox.asc
+skip_if_unavailable=1' >> /etc/yum.repos.d/virtualbox.repo
+
+postinstaller -i kernel-headers -i kernel-devel -i dkms -i gcc 
 
 postinstaller -u
 
-xterm -e 'postinstaller -i --enablerepo=virtualbox VirtualBox-4.2'
+xterm -e 'dnf -y install --enablerepo=virtualbox VirtualBox-4.3'
 xterm -e '/etc/init.d/vboxdrv setup'
 cd /tmp/
-wget -c  http://download.virtualbox.org/virtualbox/$lastest/Oracle_VM_VirtualBox_Extension_Pack-$lastest.vbox-extpack 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Virtual Box  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
+wget -c -P /tmp/  http://download.virtualbox.org/virtualbox/$lastest/Oracle_VM_VirtualBox_Extension_Pack-$lastest.vbox-extpack 2>&1 | sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: Virtual Box  [\1]Speed:.........[\2B]_p' | zenity --progress --pulsate --auto-close --width 500
+
 wait ${!}
 xterm -e "VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-$lastest.vbox-extpack"
 usermod -a -G vboxusers $user
@@ -3210,7 +3197,6 @@ postinstaller -u
 if [ -f /etc/yum.repos.d/dropbox.repo ]; then
 echo 'el repositorio esta incluido'
 postinstaller -i nautilus-dropbox 
-echo 'skip_if_unavailable=1' >> /etc/yum.repos.d/dropbox.repo
 else
 echo '[Dropbox]
 name=Dropbox Repository
@@ -3251,14 +3237,6 @@ fi
 
     }
      
-
-ffmulticonverter(){
-
-	postinstaller -i ffmulticonverter 
- 
-
-    }
-
             
     gtkPod(){
             
@@ -3288,9 +3266,9 @@ ffmulticonverter(){
 brlcad(){
 if [[ $architecture = x86_64 ]]; then
 
-$locainst http://sourceforge.net/projects/brlcad/files/BRL-CAD%20for%20Linux/7.24.0/brlcad-7.24.0-0.fedora.x86_64.rpm | $localprogress
+$locainst http://sourceforge.net/projects/brlcad/files/BRL-CAD%20for%20Linux/7.24.2/brlcad-7.24.2-0.fedora.x86_64.rpm | $localprogress
 else
-$locainst http://sourceforge.net/projects/brlcad/files/BRL-CAD%20for%20Linux/7.24.0/brlcad-7.24.0-0.fedora.i386.rpm | $localprogress
+$locainst http://sourceforge.net/projects/brlcad/files/BRL-CAD%20for%20Linux/7.24.2/brlcad-7.24.2-0.fedora.i386.rpm | $localprogress
 fi
 
 
@@ -3298,75 +3276,7 @@ fi
 
      
     Sweet(){  
-if [ -f /usr/share/applications/SweetHome3D.desktop ]; then
-rm -f /usr/share/applications/SweetHome3D.desktop 
-fi
-
-if [ -f /usr/bin/sweethome3d.sh ]; then
-rm -f /usr/bin/sweethome3d.sh 
-fi
-
-if [ -f /usr/bin/sweethome3d ]; then
-rm -f /usr/bin/sweethome3d 
-fi
-
-if [ -d /home/$user/.sweethome/ ]; then
-rm -R /home/$user/.sweethome/
-fi
-
-if [ -f /opt/SweetHome3D-linux-x64.tgz ]; then
-rm -f /opt/SweetHome3D-linux-x64.tgz 
-fi
-
-        
-xterm -e 'wget -c -P/usr/share/icons/ http://sourceforge.net/projects/postinstaller/files/Icons/SweetHome3DLogo.png'
-
-xterm -e 'wget -c -P/usr/bin/ http://sourceforge.net/projects/postinstaller/files/scripts/sweethome3d.sh'
-
-cd /tmp/
-foo=$(w3m -dump http://sourceforge.net/projects/sweethome3d/files/SweetHome3D/); echo "foo=$foo" >> /tmp/sweethome.txt | sed -n -e '/SweetHome3D-/p' /tmp/sweethome.txt | more | awk '{print $1}' | head -1 >> /tmp/lastest_sweethome.txt 
-wait ${!}
-
-latestfoo=$(cat /tmp/lastest_sweethome.txt ); echo "latestfoo=$latestfoo"
-
-        
-cd /opt/ 
-
-wget -c -O SweetHome3D-linux-x64.tgz http://sourceforge.net/projects/sweethome3d/files/SweetHome3D/$latestfoo/$latestfoo-linux-x64.tgz 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading:SweetHome3D  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500 
-
-
-wait ${!}
-
-
-echo "[Desktop Entry]
-Name=Sweet Home 3D
-Terminal=false
-Icon=/usr/share/icons/SweetHome3DLogo.png
-Type=Application
-Encoding=UTF-8
-Categories=Graphics;
-Exec=/usr/bin/sweethome3d.sh
-Comment=Free interior design application that helps you place your furniture on a house 2D plan, with a 3D preview." >> /usr/share/applications/SweetHome3D.desktop 
-
-chmod a+x /usr/bin/sweethome3d.sh
-chmod a+x /usr/share/applications/SweetHome3D.desktop
-chmod a+rwx /opt/SweetHome3D-linux-x64.tgz
-
-cat /dev/null > /tmp/sweethome.txt
-
-cat /dev/null > /tmp/lastest_sweethome.txt
-
-
-if [ -f /usr/bin/sweethome3d.sh ] && [ -f /opt/SweetHome3D-linux-x86.tgz ]; then
-
-if [ $(echo $LANG | cut -b1-2) = "es" ]; then
-su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Sweet Home 3D" -i "/usr/share/icons/pinguino.png" -t 5000'
-else
-su $user -c 'notify-send "PostInstallerF" "Has been completed installation of Sweet Home 3D" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi
- else 
-zenity --info --title="PostInstallerF" --text="For some reason Sweet Home 3D not installed, please try again"
-fi
+	postinstaller -i sweethome3d
 
     }
      
@@ -3690,19 +3600,6 @@ perfo(){
 stea(){
 
 
-if [ -f /etc/yum.repos.d/steam.repo ]; then
-echo 'exist repository steam'
-else
-echo '[steam]
-name=Steam RPM packages (and dependencies) for Fedora
-baseurl=http://spot.fedorapeople.org/steam/fedora-$releasever/
-enabled=1
-skip_if_unavailable=1
-gpgcheck=0' >> /etc/yum.repos.d/steam.repo
-fi 
-
-wait ${!}
-
 	postinstaller -i steam 
 
     }
@@ -3774,7 +3671,7 @@ chromium(){
 
 
 opera(){
-	postinstaller -i opera 
+	/usr/bin/postinstallerf/opera-installer 
 
     }
 

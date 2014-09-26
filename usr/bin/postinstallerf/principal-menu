@@ -25,6 +25,8 @@
 
 source /usr/bin/postinstallerf/pid
 
+/usr/bin/postinstallerf/generate-metadata &
+
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
 
 if [ "$dist" = Ubuntu ]; then

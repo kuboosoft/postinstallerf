@@ -179,12 +179,20 @@ fnotify() {
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian')
 
 if [ "$task" = Localinstall ]; then
+
+if [ "$dist" = Debian ] || [ "$dist" = Ubuntu ]; then
+globalnoti=$(dpkg-deb -I $OPTARG | grep 'Package' | awk '{print $2}')
+
+elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
+globalnoti=$(rpm -qip $OPTARG | grep 'Name' | awk '{print $3}')
+else
 cutting=$(basename $OPTARG)
 namecut="${cutting%%-[0-9]*}"
 globalnoti=$namecut
+fi
 else
 globalnoti=$OPTARG
-fi
+  fi
 
 if [ "$task" = Update ]; then
     body="Your system is updated now"
@@ -222,7 +230,7 @@ fi
   fi
     fi
 
- #  #  #
+ # # #
 
 
 if [ "$dist" = MANJARO ]; then
@@ -241,7 +249,11 @@ fi
  #
 fi
 
+if [ "$task" = Update ]; then
+	/usr/bin/paplay /usr/bin/postinstallerf/update-complete.ogg &
+else
 	/usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg &
+fi
 
     # Usage: notify "title" "description" [options to pass to send-notify"
     title="Finished"
@@ -494,11 +506,11 @@ fi
 
 
 # Import local metadata
-if [ -f "/usr/share/app-install-data-postinstallerf/index/$metainfo.in" ] ; then
-#source /usr/share/app-install-data-postinstallerf/index/$metainfo.in
+if [ -f "/usr/share/app-install-data-postinstallerf/index/$metainfo.in" ]; then
 source /usr/share/app-install-data-postinstallerf/index/$metainfo.in 
+elif [ -f "$HOME/.local/share/app-install-data-postinstallerf/index/$metainfo.in" ]; then
+source $HOME/.local/share/app-install-data-postinstallerf/index/$metainfo.in 
 else
-
 
 # Import metadata from other sites
 
