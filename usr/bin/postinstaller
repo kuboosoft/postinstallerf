@@ -582,7 +582,7 @@ if [ "$code" = 200 ] && [ ! -f /tmp/.pictures/$imagen.png ]; then
  
 cd /tmp/.pictures/
 
-wget --no-check-certificate -c -O $imagen.png http://screenshots.debian.net/screenshot/$imagen 2>&1 | \
+wget --no-check-certificate --tries=3 --timeout=15 -c -O $imagen.png http://screenshots.debian.net/screenshot/$imagen 2>&1 | \
 sed -u 's/^[a-zA-Z\-].*//; s/.* \{1,2\}\([0-9]\{1,3\}\)%.*/\1\n#Downloading... \1%/; s/^20[0-9][0-9].*/#Done./' | \
 yad --progress --image="$load" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --undecorated --percentage=0 --title=Download dialog --width=200 --height=200 --no-buttons --auto-close --auto-kill
 

@@ -42,14 +42,14 @@ if [ $(grep -c '[a-z]' /tmp/availableu) -gt 0 ]; then
 
 /usr/bin/paplay /usr/bin/postinstallerf/updateavail.ogg &
 
-listupdates=$(sed '/^\s*$/d' /tmp/availableu | head -20 )
+listupdates=$(sed '/^\s*$/d' /tmp/availableu | head -5 )
 Numberup=$(wc -l /tmp/availableu | grep '[ 0-9 ]' | awk '{print $1}' )
 
-yad --class="PostInstallerF" --image="/usr/share/icons/acciones/software-update-available.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --form --width=500 --height=200 --title="Available updates" --center --text="\n<b>There are $Numberup updates!</b>
+yad --class="PostInstallerF" --image="/usr/share/icons/acciones/software-update-available.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --width=500 --height=200 --title="Available updates" --center --text="\n<b>There are $Numberup updates!</b>
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 \n<b>Do You want update?</b>
 
-$listupdates ..." --width=400 --height=100 --button="gtk-ok:1" --button="gtk-cancel:0"
+$listupdates ..." --button="gtk-ok:1" --button="gtk-cancel:0"
 ret=$?
 if [[ $ret -eq 1 ]]; then
 echo 'installing updates'
@@ -63,7 +63,7 @@ fi
 else
 echo 'none updates'
 /usr/bin/paplay /usr/bin/postinstallerf/updateavail.ogg &
-yad --class="PostInstallerF" --image="/usr/share/icons/acciones/noneup.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --form --width=500 --height=200 --title="Hi! no problem" --center --text="\n<b>No updates found</b>" --width=400 --height=100 --button="gtk-ok:1"
+yad --class="PostInstallerF" --image="/usr/share/icons/acciones/noneup.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --width=300 --height=100 --title="Hi! no problem" --center --text="\n<b>No updates found</b>" --button="gtk-ok:1"
 
 rm -f /tmp/availableu
 exit
