@@ -1,0 +1,14 @@
+gstreamer-plugins-bad gstreamer-plugins-bad-free-extras 
+gstreamer-plugins-bad-nonfree  
+gstreamer-plugins-ugly gstreamer-ffmpeg 
+ffmpeg 
+mencoder 
+ffmpeg2theora 
+mplayer 
+libdvdcss 
+faac 
+vo-aacenc 
+gstreamer1-plugins-bad-free 
+gstreamer1-plugins-bad-free-extras 
+gstreamer1-plugins-good gstreamer1-plugins-good-extras 
+gstreamer1-plugins-ugly gstreamer1-plugins-bad-freeworld

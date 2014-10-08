@@ -11,7 +11,23 @@ currentdesk=${XDG_CURRENT_DESKTOP}
     # Define version Fedora
     version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
 
-if [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+
+groupgress() {
+
+tee -a /tmp/summary-group | stdbuf -oL sed -ne '/Installed/ s/^/# /p' -e '/Installing/ s/^/# /p' | yad --progress \
+	--title="PostInstallerF - Installing codecs" \
+	--center \
+	--image="/usr/share/icons/acciones/ingroup.png" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--width=400 --height=200 \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+	--no-buttons
+
+}
+
+if [ "$dist" = Ubuntu ]; then
 # Ubuntu
 if [ $(dpkg-query -Wf'${db:Status-abbrev}' "*ubuntu-restricted-extras") = ii ]; then
 status=INSTALLED
@@ -55,7 +71,7 @@ fi
 if [ "$tarea" = Install ]; then
 
 # UBUNTU
-if [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+if [ "$dist" = Ubuntu ]; then
 
 if [ $currentdesk = XFCE ]; then
 postinstaller -i xubuntu-restricted-extras
@@ -79,7 +95,16 @@ fi
 
 wait ${!}
 
-pkexec postinstaller -i gstreamer-plugins-bad -i gstreamer-plugins-bad-free-extras -i gstreamer-plugins-bad-nonfree -i gstreamer-plugins-ugly -i gstreamer-ffmpeg -i ffmpeg -i mencoder -i ffmpeg2theora -i mplayer -i libdvdcss -i faac -i vo-aacenc
+file="/usr/bin/postinstallerf/list_codecs"
+while IFS= read -r line; do
+        # display $line or do somthing with $line
+	if [ $(rpm -qa $line | grep -c $line) -gt 0 ] ; then
+echo "$line Installed"
+else
+echo "Installing $line"
+postinstaller -i $line
+fi
+done <"$file" | groupgress
 
 
 if [ $(rpm -qa k3b | grep -c k3b) -gt 0 ]; then
