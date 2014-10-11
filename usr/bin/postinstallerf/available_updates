@@ -24,7 +24,7 @@ tee -a /tmp/availableu | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 
 if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
 
-pkcon get-updates | grep -e 'x86_64' -e 'i686' -e 'i586' -e 'i386' -e 'noarch' | checkup 
+pkcon get-updates | stdbuf -oL sed -n 's/^/# /p' | checkup 
 
 elif [ "$dist" = Debian ] || [ "$dist" = Ubuntu ]; then
 
