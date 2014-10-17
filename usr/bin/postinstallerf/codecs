@@ -27,6 +27,9 @@ tee -a /tmp/summary-group | stdbuf -oL sed -ne '/Installed/ s/^/# /p' -e '/Insta
 
 }
 
+/usr/bin/postinstallerf/noticodecs &
+
+
 if [ "$dist" = Ubuntu ]; then
 # Ubuntu
 if [ $(dpkg-query -Wf'${db:Status-abbrev}' "*ubuntu-restricted-extras") = ii ]; then
@@ -38,7 +41,7 @@ tarea=Install
 fi
 # Fedora
 else
-if [ $(rpm -qa gstreamer-plugins-bad | grep -c gstreamer-plugins-bad) -gt 0 ] && [ $(rpm -qa gstreamer-plugins-bad-free-extras | grep -c gstreamer-plugins-bad-free-extras) -gt 0 ] && [ $(rpm -qa gstreamer-plugins-ugly | grep -c gstreamer-plugins-ugly) -gt 0 ]; then
+if [ $(rpm -qa gstreamer-plugins-bad | grep -c gstreamer-plugins-bad) -gt 0 ] && [ $(rpm -qa gstreamer-plugins-bad-free-extras | grep -c gstreamer-plugins-bad-free-extras) -gt 0 ] && [ $(rpm -qa gstreamer-plugins-ugly | grep -c gstreamer-plugins-ugly) -gt 0 ] && [ $(rpm -qa gstreamer1-plugins-ugly | grep -c gstreamer1-plugins-ugly) -gt 0 ] && [ $(rpm -qa gstreamer1-plugins-good | grep -c gstreamer1-plugins-good) -gt 0 ] && [ $(rpm -qa gstreamer1-plugins-bad-free | grep -c gstreamer1-plugins-bad-free) -gt 0 ]; then
 status=INSTALLED
 tarea=Update
 else

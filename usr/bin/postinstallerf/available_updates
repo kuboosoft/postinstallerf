@@ -37,13 +37,25 @@ pkexec packer-postinstaller --quickcheck | checkup
 
 fi
 
+wait ${!}
 
-if [ $(grep -c '[a-z]' /tmp/availableu) -gt 0 ]; then
+grep -e 'x86_64' -e 'i686' -e 'i586' -e 'noarch' /tmp/availableu | sed '/^\s*$/d' | tee -a /tmp/availableup
+
+wait ${!}
+
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
+avail=/tmp/availableup
+else
+avail=/tmp/availableu
+fi
+
+
+if [ $(grep -c '[a-z]' $avail) -gt 0 ]; then
 
 /usr/bin/paplay /usr/bin/postinstallerf/updateavail.ogg &
 
-listupdates=$(sed '/^\s*$/d' /tmp/availableu | head -5 )
-Numberup=$(wc -l /tmp/availableu | grep '[ 0-9 ]' | awk '{print $1}' )
+listupdates=$(sed '/^\s*$/d' $avail | head -5 )
+Numberup=$(wc -l $avail | grep '[ 0-9 ]' | awk '{print $1}' )
 
 yad --class="PostInstallerF" --image="/usr/share/icons/acciones/software-update-available.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --width=500 --height=200 --title="Available updates" --center --text="\n<b>There are $Numberup updates!</b>
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━

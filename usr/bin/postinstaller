@@ -262,7 +262,7 @@ fi
     opts="$*"
 
 if [ "$dist" = Debian ] || [ "$dist" = Ubuntu ] ; then
-notify-send "$title" "$body" -i "/usr/share/icons/pinguino.png" -t 10000
+notify-send --hint=int:transient:1 "$title" "$body" -i "/usr/share/icons/pinguino.png" -t 10000
 else
 if [ "$(id -u)" -eq 0 ]; then    
     # Send messages to users listed by the 'users' command, but only once
@@ -275,11 +275,11 @@ if [ "$(id -u)" -eq 0 ]; then
             "$USER "*) ;;
             *" $USER "*) ;;
             # use 'su USER' to send the message
-            *) SENT="$SENT $USER"; su $USER -c "notify-send $opts \"$title\" \"$body\" -i "/usr/share/icons/pinguino.png" -t 10000" ;;
+            *) SENT="$SENT $USER"; su $USER -c "notify-send --hint=int:transient:1 $opts \"$title\" \"$body\" -i "/usr/share/icons/pinguino.png" -t 10000" ;;
         esac
     done
 else
-notify-send "$title" "$body" -i "/usr/share/icons/pinguino.png" -t 10000
+notify-send --hint=int:transient:1 "$title" "$body" -i "/usr/share/icons/pinguino.png" -t 10000
 fi 
   fi
 
@@ -1178,7 +1178,7 @@ if [ "$?" != 0 ]; then
 exit
 else
 
-notify-send -t 500000 "Searching $BUSCA_I
+notify-send --hint=int:transient:1 -t 500000 "Searching $BUSCA_I
 Please wait" -i "/usr/share/icons/acciones/loadingimage2.png"
 
 	RES_BUSCA_I=$(packer-postinstaller -Ss $BUSCA_I | grep -e '^extra' -e '^community' -e '^aur' -e '^core' -e '^local' -e '^multilib' -e '^testing' -e '^community-testing' -e '^multilib-testing' | sed 's:/: :g' | awk '{print $1, $2, $3}' | uniq -c)
@@ -1203,7 +1203,7 @@ if [ "$?" != 0 ]; then
 exit
 else
 
-notify-send -t 500000 "Searching $BUSCA_I
+notify-send --hint=int:transient:1 -t 500000 "Searching $BUSCA_I
 Please wait" -i "/usr/share/icons/acciones/loadingimage2.png"
 
 if [ $architecture = x86_64 ]; then
@@ -1233,7 +1233,7 @@ if [ "$?" != 0 ]; then
 exit
 else
 
-notify-send -t 500000 "Searching $BUSCA_I
+notify-send --hint=int:transient:1 -t 500000 "Searching $BUSCA_I
 Please wait" -i "/usr/share/icons/acciones/loadingimage2.png"
 
 if [ $architecture = x86_64 ]; then

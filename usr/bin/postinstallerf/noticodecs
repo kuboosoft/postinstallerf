@@ -1,0 +1,4 @@
+#!/bin/bash
+
+notify-send --hint=int:transient:1 -t 50000000 "Searching codecs
+Please wait" -i "/usr/share/icons/acciones/loadingimage2.png"

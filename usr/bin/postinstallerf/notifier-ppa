@@ -7,7 +7,7 @@ SERVICE3='postinstaller'
 
 if [ $(ps ax | grep -v grep | grep -c $SERVICE3) -gt 0 ] && [ $(ps ax | grep -v grep | grep -c $SERVICE2) -gt 0 ]; then 
 
-notify-send -t 500000 "Searching PPA
+notify-send --hint=int:transient:1 -t 500000 "Searching PPA
 Please wait" -i "/usr/share/icons/acciones/loadingimage2.png"
 exit
  fi
