@@ -25,39 +25,60 @@ do
  case $option in
   i)
    echo received -i with $OPTARG
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
-if [ "$dist" = MANJARO ]; then
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
 ang='packer-postinstaller -S --noconfirm --noedit'
 elif [ "$dist" = Ubuntu ] ; then
 ang='apt-get -y install'
+elif [ -f /etc/SuSE-release ]; then
+ang='pkcon -p install'
+else
+if [ $(pkcon backend-details | grep -c 'GDBus.Error:org.freedesktop.DBus.Error.TimedOut') -gt 0 ];
+then
+ang='pkexec dnf -y install'
 else
 ang='pkcon -p -y install'
 fi
+ fi
 task=Installing 
    ;;
   e)
    echo received -e with $OPTARG
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
-if [ "$dist" = MANJARO ]; then
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
 ang='packer-postinstaller -D'
 elif [ "$dist" = Ubuntu ] ; then
 ang='apt-get -y remove'
+elif [ -f /etc/SuSE-release ]; then
+ang='pkcon -p remove' 
+else
+if [ $(pkcon backend-details | grep -c 'GDBus.Error:org.freedesktop.DBus.Error.TimedOut') -gt 0 ];
+then
+ang='pkexec dnf -y remove'
 else
 ang='pkcon -p -y remove' 
 fi
+ fi
 task=Uninstalling 
    ;;
   l)
    echo received -l with $OPTARG
 . /usr/bin/postinstallerf/pid
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
-if [ "$dist" = MANJARO ]; then
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
 ang='packer-postinstaller -L'
 elif [ "$dist" = Ubuntu ] ; then
 ang='dpkg -i'
+elif [ -f /etc/SuSE-release ]; then
+ang='pkcon -p install-local' 
+else
+if [ $(pkcon backend-details | grep -c 'GDBus.Error:org.freedesktop.DBus.Error.TimedOut') -gt 0 ];
+then
+ang='pkexec dnf -y install'
 else
 ang='pkcon -p -y install-local' 
 fi
+ fi
 task=Localinstall
    ;;
   g)
@@ -101,11 +122,13 @@ fi
    echo received -u
 # source /usr/bin/postinstallerf/pid
 task=Update
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
-if [ "$dist" = MANJARO ]; then
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
 ang='packer-postinstaller -Suu --noconfirm --noedit'
 elif [ "$dist" = Ubuntu ] ; then
 ang='apt-get -y dist-upgrade'
+elif [ -f /etc/SuSE-release ]; then
+ang='pkcon -p update'
 else
 ang='pkcon -p -y update'
 fi
@@ -176,7 +199,7 @@ runasroot() {
 
 # called whenever anything needs inform all task
 fnotify() {
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian')
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
 
 if [ "$task" = Localinstall ]; then
 
@@ -233,7 +256,7 @@ fi
  # # #
 
 
-if [ "$dist" = MANJARO ]; then
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
 
 if (pacman -Q $globalnoti >/dev/null) ; then 
 body="$globalnoti is installed"
@@ -367,6 +390,12 @@ rm -f /tmp/.pictures/$OPTARG.png
 fi
 }
 
+
+cleanaur() {
+rm -rf /tmp/packerbuild*
+rm -rf /tmp/packertmp*
+}
+
 usage() {
   echo 'usage: postinstaller [option] [package] [option] [package] [...]'
   echo
@@ -489,11 +518,16 @@ pkexec /usr/bin/postinstallerf/postinstaller-list-menu
 fi
 
 
-# Init check if task isn't equal to install or remove, exlude local install and update.
+# Init check if task isn't equal to install or remove, exlude update.
 
 if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Information ] || [ "$task" = Localinstall ]; then
 
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+fullname=$(basename $OPTARG | sed 's/-git//g' | sed 's/-bzr//g')
+else
 fullname=$(basename $OPTARG)
+fi
+
 cuttingname="${fullname%%-[0-9]*}"
 
 /usr/bin/postinstallerf/notifier & 
@@ -555,7 +589,11 @@ lic="${License:-$kwno}"
 if [ "$task" = Localinstall ]; then
 imagen=$cuttingname
 else
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+imagen=$fullname
+else
 imagen=$OPTARG
+fi
 fi
 
 url='http://screenshots.debian.net/screenshot/'
@@ -582,7 +620,7 @@ if [ "$code" = 200 ] && [ ! -f /tmp/.pictures/$imagen.png ]; then
  
 cd /tmp/.pictures/
 
-wget --no-check-certificate --tries=3 --timeout=15 -c -O $imagen.png http://screenshots.debian.net/screenshot/$imagen 2>&1 | \
+wget --no-check-certificate -c -O $imagen.png http://screenshots.debian.net/screenshot/$imagen 2>&1 | \
 sed -u 's/^[a-zA-Z\-].*//; s/.* \{1,2\}\([0-9]\{1,3\}\)%.*/\1\n#Downloading... \1%/; s/^20[0-9][0-9].*/#Done./' | \
 yad --progress --image="$load" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --undecorated --percentage=0 --title=Download dialog --width=200 --height=200 --no-buttons --auto-close --auto-kill
 
@@ -615,7 +653,10 @@ fi
 
 wait ${!}
 
-if [ -f "/tmp/.pictures/$imagen.png" ]; then
+identify /tmp/.pictures/$imagen.png
+testpicture=$?
+
+if [ $testpicture -eq 0 ]; then
 screenshot="/tmp/.pictures/$imagen.png"
 else
 echo 'screenshot not avaible'
@@ -626,7 +667,7 @@ cd
 
 # CHECKING IF PROGRAM IS INSTALLED AND DEFINE OS
 
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian')
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
 
 if [ "$dist" = Debian ]; then
            echo " System is running Debian Linux"
@@ -684,7 +725,7 @@ tarea=Install
 status="NO INSTALLED"
 fi
 
-    elif [ "$dist" = MANJARO ]; then
+    elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
             echo "System is running MANJARO Linux"
             DISTRO=MANJARO
 
@@ -767,8 +808,8 @@ elif [ $ret -eq 1 ]; then
 cleanlock
 	fi
 
-fi
 
+  fi
 
 
 # MENU 2 #
@@ -777,13 +818,14 @@ fi
 
 if [ "$task" = Installing ] || [ "$task" = Uninstalling ]; then
 
-if [ "$dist" = MANJARO ]; then
-echo > /tmp/packer-url-tmp
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+echo > /tmp/packagekit-url-$OPTARG
+cleanaur
 
 # MANJARO Y ARCH LINUX
 
-if [ "$dist" = MANJARO ] && [ "$task" = Installing ] ; then
-pkexec $ang $OPTARG 2>&1 | tee -a /tmp/packer-url-$OPTARG | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' | yad --progress \
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] && [ "$task" = Installing ] ; then
+$ang $OPTARG 2>&1 | tee -a /tmp/packer-url-$OPTARG | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' | yad --progress \
 --title="PostInstallerF - $task $OPTARG" \
 --center \
 --image="$screenshot" --image-on-top \
@@ -821,7 +863,11 @@ Done" --width=350 --height=350 --timeout=5
 fnotify 
 
 # Clean capture
+if [ "$(id -u)" -eq 0 ]; then
+rm -rf /tmp/.pictures/
+else
 rm -f /tmp/.pictures/$OPTARG.png
+fi
 
 # Clean packer results
 if [ "$(id -u)" -eq 0 ]; then
@@ -831,8 +877,8 @@ else
 cat /dev/null > /tmp/packer-url-$OPTARG
 fi
 
-elif [ "$dist" = MANJARO ] && [ "$task" = Uninstalling ] ; then
-pkexec $ang $OPTARG 2>&1 | tee -a /tmp/packer-url-$OPTARG | stdbuf -oL sed -nru '/\.\.\.$/ s/^/# /p' | yad --progress \
+elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] && [ "$task" = Uninstalling ] ; then
+$ang $OPTARG 2>&1 | tee -a /tmp/packer-url-$OPTARG | stdbuf -oL sed -nru '/\.\.\.$/ s/^/# /p' | yad --progress \
 --title="PostInstallerF - $task $OPTARG" \
 --center \
 --image="$screenshot" --image-on-top \
@@ -871,7 +917,11 @@ Done" --width=350 --height=350 --timeout=5
 fnotify
 
 # Clean capture
+if [ "$(id -u)" -eq 0 ]; then
+rm -rf /tmp/.pictures/
+else
 rm -f /tmp/.pictures/$OPTARG.png
+fi
 
 # Clean packer results
 if [ "$(id -u)" -eq 0 ]; then
@@ -885,7 +935,7 @@ fi
 #UBUNTU
 
 elif [ "$dist" = Ubuntu ] ; then
-echo > /tmp/packagekit-url-tmp
+echo > /tmp/packagekit-url-$OPTARG
 pkexec $ang $OPTARG | tee /tmp/packagekit-url-$OPTARG | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 	--title="PostInstallerF - $task $OPTARG" \
 	--center \
@@ -923,6 +973,13 @@ Done" --width=350 --height=350 --timeout=5
 
 fnotify
 
+# Clean capture
+if [ "$(id -u)" -eq 0 ]; then
+rm -rf /tmp/.pictures/
+else
+rm -f /tmp/.pictures/$OPTARG.png
+fi
+
 # Clean package info
 
 if [ "$(id -u)" -eq 0 ]; then
@@ -934,10 +991,11 @@ cat /dev/null > /tmp/packagekit-url-$OPTARG
 fi
 
 
-# TODAS LAS DISTRIBUCIONES #
-else
 
-echo > /tmp/packagekit-url-tmp
+# OPENSUSE
+elif [ -f /etc/SuSE-release ]; then
+
+echo > /tmp/packagekit-url-$OPTARG
 $ang $OPTARG | tee /tmp/packagekit-url-$OPTARG | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 	--title="PostInstallerF - $task $OPTARG" \
 	--center \
@@ -978,6 +1036,77 @@ Done" --width=350 --height=350 --timeout=5
 
 fnotify
 
+# Clean capture
+if [ "$(id -u)" -eq 0 ]; then
+rm -rf /tmp/.pictures/
+else
+rm -f /tmp/.pictures/$OPTARG.png
+fi
+
+# Clean package info
+
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/packagekit-url-$OPTARG
+rm -rf /tmp/.pictures/
+rm -f /tmp/postinstaller.$OPTARG.lck
+else
+cat /dev/null > /tmp/packagekit-url-$OPTARG
+fi
+   
+
+
+# TODAS LAS DISTRIBUCIONES #
+else
+
+
+echo > /tmp/packagekit-url-$OPTARG
+$ang $OPTARG | tee /tmp/packagekit-url-$OPTARG | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+	--title="PostInstallerF - $task $OPTARG" \
+	--center \
+	--image="$screenshot" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--width=800 --height=500 \
+	--text="$names 
+$resume
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+$pvar 
+
+License: $lic 
+
+$Url"  \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+	--no-buttons
+
+wait ${!}
+
+if [ $(rpm -qa $OPTARG | grep -c $OPTARG) -gt 0 ]; then
+    echo "$OPTARG is present"
+checking='is' 
+else
+    echo "none $OPTARG is present"
+checking='is not' 
+fi
+
+
+Result=$(grep -e 'Resultados:' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'installed' -e 'status' -e 'erased' -e 'freedesktop.PackageKit:' /tmp/packagekit-url-$OPTARG | tail -10) 
+
+yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
+
+$OPTARG $checking installed now
+Done" --width=350 --height=350 --timeout=5
+
+
+fnotify
+
+# Clean capture
+if [ "$(id -u)" -eq 0 ]; then
+rm -rf /tmp/.pictures/
+else
+rm -f /tmp/.pictures/$OPTARG.png
+fi
+
 # Clean package info
 
 if [ "$(id -u)" -eq 0 ]; then
@@ -1007,9 +1136,9 @@ if [ "$task" = Localinstall ]; then
 # fullname=$(basename $OPTARG)
 # cuttingname="${fullname%%-[0-9]*}"
 
-if [ "$dist" = MANJARO ]; then
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
 
-pkexec $ang $OPTARG 2>&1 | tee -a /tmp/packer-local-$cuttingname | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' -e '/\.\.\.$/ s/^/# /p' | yad --progress \
+$ang $OPTARG 2>&1 | tee -a /tmp/packer-local-$cuttingname | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' -e '/\.\.\.$/ s/^/# /p' | yad --progress \
 --title="PostInstallerF - $task $OPTARG" \
 --center \
 --image="$screenshot" --image-on-top \
@@ -1036,6 +1165,13 @@ Done" --width=350 --height=350
 
 
 fnotify
+
+# Clean capture
+if [ "$(id -u)" -eq 0 ]; then
+rm -rf /tmp/.pictures/
+else
+rm -f /tmp/.pictures/$OPTARG.png
+fi
 
 # Clean packer results
 if [ "$(id -u)" -eq 0 ]; then
@@ -1079,6 +1215,13 @@ Done" --width=350 --height=350 --timeout=5
       	 
 fnotify
 
+# Clean capture
+if [ "$(id -u)" -eq 0 ]; then
+rm -rf /tmp/.pictures/
+else
+rm -f /tmp/.pictures/$OPTARG.png
+fi
+
 # Clean package info
 if [ "$(id -u)" -eq 0 ]; then
 rm -f *.$OPTARG.lck
@@ -1088,6 +1231,55 @@ else
 cat /dev/null > /tmp/local-url-$cuttingname
 fi
 
+
+# OPENSUSE
+
+elif [ -f /etc/SuSE-release ]; then
+$ang $OPTARG | tee /tmp/local-url-$cuttingname | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+	--title="PostInstallerF - $task $OPTARG" \
+	--center \
+	--image="$screenshot" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--width=800 --height=500 \
+	--text="$fullname 
+$resume
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+$pvar 
+
+License: $lic 
+
+$Url"  \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+	--no-buttons
+
+wait ${!}
+
+
+Result=$(grep -e 'Resultados:' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'freedesktop.PackageKit:' -e 'Actualizado' -e 'Updated' -e '(local)' /tmp/local-url-$cuttingname | tail -10) 
+
+yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
+Done" --width=350 --height=350 --timeout=5
+
+      	 
+fnotify
+
+# Clean capture
+if [ "$(id -u)" -eq 0 ]; then
+rm -rf /tmp/.pictures/
+else
+rm -f /tmp/.pictures/$OPTARG.png
+fi
+
+# Clean package info
+if [ "$(id -u)" -eq 0 ]; then
+rm -f *.$OPTARG.lck
+rm -f /tmp/local-url-$cuttingname
+rm -f /tmp/localinstall..lck
+else
+cat /dev/null > /tmp/local-url-$cuttingname
+fi
 
 # TODAS LAS DISTRIBUCIONES #
 else
@@ -1122,6 +1314,13 @@ Done" --width=350 --height=350 --timeout=5
       	 
 fnotify
 
+# Clean capture
+if [ "$(id -u)" -eq 0 ]; then
+rm -rf /tmp/.pictures/
+else
+rm -f /tmp/.pictures/$OPTARG.png
+fi
+
 # Clean package info
 if [ "$(id -u)" -eq 0 ]; then
 rm -f *.$OPTARG.lck
@@ -1150,7 +1349,7 @@ fi
 # MENU 5 #
 # If only need search
 
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
 
 #Define Architecture
 architecture=$(uname -m)
@@ -1170,7 +1369,7 @@ for lock in synaptic update-manager software-center apt-get dpkg aptitude yum pk
 	done
 
 
-if [ "$dist" = MANJARO ]; then
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
 
 BUSCA_I=$(yad --entry --center --title="Repository search." --window-icon="/usr/share/icons/acciones/topicon.png" --width=350 --text="Type in as many keywords as you want to search for." --image=/usr/share/icons/acciones/searchpackage.png --image-on-top) 
 
@@ -1347,9 +1546,9 @@ fi
 
 if [ "$task" = Update ]; then
 
-if [ "$dist" = MANJARO ]; then
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
 
-pkexec $ang 2>&1 | tee -a /tmp/packer-url-tmp | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' -e '/^descargando/ s/^/# /p' -e '/^downloading/ s/^/# /p' | yad --progress \
+$ang 2>&1 | tee -a /tmp/packer-url-tmp | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' -e '/^descargando/ s/^/# /p' -e '/^downloading/ s/^/# /p' | yad --progress \
 --title="PostInstallerF - $task" \
 --center \
 --image="/usr/share/icons/acciones/update.png" --image-on-top \
@@ -1414,6 +1613,40 @@ else
 cat /dev/null > /tmp/apt-url-tmp
 fi
 
+# OPENSUSE
+
+elif [ -f /etc/SuSE-release ]; then
+pkrefresh
+
+$ang | tee /tmp/update-url-tmp | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+	--title="PostInstallerF - $task" \
+	--center \
+	--image="/usr/share/icons/acciones/update.png" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--width=800 --height=500 \
+	--text='<span size="xx-large">Updating, please wait...</span>'  \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+	--no-buttons
+
+wait ${!}
+
+Result=$(grep -e 'Resultados:' -e '(updates)' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'updated' -e 'Actualizado' -e 'paquetes' -e 'Updated' -e 'freedesktop.PackageKit:' -e 'actualizarse' -e 'operación' -e 'operation' /tmp/update-url-tmp | tail -10) 
+
+yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
+Done"
+
+
+fnotify
+
+# Clean package info
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/update-url-tmp
+rm -f /tmp/*.lck
+else
+cat /dev/null > /tmp/update-url-tmp
+fi
 
 # TODAS LAS DISTRIBUCIONES #
 else

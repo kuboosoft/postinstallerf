@@ -2,6 +2,28 @@
 
 source /usr/bin/postinstallerf/pid
 
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
+
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+
+if (pacman -Q unrar >/dev/null) && (pacman -Q p7zip >/dev/null) ; then
+status=INSTALLED
+tarea=Uninstall
+else
+status='NO INSTALLED'
+tarea=Install
+fi
+
+elif [ "$dist" = Ubuntu ]; then
+if [ $(dpkg-query -Wf'${db:Status-abbrev}' "unrar") = ii ] && [ $(dpkg-query -Wf'${db:Status-abbrev}' "p7zip") = ii ] ; then
+status=INSTALLED
+tarea=Uninstall
+else
+status='NO INSTALLED'
+tarea=Install
+fi
+
+else
 if [ $(rpm -qa unrar | grep -c unrar) -gt 0 ] && [ $(rpm -qa p7zip | grep -c p7zip) -gt 0 ]; then
 status=INSTALLED
 tarea=Uninstall
@@ -9,6 +31,7 @@ else
 status='NO INSTALLED'
 tarea=Install
 fi
+  fi
 
 Comment='<span size="xx-large">Unrar and p7zip</span>'
 

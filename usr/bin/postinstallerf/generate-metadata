@@ -1,12 +1,12 @@
 #!/bin/bash
 
 architecture=$(uname -m)
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
 
 
 #FEDORA
 
-if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then 
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
 export LANG=C
 
 rm -rf /tmp/metadata/
@@ -201,7 +201,7 @@ fi
 
 # MANJARO
 
-if [ "$dist" = MANJARO ]; then
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
 export LANGUAGE="en_AU:en_GB:en"
 
 rm -rf /tmp/metadata/

@@ -2,6 +2,8 @@
 
 source /usr/bin/postinstallerf/pid
 
+user=$(loginctl show-session $XDG_SESSION_ID | grep 'Name' | cut -d= -f2 | tail -n 1)
+
 # Called whenever anything needs to be run as root ($@ is the command)
 runasroot() {
   if [[ $UID -eq 0 ]]; then
@@ -15,7 +17,7 @@ runasroot() {
 }
 
 
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian')
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
 
 if [ $dist = Ubuntu ]; then
 
@@ -27,7 +29,7 @@ status='NO INSTALLED'
 tarea='Install'
 fi
 
-elif [ "$dist" = MANJARO ]; then
+elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] ; then
            
 if (pacman -Q xfce4 >/dev/null) ; then 
 status='INSTALLED'
@@ -35,6 +37,15 @@ tarea='Update'
 else
 status='NO INSTALLED'
 tarea='Install'
+fi
+
+elif [ -f /etc/SuSE-release ]; then
+if [ $(rpm -qa xfce4-panel | grep -c xfce4-panel) -gt 0 ]; then
+status=INSTALLED
+tarea=Update
+else
+status='NO INSTALLED'
+tarea=Install
 fi
 
 elif [ -f /etc/fedora-release ]; then
@@ -74,6 +85,9 @@ elif [[ $tarea = Install ]]; then
 if [ $dist = Ubuntu ]; then
 postinstaller -i xubuntu-desktop 
 
+elif [ -f /etc/SuSE-release ]; then
+pkexec zypper in -t pattern xfce
+
 elif [ -f /etc/fedora-release ]; then
 pkexec postinstaller -g xfce-desktop
 if [ $(rpm -qa xfce4-volumed | grep -c xfce4-volumed) -gt 0 ]; then
@@ -82,8 +96,36 @@ else
 postinstaller -i xfce4-volumed
 fi
 
-elif [ $dist = MANJARO ]; then 
-postinstaller -i xfce4 -i xfce4-goodies
+elif [ $dist = MANJARO ] || [ $dist = ARCH ]; then 
+pkexec postinstaller -i xfce4 -i xfce4-goodies -i gamin -i alsa-utils -i alsa-plugins -i xfce4-notifyd -i network-manager-applet -i volumeicon -i xscreensaver -i mate-polkit -i samba -i smbclient -i lightdm -i lightdm-gtk3-greeter -i xfce4-mixer -i xfce4-volumed -i blueman
+# creando archivo de configuracion
+cp /etc/skel/.xinitrc ~
+# agregando xfce4, para que inicie automaticamente
+echo 'xbindkeys' >> $HOME/.xinitrc
+echo 'exec startxfce4' >> $HOME/.xinitrc
+
+# Arrancando Xscreensaver, desde inicio automaticamente
+echo 'xscreensaver -no-splash &' >> $HOME/.xinitrc
+# Arrancando polkit mate authentication desde el inicio
+cp /etc/xdg/xfce4/xinitrc ~/.config/xfce4/
+cp -f /etc/xdg/autostart/polkit-mate-authentication-agent-1.desktop ~/.config/autostart/
+
+# Agregando soporte samba 
+pkexec systemctl enable smbd.service nmbd.service
+pkexec pdbedit -a -u $user
+# activando LightDM
+#pkexec systemctl start lightdm.service
+# subiendo volumen
+amixer sset Master unmute
+amixer set Master 5%+
+# agregando permisos a blueman
+echo 'source /etc/X11/xinit/xinitrc.d/*' >> $HOME/.xinitrc
+# agregando suporte blueman a thunar
+echo '#!/bin/bash
+fusermount -u ~/bluetooth
+obexfs -b $1 ~/bluetooth
+thunar ~/bluetooth' > /usr/local/bin/obex_thunar.sh
+chmod +x /usr/local/bin/obex_thunar.sh
 fi
 
 fi

@@ -1,15 +1,14 @@
 #!/bin/bash
 
 source /usr/bin/postinstallerf/pid
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
 currentdesk=${XDG_CURRENT_DESKTOP}
 
 
     # Local Progress
     localprogress='/usr/bin/postinstallerf/local-pro'
 
-    # Define version Fedora
-    version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
+    
 
 
 groupgress() {
@@ -27,11 +26,15 @@ tee -a /tmp/summary-group | stdbuf -oL sed -ne '/Installed/ s/^/# /p' -e '/Insta
 
 }
 
-/usr/bin/postinstallerf/noticodecs &
 
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+echo 'Arch/Manjaro'
+status='SOME PACKAGES INSTALLED'
+tarea=Install
 
-if [ "$dist" = Ubuntu ]; then
+elif [ "$dist" = Ubuntu ]; then
 # Ubuntu
+/usr/bin/postinstallerf/noticodecs &
 if [ $(dpkg-query -Wf'${db:Status-abbrev}' "*ubuntu-restricted-extras") = ii ]; then
 status=INSTALLED
 tarea=Update
@@ -39,8 +42,16 @@ else
 status='NO INSTALLED'
 tarea=Install
 fi
+
+# Opensuse
+elif [ -f /etc/SuSE-release ]; then
+echo 'openSuse' 
+status='SOME PACKAGES INSTALLED'
+tarea=Install
+
 # Fedora
-else
+elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then 
+/usr/bin/postinstallerf/noticodecs &
 if [ $(rpm -qa gstreamer-plugins-bad | grep -c gstreamer-plugins-bad) -gt 0 ] && [ $(rpm -qa gstreamer-plugins-bad-free-extras | grep -c gstreamer-plugins-bad-free-extras) -gt 0 ] && [ $(rpm -qa gstreamer-plugins-ugly | grep -c gstreamer-plugins-ugly) -gt 0 ] && [ $(rpm -qa gstreamer1-plugins-ugly | grep -c gstreamer1-plugins-ugly) -gt 0 ] && [ $(rpm -qa gstreamer1-plugins-good | grep -c gstreamer1-plugins-good) -gt 0 ] && [ $(rpm -qa gstreamer1-plugins-bad-free | grep -c gstreamer1-plugins-bad-free) -gt 0 ]; then
 status=INSTALLED
 tarea=Update
@@ -86,8 +97,44 @@ else
 postinstaller -i ubuntu-restricted-extras
 fi
 
+# ARCH/MANJARO
+
+elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+
+file="/home/david/Dropbox/postinstallerf-1.5.0/usr/bin/postinstallerf/arch_list_codecs"
+while IFS= read -r line; do
+        # display $line or do somthing with $line
+	if [ $(pacman -Q $line | grep -c $line) -gt 0 ] ; then
+echo "$line Installed"
+else
+echo "Installing $line"
+pkexec postinstaller -i $line
+fi
+done <"$file" | groupgress
+
+# OPENSUSE
+elif [ -f /etc/SuSE-release ]; then
+# Define version Fedora
+version=$(rpm -q --queryformat '%{VERSION}\n' openSUSE-release)
+
+zypper addrepo -f http://ftp.gwdg.de/pub/linux/packman/suse/$version/ packman
+zypper addrepo -f http://opensuse-guide.org/repo/$version/ dvd
+
+file="/home/david/Dropbox/postinstallerf-1.5.0/usr/bin/postinstallerf/suse_list_codecs"
+while IFS= read -r line; do
+        # display $line or do somthing with $line
+	if [ $(pacman -Q $line | grep -c $line) -gt 0 ] ; then
+echo "$line Installed"
+else
+echo "Installing $line"
+pkexec postinstaller -i $line
+fi
+done <"$file" | groupgress
+
 # FEDORA
 elif [ -f /etc/fedora-release ]; then
+# Define version Fedora
+version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
 
 # Checking rpmfusion
 if [ $(rpm -qa rpmfusion-free-release | grep -c rpmfusion-free-release) -gt 0 ] && [ $(rpm -qa rpmfusion-nonfree-release | grep -c rpmfusion-nonfree-release) -gt 0 ]; then

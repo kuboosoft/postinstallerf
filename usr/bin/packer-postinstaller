@@ -77,18 +77,6 @@ usage() {
   exit
 }
 
-# Called whenever anything needs to be run as root ($@ is the command)
-runasroot() {
-  if [[ $UID -eq 0 ]]; then
-    "$@"
-  elif zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | sudo -S -v &>/dev/null && sudo -l "$@" &>/dev/null; then
-    sudo -E "$@"
-  else
-    echo -n "root "
-    zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | su -c "$(printf '%q ' "$@")"
-  fi
-}
-
 
 # Called whenever anything needs unblock pacman
 unlockpac() {
@@ -356,9 +344,11 @@ aurinstall() {
 
   [[ $? -ne 0 ]] && echo "The build failed." && return 1
   if  [[ $2 = dependency ]]; then
-    runasroot $PACMAN ${PACOPTS[@]} --asdeps -U $pkgname-*$PKGEXT
+name_complete=$(ls $pkgname*.pkg.tar.xz)
+    pkexec $PACMAN ${PACOPTS[@]} --asdeps -U "$dir/$pkgname/$name_complete" #
   elif [[ $2 = explicit ]]; then
-    runasroot $PACMAN ${PACOPTS[@]} -U $pkgname-*$PKGEXT
+name_complete=$(ls $pkgname*.pkg.tar.xz)
+    pkexec $PACMAN ${PACOPTS[@]} -U "$dir/$pkgname/$name_complete" #
   fi
 }
 
@@ -417,7 +407,7 @@ installhandling() {
  
   # First install the explicit pacman packages, let pacman prompt
   if [[ $pacmanpackages ]]; then
-    runasroot $PACMAN "${PACOPTS[@]}" -S -- "${pacmanpackages[@]}"
+    pkexec $PACMAN "${PACOPTS[@]}" -S -- "${pacmanpackages[@]}"
   fi
   if [[ -z $aurtargets ]]; then
     exit
@@ -463,7 +453,7 @@ installhandling() {
 
   # Install pacman dependencies
   if [[ $pacmandepends ]]; then
-    runasroot $PACMAN --noconfirm --asdeps -S -- "${pacmandepends[@]}" || err "Installation failed."
+    pkexec $PACMAN --noconfirm --asdeps -S -- "${pacmandepends[@]}" || err "Installation failed."
   fi 
 
   # Install aur dependencies
@@ -580,7 +570,7 @@ if [[ $option = localinstall ]]; then
 
 unlockpac
 
-  runasroot pacman -U --noconfirm "${packageargs[@]}"
+  pkexec pacman -U --noconfirm "${packageargs[@]}"
   exit
 fi
 
@@ -588,7 +578,7 @@ fi
 if [[ $option = remove ]]; then
 #  zenity --password | sudo -S pacman -R --noconfirm "${packageargs[@]}"
 unlockpac
-  runasroot pacman -Rs --noconfirm "${packageargs[@]}"
+  pkexec pacman -Rs --noconfirm "${packageargs[@]}"
 exit
 fi
 
@@ -599,7 +589,7 @@ unlockpac
   sourcemakepkgconf
   # Pacman update
   if ! [[ $auronly ]]; then
-    runasroot $PACMAN "${PACOPTS[@]}" "$pacmanarg"
+    pkexec $PACMAN "${PACOPTS[@]}" "$pacmanarg"
   fi
 
   # Aur update

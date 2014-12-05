@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian')
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
 
 if [ -f /tmp/availableu ]; then
 rm -f /tmp/availableu
@@ -31,9 +31,9 @@ elif [ "$dist" = Debian ] || [ "$dist" = Ubuntu ]; then
 apt-show-versions -u | checkup
 # apt-get --just-print upgrade | grep '[0-9]' | sed '/,/d' | awk '{print $2}' | checkup
 
-elif [ "$dist" = MANJARO ]; then
+elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] ; then
 
-pkexec packer-postinstaller --quickcheck | checkup 
+packer-postinstaller --quickcheck | checkup 
 
 fi
 

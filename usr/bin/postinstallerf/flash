@@ -2,7 +2,7 @@
 
 source /usr/bin/postinstallerf/pid
 
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
 
     # Local install
     locainst='dnf -y install'
@@ -13,7 +13,16 @@ dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
     # Architecture
     architecture=$(uname -m)
 
-if [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+if (pacman -Q flashplugin >/dev/null); then
+status=INSTALLED
+tarea=Uninstall
+else
+status='NO INSTALLED'
+tarea=Install
+fi
+
+elif [ "$dist" = Ubuntu ]; then
 # Ubuntu
 if [ $(dpkg-query -Wf'${db:Status-abbrev}' "*flashplugin-installer") = ii ] || [ $(dpkg-query -Wf'${db:Status-abbrev}' "*adobe-flashplugin") = ii ] ; then
 status=INSTALLED
@@ -52,6 +61,7 @@ if [[ $ret -eq 0 ]]; then
 
 if [[ "$tarea" = Install ]]; then 
 
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
 if [ $(rpm -qa adobe-release-x86_64 | grep -c adobe-release-x86_64) -gt 0 ] || [ $(rpm -qa adobe-release-i386 | grep -c adobe-release-i386) -gt 0 ]; then
 echo 'installed adobe repository'
  else
@@ -60,6 +70,7 @@ pkexec dnf -y install http://linuxdownload.adobe.com/linux/x86_64/adobe-release-
 else
 pkexec dnf -y install http://linuxdownload.adobe.com/adobe-release/adobe-release-i386-1.0-1.noarch.rpm | $localprogress
 fi
+  fi
   fi
 
 if [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
@@ -72,7 +83,7 @@ elif [[ "$tarea" = Uninstall ]]; then
 if [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
 postinstaller -e flashplugin-installer -e adobe-flashplugin
 else
-pkexec postinstaller -e flash-plugin -e hal-flash
+pkexec postinstaller -e flash-plugin -e libhal1-flash
 fi
 
 fi

@@ -3144,6 +3144,8 @@ gpgcheck=1
 gpgkey=https://www.virtualbox.org/download/oracle_vbox.asc
 skip_if_unavailable=1' >> /etc/yum.repos.d/virtualbox.repo
 
+yum clean metadata
+
 postinstaller -i kernel-headers -i kernel-devel -i dkms -i gcc 
 
 postinstaller -u
@@ -3434,7 +3436,31 @@ mix(){
 
 
 skype(){
-	xterm -e 'sh /usr/bin/postinstallerf/skype-installer'
+
+if [! -f /etc/yum.repos.d/fedora-skype.repo ]; then
+
+echo '[fedora-skype]
+name=Skype for Fedora
+baseurl=http://negativo17.org/repos/skype/fedora-$releasever/$basearch/
+enabled=1
+skip_if_unavailable=1
+gpgkey=http://negativo17.org/repos/RPM-GPG-KEY-slaanesh
+gpgcheck=1
+
+[fedora-skype-source]
+name=Skype for Fedora - Source
+baseurl=http://negativo17.org/repos/skype/fedora-$releasever/SRPMS
+enabled=0
+skip_if_unavailable=1
+gpgkey=http://negativo17.org/repos/RPM-GPG-KEY-slaanesh
+gpgcheck=1' >> /etc/yum.repos.d/fedora-skype.repo
+
+	yum clean metadata
+	postinstaller -i skype 
+
+else
+	postinstaller -i skype 
+fi
 
 
     }
@@ -3612,6 +3638,8 @@ Gnutella(){
 
 veOff(){
 
+if [! -f /etc/yum.repos.d/home:gcala.repo ]; then
+
 echo '[home_gcala]
 name=gcala Home Project
 type=rpm-md
@@ -3623,7 +3651,12 @@ skip_if_unavailable=1' >> /etc/yum.repos.d/home:gcala.repo
 
 wait ${!}
 
+	yum clean metadata
 	postinstaller -i grooveoff 
+
+else
+	postinstaller -i grooveoff
+fi
 
     }
 

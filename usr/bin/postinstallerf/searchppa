@@ -69,11 +69,16 @@ cleanppa
 exit
 fi
 
-mojito3=$(curl -k https://launchpad.net/+search?field.text=$BUSCA_I | grep '+archive/' | grep "$BUSCA_I" | awk -F'<a href="' '{print $2}' | awk -F'">' '{print $1}' | tr ' ' '\n' | tee -a /tmp/ppa-url-tmp)
+wait ${!}
+/usr/bin/postinstallerf/notifier-ppa &
 
-mojito5=$(curl -k https://launchpad.net/+search?field.text=$BUSCA_I | grep '+archive/' | grep "ppa" | awk -F'<a href="' '{print $2}' | awk -F'">' '{print $1}' | tr ' ' '\n' | tee -a /tmp/ppa-url-tmp)
+mojito=$(curl -k https://launchpad.net/ubuntu/+ppas?name_filter=$BUSCA_I | grep '+archive/' | grep 'href="/~' | awk -F'<td><a href="/~' '{print $2}' | awk -F'">' '{print $1}' >> /tmp/ppa-url-tmp)
 
-mojito=$(curl -k https://launchpad.net/ubuntu/+ppas?name_filter=$BUSCA_I | grep -e "$BUSCA_I" -e "$corel" -e "$relu" | grep '+archive/' | awk -F'<td><a href="/~' '{print $2}' | awk -F'">' '{print $1}' | tr ' ' '\n' | tee -a /tmp/ppa-url-tmp)
+mojito2=$(curl -k https://launchpad.net/+search?field.text=$BUSCA_I | grep '+archive/' | grep "$BUSCA_I" | awk -F'<a href="' '{print $2}' | awk -F'">' '{print $1}' >> /tmp/ppa-url-tmp)
+
+mojito3=$(curl -k https://launchpad.net/+search?field.text=$BUSCA_I | grep '+archive/' | grep "ppa" | awk -F'<a href="' '{print $2}' | awk -F'">' '{print $1}' >> /tmp/ppa-url-tmp)
+
+# | tr ' ' '\n'
 
 wait ${!}
 
@@ -85,36 +90,24 @@ sed -i '/+Error/d' /tmp/ppa-url-tmp
 sed -i '/+listing-archive-extra/d' /tmp/ppa-url-tmp
 sed -i '/+index?/d' /tmp/ppa-url-tmp
 
-sed -ni '/^https/p' /tmp/ppa-url-tmp
+sort /tmp/ppa-url-tmp 
+
+#sed -ni '/^https/p' /tmp/ppa-url-tmp
 
 sed -i '#https://launchpad.net/#!d' /tmp/ppa-url-tmp
 sed '$!N; /^\(.*\)\n\1$/!P; D' /tmp/ppa-url-tmp
 sed -i '/^\s*$/d' /tmp/ppa-url-tmp
 
 wait ${!}
-/usr/bin/postinstallerf/notifier-ppa &
+#/usr/bin/postinstallerf/notifier-ppa &
 
-
-# refine search
-
-if [ $(tr -d "\r\n" < /tmp/ppa-url-tmp | wc -c) -eq 0 ]; then
-echo "None ppa found, then searching all"
-mojito2=$(curl -k https://launchpad.net/ubuntu/+ppas?name_filter=$BUSCA_I | grep '+archive/' | awk -F'<td><a href="/~' '{print $2}' | awk -F'">' '{print $1}' | tr ' ' '\n' | tee -a /tmp/ppa-url-tmp)
-sed -i '/+build/d' /tmp/ppa-url-tmp
-sed -i '/+test/d' /tmp/ppa-url-tmp
-sed -i '/+packages/d' /tmp/ppa-url-tmp
-sed -i '/+builds/d' /tmp/ppa-url-tmp
-sed -i '/+Error/d' /tmp/ppa-url-tmp
-sed -i '/+listing-archive-extra/d' /tmp/ppa-url-tmp
-sed -ni '/^https/p' /tmp/ppa-url-tmp
-sed '$!N; /^\(.*\)\n\1$/!P; D' /tmp/ppa-url-tmp
-sed -i '/^\s*$/d' /tmp/ppa-url-tmp
- fi
 
 
 # checking results
 
-if [ $(tr -d "\r\n" < /tmp/ppa-url-tmp | wc -c) -eq 0 ]; then
+if [ $(grep -c '[a-z]' /tmp/ppa-url-tmp) -gt 0 ]; then
+echo 'found result'
+else
 echo "None ppa found"
 ps aux | grep notify | awk '{print $2}' | xargs kill -9
 yad --info --window-icon="/usr/share/icons/acciones/topicon.png" --title="PostInstallerF" --text="Sorry
@@ -128,9 +121,9 @@ file="/tmp/ppa-url-tmp"
 while IFS= read -r line; do
         # display $line or do somthing with $line
 
-cod=$(curl -s -k --head -w %{http_code} $line -o /dev/null)
+cod=$(curl -s -k --head -w %{http_code} https://launchpad.net/~$line -o /dev/null)
 
-curl -k -o /tmp/$BUSCA_I.temp $line
+curl -k -o /tmp/$BUSCA_I.temp https://launchpad.net/~$line
 
 #if [ $(tr -d "\r\n" < /tmp/$BUSCA_I.temp | wc -c) -eq 0 ]; then
 #echo "0 Sized and completely empty"
@@ -139,7 +132,7 @@ curl -k -o /tmp/$BUSCA_I.temp $line
 
 # if [ $(cat /tmp/$BUSCA_I.temp | grep -c "$relu") -gt 0 ] || [ $(cat /tmp/$BUSCA_I.temp | grep -c "$corel") -gt 0 ] || [ $(cat /tmp/$BUSCA_I.temp | grep -c "$BUSCA_I") -gt 0 ] || [ $(cat /tmp/$BUSCA_I.temp | grep -c '/ppa') -gt 0 ] && [ "$cod" -eq 200 ]; then
 
-if [ "$cod" -eq 200 ]; then
+if [ "$cod" -eq 200 ] && [ $(grep -c "$BUSCA_I" /tmp/$BUSCA_I.temp) -gt 0 ] && [ $(grep -c "$relu" /tmp/$BUSCA_I.temp) -gt 0 ]; then
 
 title=$(cat /tmp/$BUSCA_I.temp | grep -e '<title>'  | awk -F '<title>' '{print $2}' | awk -F '</title>' '{print $1}')
 

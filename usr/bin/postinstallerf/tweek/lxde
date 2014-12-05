@@ -15,7 +15,7 @@ runasroot() {
 }
 
 
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian')
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
 
 if [ $dist = Ubuntu ]; then
 
@@ -27,7 +27,7 @@ status='NO INSTALLED'
 tarea='Install'
 fi
 
-elif [ "$dist" = MANJARO ]; then
+elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
            
 if (pacman -Q lxde >/dev/null) ; then 
 status='INSTALLED'
@@ -35,6 +35,15 @@ tarea='Update'
 else
 status='NO INSTALLED'
 tarea='Install'
+fi
+
+elif [ -f /etc/SuSE-release ]; then
+if [ $(rpm -qa lxde-common | grep -c lxde-common) -gt 0 ]; then
+status=INSTALLED
+tarea=Update
+else
+status='NO INSTALLED'
+tarea=Install
 fi
 
 elif [ -f /etc/fedora-release ]; then
@@ -73,10 +82,13 @@ elif [[ $tarea = Install ]]; then
 if [ $dist = Ubuntu ]; then
 postinstaller -i lubuntu-desktop 
 
+elif [ -f /etc/SuSE-release ]; then
+zypper install patterns-openSUSE-lxde
+
 elif [ -f /etc/fedora-release ]; then
 pkexec postinstaller -g lxde-desktop
 
-elif [ $dist = MANJARO ]; then 
+elif [ $dist = MANJARO ] || [ $dist = ARCH ]; then 
 postinstaller -i lxde
 fi
 
