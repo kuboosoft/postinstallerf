@@ -1,7 +1,12 @@
 #!/bin/bash
 
 architecture=$(uname -m)
+
+if [ -f /etc/arch-release ]; then
+dist=ARCH
+else
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
+fi
 
 
 #FEDORA
@@ -38,10 +43,11 @@ echo "Name=$line" >  $line.in
 
 repoquery -i $line > /tmp/met
 
+
 cat /tmp/met | grep 'Summary' | tr -d "'" | sed "s/Summary     : /Comment=/g" >> $line.in
 
 cat /tmp/met | grep -A10 'Description' | tr -d "'" | sed "s/Description :/Comment3='/g" | tr -d ":" >>  $line.in
-#| sed "s/.$/'/"
+sed "s/&/and/g" /tmp/met
 echo "'" >>  $line.in
 
 cat /tmp/met | grep 'License' | tr -d "'" | sed "s/License     : /License='/g" | sed "s/$/'/" >> $line.in
@@ -154,6 +160,7 @@ cat /tmp/met | grep -v 'Homepage:' | grep -A1 'Description-en:' | sed -n '1p' | 
 echo "Comment3='" >>  $line.in
 cat /tmp/met | grep -ve 'Homepage:' -e 'Description-en:' | tr -d "'" | tr -d '\n' | cut -f1 -d"." | sed "s/$/.'/" >> $line.in
 
+sed "s/&/and/g" /tmp/met
 
 echo "License=''" >>  $line.in
 
@@ -246,6 +253,8 @@ echo "Name=$line" >  $line.in
 echo "Comment=''" >>  $line.in
 
 yaourt -Si $line > /tmp/met
+
+sed "s/&/and/g" /tmp/met 
 
 cat /tmp/met | grep 'Description' | tr -d "'" | sed "s/Description    : /Comment3='/g" | tr -d ":" >>  $line.in
 

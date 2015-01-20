@@ -27,7 +27,11 @@ source /usr/bin/postinstallerf/pid
 
 /usr/bin/postinstallerf/generate-metadata &
 
+if [ -f /etc/arch-release ]; then
+dist=ARCH
+else
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
+fi
 
 if [ "$dist" = Ubuntu ]; then
 postversion=$(dpkg -s postinstallerf | grep 'Version' | awk '{print $2}')
@@ -38,7 +42,7 @@ postversion=$(rpm -q postinstallerf | awk -F '[a-z]-' '{print $2}' | awk -F '.fc
 fi
 
 
-if [ "$dist" = ARCH ]; then
+if [ "$dist" = ARCH ] || [ "$dist" = MANJARRO ]; then
 if [ ! -f  ~/.config/autostart/polkit-mate-authentication-agent-1.desktop ]; then
 cp -f /etc/xdg/autostart/polkit-mate-authentication-agent-1.desktop ~/.config/autostart/
 fi

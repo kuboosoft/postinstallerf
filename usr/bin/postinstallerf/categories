@@ -25,7 +25,11 @@
 
 source /usr/bin/postinstallerf/pid
 
+if [ -f /etc/arch-release ]; then
+dist=ARCH
+else
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
+fi
 
 yad --center --image="/usr/share/icons/acciones/menuprincipal.png" --image-on-top --icons --name="PostInstallerF - Categories" --window-icon="/usr/share/icons/Postinstaller1.svg" --class="PostInstallerF" --width=800 --height=500  --read-dir="/usr/share/postinstallerf-desktop/categorias/" --item-width=90 --title="PostInstallerF - Categories" --button="Donate:0" --button="Repositories:2" --button="Close:1" 
 

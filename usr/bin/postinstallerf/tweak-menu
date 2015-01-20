@@ -25,7 +25,12 @@
 
 
 source /usr/bin/postinstallerf/pid
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu')
+
+if [ -f /etc/arch-release ]; then
+dist=ARCH
+else
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
+fi
 
 yad --center --image="/usr/share/icons/acciones/Tweak.png" --image-on-top --icons --name="PostInstallerF - Multimedia" --item-width=90 --window-icon="/usr/share/icons/Postinstaller1.svg" --class="PostInstallerF" --width=800 --height=500  --read-dir="/usr/share/postinstallerf-desktop/tweak/" --title="PostInstallerF - Tweak" --button="Donate:0" --button="Repositories:2" --button="Close:1" 
 

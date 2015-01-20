@@ -86,8 +86,8 @@
     <message>Authentication is required to install programs and configure the system.</message>
     <defaults>
       <allow_any>auth_admin</allow_any>
-      <allow_inactive>no</allow_inactive>
-      <allow_active>auth_admin_keep</allow_active>
+      <allow_inactive>yes</allow_inactive>
+      <allow_active>yes</allow_active>
     </defaults>
     <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/postinstallerf/postinstaller-list-menu</annotate>
     <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
@@ -110,8 +110,8 @@
     <message>Authentication is required to install programs and configure the system.</message>
     <defaults>
       <allow_any>auth_admin</allow_any>
-      <allow_inactive>no</allow_inactive>
-      <allow_active>auth_admin_keep</allow_active>
+      <allow_inactive>yes</allow_inactive>
+      <allow_active>yes</allow_active>
     </defaults>
     <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/postinstallerf/searchppa</annotate>
     <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
@@ -134,10 +134,34 @@
     <message>Authentication is required to install/uninstall programs.</message>
     <defaults>
       <allow_any>auth_admin</allow_any>
+      <allow_inactive>yes</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/pacman</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+  <action id="org.freedesktop.pkexec.chrome-installer">
+    <description>Installer for Chrome</description>
+    <message>Authentication is required to install/uninstall programs.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_admin_keep</allow_active>
     </defaults>
-    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/pacman</annotate>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/postinstallerf/chrome-installer</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+  <action id="org.freedesktop.pkexec.skype-installer">
+    <description>Installer for Skype</description>
+    <message>Authentication is required to install/uninstall programs.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/postinstallerf/skype-installer</annotate>
     <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
   </action>
 

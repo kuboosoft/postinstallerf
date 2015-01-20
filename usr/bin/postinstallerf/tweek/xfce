@@ -17,7 +17,11 @@ runasroot() {
 }
 
 
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
+if [ -f /etc/arch-release ]; then
+dist=ARCH
+else
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' 'ARCH')
+fi
 
 if [ $dist = Ubuntu ]; then
 
@@ -29,7 +33,7 @@ status='NO INSTALLED'
 tarea='Install'
 fi
 
-elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] ; then
+elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
            
 if (pacman -Q xfce4 >/dev/null) ; then 
 status='INSTALLED'

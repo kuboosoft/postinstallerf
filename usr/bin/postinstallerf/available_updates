@@ -1,6 +1,10 @@
 #!/bin/bash
 
+if [ -f /etc/arch-release ]; then
+dist=ARCH
+else
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
+fi
 
 if [ -f /tmp/availableu ]; then
 rm -f /tmp/availableu

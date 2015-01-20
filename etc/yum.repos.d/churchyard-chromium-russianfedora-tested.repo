@@ -1,0 +1,6 @@
+[churchyard-chromium-russianfedora-tested]
+name=Copr repo for chromium-russianfedora-tested owned by churchyard
+baseurl=http://copr-be.cloud.fedoraproject.org/results/churchyard/chromium-russianfedora-tested/fedora-$releasever-$basearch/
+skip_if_unavailable=True
+gpgcheck=0
+enabled=1

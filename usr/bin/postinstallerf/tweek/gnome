@@ -15,7 +15,11 @@ runasroot() {
 }
 
 
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian')
+if [ -f /etc/arch-release ]; then
+dist=ARCH
+else
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' 'ARCH')
+fi
 
 if [ $dist = Ubuntu ]; then
 
@@ -27,7 +31,7 @@ status='NO INSTALLED'
 tarea='Install'
 fi
 
-elif [ "$dist" = MANJARO ]; then
+elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
            
 if (pacman -Q gnome >/dev/null) ; then 
 status='INSTALLED'
@@ -76,7 +80,7 @@ postinstaller -i  gnome-shell ubuntu-gnome-desktop
 elif [ -f /etc/fedora-release ]; then
 pkexec postinstaller -g gnome-desktop
 
-elif [ $dist = MANJARO ]; then 
+elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
 postinstaller -i gnome
 fi
 

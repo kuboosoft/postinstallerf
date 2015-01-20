@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # +--------------------------------------------------------------------------------+
-# | Copyright (C) 2014 Kuboosoft                                                   |
+# | Copyright (C) 2015 Kuboosoft                                                   |
 # |                                                                                |
 # |This program is free software; You can distribute it and / or                   |
 # |modify it under the terms of the GNU General Public License                     |
@@ -26,7 +26,7 @@ do
   i)
    echo received -i with $OPTARG
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
-if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 ang='packer-postinstaller -S --noconfirm --noedit'
 elif [ "$dist" = Ubuntu ] ; then
 ang='apt-get -y install'
@@ -45,7 +45,7 @@ task=Installing
   e)
    echo received -e with $OPTARG
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
-if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 ang='packer-postinstaller -D'
 elif [ "$dist" = Ubuntu ] ; then
 ang='apt-get -y remove'
@@ -65,7 +65,7 @@ task=Uninstalling
    echo received -l with $OPTARG
 . /usr/bin/postinstallerf/pid
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
-if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 ang='packer-postinstaller -L'
 elif [ "$dist" = Ubuntu ] ; then
 ang='dpkg -i'
@@ -84,6 +84,7 @@ task=Localinstall
   g)
    echo received -g with $OPTARG
 . /usr/bin/postinstallerf/pid
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
 task=Install-group
 if [ "$(id -u)" -eq 0 ]; then
 echo 'You are root, well'
@@ -95,6 +96,7 @@ fi
   n)
    echo received -n with $OPTARG
 . /usr/bin/postinstallerf/pid
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
 task=Information
    ;;
   o)
@@ -123,8 +125,8 @@ fi
 # source /usr/bin/postinstallerf/pid
 task=Update
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
-if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
-ang='packer-postinstaller -Suu --noconfirm --noedit'
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
+ang='packer-postinstaller -Syu --noconfirm --noedit'
 elif [ "$dist" = Ubuntu ] ; then
 ang='apt-get -y dist-upgrade'
 elif [ -f /etc/SuSE-release ]; then
@@ -136,6 +138,7 @@ fi
   s)
    echo received -s 
 . /usr/bin/postinstallerf/pid
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
 task=Search
    ;;
   h)
@@ -179,10 +182,20 @@ exit
 
 
 
-#cleaning variables info
+#cleaning variables info and capture
 
 rm -f /tmp/packagekit-url-tmp
 rm -f /tmp/packer-url-tmp
+
+cleanlock() {
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/packagekit-url-$OPTARG
+rm -rf /tmp/.pictures/
+rm -f /tmp/postinstaller.$OPTARG.lck
+else
+rm -f /tmp/.pictures/$OPTARG.png
+fi
+}
 
 # Called whenever anything needs to be run as root ($@ is the command)
 runasroot() {
@@ -236,6 +249,7 @@ else
     body="Sorry $globalnoti is not installed"
 fi
   fi
+cleanlock
      fi
  # # #
 
@@ -251,12 +265,13 @@ else
     body="Sorry $globalnoti is not installed"
 fi
   fi
+cleanlock
     fi
 
  # # #
 
 
-if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 
 if (pacman -Q $globalnoti >/dev/null) ; then 
 body="$globalnoti is installed"
@@ -267,6 +282,7 @@ else
     body="Sorry $globalnoti is not installed"
 fi
 fi
+cleanlock
   fi
 
  #
@@ -377,16 +393,6 @@ cat /dev/null > /tmp/ppalist
 cat /dev/null > /tmp/ppa-url-tmp
 cat /dev/null > /tmp/gress
 cat /dev/null > /tmp/$BUSCA_I.temp
-fi
-}
-
-cleanlock() {
-if [ "$(id -u)" -eq 0 ]; then
-rm -f /tmp/packagekit-url-$OPTARG
-rm -rf /tmp/.pictures/
-rm -f /tmp/postinstaller.$OPTARG.lck
-else
-rm -f /tmp/.pictures/$OPTARG.png
 fi
 }
 
@@ -522,8 +528,8 @@ fi
 
 if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Information ] || [ "$task" = Localinstall ]; then
 
-if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
-fullname=$(basename $OPTARG | sed 's/-git//g' | sed 's/-bzr//g')
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
+fullname=$(basename $OPTARG | sed 's/-git//g' | sed 's/-bzr//g' | sed 's/-bin//g' | sed 's/-svn//g' | sed 's/-gtk2//g' | sed 's/-qt//g')
 else
 fullname=$(basename $OPTARG)
 fi
@@ -589,7 +595,7 @@ lic="${License:-$kwno}"
 if [ "$task" = Localinstall ]; then
 imagen=$cuttingname
 else
-if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 imagen=$fullname
 else
 imagen=$OPTARG
@@ -725,7 +731,7 @@ tarea=Install
 status="NO INSTALLED"
 fi
 
-    elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+    elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
             echo "System is running MANJARO Linux"
             DISTRO=MANJARO
 
@@ -818,13 +824,13 @@ cleanlock
 
 if [ "$task" = Installing ] || [ "$task" = Uninstalling ]; then
 
-if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 echo > /tmp/packagekit-url-$OPTARG
 cleanaur
 
 # MANJARO Y ARCH LINUX
 
-if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] && [ "$task" = Installing ] ; then
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ] && [ "$task" = Installing ] ; then
 $ang $OPTARG 2>&1 | tee -a /tmp/packer-url-$OPTARG | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' | yad --progress \
 --title="PostInstallerF - $task $OPTARG" \
 --center \
@@ -877,7 +883,7 @@ else
 cat /dev/null > /tmp/packer-url-$OPTARG
 fi
 
-elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] && [ "$task" = Uninstalling ] ; then
+elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ] && [ "$task" = Uninstalling ] ; then
 $ang $OPTARG 2>&1 | tee -a /tmp/packer-url-$OPTARG | stdbuf -oL sed -nru '/\.\.\.$/ s/^/# /p' | yad --progress \
 --title="PostInstallerF - $task $OPTARG" \
 --center \
@@ -1136,7 +1142,7 @@ if [ "$task" = Localinstall ]; then
 # fullname=$(basename $OPTARG)
 # cuttingname="${fullname%%-[0-9]*}"
 
-if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 
 $ang $OPTARG 2>&1 | tee -a /tmp/packer-local-$cuttingname | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' -e '/\.\.\.$/ s/^/# /p' | yad --progress \
 --title="PostInstallerF - $task $OPTARG" \
@@ -1369,7 +1375,7 @@ for lock in synaptic update-manager software-center apt-get dpkg aptitude yum pk
 	done
 
 
-if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 
 BUSCA_I=$(yad --entry --center --title="Repository search." --window-icon="/usr/share/icons/acciones/topicon.png" --width=350 --text="Type in as many keywords as you want to search for." --image=/usr/share/icons/acciones/searchpackage.png --image-on-top) 
 
@@ -1380,7 +1386,7 @@ else
 notify-send --hint=int:transient:1 -t 500000 "Searching $BUSCA_I
 Please wait" -i "/usr/share/icons/acciones/loadingimage2.png"
 
-	RES_BUSCA_I=$(packer-postinstaller -Ss $BUSCA_I | grep -e '^extra' -e '^community' -e '^aur' -e '^core' -e '^local' -e '^multilib' -e '^testing' -e '^community-testing' -e '^multilib-testing' | sed 's:/: :g' | awk '{print $1, $2, $3}' | uniq -c)
+	RES_BUSCA_I=$(packer-postinstaller -Ss $BUSCA_I | grep -e '^extra/' -e '^community/' -e '^aur/' -e '^core/' -e '^local/' -e '^multilib/' -e '^testing/' -e '^community-testing/' -e '^multilib-testing/' | sed 's:/: :g' | awk '{print $1, $2, $3}' | uniq -c)
 
 ps aux | grep notify | awk '{print $2}' | xargs kill -9	
 
@@ -1546,7 +1552,7 @@ fi
 
 if [ "$task" = Update ]; then
 
-if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 
 $ang 2>&1 | tee -a /tmp/packer-url-tmp | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' -e '/^descargando/ s/^/# /p' -e '/^downloading/ s/^/# /p' | yad --progress \
 --title="PostInstallerF - $task" \

@@ -11,7 +11,8 @@ source /usr/bin/postinstallerf/pid
 
 if [! -f /etc/yum.repos.d/fedora-skype.repo ]; then
 
-echo '[fedora-skype]
+cat << EOF > /etc/yum.repos.d/fedora-skype.repo
+[fedora-skype]
 name=Skype for Fedora
 baseurl=http://negativo17.org/repos/skype/fedora-$releasever/$basearch/
 enabled=1
@@ -25,7 +26,8 @@ baseurl=http://negativo17.org/repos/skype/fedora-$releasever/SRPMS
 enabled=0
 skip_if_unavailable=1
 gpgkey=http://negativo17.org/repos/RPM-GPG-KEY-slaanesh
-gpgcheck=1' >> /etc/yum.repos.d/fedora-skype.repo
+gpgcheck=1
+EOF
 
 	yum clean metadata
 	postinstaller -i skype 
