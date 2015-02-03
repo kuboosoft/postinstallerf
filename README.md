@@ -20,8 +20,11 @@ from a terminal:
 FEDORA 20/21
 
 1) su
+
 2) dnf -y install wget 
+
 3) wget -P /etc/yum.repos.d/ https://raw.github.com/kuboosoft/postinstallerf/master/postinstallerf.repo
+
 4) dnf -y install postinstallerf
 
 
