@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # +--------------------------------------------------------------------------------+
-# | Copyright (C) 2014 Kuboosoft                                                   |
+# | Copyright (C) 2015 Kuboosoft                                                   |
 # |                                                                                |
 # |This program is free software; You can distribute it and / or                   |
 # |modify it under the terms of the GNU General Public License                     |
@@ -17,7 +17,7 @@
 # |should be addressed to:                                                         |
 # |https://plus.google.com/communities/118230919321773121406                       |
 # +--------------------------------------------------------------------------------+
-# FEDORA  20 y 21 CONFPOST 1.5.0 
+# FEDORA  20 y 21 CONFPOST 1.5 
 
 
 # +--------------------------------------------------------------------------------------------------+
@@ -119,15 +119,6 @@ fi
 
             fi
 
-if ! $installed | grep "Plasma-wallpaper-dreamdesktop" > /dev/null; then
-if [ -f /usr/lib/kde4/dreamdesktop.so ] || [ -f /usr/lib64/kde4/dreamdesktop.so ]; then
-                    im=$im"FALSE \"Plasma-wallpaper-dreamdesktop\"    \"Un innovador fondo de escritorio animado para KDE.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Plasma-wallpaper-dreamdesktop\"    \"Un innovador fondo de escritorio animado para KDE.\" \"NO INSTALADO  \"  "
-fi
-
-            fi
-
 
 if ! $installed | grep "Entorno de escritorio GNOME/SHELL" > /dev/null; then
 if [ $(rpm -qa gnome-desktop3 | grep -c gnome-desktop3) -gt 0 ]; then
@@ -205,14 +196,6 @@ fi
             fi
 
 
-if ! $installed | grep "Grub Customizer" > /dev/null; then
-if which grub-customizer >/dev/null; then
-                    im=$im"FALSE \"Grub Customizer\"    \"Es una interfaz gráfica para configurar grub2/burg, sin perder el comportamiento dinámico.\" \"INSTALADO  \"  "
-else
-im=$im"FALSE \"Grub Customizer\"    \"Es una interfaz gráfica para configurar grub2/burg, sin perder el comportamiento dinámico.\" \"NO INSTALADO  \"  "
-fi
-            fi
-
 if ! $installed | grep "Activar/Desactivar Repositorios" > /dev/null; then
                     im=$im"FALSE \"Activar/Desactivar Repositorios\"    \"Activa o desactiva repositorios marcar un repo para activar, desmarcar para disactivar \" \"ACTIVO  \"  "
             fi
@@ -284,15 +267,6 @@ if [ $(rpm -qa cinnamon | grep -c cinnamon) -gt 0 ]; then
                     im=$im"FALSE \"Cinnamon\"    \"Cinnamon is a fork of GNOME Shell, initially developed by Linux Mint.\" \"INSTALLED  \"  "
 else
 im=$im"FALSE \"Cinnamon\"    \"Cinnamon is a fork of GNOME Shell, initially developed by Linux Mint.\" \"NO INSTALLED  \"  "
-fi
-
-            fi
-
-if ! $installed | grep "Plasma-wallpaper-dreamdesktop" > /dev/null; then
-if [ -f /usr/lib/kde4/dreamdesktop.so ] || [ -f /usr/lib64/kde4/dreamdesktop.so ]; then
-                    im=$im"FALSE \"Plasma-wallpaper-dreamdesktop\"    \"An innovative animated desktop wallpaper for KDE.\" \"INSTALLED  \"  "
-else
-im=$im"FALSE \"Plasma-wallpaper-dreamdesktop\"    \"An innovative animated desktop wallpaper for KDE.\" \"NO INSTALLED  \"  "
 fi
 
             fi
@@ -375,15 +349,6 @@ fi
             fi
 
 
-if ! $installed | grep "Grub Customizer" > /dev/null; then
-if which grub-customizer >/dev/null; then
-                    im=$im"FALSE \"Grub Customizer\"    \"Graphical interface to configure the GRUB2/BURG settings and menuentries. \" \"INSTALLED  \"  "
-else
-im=$im"FALSE \"Grub Customizer\"    \"Graphical interface to configure the GRUB2/BURG settings and menuentries.\" \"NO INSTALLED  \"  "
-fi
-            fi
-
-
 if ! $installed | grep "Enable/Disable Repositories" > /dev/null; then
                     im=$im"FALSE \"Enable/Disable Repositories\"    \"Enable/disable repositories, check a repo to enable, uncheck to disable \" \"ACTIVATED  \"  "
             fi
@@ -454,9 +419,6 @@ if echo $choice | grep "Cinnamon" > /dev/null; then
                     cinnamon
             fi
 
-if echo $choice | grep "Plasma-wallpaper-dreamdesktop" > /dev/null; then
-                    dreamd
-            fi
 
 if echo $choice | grep "Jocky" > /dev/null; then
                     jocky
@@ -517,10 +479,6 @@ if echo $choice | grep "Disable or enable de SELinux" > /dev/null; then
 
 if echo $choice | grep "Frozen Kernel" > /dev/null; then
                     frozen
-            fi
-
-if echo $choice | grep "Grub Customizer" > /dev/null; then
-                    grubcus
             fi
 
 if echo $choice | grep "Activar/Desactivar Repositorios" > /dev/null; then
@@ -601,13 +559,6 @@ dnf group -y install cinnamon-desktop | $localprogress
     }
 
 
-dreamd(){
-
-postinstaller -i plasma-wallpaper-dreamdesktop 
-
-
-    }
-
 
 gnodesk(){
             dnf group -y install gnome-desktop | $localprogress
@@ -670,13 +621,6 @@ postinstaller -a
 frozen(){
             
 postinstaller -f
-
-    }
-
-grubcus(){
-            
-postinstaller -i grub-customizer
-
 
     }
 

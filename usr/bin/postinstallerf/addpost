@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # +--------------------------------------------------------------------------------+
-# | Copyright (C) 2014 Kuboosoft                                                   |
+# | Copyright (C) 2015 Kuboosoft                                                   |
 # |                                                                                |
 # |This program is free software; You can distribute it and / or                   |
 # |modify it under the terms of the GNU General Public License                     |
@@ -17,7 +17,7 @@
 # |should be addressed to:                                                         |
 # |https://plus.google.com/communities/118230919321773121406                       |
 # +--------------------------------------------------------------------------------+
-# FEDORA 20, 21 ADPOST 1.2.2 64 BITS
+# FEDORA 20, 21 ADPOST 1.5 
 
 # +--------------------------------------------------------------------------------------------------+
 # |AQUI INICIA EL MENU                                                                               |
@@ -2743,100 +2743,61 @@ postinstaller -i flash-plugin -i hal-flash
 
 jre(){
 
-rm -f /tmp/jre-oraclejava.rpm
-rm -f /etc/profile.d/java.sh
-
 if [ -f /usr/lib/IcedTeaPlugin.so ] || [ -f /usr/lib64/IcedTeaPlugin.so ]; then
 xterm -e 'dnf -y remove icedtea-web'
 fi
 
 
-if [[ $(rpm -qa jdk*-linux-*.rpm | grep -c jdk*-linux-*.rpm) -gt 0 ]]; then
+verjava=$(curl -k http://www.oracle.com/technetwork/java/javase/downloads/index.html | grep 'jre8-downloads' | awk -F'/jre8-downloads' '{print $2}' | awk -F'"><img' '{print $1}' | sed 's/target=//g' | tr -d '"' | sort | sed '/^\s*$/d' | tail -1 )
 
-zenity --question --title="Detected jdk oracle java installed" --text="You need uninstall jdk oracle java, Do you want uninstall" --ok-label "Yes" --cancel-label "No"
-if [[ $? -eq 0 ]]; then
+if [ `getconf LONG_BIT` = "64" ]; then
+verjre=$(curl -k http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads$verjava | grep 'x64.rpm' | awk -F'filepath":"' '{print $2}' | awk -F'"' '{print $1}' | sort | sed '/^\s*$/d' | tail -1 )
+
+else
+verjre=$(curl -k http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads$verjava | grep 'i586.rpm' | awk -F'filepath":"' '{print $2}' | awk -F'"' '{print $1}' | sort | sed '/^\s*$/d' | tail -1 )
+fi
+
+wait ${!}
 
 xterm -e 'dnf -y erase jdk'
 
-rm -f /etc/profile.d/java.sh
-
-if [ `getconf LONG_BIT` = "64" ]
-then
+if [ `getconf LONG_BIT` = "64" ]; then
 rm -f /usr/lib64/mozilla/plugins/libnpjp2.so
 else
 rm -f /usr/lib/mozilla/plugins/libnpjp2.so
 fi  
            
-if [ `getconf LONG_BIT` = "64" ]
-then
-xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jre*-linux-x64.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
+if [ `getconf LONG_BIT` = "64" ]; then
+wget -c -P/tmp/ --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" $verjre 2>&1 | sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: JRE ORACLE  [\1]Speed:.........[\2B]_p' | zenity --progress --pulsate --auto-close --width 500
 wait ${!}
 
 xterm -e 'dnf -y install /tmp/jre*-linux-x64.rpm'
 else
-xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jre*-linux-i586.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
+wget -c -P/tmp/ --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" $verjre 2>&1 | sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: JRE ORACLE  [\1]Speed:.........[\2B]_p' | zenity --progress --pulsate --auto-close --width 500
 wait ${!}
 xterm -e 'dnf -y install /tmp/jre*-linux-i586.rpm'
 fi
 
 
-if [ `getconf LONG_BIT` = "64" ]
-then
-ln -s /usr/java/latest/lib64/x86_64/libnpjp2.so /usr/lib64/mozilla/plugins/
+if [ `getconf LONG_BIT` = "64" ]; then
+ln -s /usr/java/latest/lib/amd64/libnpjp2.so /usr/lib64/mozilla/plugins/
 else
 ln -s /usr/java/latest/lib/i386/libnpjp2.so /usr/lib/mozilla/plugins/
 fi
 
-echo 'PATH=/usr/java/latest/bin:$PATH' >> /etc/profile.d/java.sh
+echo 'PATH=/usr/java/latest/bin:$PATH' > /etc/profile.d/java.sh
 
-if [ `getconf LONG_BIT` = "64" ]
-then
+cd /usr/java/
+
+currentd=$(ls | grep 'jre' | sort | sed '/^\s*$/d' | tail -1)
+
+ln -s $currentd latest
+
+if [ `getconf LONG_BIT` = "64" ]; then
 rm -f jre*-linux-x64.rpm
 else
 rm -f jre*-linux-i586.rpm
 fi
-
-else
-echo 'en otra ocacion'
-fi
-
- else
-
-if [ `getconf LONG_BIT` = "64" ]
-then
-xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jre*-linux-x64.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
-wait ${!}
-xterm -e 'dnf -y install /tmp/jre*-linux-x64.rpm'
-else
-xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jre*-linux-i586.rpm -erobots=off http://uni-smr.ac.ru/archive/dev/java/JRE/oracle/7/'
-wait ${!}
-xterm -e 'dnf -y install /tmp/jre*-linux-i586.rpm'
-fi
-
-if [ -f /usr/lib64/mozilla/plugins/libnpjp2.so ] || [ -f /usr/lib/mozilla/plugins/libnpjp2.so ]; then
-echo 'jre plugin enabled'
-else
-if [ `getconf LONG_BIT` = "64" ]
-then
-ln -s /usr/java/latest/lib64/x86_64/libnpjp2.so /usr/lib64/mozilla/plugins/
-else
-ln -s /usr/java/latest/lib/i386/libnpjp2.so /usr/lib/mozilla/plugins/
-fi
-  fi
-
-if [ -f /etc/profile.d/java.sh ]; then
-echo 'default jdk java enabled'
-else
-echo 'PATH=/usr/java/latest/bin:$PATH' >> /etc/profile.d/java.sh
-fi
-
-if [ `getconf LONG_BIT` = "64" ]
-then
-rm -f jre*-linux-x64.rpm
-else
-rm -f jre*-linux-i586.rpm
-fi
-  fi
 
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
@@ -2854,14 +2815,17 @@ if [ -f /usr/lib/IcedTeaPlugin.so ] || [ -f /usr/lib64/IcedTeaPlugin.so ]; then
 xterm -e 'dnf -y erase icedtea-web'
 fi
 
-if [[ $(rpm -qa jre*-linux-*.rpm | grep -c jre*-linux-*.rpm) -gt 0 ]]; then
+verjdkin=$(curl -k http://www.oracle.com/technetwork/java/javase/downloads/index.html | grep 'name="JDK8"' | awk -F'"JDK8"\ href="' '{print $2}' | awk -F'">' '{print $1}' | sed 's/target=//g' | tr -d '"' | sort | sed '/^\s*$/d' | tail -1)
 
-zenity --question --title="Detected jre oracle java installed" --text="You need uninstall jre oracle java, Do you want uninstall" --ok-label "Yes" --cancel-label "No"
-if [[ $? -eq 0 ]]; then
+if [ `getconf LONG_BIT` = "64" ]; then
+verdkin=$(curl -k http://www.oracle.com$verjdkin | grep 'x64.rpm' | awk -F'filepath":"' '{print $2}' | awk -F'"};' '{print $1}' | sort | sed '/^\s*$/d' | tail -1 )
+else
+verjdkin=$(curl -k http://www.oracle.com$verjdkin | grep 'i586.rpm' | awk -F'filepath":"' '{print $2}' | awk -F'"};' '{print $1}' | sort | sed '/^\s*$/d' | tail -1 )
+fi
+
+wait ${!}
 
 xterm -e 'dnf -y erase jre'
-
-rm -f /etc/profile.d/java.sh
 
 if [ `getconf LONG_BIT` = "64" ]
 then
@@ -2870,86 +2834,44 @@ else
 rm -f /usr/lib/mozilla/plugins/libnpjp2.so
 fi
 
-if [ `getconf LONG_BIT` = "64" ]
-then
-xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jdk*-linux-x64.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
+if [ `getconf LONG_BIT` = "64" ]; then
+wget -c -P /tmp/ --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" $verjdkin  2>&1 | sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: JDK ORACLE  [\1]Speed:.........[\2B]_p' | zenity --progress --pulsate --auto-close --width 500
 wait ${!}
 xterm -e 'dnf -y install /tmp/jdk*-linux-x64.rpm'
 else
-xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jdk*-linux-i586.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
+wget -c -P /tmp/ --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" $verjdkin 2>&1 | sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: JDK ORACLE  [\1]Speed:.........[\2B]_p' | zenity --progress --pulsate --auto-close --width 500
 wait ${!}
 xterm -e 'dnf -y install /tmp/jdk*-linux-i586.rpm'
 fi
 
 
-if [ `getconf LONG_BIT` = "64" ]
-then
+if [ `getconf LONG_BIT` = "64" ]; then
 ln -s /usr/java/latest/jre/lib/amd64/libnpjp2.so /usr/lib64/mozilla/plugins/
 else
 ln -s /usr/java/latest/jre/lib/i386/libnpjp2.so /usr/lib/mozilla/plugins/
 fi
 
-echo 'PATH=/usr/java/latest/bin:$PATH' >> /etc/profile.d/java.sh
+cd /usr/java/
 
-if [ `getconf LONG_BIT` = "64" ]
-then
+currentd=$(ls | grep 'jdk' | sort | sed '/^\s*$/d' | tail -1)
+
+ln -s $currentd latest
+
+echo 'PATH=/usr/java/latest/bin:$PATH' > /etc/profile.d/java.sh
+
+if [ `getconf LONG_BIT` = "64" ]; then
 rm -f jdk*-linux-x64.rpm
 else
 rm -f jdk*-linux-i586.rpm
 fi
 
- else
-echo 'en otra ocacion'
-  fi
 
-  else 
-
-
-          
-if [ `getconf LONG_BIT` = "64" ]
-then
-xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jdk*-linux-x64.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
-wait ${!}
-xterm -e 'dnf -y install /tmp/jdk*-linux-x64.rpm'
-else
-xterm -e 'wget -c -P/tmp/ -r -l1 -H -t1 -nd -N -np -A jdk*-linux-i586.rpm -erobots=off http://ftp.wsisiz.edu.pl/pub/pc/pozyteczne%20oprogramowanie/java/'
-wait ${!}
-xterm -e 'dnf -y install /tmp/jdk*-linux-i586.rpm'
-fi
-
-if [ -f /usr/lib64/mozilla/plugins/libnpjp2.so ] || [ -f /usr/lib/mozilla/plugins/libnpjp2.so ]; then
-echo 'jdk plugin enabled, removing old ln'
-rm -f  /usr/lib64/mozilla/plugins/libnpjp2.so
-rm -f  /usr/lib/mozilla/plugins/libnpjp2.so
-else
-if [ `getconf LONG_BIT` = "64" ]
-then
-ln -s /usr/java/latest/jre/lib/amd64/libnpjp2.so /usr/lib64/mozilla/plugins/
-else
-ln -s /usr/java/latest/jre/lib/i386/libnpjp2.so /usr/lib/mozilla/plugins/
-fi
-  fi
-
-if [ -f /etc/profile.d/java.sh ]; then
-echo 'default jdk java enabled'
-else
-echo 'PATH=/usr/java/latest/bin:$PATH' >> /etc/profile.d/java.sh
-fi
-
-if [ `getconf LONG_BIT` = "64" ]
-then
-rm -f jdk*-linux-x64.rpm
-else
-rm -f jdk*-linux-i586.rpm
-fi
-  
-   fi
 
 if [ $(echo $LANG | cut -b1-2) = "es" ]; then
 su $user -c 'notify-send "PostInstallerF" "Completada la instalacion de Java JDK Oracle" -i "/usr/share/icons/pinguino.png" -t 5000'
 else
 su $user -c 'notify-send "PostInstallerF" "Has been completed installation of Java JKD Oracle" -i "/usr/share/icons/pinguino.png" -t 5000'
-fi   
+fi
 
     }
 
@@ -3075,7 +2997,7 @@ project(){
 
 yEdt(){
 
-wget -c -P/tmp/ http://www.yworks.com/products/yed/demo/yEd-3.9.2_setup.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: yEd  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
+wget -c -P /tmp/ http://www.yworks.com/products/yed/demo/yEd-3.9.2_setup.sh 2>&1 |sed -un 's_^.* \([0-9]\+%\).* \([0-9.]\+[GMKB]\).*_#Downloading: yEd  [\1]Speed:.........[\2B]_p' |zenity --progress --pulsate --auto-close --width 500
 
 xterm -e 'sh /tmp/yEd-3.9.2_setup.sh'
 
@@ -3196,21 +3118,10 @@ postinstaller -u
      
     dropbox(){
 
-if [ -f /etc/yum.repos.d/dropbox.repo ]; then
-echo 'el repositorio esta incluido'
-postinstaller -i nautilus-dropbox 
-else
-echo '[Dropbox]
-name=Dropbox Repository
-baseurl=http://linux.dropbox.com/fedora/$releasever/
-gpgkey=https://linux.dropbox.com/fedora/rpm-public-key.asc
-skip_if_unavailable=1' >> /etc/yum.repos.d/dropbox.repo
-postinstaller -u
-postinstaller -i nautilus-dropbox 
-echo 'skip_if_unavailable=1' >> /etc/yum.repos.d/dropbox.repo
-fi
-            
 
+	postinstaller -i nautilus-dropbox 
+
+           
     }
      
 
@@ -3687,10 +3598,21 @@ blue(){
 
 
 Chrome(){
-if [[ $architecture = x86_64 ]]; then
-$locainst https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm | $localprogress
+if [! -f /etc/yum.repos.d/google-chrome.repo ]; then
+
+echo '
+[google-chrome]
+name=google-chrome - \$basearch
+baseurl=http://dl.google.com/linux/chrome/rpm/stable/\$basearch
+enabled=1
+gpgcheck=1
+gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub' > /etc/yum.repos.d/google-chrome.repo
+
+	postinstaller -u
+	postinstaller -i google-chrome-stable 
+
 else
-$locainst https://dl.google.com/linux/direct/google-chrome-stable_current_i386.rpm | $localprogress
+	postinstaller -i google-chrome-stable 
 fi
 
     }
@@ -3704,7 +3626,8 @@ chromium(){
 
 
 opera(){
-	/usr/bin/postinstallerf/opera-installer 
+	
+	postinstaller -i opera
 
     }
 

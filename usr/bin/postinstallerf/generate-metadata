@@ -9,9 +9,9 @@ dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
 fi
 
 
-#FEDORA
+#FEDORA AND OTHERS
 
-if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ] || [ -f /etc/mageia-release ]; then 
 export LANG=C
 
 rm -rf /tmp/metadata/
@@ -37,24 +37,24 @@ cd /tmp/metadata/
 file="/tmp/dnflist"
 while IFS= read -r line; do
         # display $line or do somthing with $line
-if [ ! -f /usr/share/app-install-data-postinstallerf/index/$line.in ] && [ ! -f $HOME/.local/share/app-install-data-postinstallerf/index/$line.in ]; then
+if [ ! -f /usr/share/app-install-data-postinstallerf/index/$line.posmet ] && [ ! -f $HOME/.local/share/app-install-data-postinstallerf/index/$line.posmet ]; then
 echo "making metadata for $line"
-echo "Name=$line" >  $line.in
+echo "Name=$line" >  $line.posmet
 
 repoquery -i $line > /tmp/met
 
 
-cat /tmp/met | grep 'Summary' | tr -d "'" | sed "s/Summary     : /Comment=/g" >> $line.in
+cat /tmp/met | grep 'Summary' | tr -d "'" | sed "s/Summary     : /Comment=/g" | sed "s/&/and/g" >> $line.posmet
 
-cat /tmp/met | grep -A10 'Description' | tr -d "'" | sed "s/Description :/Comment3='/g" | tr -d ":" >>  $line.in
+cat /tmp/met | grep -A10 'Description' | tr -d "'" | sed "s/Description :/Comment3='/g" | tr -d ":" | sed "s/&/and/g" >>  $line.posmet
 sed "s/&/and/g" /tmp/met
-echo "'" >>  $line.in
+echo "'" >>  $line.posmet
 
-cat /tmp/met | grep 'License' | tr -d "'" | sed "s/License     : /License='/g" | sed "s/$/'/" >> $line.in
+cat /tmp/met | grep 'License' | tr -d "'" | sed "s/License     : /License='/g" | sed "s/$/'/" | sed "s/&/and/g" >> $line.posmet
 
-echo "Screenshot=''" >> $line.in
+echo "Screenshot=''" >> $line.posmet
 
-cat /tmp/met | grep 'URL' | sed "s/URL         : /Url='/g" | sed "s/$/'/" >> $line.in
+cat /tmp/met | grep 'URL' | sed "s/URL         : /Url='/g" | sed "s/$/'/" >> $line.posmet
 else
 echo "exist $line"
 	fi
@@ -63,7 +63,7 @@ done <"$file"
 
 if [ "$(ls -A /tmp/metadata/)" ]; then
 
-fill1=`ls *.in`
+fill1=`ls *.posmet`
 
 #fixing the Comment tag
 
@@ -83,7 +83,7 @@ wait ${!}
 
 cd /tmp/metadata-postinstaller/
 
-fill2=`ls *.in`
+fill2=`ls *.posmet`
 
 for i in $fill2; do sed  -i 's|Comment=|&'\''<span size="xx-large">|; s|Comment=.*|&</span>'\''|' $i ; done
 
@@ -100,10 +100,10 @@ for i in $fill2; do sed -i '1i#!/bin/sh\' $i ; done
 
 wait ${!}
 
-chmod a+x *.in
+chmod a+x *.posmet
 
 wait ${!}
-cp -f /tmp/metadata-postinstaller/*.in $HOME/.local/share/app-install-data-postinstallerf/index/
+cp -f /tmp/metadata-postinstaller/*.posmet $HOME/.local/share/app-install-data-postinstallerf/index/
 fi
   fi
 
@@ -143,30 +143,30 @@ file="/tmp/packages-complete"
 while IFS= read -r line; do
         # display $line or do somthing with $line
 
-if [ ! -f /usr/share/app-install-data-postinstallerf/index/$line.in ] && [ ! -f $HOME/.local/share/app-install-data-postinstallerf/index/$line.in ]; then
+if [ ! -f /usr/share/app-install-data-postinstallerf/index/$line.posmet ] && [ ! -f $HOME/.local/share/app-install-data-postinstallerf/index/$line.posmet ]; then
 echo "making metadata for $line"
 
-echo "Name=$line" >  $line.in
-#echo "Comment=''" >>  $line.in
+echo "Name=$line" >  $line.posmet
+#echo "Comment=''" >>  $line.posmet
 
 
 apt-cache show $line | grep -ve 'Bugs:' -e 'Description-md5:' -e 'Origin:' -e 'Supported:' -e 'Task:' -e 'Replaces:' -e 'Provides:' -e 'Architecture:' -e 'Maintainer:' -e 'Installed-Size:' -e 'Recommends:' -e 'Suggests:' -e 'Task:' -e 'Bugs:' -e 'Depends:' -e 'Breaks:' -e 'Filename:' -e 'Size:' -e 'MD5sum:' -e 'SHA1:' -e 'SHA256:' -e 'Priority:' -e 'Section:' -e 'Version:' -e 'Multi-Arch:' -e 'Package:' -e 'Author:' -e 'Source:' -e 'Enhances:' -e 'Conflicts:' > /tmp/met
 
 #comment 1
 
-cat /tmp/met | grep -v 'Homepage:' | grep -A1 'Description-en:' | sed -n '1p' | tr -d "'" | sed "s/Description-en: /Comment=/g" >> $line.in
+cat /tmp/met | grep -v 'Homepage:' | grep -A1 'Description-en:' | sed -n '1p' | tr -d "'" | sed "s/Description-en: /Comment=/g" | sed "s/&/and/g" >> $line.posmet
 
 #comment 3
-echo "Comment3='" >>  $line.in
-cat /tmp/met | grep -ve 'Homepage:' -e 'Description-en:' | tr -d "'" | tr -d '\n' | cut -f1 -d"." | sed "s/$/.'/" >> $line.in
+echo "Comment3='" >>  $line.posmet
+cat /tmp/met | grep -ve 'Homepage:' -e 'Description-en:' | tr -d "'" | tr -d '\n' | cut -f1 -d"." | sed "s/$/.'/" | sed "s/&/and/g" >> $line.posmet
 
 sed "s/&/and/g" /tmp/met
 
-echo "License=''" >>  $line.in
+echo "License=''" >>  $line.posmet
 
-echo "Screenshot=''" >> $line.in
+echo "Screenshot=''" >> $line.posmet
 
-cat /tmp/met | grep 'Homepage:' | sed "s/Homepage: /Url='/g" | sed "s/$/'/" >> $line.in
+cat /tmp/met | grep 'Homepage:' | sed "s/Homepage: /Url='/g" | sed "s/$/'/" >> $line.posmet
 else
 echo "exist $line"
 	fi
@@ -175,14 +175,14 @@ done <"$file"
 if [ "$(ls -A /tmp/metadata/)" ]; then
 
 wait ${!}
-fill1=`ls *.in`
+fill1=`ls *.posmet`
 for i in $fill1; do sed '/^$/d' $i ; done
 for i in $fill1; do awk '!x[$0]++' $i > /tmp/metadata-postinstaller/$i ; done
 
 wait ${!}
 cd /tmp/metadata-postinstaller/
 
-fill2=`ls *.in`
+fill2=`ls *.posmet`
 
 for i in $fill2; do sed  -i 's|Comment=|&'\''<span size="xx-large">|; s|Comment=.*|&</span>'\''|' $i ; done
 
@@ -197,9 +197,9 @@ for i in $fill2; do echo "export Url" >> $i ; done
 
 for i in $fill2; do sed -i '1i#!/bin/sh\' $i ; done
 wait ${!}
-chmod a+x *.in
+chmod a+x *.posmet
 wait ${!}
-cp -f *.in $HOME/metadata-postinstaller/ $HOME/.local/share/app-install-data-postinstallerf/index/
+cp -f *.posmet $HOME/metadata-postinstaller/ $HOME/.local/share/app-install-data-postinstallerf/index/
 fi
 
   fi
@@ -217,7 +217,7 @@ rm -f /tmp/metactual
 rm -f /tmp/metalocal
 rm -f /tmp/arpackages-tmp
 rm -f /tmp/packages-tmp
-rm -f /tmp/metadata-postinstaller/*.in
+rm -f /tmp/metadata-postinstaller/*.posmet
 rm -f /tmp/matches
 
 
@@ -246,27 +246,27 @@ cd /tmp/metadata/
 file="/tmp/metactual"
 while IFS= read -r line; do
         # display $line or do somthing with $line
-if [ ! -f /usr/share/app-install-data-postinstallerf/index/$line.in ] && [ ! -f $HOME/.local/share/app-install-data-postinstallerf/index/$line.in ]; then
+if [ ! -f /usr/share/app-install-data-postinstallerf/index/$line.posmet ] && [ ! -f $HOME/.local/share/app-install-data-postinstallerf/index/$line.posmet ]; then
 echo "making metadata for $line"
-echo "Name=$line" >  $line.in
+echo "Name=$line" >  $line.posmet
 
-echo "Comment=''" >>  $line.in
+echo "Comment=''" >>  $line.posmet
 
 yaourt -Si $line > /tmp/met
 
 sed "s/&/and/g" /tmp/met 
 
-cat /tmp/met | grep 'Description' | tr -d "'" | sed "s/Description    : /Comment3='/g" | tr -d ":" >>  $line.in
+cat /tmp/met | grep 'Description' | tr -d "'" | sed "s/Description    : /Comment3='/g" | tr -d ":" | sed "s/&/and/g" >>  $line.posmet
 
-echo "'" >>  $line.in
+echo "'" >>  $line.posmet
 
-cat /tmp/met | grep -i 'Licenses' | tr -d "'" | sed "s/Licenses       : /License='/g" | sed "s/$/'/" >> $line.in
+cat /tmp/met | grep -i 'Licenses' | tr -d "'" | sed "s/Licenses       : /License='/g" | sed "s/$/'/" | sed "s/&/and/g" >> $line.posmet
 
-echo "Screenshot=''" >> $line.in
+echo "Screenshot=''" >> $line.posmet
 
-cat /tmp/met | grep 'URL' | sed "s/URL            : /Url='/g" | sed "s/$/'/" >> $line.in
+cat /tmp/met | grep 'URL' | sed "s/URL            : /Url='/g" | sed "s/$/'/" >> $line.posmet
 
-sed -i '/AUR/d' $line.in
+sed -i '/AUR/d' $line.posmet
 else
 echo "exist $line"
 	fi
@@ -274,7 +274,7 @@ done <"$file"
 
 if [ "$(ls -A /tmp/metadata/)" ]; then
 
-fill2=`ls *.in`
+fill2=`ls *.posmet`
 
 for i in $fill2; do sed  -i 's|Name=|&'\''<b>|; s|Name=.*|&</b>'\''|' $i ; done
 
@@ -289,10 +289,10 @@ for i in $fill2; do sed -i '1i#!/bin/sh\' $i ; done
 
 wait ${!}
 
-chmod a+x *.in
+chmod a+x *.posmet
 
 wait ${!}
-cp -f *.in $HOME/.local/share/app-install-data-postinstallerf/index/
+cp -f *.posmet $HOME/.local/share/app-install-data-postinstallerf/index/
 fi
 
   fi

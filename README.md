@@ -17,12 +17,15 @@ PostinstallerF Instalara todo software que no se incluye por defecto, después d
 from a terminal:
 
 
-FEDORA 20
+FEDORA 20/21
 
-su -c "yum -y install wget && wget -P /etc/yum.repos.d/ https://raw.github.com/kuboosoft/postinstallerf/master/postinstallerf.repo && yum -y install postinstallerf"
+1) su
+2) dnf -y install wget 
+3) wget -P /etc/yum.repos.d/ https://raw.github.com/kuboosoft/postinstallerf/master/postinstallerf.repo
+4) dnf -y install postinstallerf
 
 
 ----------------------------------------------------
 SOURCE CODE
-http://sourceforge.net/projects/postinstaller/files/fedora/releases/20/SRPM/postinstallerf-1.5-17.fc20.src.rpm
+http://sourceforge.net/projects/postinstaller/files/fedora/releases/21/SRPM/postinstallerf-1.5-23.fc21.src.rpm
 
