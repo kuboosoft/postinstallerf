@@ -1088,7 +1088,7 @@ $Url"  \
 wait ${!}
 
 # BUG https://bugzilla.redhat.com/show_bug.cgi?id=1187959
-if [ $(cat /tmp/packagekit-url-$OPTARG | grep -c 'All\ mirrors\ were\ tried') -gt 0 ]; then
+if [ $(cat /tmp/packagekit-url-$OPTARG | grep -c 'All\ mirrors\ were\ tried') -gt 0 ] || [ $(cat /tmp/packagekit-url-$OPTARG | grep -c 'Failed\ to\ create\ /var/cache/PackageKit/metadata/updates/packages/') -gt 0 ]; then
 
 notify-send --hint=int:transient:1 "Sorry, something strange happened!
 Changed to force mode 
@@ -1349,7 +1349,9 @@ $Url"  \
 
 wait ${!}
 
-if [ $(cat /tmp/local-url-$cuttingname | grep -c 'All\ mirrors\ were\ tried') -gt 0 ]; then
+# BUG https://bugzilla.redhat.com/show_bug.cgi?id=1187959
+
+if [ $(cat /tmp/local-url-$cuttingname | grep -c 'All\ mirrors\ were\ tried') -gt 0 ] || [ $(cat /tmp/local-url-$cuttingname | grep -c 'Failed\ to\ create\ /var/cache/PackageKit/metadata/updates/packages/') -gt 0 ]; then
 
 notify-send --hint=int:transient:1 "Sorry, something strange happened!
 Changed to force mode 
@@ -1746,7 +1748,7 @@ wait ${!}
 
 
 # BUG https://bugzilla.redhat.com/show_bug.cgi?id=1187959
-if [ $(cat /tmp/update-url-tmp | grep -c 'All\ mirrors\ were\ tried') -gt 0 ]; then
+if [ $(cat /tmp/update-url-tmp | grep -c 'All\ mirrors\ were\ tried') -gt 0 ] || [ $(cat /tmp/update-url-tmp | grep -c 'Failed\ to\ create\ /var/cache/PackageKit/metadata/updates/packages/') -gt 0 ] ; then; then
 
 notify-send --hint=int:transient:1 "Sorry, something strange happened!
 Changed to force mode 
