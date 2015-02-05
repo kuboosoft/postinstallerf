@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # +--------------------------------------------------------------------------------+
-# | Copyright (C) 2014 Kuboosoft                                                   |
+# | Copyright (C) 2015 Kuboosoft                                                   |
 # |                                                                                |
 # |This program is free software; You can distribute it and / or                   |
 # |modify it under the terms of the GNU General Public License                     |
@@ -26,6 +26,8 @@
 source /usr/bin/postinstallerf/pid
 
 /usr/bin/postinstallerf/generate-metadata &
+
+headpic=$(ls /usr/share/apps-head/ | shuf -n1)
 
 if [ -f /etc/arch-release ]; then
 dist=ARCH
@@ -59,7 +61,7 @@ testconnection=`wget --no-check-certificate --tries=3 --timeout=15 www.google.co
 		rm /tmp/.testinternet  > /dev/null 2>&1
 	fi
 
-yad --center --image="/usr/share/icons/acciones/menuprincipal2.png" --image-on-top --icons --name="PostInstallerF - Principal Menu" --window-icon="/usr/share/icons/Postinstaller1.svg" --class="PostInstallerF" --width=800 --height=500  --read-dir="/usr/share/postinstallerf-desktop/principal/" --item-width=90 --title="PostInstallerF - $postversion - Principal Menu" --sort-by-name --button="Donate:0" --button="Repositories:2" --button="About:3" --button="Close:1" 
+yad --center --image="/usr/share/apps-head/$headpic" --image-on-top --icons --name="PostInstallerF - Principal Menu" --window-icon="/usr/share/icons/Postinstaller1.svg" --class="PostInstallerF" --width=800 --height=500  --read-dir="/usr/share/postinstallerf-desktop/principal/" --item-width=90 --title="PostInstallerF - $postversion - Principal Menu" --sort-by-name --button="Donate:0" --button="Repositories:2" --button="About:3" --button="Close:1" 
 
 ret=$?
 
@@ -82,7 +84,7 @@ yad --class="PostInstallerF" --image="/usr/share/icons/acciones/topicon.png" --i
 PostInstallerF will install all the software that doesn't include by default after running your OS for the first time. 
 PostInstallerF contains everything that you need for your daily computing.
 
-Url:http://sourceforge.net/projects/postinstaller/" --width=400 --height=100 --undecorated --button="gtk-ok:0"
+Url:http://sourceforge.net/projects/postinstaller/" --width=400 --height=100 --button="gtk-ok:0"
 ret=$?
 if [[ $ret -eq 0 ]]; then
 rm -f /tmp/principal-menu..lck
