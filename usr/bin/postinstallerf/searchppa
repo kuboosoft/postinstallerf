@@ -137,13 +137,18 @@ if [ "$cod" -eq 200 ] && [ $(grep -c "$BUSCA_I" /tmp/$BUSCA_I.temp) -gt 0 ] && [
 title=$(cat /tmp/$BUSCA_I.temp | grep -e '<title>'  | awk -F '<title>' '{print $2}' | awk -F '</title>' '{print $1}')
 
 
-description=$(cat /tmp/$BUSCA_I.temp | grep -e 'content='  | awk -F 'content="' '{print $2}' | awk -F '.' '{print $1}' | tr -d '/>' | tr -d '"' | sed -e :a -e N -e 's/\n/ /' -e ta | sed 's/^/"/' | sed 's/$/"/') 
+pre=$(cat /tmp/$BUSCA_I.temp | grep -e 'content='  | awk -F 'content="' '{print $2}' | awk -F '.' '{print $1}' | tr -d '/>' | tr -d '"' | sed -e :a -e N -e 's/\n/ /' -e ta | sed 's/^/"/' | sed 's/$/"/') 
 
 
 support=$(cat /tmp/$BUSCA_I.temp | grep -e '<option value='  | grep [0-9] | awk -F '(' '{print $2}' | awk -F ')' '{print $1}' | sed -e :a -e N -e 's/\n/ /' -e ta | awk '{print $1, $2, $3}' | sed 's/^/"/' | sed 's/$/"/' )
 
 
 ppa=$(echo $line | sed 's\https://launchpad.net/\\g' | sed 's:'/'+archive::g' | sed 's:'/'ubuntu::g' | tr -d '~' | sed 's/^/ppa:/')
+
+
+empty='Description not filled by author'
+
+description="${pre:-$empty}"
 
 
 if [ $(cat /tmp/ppalist | grep -c $ppa) -gt 0 ]; then

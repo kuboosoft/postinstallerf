@@ -387,12 +387,14 @@ rm -f /tmp/ppalist
 rm -f /tmp/ppa-url-tmp
 rm -f /tmp/gress
 rm -f /tmp/$BUSCA_I.temp
+rm -f /tmp/ppaprogress
 else
 cat /dev/null > /tmp/summary-group
 cat /dev/null > /tmp/ppalist
 cat /dev/null > /tmp/ppa-url-tmp
 cat /dev/null > /tmp/gress
 cat /dev/null > /tmp/$BUSCA_I.temp
+cat /dev/null > /tmp/ppaprogress
 fi
 }
 
@@ -1422,6 +1424,7 @@ fi
 if [ "$task" = ppa-install ]; then
 cleanppa
 pkexec /usr/bin/postinstallerf/searchppa
+cleanppa
 fi
 
 

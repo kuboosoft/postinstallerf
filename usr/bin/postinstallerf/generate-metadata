@@ -103,7 +103,7 @@ wait ${!}
 chmod a+x *.posmet
 
 wait ${!}
-cp -f /tmp/metadata-postinstaller/*.posmet $HOME/.local/share/app-install-data-postinstallerf/index/
+cp -f *.posmet $HOME/.local/share/app-install-data-postinstallerf/index/
 fi
   fi
 
@@ -199,7 +199,7 @@ for i in $fill2; do sed -i '1i#!/bin/sh\' $i ; done
 wait ${!}
 chmod a+x *.posmet
 wait ${!}
-cp -f *.posmet $HOME/metadata-postinstaller/ $HOME/.local/share/app-install-data-postinstallerf/index/
+cp -f *.posmet $HOME/.local/share/app-install-data-postinstallerf/index/
 fi
 
   fi
@@ -293,6 +293,9 @@ chmod a+x *.posmet
 
 wait ${!}
 cp -f *.posmet $HOME/.local/share/app-install-data-postinstallerf/index/
+rm -f /tmp/met
+rm -rf /tmp/metadata-postinstaller
+rm -rf /tmp/metadata
 fi
 
   fi
