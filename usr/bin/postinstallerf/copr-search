@@ -63,7 +63,7 @@ if [ $(grep -c '[a-z]' /tmp/copr-url-tmp) -gt 0 ]; then
 echo 'found result'
 else
 echo "None ppa found"
-ps aux | grep notify | awk '{print $2}' | xargs kill -9
+ps aux | grep -ie 'notify' -e 'copr-search' | awk '{print $2}' | xargs kill -9
 yad --info --window-icon="/usr/share/icons/acciones/topicon.png" --title="PostInstallerF" --text="Sorry
 None Copr found"
 cleancopr
