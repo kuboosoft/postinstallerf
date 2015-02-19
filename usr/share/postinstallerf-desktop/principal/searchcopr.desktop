@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=postinstaller -c
+Version=1.0
+Type=Application
+Name=Search Copr
+GenericName=Search Copr
+Comment=Search Package
+Icon=/usr/share/icons/acciones/copr.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

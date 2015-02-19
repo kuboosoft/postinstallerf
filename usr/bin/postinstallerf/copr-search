@@ -1,0 +1,214 @@
+#!/bin/bash
+
+
+
+cleancopr() {
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/*.lck
+rm -f /tmp/coprlist
+rm -f /tmp/copr-url-tmp
+rm -f /tmp/gress
+rm -f /tmp/$BUSCA_I.temp
+rm -f /tmp/coprprogress
+rm -f /tmp/repolist
+else
+cat /dev/null > /tmp/copr-url-tmp
+cat /dev/null > /tmp/gress
+cat /dev/null > /tmp/$BUSCA_I.temp
+cat /dev/null > /tmp/coprprogress
+cat /dev/null > /tmp/repolist
+fi
+}
+
+
+fedgres() {
+
+tee -a /tmp/coprprogress | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+	--title="PostInstallerF - Updating Repositories" \
+	--center \
+	--image="/usr/share/icons/acciones/uppa.png" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--text="Please wait.." \
+	--width=500 --height=200 \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+	--no-buttons  
+}
+
+cleancopr
+
+dnf repolist | awk '{print $1}' | tee /tmp/repolist
+
+
+BUSCA_I=$(yad --entry --center --title="COPR search." --window-icon="/usr/share/icons/acciones/topicon.png" --width=350 --text="Type in as many keywords as you want to search for." --image=/usr/share/icons/acciones/copr.png --image-on-top)
+
+if [ "$?" != 0 ]; then
+cleancopr
+exit
+fi
+
+wait ${!}
+/usr/bin/postinstallerf/notifier-ppa &
+
+corprep=$(curl -k https://copr.fedoraproject.org/coprs/fulltext/?fulltext=$BUSCA_I | grep "coprs-list" | grep -i $BUSCA_I | awk -F'href="' '{print $2}' | awk -F'">' '{print $1}' >> /tmp/copr-url-tmp)
+
+
+# curl -k https://copr.fedoraproject.org$corprep
+
+
+# checking results
+
+if [ $(grep -c '[a-z]' /tmp/copr-url-tmp) -gt 0 ]; then
+echo 'found result'
+else
+echo "None ppa found"
+ps aux | grep notify | awk '{print $2}' | xargs kill -9
+yad --info --window-icon="/usr/share/icons/acciones/topicon.png" --title="PostInstallerF" --text="Sorry
+None Copr found"
+cleancopr
+exit
+ fi
+
+
+file="/tmp/copr-url-tmp"
+while IFS= read -r line; do
+        # display $line or do somthing with $line
+
+cod=$(curl -s -k --head -w %{http_code} https://copr.fedoraproject.org$line -o /dev/null)
+
+curl -k -o /tmp/$BUSCA_I.temp https://copr.fedoraproject.org$line
+
+
+
+if [ "$cod" -eq 200 ] && [ $(grep -ci "$BUSCA_I" /tmp/$BUSCA_I.temp) -gt 0 ] && [ $(grep -c '<td>Fedora' /tmp/$BUSCA_I.temp) -gt 0 ] || [ $(grep -c 'rawhide' /tmp/$BUSCA_I.temp) -gt 0 ]; then
+
+title=$(cat /tmp/$BUSCA_I.temp | grep '<title>' | awk -F '<title>' '{print $2}' | awk -F '</title>' '{print $1}')
+
+
+pre=$(cat /tmp/$BUSCA_I.temp | grep 'shift-right' | awk -F '<p>' '{print $2}' | awk -F '</p>' '{print $1}' | awk -F '.' '{print $1}' | head -1 | sed -e :a -e N -e 's/\n/ /' -e ta) 
+
+
+support=$(cat /tmp/$BUSCA_I.temp | grep -e '<td>' | grep -e "Fedora\ [0-9]" -e 'rawhide' | awk -F '<td>Fedora' '{print $2}' | awk -F '</td>' '{print $1}' | sed -e :a -e N -e 's/\n/ /' -e ta | awk '{print $1, $2, $3}')
+
+
+coprl=$(echo $line | awk -F '/coprs/' '{print $2}' | sed 's:/$::' )
+
+empty='Description not filled by author'
+
+description="${pre:-$empty}"
+
+repo=$(echo $coprl | sed "s:/:-:g")
+
+
+if [ $(cat /tmp/repolist | grep -xc "$repo") -gt 0 ] && [ $(cat /etc/yum.repos.d/$repo-*-*.repo | grep -c 'enabled=1') -gt 0 ] || [ $(cat /etc/yum.repos.d/$repo.repo | grep -c 'enabled=1') -gt 0 ] || [ $(cat /etc/yum.repos.d/*_$repo.repo | grep -c 'enabled=1') -gt 0 ]; then
+statusp='COPR INSTALLED'
+else
+statusp='COPR NO INSTALLED'
+fi
+
+echo "=> $line" 
+
+lines=("${lines[@]}" "FALSE" "$title" "$description" "$support" "$coprl" "$statusp")
+
+fi
+	
+done < "$file" 
+
+
+
+wait ${!}
+
+
+CHECK=$(yad --list --radiolist --center --title="PostInstallerF - Copr Install" --text="You've searched for \n<b>$BUSCA_I</b>" --width=800 --height=500 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/copr.png --image-on-top --column=In --column=Name --column=Description --column=Compatible --column=COPR --column='Copr STATUS' "${lines[@]}" --button="Install:0" --button="Remove Copr:2" --button="Close:3")
+
+ret=$?
+verifycopr=$(echo $CHECK | awk -F'|' '{print $6}')
+COPR_I=$(echo $CHECK | awk -F'|' '{print $5}')
+
+if [[ $ret -eq 0 ]]; then
+
+if [[ $verifycopr = 'COPR INSTALLED' ]]; then
+postinstaller -i $BUSCA_I
+
+if [ $(rpm -qa $BUSCA_I | grep -c $BUSCA_I) -gt 0 ]; then
+echo 'fine'
+else
+# Search package, case the name in search copr doesn't correct.
+ 
+if [ $architecture = x86_64 ]; then
+RES_BUSCA_I=$(pkcon search name $BUSCA_I | grep -e 'x86_64' -e 'noarch' | grep -ve 'i686' -e 'i586' -e 'meta' -e 'debug' | grep $BUSCA_I | uniq -c )
+else
+RES_BUSCA_I=$(pkcon search name $BUSCA_I | grep -e 'i686' -e 'noarch' | grep -ve 'i586' -e 'meta' -e 'debug' | grep -w $BUSCA_I | uniq -c)
+fi
+       
+CHECK=$(yad --list --radiolist --center --title="Search package" --text="You've searched for $BUSCA_I" --width=600 --height=500 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/copr.png --image-on-top --column=In --column=Status --column=Package --column=Respository $RES_BUSCA_I)  
+	
+CHECK_INST=$(echo $CHECK | awk -F'|' '{print $3}' | awk -F'-[0-9]' '{print $1}')
+	
+/usr/bin/postinstaller -n $CHECK_INST
+#end search
+fi
+
+## case doens't exist the copr##
+
+elif [[ $verifycopr = 'COPR NO INSTALLED' ]]; then
+pkexec dnf -y copr enable $COPR_I
+postinstaller -u 
+postinstaller -i $BUSCA_I
+
+if [ $(rpm -qa $BUSCA_I | grep -c $BUSCA_I) -gt 0 ]; then
+echo 'fine'
+else
+
+## Search package, case the name in search copr doesn't correct##
+ 
+if [ $architecture = x86_64 ]; then
+RES_BUSCA_I=$(pkcon search name $BUSCA_I | grep -e 'x86_64' -e 'noarch' | grep -ve 'i686' -e 'i586' -e 'meta' -e 'debug' | grep $BUSCA_I | uniq -c )
+else
+RES_BUSCA_I=$(pkcon search name $BUSCA_I | grep -e 'i686' -e 'noarch' | grep -ve 'i586' -e 'meta' -e 'debug' | grep -w $BUSCA_I | uniq -c)
+fi
+       
+CHECK=$(yad --list --radiolist --center --title="Search package" --text="You've searched for $BUSCA_I" --width=600 --height=500 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/copr.png --image-on-top --column=In --column=Status --column=Package --column=Respository $RES_BUSCA_I)  
+	
+CHECK_INST=$(echo $CHECK | awk -F'|' '{print $3}' | awk -F'-[0-9]' '{print $1}')
+	
+/usr/bin/postinstaller -n $CHECK_INST
+#end search
+fi
+fi
+ fi
+
+## choise boton remove##
+
+if [ $ret -eq 2 ]; then
+
+if [[ $verifycopr = 'COPR INSTALLED' ]]; then
+pkexec dnf -y copr disable $COPR_I
+postinstaller -u 
+
+if [ $(rpm -qa $BUSCA_I | grep -c $BUSCA_I) -gt 0 ]; then
+zenity --question --title="Remove $BUSCA_I" --text="Do you want remove also $BUSCA_I?" --ok-label "Yes" --cancel-label "No"
+
+if [ $? -eq 0 ]; then
+postinstaller -e $BUSCA_I
+fi
+  fi
+
+
+elif [[ $verifycopr = 'COPR NO INSTALLED' ]]; then
+yad --info --title="COPR no installed" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="This Copr isn't installed" --width=350 --height=350
+fi
+  fi
+
+## choise boton close##
+if [ $ret -eq 3 ]; then
+cleancopr
+exit
+fi
+
+#end
+
+
+cleancopr
+

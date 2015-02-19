@@ -20,7 +20,7 @@
 
 
 
-while getopts ":i:e:n:l:g:opsuhabfdm" option;
+while getopts ":i:e:n:l:g:ocpsuhabfdm" option;
 do
  case $option in
   i)
@@ -105,6 +105,15 @@ task=Information
 if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
 task=Remove-old-kernel
 ang='package-cleanup --oldkernels -y'
+else
+echo 'OS no compatible'
+exit
+fi
+   ;;
+  c)
+   echo received -c
+if [ -f /etc/fedora-release ]; then
+task=copr-install
 else
 echo 'OS no compatible'
 exit
@@ -399,6 +408,25 @@ fi
 }
 
 
+cleancopr() {
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/*.lck
+rm -f /tmp/coprlist
+rm -f /tmp/copr-url-tmp
+rm -f /tmp/gress
+rm -f /tmp/$BUSCA_I.temp
+rm -f /tmp/coprprogress
+rm -f /tmp/repolist
+else
+cat /dev/null > /tmp/copr-url-tmp
+cat /dev/null > /tmp/gress
+cat /dev/null > /tmp/$BUSCA_I.temp
+cat /dev/null > /tmp/coprprogress
+cat /dev/null > /tmp/repolist
+fi
+}
+
+
 cleanaur() {
 rm -rf /tmp/packerbuild*
 rm -rf /tmp/packertmp*
@@ -409,6 +437,7 @@ usage() {
   echo
   echo '    -a           - Disable/Enable SELinux'
   echo '    -b           - Disable/Enable Gracia sudo'
+  echo '    -c           - search copr, only Fedora'
   echo '    -f           - Disable/Enable Kernel updates'
   echo '    -d           - Enable/Disable sudo'
   echo '    -i           - install package'
@@ -1419,6 +1448,16 @@ fi
 
 
 # MENU 4 #
+# If only need search copr (only Fedora)
+
+if [ "$task" = copr-install ]; then
+cleancopr
+/usr/bin/postinstallerf/copr-search
+cleancopr
+fi
+
+
+# MENU 5 #
 # If only need search ppa (only Ubuntu and Mint)
 
 if [ "$task" = ppa-install ]; then
@@ -1428,7 +1467,7 @@ cleanppa
 fi
 
 
-# MENU 5 #
+# MENU 6 #
 # If only need search
 
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
@@ -1544,7 +1583,7 @@ fi
   fi
 
 
-# MENU 6 #
+# MENU 7 #
 # If only need install group
 
 if [ "$task" = Install-group ]; then
@@ -1585,7 +1624,7 @@ fi
 
 
 
-# MENU 7 #
+# MENU 8 #
 # If only need remove old kernels
 
 if [ "$task" = Remove-old-kernel ]; then
@@ -1623,7 +1662,7 @@ fi
 
 
 
-# MENU 8 #
+# MENU 9 #
 # If only need update
 
 if [ "$task" = Update ]; then
