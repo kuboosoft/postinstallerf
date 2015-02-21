@@ -110,7 +110,7 @@ echo 'found result'
 else
 echo "None ppa found"
 ps aux | grep notify | awk '{print $2}' | xargs kill -9
-yad --info --window-icon="/usr/share/icons/acciones/topicon.png" --title="PostInstallerF" --text="Sorry
+yad --info --window-icon="/usr/share/icons/acciones/topicon.png" --image="/usr/share/icons/acciones/ppa-search.png" --image-on-top --title="PostInstallerF" --text="Sorry
 None ppa found"
 cleanppa
 exit

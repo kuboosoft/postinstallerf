@@ -20,7 +20,7 @@
 
 
 
-while getopts ":i:e:n:l:g:ocpsuhabfdm" option;
+while getopts ":i:e:n:l:j:g:ocpsuhabfdm" option;
 do
  case $option in
   i)
@@ -41,6 +41,15 @@ ang='pkcon -p -y install'
 fi
  fi
 task=Installing 
+   ;;
+  j)
+   echo received -j with $OPTARG
+if [ -f /etc/fedora-release ]; then
+ang='pkexec dnf -y install'
+else
+echo 'OS no compatible'
+fi
+task=copr 
    ;;
   e)
    echo received -e with $OPTARG
@@ -430,6 +439,12 @@ fi
 cleanaur() {
 rm -rf /tmp/packerbuild*
 rm -rf /tmp/packertmp*
+}
+
+
+killernot() {
+killprocess=$(ps -e | grep -i 'notify' | awk '{print $1}')  
+kill $killprocess
 }
 
 usage() {
@@ -853,7 +868,9 @@ cleanlock
 # If only need install or uninstall
 
 
-if [ "$task" = Installing ] || [ "$task" = Uninstalling ]; then
+if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = copr ]; then
+
+killernot
 
 if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 echo > /tmp/packagekit-url-$OPTARG

@@ -36,6 +36,13 @@ tee -a /tmp/coprprogress | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 	--no-buttons  
 }
 
+
+killernot() {
+killprocess=$(ps -e | grep -i 'notify' | awk '{print $1}')  
+kill $killprocess
+}
+
+
 cleancopr
 
 dnf repolist | awk '{print $1}' | tee /tmp/repolist
@@ -62,9 +69,9 @@ corprep=$(curl -k https://copr.fedoraproject.org/coprs/fulltext/?fulltext=$BUSCA
 if [ $(grep -c '[a-z]' /tmp/copr-url-tmp) -gt 0 ]; then
 echo 'found result'
 else
+killernot
 echo "None ppa found"
-ps aux | grep -ie 'notify' -e 'copr-search' | awk '{print $2}' | xargs kill -9
-yad --info --window-icon="/usr/share/icons/acciones/topicon.png" --title="PostInstallerF" --text="Sorry
+yad --info --window-icon="/usr/share/icons/acciones/topicon.png" --title="PostInstallerF" --image="/usr/share/icons/acciones/copr.png" --image-on-top --text="Sorry
 None Copr found"
 cleancopr
 exit
@@ -119,6 +126,7 @@ done < "$file"
 
 wait ${!}
 
+killernot
 
 CHECK=$(yad --list --radiolist --center --title="PostInstallerF - Copr Install" --text="You've searched for \n<b>$BUSCA_I</b>" --width=800 --height=500 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/copr.png --image-on-top --column=In --column=Name --column=Description --column=Compatible --column=COPR --column='Copr STATUS' "${lines[@]}" --button="Install:0" --button="Remove Copr:2" --button="Close:3")
 
@@ -129,7 +137,7 @@ COPR_I=$(echo $CHECK | awk -F'|' '{print $5}')
 if [[ $ret -eq 0 ]]; then
 
 if [[ $verifycopr = 'COPR INSTALLED' ]]; then
-postinstaller -i $BUSCA_I
+postinstaller -j $BUSCA_I
 
 if [ $(rpm -qa $BUSCA_I | grep -c $BUSCA_I) -gt 0 ]; then
 echo 'fine'
@@ -155,7 +163,7 @@ fi
 elif [[ $verifycopr = 'COPR NO INSTALLED' ]]; then
 pkexec dnf -y copr enable $COPR_I
 postinstaller -u 
-postinstaller -i $BUSCA_I
+postinstaller -j $BUSCA_I
 
 if [ $(rpm -qa $BUSCA_I | grep -c $BUSCA_I) -gt 0 ]; then
 echo 'fine'
