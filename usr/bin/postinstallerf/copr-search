@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+architecture=$(uname -p)
 
 cleancopr() {
 if [ "$(id -u)" -eq 0 ]; then
@@ -155,6 +155,7 @@ CHECK=$(yad --list --radiolist --center --title="Search package" --text="You've 
 CHECK_INST=$(echo $CHECK | awk -F'|' '{print $3}' | awk -F'-[0-9]' '{print $1}')
 	
 /usr/bin/postinstaller -n $CHECK_INST
+exit
 #end search
 fi
 
@@ -182,6 +183,7 @@ CHECK=$(yad --list --radiolist --center --title="Search package" --text="You've 
 CHECK_INST=$(echo $CHECK | awk -F'|' '{print $3}' | awk -F'-[0-9]' '{print $1}')
 	
 /usr/bin/postinstaller -n $CHECK_INST
+exit
 #end search
 fi
 fi
@@ -200,6 +202,7 @@ zenity --question --title="Remove $BUSCA_I" --text="Do you want remove also $BUS
 
 if [ $? -eq 0 ]; then
 postinstaller -e $BUSCA_I
+exit
 fi
   fi
 

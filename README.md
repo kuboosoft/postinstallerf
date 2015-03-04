@@ -30,5 +30,5 @@ FEDORA 20/21
 
 ----------------------------------------------------
 SOURCE CODE
-http://sourceforge.net/projects/postinstaller/files/fedora/releases/21/SRPM/postinstallerf-1.5-24.fc21.src.rpm
+http://sourceforge.net/projects/postinstaller/files/fedora/releases/21/SRPM/postinstallerf-1.5-26.fc21.src.rpm
 
