@@ -70,7 +70,7 @@ if [ $(grep -c '[a-z]' /tmp/copr-url-tmp) -gt 0 ]; then
 echo 'found result'
 else
 killernot
-echo "None ppa found"
+echo "None copr found"
 yad --info --window-icon="/usr/share/icons/acciones/topicon.png" --title="PostInstallerF" --image="/usr/share/icons/acciones/copr.png" --image-on-top --text="Sorry
 None Copr found"
 cleancopr
@@ -88,7 +88,7 @@ curl -k -o /tmp/$BUSCA_I.temp https://copr.fedoraproject.org$line
 
 
 
-if [ "$cod" -eq 200 ] && [ $(grep -ci "$BUSCA_I" /tmp/$BUSCA_I.temp) -gt 0 ] && [ $(grep -c '<td>Fedora' /tmp/$BUSCA_I.temp) -gt 0 ] || [ $(grep -c 'rawhide' /tmp/$BUSCA_I.temp) -gt 0 ]; then
+if [ "$cod" -eq 200 ] && [ $(grep -ci "$BUSCA_I" /tmp/$BUSCA_I.temp) -gt 0 ] && [ $(grep -c '<td>Fedora' /tmp/$BUSCA_I.temp) -gt 0 ] || [ $(grep -c 'rawhide' /tmp/$BUSCA_I.temp) -gt 0 ] || [ $(grep -c 'Fedora 20' /tmp/$BUSCA_I.temp) -gt 0 ] || [ $(grep -c 'Fedora 21' /tmp/$BUSCA_I.temp) -gt 0 ] || [ $(grep -c 'Fedora 22' /tmp/$BUSCA_I.temp) -gt 0 ]; then
 
 title=$(cat /tmp/$BUSCA_I.temp | grep '<title>' | awk -F '<title>' '{print $2}' | awk -F '</title>' '{print $1}')
 
@@ -98,10 +98,14 @@ pre=$(cat /tmp/$BUSCA_I.temp | grep 'shift-right' | awk -F '<p>' '{print $2}' | 
 
 support=$(cat /tmp/$BUSCA_I.temp | grep -e '<td>' | grep -e "Fedora\ [0-9]" -e 'rawhide' | awk -F '<td>Fedora' '{print $2}' | awk -F '</td>' '{print $1}' | sed -e :a -e N -e 's/\n/ /' -e ta | awk '{print $1, $2, $3}')
 
+support2=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 20' -e 'Fedora\ 21' -e 'Fedora\ 22' -e 'rawhide' -e 'Rawhide')
+
 
 coprl=$(echo $line | awk -F '/coprs/' '{print $2}' | sed 's:/$::' )
 
 empty='Description not filled by author'
+
+compatible="${support:-$support2}"
 
 description="${pre:-$empty}"
 
@@ -116,7 +120,7 @@ fi
 
 echo "=> $line" 
 
-lines=("${lines[@]}" "FALSE" "$title" "$description" "$support" "$coprl" "$statusp")
+lines=("${lines[@]}" "FALSE" "$title" "$description" "$compatible" "$coprl" "$statusp")
 
 fi
 	
