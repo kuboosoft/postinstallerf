@@ -17,7 +17,7 @@ PostinstallerF Instalara todo software que no se incluye por defecto, después d
 from a terminal:
 
 
-FEDORA 20/21
+FEDORA 20/21/22
 
 1) su
 
@@ -30,5 +30,5 @@ FEDORA 20/21
 
 ----------------------------------------------------
 SOURCE CODE
-http://sourceforge.net/projects/postinstaller/files/fedora/releases/21/SRPM/postinstallerf-1.5-27.fc21.src.rpm
+http://sourceforge.net/projects/postinstaller/files/fedora/releases/22/SRPM/postinstallerf-1.5-29.fc22.src.rpm
 
