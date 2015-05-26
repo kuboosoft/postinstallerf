@@ -713,52 +713,22 @@ fi
 
 wait ${!}
 
-identify /tmp/.pictures/$imagen.png
-testpicture=$?
-
-if [ $testpicture -eq 0 ]; then
+if [ $(identify /tmp/.pictures/$imagen.png | grep -c PNG) -gt 0 ]; then
 screenshot="/tmp/.pictures/$imagen.png"
 else
 echo 'screenshot not avaible'
 screenshot=/usr/share/icons/acciones/noscreen.png
 fi
 
-cd
+cd -
 
 # CHECKING IF PROGRAM IS INSTALLED AND DEFINE OS
 
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
 
-if [ "$dist" = Debian ]; then
-           echo " System is running Debian Linux"
-           DISTRO=DEBIAN
-if [ $(dpkg-query -Wf'${db:Status-abbrev}' $OPTARG) = ii ]; then
-echo "$OPTARG is present"
-tarea=Uninstall
-status=INSTALLED
-else
-    echo "none $OPTARG is present"
-tarea=Install
-status="NO INSTALLED"
-fi
 
-
-    elif [ -f /etc/SuSE-release ]; then
-           echo " System is running SuSE Linux"
-           DISTRO=SUSE
-
-if [ $(rpm -qa $OPTARG | grep -c $OPTARG) -gt 0 ]; then
-    echo "$OPTARG is present"
-tarea=Uninstall
-status=INSTALLED
-else
-    echo "none $OPTARG is present"
-tarea=Install
-status="NO INSTALLED"
-fi
-
-    elif [ -f /etc/fedora-release ]; then
-           echo " System is running Fedora Linux"  
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
+           echo 'System is running Fedora/Red Hat Linux'  
           version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
 
 if [ $(rpm -qa $OPTARG | grep -c $OPTARG) -gt 0 ]; then
@@ -768,12 +738,29 @@ status=INSTALLED
 else
     echo "none $OPTARG is present"
 tarea=Install
-status="NO INSTALLED"
+status='NO INSTALLED'
 fi
+	fi
 
-    elif [ -f /etc/redhat-release ]; then
-           echo " System is running Red Hat Linux"
-           DISTRO=REDHAT
+
+if [ "$dist" = Debian ]; then
+           echo 'System is running Debian Linux'
+           DISTRO=DEBIAN
+if [ $(dpkg-query -Wf'${db:Status-abbrev}' $OPTARG) = ii ]; then
+echo "$OPTARG is present"
+tarea=Uninstall
+status=INSTALLED
+else
+    echo "none $OPTARG is present"
+tarea=Install
+status='NO INSTALLED'
+fi
+	fi
+
+
+if [ -f /etc/SuSE-release ]; then
+           echo 'System is running SuSE Linux'
+           DISTRO=SUSE
 
 if [ $(rpm -qa $OPTARG | grep -c $OPTARG) -gt 0 ]; then
     echo "$OPTARG is present"
@@ -782,11 +769,13 @@ status=INSTALLED
 else
     echo "none $OPTARG is present"
 tarea=Install
-status="NO INSTALLED"
+status='NO INSTALLED'
 fi
+	fi
 
-    elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
-            echo "System is running MANJARO Linux"
+
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
+            echo 'System is running MANJARO Linux'
             DISTRO=MANJARO
 
 if (pacman -Q $OPTARG >/dev/null) ; then 
@@ -796,11 +785,13 @@ status=INSTALLED
 else
     echo "none $OPTARG is present"
 tarea=Install
-status="NO INSTALLED"
+status='NO INSTALLED'
 fi
+	fi
 
-    elif [ "$dist" = Ubuntu ] ; then
-            echo "System is running Ubuntu Linux"
+
+if [ "$dist" = Ubuntu ] ; then
+            echo 'System is running Ubuntu Linux'
             DISTRO=UBUNTU
 
 if [ $(dpkg-query -Wf '${db:Status-abbrev}' $OPTARG) = ii ]; then
@@ -810,15 +801,14 @@ status=INSTALLED
 else
     echo "none $OPTARG is present"
 tarea=Install
-status="NO INSTALLED"
+status='NO INSTALLED'
 fi
+	fi
 
-else 
-        echo -e 'no supported distribution found running'
 fi 
 
-# end check if task isn't equal to install o remove, exlude local install and update.
- fi  
+# end check if task isn't equal to install o remove, exluded update.
+  
 
 
 # MENU 1#
@@ -866,6 +856,7 @@ postinstaller -n $OPTARG
 elif [ $ret -eq 1 ]; then
 	echo "Nothing to do"
 cleanlock
+exit
 	fi
 
 
