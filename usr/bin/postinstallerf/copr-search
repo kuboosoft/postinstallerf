@@ -98,7 +98,7 @@ pre=$(cat /tmp/$BUSCA_I.temp | grep 'shift-right' | awk -F '<p>' '{print $2}' | 
 
 support=$(cat /tmp/$BUSCA_I.temp | grep -e '<td>' | grep -e "Fedora\ [0-9]" -e 'rawhide' | awk -F '<td>Fedora' '{print $2}' | awk -F '</td>' '{print $1}' | sed -e :a -e N -e 's/\n/ /' -e ta | awk '{print $1, $2, $3}')
 
-support2=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 20' -e 'Fedora\ 21' -e 'Fedora\ 22' -e 'rawhide' -e 'Rawhide')
+support2=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 20' -e 'Fedora\ 21' -e "Fedora\ 22" -e 'rawhide' -e 'Rawhide' | grep -ve 'https://copr.fedoraproject' -e '.repo')
 
 
 coprl=$(echo $line | awk -F '/coprs/' '{print $2}' | sed 's:/$::' )
@@ -198,7 +198,14 @@ fi
 if [ $ret -eq 2 ]; then
 
 if [[ $verifycopr = 'COPR INSTALLED' ]]; then
+delrep=$(echo $COPR_I | awk -F'/' '{print $1}')
 pkexec dnf -y copr disable $COPR_I
+repository=$(ls | grep -i $delrep)
+zenity --question --title="Remove $BUSCA_I" --text="Do you want remove also $COPR_I repository?" --ok-label "Yes" --cancel-label "No"
+if [ $? -eq 0 ]; then
+pkexec rm -f /etc/yum.repos.d/$repository*
+fi
+
 postinstaller -u 
 
 if [ $(rpm -qa $BUSCA_I | grep -c $BUSCA_I) -gt 0 ]; then

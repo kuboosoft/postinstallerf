@@ -20,7 +20,7 @@
 
 
 
-while getopts ":i:e:n:l:j:g:ocpsuhabfdm" option;
+while getopts ":i:e:n:l:j:g:ocprsuhabfdm" option;
 do
  case $option in
   i)
@@ -189,6 +189,16 @@ task=enasudo
    echo received -m
 . /usr/bin/postinstallerf/pid
 task=plistm
+   ;;
+  r)
+   echo received -r 
+. /usr/bin/postinstallerf/pid
+if [ $(pkcon backend-details | grep -c 'GDBus.Error:org.freedesktop.DBus.Error.TimedOut') -gt 0 ]; then
+echo 'sorry packagekit is broken, and can not refresh'
+exit
+else
+task=cclean
+fi
    ;;
   :)
    echo "option -$OPTARG needs an argument"
@@ -370,7 +380,9 @@ tee -a /tmp/summary-group | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 	--center \
 	--image="/usr/share/icons/acciones/uppa.png" --image-on-top \
 	--window-icon="/usr/share/icons/acciones/topicon.png" \
-	--text="Please wait.." \
+	--text='Please wait..
+
+* This could take a long time.' \
 	--width=400 --height=200 \
 	--justify=fill \
 	--pulsate   \
@@ -456,7 +468,7 @@ kill $killprocess
 }
 
 usage() {
-  echo 'usage: postinstaller [option] [package] [option] [package] [...]'
+  echo 'usage: postinstaller [option] [package]'
   echo
   echo '    -a           - Disable/Enable SELinux'
   echo '    -b           - Disable/Enable Gracia sudo'
@@ -475,6 +487,7 @@ usage() {
   echo '    -n      	 - outputs info for package'
   echo '    -g     	 - install group, only for Fedora'
   echo '    -h           - outputs this message'
+  echo '    -r           - Refresh metadata/cache'
   exit
 }
 
@@ -500,40 +513,47 @@ Sat=6
 Sun=7
 
 if [ ""$nuday = $Fri"" ] && [ ""$time = $setime"" ]; then
-pkcon refresh | ubugres
+pkcon refresh force | ubugres
 elif [ ""$nuday = $Fri"" ] && [ ""$time2 = $setimea"" ]; then
-pkcon refresh | ubugres
+pkcon refresh force | ubugres
 elif [ ""$nuday = $Fri"" ] && [ ""$time2 = $setimeb"" ]; then
-pkcon refresh | ubugres
+pkcon refresh force | ubugres
 elif [ ""$nuday = $Fri"" ] && [ ""$time = $setimec"" ]; then
-pkcon refresh | ubugres
+pkcon refresh force | ubugres
 elif [ ""$nuday = $Fri"" ] && [ ""$time = $setimed"" ]; then
-pkcon refresh | ubugres
+pkcon refresh force | ubugres
 
 elif [ ""$nuday = $Wed"" ] && [ ""$time = $setime"" ]; then
-pkcon refresh | ubugres
+pkcon refresh force | ubugres
 elif [ ""$nuday = $Wed"" ] && [ ""$time2 = $setimea"" ]; then
-pkcon refresh | ubugres
+pkcon refresh force | ubugres
 elif [ ""$nuday = $Wed"" ] && [ ""$time2 = $setimeb"" ]; then
-pkcon refresh | ubugres
+pkcon refresh force | ubugres
 elif [ ""$nuday = $Wed"" ] && [ ""$time = $setimec"" ]; then
-pkcon refresh | ubugres
+pkcon refresh force | ubugres
 elif [ ""$nuday = $Wed"" ] && [ ""$time = $setimed"" ]; then
-pkcon refresh | ubugres
+pkcon refresh force | ubugres
 
 elif [ ""$nuday = $Mon"" ] && [ ""$time = $setime"" ]; then
-pkcon refresh | ubugres
+pkcon refresh force | ubugres
 elif [ ""$nuday = $Mon"" ] && [ ""$time2 = $setimea"" ]; then
-pkcon refresh | ubugres
+pkcon refresh force | ubugres
 elif [ ""$nuday = $Mon"" ] && [ ""$time2 = $setimeb"" ]; then
-pkcon refresh | ubugres
+pkcon refresh force | ubugres
 elif [ ""$nuday = $Mon"" ] && [ ""$time = $setimec"" ]; then
-pkcon refresh | ubugres
+pkcon refresh force | ubugres
 elif [ ""$nuday = $Mon"" ] && [ ""$time = $setimed"" ]; then
-pkcon refresh | ubugres
+pkcon refresh force | ubugres
 fi
 
 }
+
+
+# If only need update cache and metadata
+
+if [ "$task" = cclean ]; then
+pkcon refresh force | ubugres
+fi
 
 
 # If the user need help
@@ -1736,10 +1756,7 @@ fi
 	
 	fi
 
-
-
-
-# MENU 9 #
+# MENU 10 #
 # If only need update
 
 if [ "$task" = Update ]; then
@@ -1911,8 +1928,6 @@ rm -f /tmp/*.lck
 else
 cat /dev/null > /tmp/update-url-tmp
 fi
-
-
 
 # End options basics
 fi
