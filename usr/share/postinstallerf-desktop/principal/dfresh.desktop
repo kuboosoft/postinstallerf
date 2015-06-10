@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=postinstaller -r
+Version=1.0
+Type=Application
+Name=Refresh database
+GenericName=Refresh database
+Comment=Refresh database
+Icon=/usr/share/icons/acciones/prefresh.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

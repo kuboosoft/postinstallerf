@@ -7,7 +7,11 @@ dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
 fi
 
 if [ -f /tmp/availableu ]; then
+cat /dev/null > /tmp/availableu
 rm -f /tmp/availableu
+elif [ -f /tmp/availableup ]; then
+cat /dev/null > /tmp/availableup 
+rm -f /tmp/availableup
 fi
 
 checkup() {
