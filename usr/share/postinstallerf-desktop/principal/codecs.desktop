@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=/usr/bin/postinstallerf/codecs
+Exec=pkexec /usr/bin/postinstallerf/codecs
 Version=1.0
 Type=Application
 Name=Codecs audio and video

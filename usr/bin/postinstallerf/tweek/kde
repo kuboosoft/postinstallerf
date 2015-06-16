@@ -44,7 +44,7 @@ fi
 
 elif [ -f /etc/fedora-release ]; then
 
-if [ $(rpm -qa kde-workspace | grep -c kde-workspace) -gt 0 ]; then
+if [ $(rpm -qa kdecoration | grep -c kdecoration) -gt 0 ]; then
 status='INSTALLED'
 tarea='Update'
 else

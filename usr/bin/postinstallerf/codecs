@@ -31,6 +31,12 @@ tee -a /tmp/summary-group | stdbuf -oL sed -ne '/Installed/ s/^/# /p' -e '/Insta
 }
 
 
+killernot() {
+killprocess=$(ps -e | grep -i 'notify' | awk '{print $1}')  
+kill $killprocess
+}
+
+
 if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
 echo 'Arch/Manjaro'
 status='SOME PACKAGES INSTALLED'
@@ -57,9 +63,11 @@ tarea=Install
 elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then 
 /usr/bin/postinstallerf/noticodecs &
 if [ $(rpm -qa gstreamer-plugins-bad | grep -c gstreamer-plugins-bad) -gt 0 ] && [ $(rpm -qa gstreamer-plugins-bad-free-extras | grep -c gstreamer-plugins-bad-free-extras) -gt 0 ] && [ $(rpm -qa gstreamer-plugins-ugly | grep -c gstreamer-plugins-ugly) -gt 0 ] && [ $(rpm -qa gstreamer1-plugins-ugly | grep -c gstreamer1-plugins-ugly) -gt 0 ] && [ $(rpm -qa gstreamer1-plugins-good | grep -c gstreamer1-plugins-good) -gt 0 ] && [ $(rpm -qa gstreamer1-plugins-bad-free | grep -c gstreamer1-plugins-bad-free) -gt 0 ]; then
-status=INSTALLED
-tarea=Update
+killernot
+status='BASIC CODECS INSTALLED'
+tarea='More codecs'
 else
+killernot
 status='NO INSTALLED'
 tarea=Install
 fi
@@ -86,7 +94,7 @@ fi
 
 # If the user only need install
 
-if [ "$tarea" = Install ]; then
+if [ "$tarea" = Install ] || [ "$tarea" = 'More codecs' ]; then
 
 # UBUNTU
 if [ "$dist" = Ubuntu ]; then
@@ -168,9 +176,4 @@ fi
   fi 
     fi 
 
-
-# If the user only need Update
-if [ "$tarea" = Update ]; then
-postinstaller -u
-fi
 

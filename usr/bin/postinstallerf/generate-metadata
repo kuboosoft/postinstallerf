@@ -42,7 +42,7 @@ if [ ! -f /usr/share/app-install-data-postinstallerf/index/$line.posmet ] && [ !
 echo "making metadata for $line"
 echo "Name=$line" >  $line.posmet
 
-repoquery -i $line > /tmp/met
+dnf repoquery -i $line > /tmp/met
 
 
 cat /tmp/met | grep 'Summary' | tr -d "'" | sed "s/Summary     : /Comment=/g" | sed "s/&/and/g" >> $line.posmet
