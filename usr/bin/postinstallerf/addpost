@@ -2725,18 +2725,22 @@ fi
 
 
 
-postinstaller -i flash-plugin -i hal-flash 
+postinstaller -i flash-plugin 
+postinstaller -i libhal1-flash 
 
     }
      
     comprimir(){
-            postinstaller -i unrar -i p7zip -i p7zip-plugins 
+           	postinstaller -i unrar 
+		postinstaller -i p7zip 
+		postinstaller -i p7zip-plugins 
 
             
     }
      
     java(){
-            postinstaller -i java icedtea-web 
+            	postinstaller -i java 
+		postinstaller -i icedtea-web 
 
     }
 
@@ -3029,7 +3033,9 @@ cmap(){
      
      
     wine(){
-	postinstaller -i wine -i cabextract -i winetricks 
+	postinstaller -i wine 
+	postinstaller -i cabextract 
+	postinstaller -i winetricks 
 
     }
      
@@ -3044,7 +3050,10 @@ lastest=$(curl -k http://download.virtualbox.org/virtualbox/LATEST.TXT | grep '[
 wait ${!}
 
             if [ -f '/etc/yum.repos.d/virtualbox.repo' ]; then
-postinstaller -i kernel-headers -i kernel-devel -i dkms -i gcc 
+postinstaller -i kernel-headers 
+postinstaller -i kernel-devel 
+postinstaller -i dkms 
+postinstaller -i gcc 
 
 postinstaller -u
 
@@ -3068,7 +3077,10 @@ skip_if_unavailable=1' >> /etc/yum.repos.d/virtualbox.repo
 
 postinstaller -r
 
-postinstaller -i kernel-headers -i kernel-devel -i dkms -i gcc 
+postinstaller -i kernel-headers 
+postinstaller -i kernel-devel 
+postinstaller -i dkms 
+postinstaller -i gcc
 
 postinstaller -u
 
@@ -3100,13 +3112,15 @@ fi
     }
      
     play(){
-	postinstaller -i wine -i cabextract 
+	postinstaller -i wine 
+	postinstaller -i cabextract 
 
 $locainst http://rpm.playonlinux.com/playonlinux-yum-4-1.noarch.rpm 
 
-postinstaller -u
+postinstaller -r
 
-	postinstaller -i playonlinux -i winetricks 
+	postinstaller -i playonlinux 
+	postinstaller -i winetricks 
 
 
     }
@@ -3219,7 +3233,9 @@ $locainst http://dl-ak.solidworks.com/nonsecure/draftsight/V1R2.0/draftSight.rpm
 
      
     openshot(){
-	postinstaller -i blender -i inkscape -i openshot 
+	postinstaller -i blender 
+	postinstaller -i inkscape 
+	postinstaller -i openshot 
 
     }
 
@@ -3304,7 +3320,7 @@ xbm(){
 
 
 clementine(){
-	postinstaller -i qtwebkit -i clementine 
+	postinstaller -i clementine 
 
 
     }
@@ -3537,7 +3553,7 @@ perfo(){
 stea(){
 
 
-	$locainst steam | $localprogress 
+	postinstaller -k steam 
 
     }
 
@@ -3608,7 +3624,7 @@ enabled=1
 gpgcheck=1
 gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub' > /etc/yum.repos.d/google-chrome.repo
 
-	postinstaller -u
+	postinstaller -r
 	postinstaller -i google-chrome-stable 
 
 else

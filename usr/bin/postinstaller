@@ -20,7 +20,7 @@
 
 
 
-while getopts ":i:e:n:l:j:g:ocprsuhabfdm" option;
+while getopts ":i:e:n:l:j:k:g:ocprsuhabfdm" option;
 do
  case $option in
   i)
@@ -50,6 +50,15 @@ else
 echo 'OS no compatible'
 fi
 task=copr 
+   ;;
+  k)
+   echo received -k with $OPTARG
+if [ -f /etc/fedora-release ]; then
+ang='pkexec dnf -y install'
+else
+echo 'OS no compatible'
+fi
+task=force 
    ;;
   e)
    echo received -e with $OPTARG
@@ -611,7 +620,7 @@ fi
 
 # Init check if task isn't equal to install or remove, exlude update.
 
-if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Information ] || [ "$task" = Localinstall ] || [ "$task" = copr ]; then
+if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Information ] || [ "$task" = Localinstall ] || [ "$task" = copr ] || [ "$task" = force ]; then
 
 if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 fullname=$(basename $OPTARG | sed 's/-git//g' | sed 's/-bzr//g' | sed 's/-bin//g' | sed 's/-svn//g' | sed 's/-gtk2//g' | sed 's/-qt//g')
@@ -1166,7 +1175,7 @@ $Url"  \
 wait ${!}
 
 # BUG https://bugzilla.redhat.com/show_bug.cgi?id=1187959
-if [ $(cat /tmp/packagekit-url-$OPTARG | grep -c 'All\ mirrors\ were\ tried') -gt 0 ] || [ $(cat /tmp/packagekit-url-$OPTARG | grep -c 'Failed\ to\ create\ /var/cache/PackageKit/metadata/updates/packages/') -gt 0 ]; then
+if [ $(cat /tmp/packagekit-url-$OPTARG | grep -c 'All\ mirrors\ were\ tried') -gt 0 ] || [ $(cat /tmp/packagekit-url-$OPTARG | grep -c 'Failed\ to\ create\ /var/cache/PackageKit/metadata/updates/packages/') -gt 0 ] || [ $(cat /tmp/packagekit-url-$OPTARG | grep -c 'Paquete\ no\ encontrado:') -gt 0 ] || [ $(cat /tmp/packagekit-url-$OPTARG | grep -c 'Package\ not\ found') -gt 0 ]; then
 
 notify-send --hint=int:transient:1 "Sorry, something strange happened!
 Changed to force mode 
@@ -1246,10 +1255,73 @@ fi
  fi
 
 
-
-
-
 # MENU 3 #
+# If only need install in force mode
+
+if [ "$task" = force ]; then
+echo > /tmp/packagekit-url-$OPTARG
+$ang $OPTARG | tee /tmp/packagekit-url-$OPTARG | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+	--title="PostInstallerF - $task $OPTARG" \
+	--center \
+	--image="$screenshot" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--width=800 --height=500 \
+	--text="$names 
+$resume
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+$pvar 
+
+License: $lic 
+
+$Url"  \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+	--no-buttons
+
+
+wait ${!}
+
+if [ $(rpm -qa $OPTARG | grep -c $OPTARG) -gt 0 ]; then
+    echo "$OPTARG is present"
+checking='is' 
+else
+    echo "none $OPTARG is present"
+checking='is not' 
+fi
+
+
+Result=$(grep -e 'Resultados:' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'installed' -e 'status' -e 'erased' -e 'freedesktop.PackageKit:' /tmp/packagekit-url-$OPTARG | tail -10) 
+
+yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
+
+$OPTARG $checking installed now
+Done" --width=350 --height=350 --timeout=5
+
+
+fnotify
+
+# Clean capture
+if [ "$(id -u)" -eq 0 ]; then
+rm -rf /tmp/.pictures/
+else
+rm -f /tmp/.pictures/$OPTARG.png
+fi
+
+# Clean package info
+
+if [ "$(id -u)" -eq 0 ]; then
+rm -f /tmp/packagekit-url-$OPTARG
+rm -rf /tmp/.pictures/
+rm -f /tmp/postinstaller.$OPTARG.lck
+else
+cat /dev/null > /tmp/packagekit-url-$OPTARG
+fi
+
+fi
+
+
+# MENU 4 #
 # If only need install local
 
 
@@ -1494,7 +1566,7 @@ fi
  fi
 
 
-# MENU 4 #
+# MENU 5 #
 # If only need search copr (only Fedora)
 
 if [ "$task" = copr-install ]; then
@@ -1504,7 +1576,7 @@ cleancopr
 fi
 
 
-# MENU 5 #
+# MENU 6 #
 # If only need search ppa (only Ubuntu and Mint)
 
 if [ "$task" = ppa-install ]; then
@@ -1514,7 +1586,7 @@ cleanppa
 fi
 
 
-# MENU 6 #
+# MENU 7 #
 # If only need search
 
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
@@ -1691,7 +1763,7 @@ fi
  fi
 
 
-# MENU 7 #
+# MENU 8 #
 # If only need install group
 
 if [ "$task" = Install-group ]; then
@@ -1732,7 +1804,7 @@ fi
 
 
 
-# MENU 8 #
+# MENU 9 #
 # If only need remove old kernels
 
 if [ "$task" = Remove-old-kernel ]; then
