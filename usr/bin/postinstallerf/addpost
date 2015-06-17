@@ -3066,7 +3066,7 @@ gpgcheck=1
 gpgkey=https://www.virtualbox.org/download/oracle_vbox.asc
 skip_if_unavailable=1' >> /etc/yum.repos.d/virtualbox.repo
 
-yum clean metadata
+postinstaller -r
 
 postinstaller -i kernel-headers -i kernel-devel -i dkms -i gcc 
 
@@ -3366,7 +3366,7 @@ skip_if_unavailable=1
 gpgkey=http://negativo17.org/repos/RPM-GPG-KEY-slaanesh
 gpgcheck=1' >> /etc/yum.repos.d/fedora-skype.repo
 
-	yum clean metadata
+	postinstaller -r
 	postinstaller -i skype 
 
 else
@@ -3537,7 +3537,7 @@ perfo(){
 stea(){
 
 
-	postinstaller -i steam 
+	$locainst steam | $localprogress 
 
     }
 
@@ -3562,7 +3562,7 @@ skip_if_unavailable=1' >> /etc/yum.repos.d/home:gcala.repo
 
 wait ${!}
 
-	yum clean metadata
+	postinstaller -r
 	postinstaller -i grooveoff 
 
 else

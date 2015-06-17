@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=pkexec /usr/bin/postinstallerf/codecs
+Exec=/usr/bin/postinstallerf/aunt_codecs
 Version=1.0
 Type=Application
 Name=Codecs audio and video
