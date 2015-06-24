@@ -275,7 +275,7 @@ elif [ "$task" = Remove-old-kernel ]; then
     body="Old kernel erased"
 elif [ "$task" = Install-group ]; then
     body="Group $OPTARG installed"
-elif [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Localinstall ]; then
+elif [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Localinstall ] || [ "$task" = force ] || [ "$task" = copr-install ]; then
 
 if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
 
@@ -573,6 +573,7 @@ fi
 
 if [ "$task" = cclean ]; then
 pkcon refresh force | ubugres
+/usr/bin/postinstallerf/generate-metadata &
 fi
 
 
