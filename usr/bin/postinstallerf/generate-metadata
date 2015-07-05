@@ -14,6 +14,17 @@ fi
 if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ] || [ -f /etc/mageia-release ]; then 
 export LANG=C
 
+# Unlock
+for lock in yum dnf
+	do
+		if ps -U root -u root u | grep "$lock" | grep -v grep > /dev/null;
+			then 
+				kill $lock	
+		fi
+	done
+
+#check if synaptic update-manager software-center apt-get dpkg aptitude yum pkcon is locking the system
+
 rm -rf /tmp/metadata/
 rm -rf /tmp/metadata-postinstaller/
 rm -f /tmp/dnflist

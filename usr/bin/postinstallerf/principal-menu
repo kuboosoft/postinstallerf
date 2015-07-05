@@ -25,6 +25,12 @@
 
 source /usr/bin/postinstallerf/pid
 
+    # Local Progress
+    localprogress='/usr/bin/postinstallerf/local-pro'
+
+    # Define version Fedora
+    version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
+
 /usr/bin/postinstallerf/generate-metadata &
 
 headpic=$(ls /usr/share/apps-head/ | shuf -n1)
@@ -41,6 +47,22 @@ elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
 postversion=$(pacman -Q postinstallerf | awk '{print $2}')
 else
 postversion=$(rpm -q postinstallerf | awk -F '[a-z]-' '{print $2}' | awk -F '.fc[0-9]' '{print $1}')
+
+if [ ! -f /etc/yum.repos.d/fedora.repo ] || [ ! -f /etc/yum.repos.d/fedora-updates.repo ]; then
+
+versr=$(curl -k https://kojipkgs.fedoraproject.org/packages/fedora-repos/$version/ | awk -F'href="' '{print $2}' | awk -F'">' '{print $1}' | grep [0-9] | tr -d '/' | sort | tail -n 1)
+
+wait ${!}
+
+pckage=$(curl -k https://kojipkgs.fedoraproject.org/packages/fedora-repos/$version/$versr/noarch/ | grep 'fedora-repos' | awk -F'href="' '{print $2}' | awk -F'">' '{print $1}' | grep -v 'rawhide' | grep 'noarch')
+
+wait ${!}
+
+#wget -c -no-check-certificate https://kojipkgs.fedoraproject.org/packages/fedora-repos/$version/$versr/noarch/$pckage
+
+pkexec dnf -y reinstall --nogpgcheck https://kojipkgs.fedoraproject.org/packages/fedora-repos/$version/$versr/noarch/$pckage | $localprogress
+fi
+
 fi
 
 

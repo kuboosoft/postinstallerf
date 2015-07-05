@@ -84,7 +84,7 @@ while IFS= read -r line; do
 
 cod=$(curl -s -k --head -w %{http_code} https://copr.fedoraproject.org$line -o /dev/null)
 
-curl -k -o /tmp/$BUSCA_I.temp https://copr.fedoraproject.org$line
+curl -k -o /tmp/$BUSCA_I.temp https://copr.fedoraproject.org$line/
 
 
 
@@ -98,7 +98,7 @@ pre=$(cat /tmp/$BUSCA_I.temp | grep 'shift-right' | awk -F '<p>' '{print $2}' | 
 
 support=$(cat /tmp/$BUSCA_I.temp | grep -e '<td>' | grep -e "Fedora\ [0-9]" -e 'rawhide' | awk -F '<td>Fedora' '{print $2}' | awk -F '</td>' '{print $1}' | sed -e :a -e N -e 's/\n/ /' -e ta | awk '{print $1, $2, $3}')
 
-support2=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 20' -e 'Fedora\ 21' -e "Fedora\ 22" -e 'rawhide' -e 'Rawhide' | grep -ve 'https://copr.fedoraproject' -e '.repo')
+support2=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 20' -e 'Fedora\ 21' -e 'Fedora\ 22' -e 'rawhide' -e 'Rawhide' | grep -ve 'https://copr.fedoraproject' -e '.repo' -e '<' -e 'class' -e '>' )
 
 
 coprl=$(echo $line | awk -F '/coprs/' '{print $2}' | sed 's:/$::' )

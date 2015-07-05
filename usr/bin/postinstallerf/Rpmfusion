@@ -8,9 +8,16 @@ source /usr/bin/postinstallerf/pid
     # Define version Fedora
     version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
 
-if [ $(rpm -qa rpmfusion-free-release | grep -c rpmfusion-free-release) -gt 0 ] && [ $(rpm -qa rpmfusion-nonfree-release | grep -c rpmfusion-nonfree-release) -gt 0 ]; then
-status=INSTALLED
+
+if [ -f /etc/yum.repos.d/rpmfusion-free.repo ] && [ -f /etc/yum.repos.d/rpmfusion-nonfree.repo ]; then
+status='INSTALLED'
 tarea=Uninstall
+elif [ $(rpm -qa rpmfusion-free-release | grep -c rpmfusion-free-release) -gt 0 ] && [ ! -f /etc/yum.repos.d/rpmfusion-free.repo ]; then  
+status='DELETED'
+tarea=Reinstall
+elif [ $(rpm -qa rpmfusion-nonfree-release | grep -c rpmfusion-nonfree-release) -gt 0 ] && [ ! -f /etc/yum.repos.d/rpmfusion-nonfree.repo ]; then
+status='DELETED'
+tarea=Reinstall
 else
 status='NO INSTALLED'
 tarea=Install
@@ -38,8 +45,13 @@ if [[ "$tarea" = Install ]]; then
 
 pkexec dnf -y install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$version.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$version.noarch.rpm | $localprogress 
 
+if [[ "$tarea" = Reinstall ]]; then
+
+pkexec dnf -y reinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$version.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$version.noarch.rpm | $localprogress
+
 elif [[ "$tarea" = Uninstall ]]; then 
-postinstaller -e rpmfusion-free-release -e rpmfusion-nonfree-release
+postinstaller -e rpmfusion-free-release 
+postinstaller -e rpmfusion-nonfree-release
 fi
 
   fi
