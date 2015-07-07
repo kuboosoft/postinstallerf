@@ -20,7 +20,7 @@ gpgcheck=1
 gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
 EOF 
 
-	yum clean metadata
+	postinstaller -r
 	postinstaller -i google-chrome-stable 
 
 else

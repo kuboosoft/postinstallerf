@@ -29,7 +29,7 @@ gpgkey=http://negativo17.org/repos/RPM-GPG-KEY-slaanesh
 gpgcheck=1
 EOF
 
-	yum clean metadata
+	postinstaller -r
 	postinstaller -i skype 
 
 else

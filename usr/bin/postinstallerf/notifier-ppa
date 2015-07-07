@@ -1,11 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
 
 SERVICE2='curl'
 SERVICE3='postinstaller'
 
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
-if [ $dist = Ubuntu ]; then
+if [[ $dist = Ubuntu ]]; then
 func=PPA
 else
 func=Copr
