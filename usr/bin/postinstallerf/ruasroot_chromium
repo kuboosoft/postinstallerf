@@ -4,4 +4,4 @@
     localprogress='/usr/bin/postinstallerf/local-pro'
 
 
-pkexec dnf copr enable spot/chromium | $localprogress
+pkexec dnf -y copr enable spot/chromium | $localprogress
