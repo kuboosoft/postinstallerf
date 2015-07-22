@@ -44,9 +44,10 @@ kill $killprocess
 
 
 cleancopr
-
+/usr/bin/postinstallerf/notifier-ocupado &
 dnf repolist | awk '{print $1}' | tee /tmp/repolist
 
+killernot
 
 BUSCA_I=$(yad --entry --center --title="COPR search." --window-icon="/usr/share/icons/acciones/topicon.png" --width=350 --text="Type in as many keywords as you want to search for." --image=/usr/share/icons/acciones/copr.png --image-on-top)
 

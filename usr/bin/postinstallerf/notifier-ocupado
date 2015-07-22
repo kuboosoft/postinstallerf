@@ -1,0 +1,22 @@
+#!/bin/bash
+
+
+SERVICE2='dnf'
+SERVICE3='postinstaller'
+
+#dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
+#if [[ $dist = Ubuntu ]]; then
+#func=PPA
+#else
+#func=Copr
+#fi
+
+
+
+if [ $(ps ax | grep -v grep | grep -c $SERVICE3) -gt 0 ] && [ $(ps ax | grep -v grep | grep -c $SERVICE2) -gt 0 ]; then 
+
+notify-send --hint=int:transient:1 -t 50000000 'Reading all repository installed
+Please wait' -i "/usr/share/icons/acciones/loadingimage2.png"
+exit
+ fi
+

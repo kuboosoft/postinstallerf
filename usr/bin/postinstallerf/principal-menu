@@ -25,6 +25,11 @@
 
 source /usr/bin/postinstallerf/pid
 
+if [ ! -f $HOME/.local/share/firstart_postinstallerf ]; then
+postinstaller -r
+echo $(date +"%m-%d-%y")  > $HOME/.local/share/firstart_postinstallerf
+fi
+
     # Local Progress
     localprogress='/usr/bin/postinstallerf/local-pro'
 
