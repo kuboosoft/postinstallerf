@@ -5,3 +5,4 @@
 
 
 pkexec dnf -y copr enable spot/chromium | $localprogress
+postinstaller -i chromium
