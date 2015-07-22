@@ -30,6 +30,12 @@ tee -a /tmp/summary-group | stdbuf -oL sed -ne '/Installed/ s/^/# /p' -e '/Insta
 
 }
 
+    # Local Progress
+    localprogress='/usr/bin/postinstallerf/local-pro'
+
+notifinished() {
+notify-send --hint=int:transient:1 "Codecs installed" -i "/usr/share/icons/pinguino.png" -t 10000
+}
 
 killernot() {
 killprocess=$(ps -e | grep -i 'notify' | awk '{print $1}')  
@@ -149,11 +155,20 @@ elif [ -f /etc/fedora-release ]; then
 version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
 
 # Checking rpmfusion
-if [ $(rpm -qa rpmfusion-free-release | grep -c rpmfusion-free-release) -gt 0 ] && [ $(rpm -qa rpmfusion-nonfree-release | grep -c rpmfusion-nonfree-release) -gt 0 ]; then
-echo 'rpmfusion installed'
-else
-pkexec dnf -y install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$version.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$version.noarch.rpm | $localprogress    
+if [ -f /etc/yum.repos.d/rpmfusion-free.repo ] && [ -f /etc/yum.repos.d/rpmfusion-nonfree.repo ]; then
+tarea=Install
+elif [ $(rpm -qa rpmfusion-free-release | grep -c rpmfusion-free-release) -gt 0 ] && [ ! -f /etc/yum.repos.d/rpmfusion-free.repo ]; then  
+tarea=Reinstall
+elif [ $(rpm -qa rpmfusion-nonfree-release | grep -c rpmfusion-nonfree-release) -gt 0 ] && [ ! -f /etc/yum.repos.d/rpmfusion-nonfree.repo ]; then
+tarea=Reinstall
 fi
+
+if [[ "$tarea" = Install ]]; then 
+pkexec dnf -y install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$version.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$version.noarch.rpm | $localprogress 
+elif [[ "$tarea" = Reinstall ]]; then
+pkexec dnf -y reinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$version.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$version.noarch.rpm | $localprogress
+fi
+
 
 wait ${!}
 
@@ -173,7 +188,9 @@ if [ $(rpm -qa k3b | grep -c k3b) -gt 0 ]; then
 postinstaller -i k3b-extras-freeworld
 fi
 
+
   fi 
+notifinished
     fi 
 
 

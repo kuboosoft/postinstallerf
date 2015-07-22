@@ -1,0 +1,7 @@
+#!/bin/bash
+
+    # Local Progress
+    localprogress='/usr/bin/postinstallerf/local-pro'
+
+
+pkexec dnf copr enable spot/chromium | $localprogress
