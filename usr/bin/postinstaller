@@ -160,6 +160,8 @@ elif [ "$dist" = Ubuntu ] ; then
 ang='apt-get -y dist-upgrade'
 elif [ -f /etc/SuSE-release ]; then
 ang='pkcon -p update'
+elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
+ang='pkcon -p -y update'
 else
 ang='pkcon -p -y update'
 fi
@@ -1972,7 +1974,7 @@ wait ${!}
 cleanup
 
 # BUG https://bugzilla.redhat.com/show_bug.cgi?id=1187959
-if [ $(cat /tmp/update-url-tmp | grep -c 'All\ mirrors\ were\ tried') -gt 0 ] || [ $(cat /tmp/update-url-tmp | grep -c 'Failed\ to\ create\ /var/cache/PackageKit/metadata/updates/packages/') -gt 0 ]; then
+if [ $(cat /tmp/update-url-tmp | grep -c 'All\ mirrors\ were\ tried') -gt 0 ] || [ $(cat /tmp/update-url-tmp | grep -c 'Failed\ to\ create\ /var/cache/PackageKit/metadata/updates/packages/') -gt 0 ] || [ $(cat /tmp/update-url-tmp | grep -c 'client\ did\ not\ authorize\ action') -gt 0 ]; then
 
 notify-send --hint=int:transient:1 "Sorry, something strange happened!
 Changed to force mode 
