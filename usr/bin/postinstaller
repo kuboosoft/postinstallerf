@@ -161,7 +161,7 @@ ang='apt-get -y dist-upgrade'
 elif [ -f /etc/SuSE-release ]; then
 ang='pkcon -p update'
 elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
-ang='pkcon -p -y update'
+ang='pkexec dnf -y update'
 else
 ang='pkcon -p -y update'
 fi
@@ -1974,19 +1974,19 @@ wait ${!}
 cleanup
 
 # BUG https://bugzilla.redhat.com/show_bug.cgi?id=1187959
-if [ $(cat /tmp/update-url-tmp | grep -c 'All\ mirrors\ were\ tried') -gt 0 ] || [ $(cat /tmp/update-url-tmp | grep -c 'Failed\ to\ create\ /var/cache/PackageKit/metadata/updates/packages/') -gt 0 ] || [ $(cat /tmp/update-url-tmp | grep -c 'client\ did\ not\ authorize\ action') -gt 0 ]; then
+#if [ $(cat /tmp/update-url-tmp | grep -c 'All\ mirrors\ were\ tried') -gt 0 ] || [ $(cat /tmp/update-url-tmp | grep -c 'Failed\ to\ create\ /var/cache/PackageKit/metadata/updates/packages/') -gt 0 ] || [ $(cat /tmp/update-url-tmp | grep -c 'client\ did\ not\ authorize\ action') -gt 0 ]; then
 
-notify-send --hint=int:transient:1 "Sorry, something strange happened!
+#notify-send --hint=int:transient:1 "Sorry, something strange happened!
 Changed to force mode 
-Please wait..." -i "/usr/share/icons/acciones/wrong.png"
+#Please wait..." -i "/usr/share/icons/acciones/wrong.png"
 
-if [ "$task" = Update ]; then
-forcemode='pkexec dnf -y update'
-fi
+#if [ "$task" = Update ]; then
+#forcemode='pkexec dnf -y update'
+#fi
 
-echo > /tmp/update-url-tmp
+#echo > /tmp/update-url-tmp
 
-$forcemode | tee /tmp/update-url-tmp | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+#$forcemode | tee /tmp/update-url-tmp | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 	--title="PostInstallerF - $task" \
 	--center \
 	--image="/usr/share/icons/acciones/update.png" --image-on-top \
@@ -1999,9 +1999,9 @@ $forcemode | tee /tmp/update-url-tmp | stdbuf -oL sed -n 's/^/# /p' | yad --prog
 	--no-buttons
 
 
-fi
+#fi
 
-wait ${!}
+#wait ${!}
 
 Result=$(grep -e 'Resultados:' -e '(updates)' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'updated' -e 'Actualizado' -e 'paquetes' -e 'Updated' -e 'freedesktop.PackageKit:' -e 'actualizarse' -e 'operación' -e 'operation' /tmp/update-url-tmp | tail -10) 
 
