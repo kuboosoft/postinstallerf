@@ -1,2 +1,2 @@
 #!/bin/bash
-tar xJf
+tar xJf /usr/share/rescue/rescue_repository.tar.xz -C /etc/yum.repos.d/

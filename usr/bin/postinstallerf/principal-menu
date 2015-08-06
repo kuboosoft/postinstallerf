@@ -55,7 +55,7 @@ elif [ -f /etc/fedora-release ]; then
 postversion=$(rpm -q postinstallerf | awk -F '[a-z]-' '{print $2}' | awk -F '.fc[0-9]' '{print $1}')
 if [ ! -f /etc/yum.repos.d/fedora.repo ] || [ ! -f /etc/yum.repos.d/fedora-updates.repo ]; then
 echo 'danger; The official repositories does not exist, but PostInstallerF will repair for you'
-pkexec $tarules /usr/share/rescue/rescue_repository.tar.xz -C /etc/yum.repos.d/
+pkexec $tarules
 fi
 else
 postversion=$(rpm -q postinstallerf | awk -F '[a-z]-' '{print $2}' | awk -F '.fc[0-9]' '{print $1}')
