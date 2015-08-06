@@ -1,2 +1,2 @@
 #!/bin/bash
-chmod a+r
+chmod a+r /etc/yum.repos.d/*copr*.repo

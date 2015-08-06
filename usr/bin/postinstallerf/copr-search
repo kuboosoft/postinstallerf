@@ -170,9 +170,7 @@ fi
 elif [[ $verifycopr = 'COPR NO INSTALLED' ]]; then
 pkexec dnf -y copr enable $COPR_I
 # test 1
- instrep=$(echo $COPR_I | awk -F'/' '{print $1}')
- repository=$(ls /etc/yum.repos.d/ | grep -i $instrep)
-pkexec $chrules /etc/yum.repos.d/$repository
+pkexec $chrules
 postinstaller -r 
 postinstaller -j $BUSCA_I
 
