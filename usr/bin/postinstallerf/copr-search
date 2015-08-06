@@ -207,7 +207,7 @@ pkexec dnf -y copr disable $COPR_I
 repository=$(ls /etc/yum.repos.d/ | grep -i $delrep)
 zenity --question --title="Remove $BUSCA_I" --text="Do you want remove also $COPR_I repository?" --ok-label "Yes" --cancel-label "No"
 if [ $? -eq 0 ]; then
-pkexec rm -f /etc/yum.repos.d/$repository*
+pkexec rm -f /etc/yum.repos.d/*copr*$repository.repo
 fi
 
 postinstaller -r 
