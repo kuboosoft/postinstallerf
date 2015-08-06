@@ -165,4 +165,28 @@
     <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
   </action>
 
+  <action id="org.freedesktop.pkexec.chrules">
+    <description>Read mode for all for COPR repositories</description>
+    <message>Authentication is required to install programs and configure the system.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>yes</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/postinstallerf/chrules</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+  <action id="org.freedesktop.pkexec.tarules">
+    <description>Admin mode for rescue the official repositories</description>
+    <message>Authentication is required to install programs and configure the system.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>yes</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/postinstallerf/tarules</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
 </policyconfig>

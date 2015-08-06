@@ -4,5 +4,5 @@
     localprogress='/usr/bin/postinstallerf/local-pro'
 
 
-pkexec dnf -y copr enable spot/chromium | $localprogress
+pkexec dnf -y copr enable churchyard/chromium-russianfedora-tested | $localprogress
 postinstaller -i chromium

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 architecture=$(uname -p)
+chrules=/usr/bin/postinstallerf/chrules
 
 cleancopr() {
 if [ "$(id -u)" -eq 0 ]; then
@@ -168,6 +169,10 @@ fi
 
 elif [[ $verifycopr = 'COPR NO INSTALLED' ]]; then
 pkexec dnf -y copr enable $COPR_I
+# test 1
+ instrep=$(echo $COPR_I | awk -F'/' '{print $1}')
+ repository=$(ls /etc/yum.repos.d/ | grep -i $instrep)
+pkexec $chrules /etc/yum.repos.d/$repository
 postinstaller -r 
 postinstaller -j $BUSCA_I
 
@@ -201,7 +206,7 @@ if [ $ret -eq 2 ]; then
 if [[ $verifycopr = 'COPR INSTALLED' ]]; then
 delrep=$(echo $COPR_I | awk -F'/' '{print $1}')
 pkexec dnf -y copr disable $COPR_I
-repository=$(ls | grep -i $delrep)
+repository=$(ls /etc/yum.repos.d/ | grep -i $delrep)
 zenity --question --title="Remove $BUSCA_I" --text="Do you want remove also $COPR_I repository?" --ok-label "Yes" --cancel-label "No"
 if [ $? -eq 0 ]; then
 pkexec rm -f /etc/yum.repos.d/$repository*
