@@ -171,7 +171,7 @@ elif [[ $verifycopr = 'COPR NO INSTALLED' ]]; then
 pkexec dnf -y copr enable $COPR_I
 # test 1
 pkexec $chrules
-postinstaller -r 
+postinstaller -q 
 postinstaller -j $BUSCA_I
 
 if [ $(rpm -qa $BUSCA_I | grep -c $BUSCA_I) -gt 0 ]; then
@@ -210,7 +210,7 @@ if [ $? -eq 0 ]; then
 pkexec rm -f /etc/yum.repos.d/*copr*$repository.repo
 fi
 
-postinstaller -r 
+postinstaller -q 
 
 if [ $(rpm -qa $BUSCA_I | grep -c $BUSCA_I) -gt 0 ]; then
 zenity --question --title="Remove $BUSCA_I" --text="Do you want remove also $BUSCA_I?" --ok-label "Yes" --cancel-label "No"

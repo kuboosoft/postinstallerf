@@ -20,7 +20,7 @@
 
 
 
-while getopts ":i:e:n:l:j:k:g:ocprsuhabfdm" option;
+while getopts ":i:e:n:l:j:k:g:ocpqrsuhabfdm" option;
 do
  case $option in
   i)
@@ -200,6 +200,16 @@ task=enasudo
    echo received -m
 . /usr/bin/postinstallerf/pid
 task=plistm
+   ;;
+  q)
+   echo received -q 
+. /usr/bin/postinstallerf/pid
+if [ $(pkcon backend-details | grep -c 'GDBus.Error:org.freedesktop.DBus.Error.TimedOut') -gt 0 ]; then
+echo 'sorry packagekit is broken, and can not refresh'
+exit
+else
+task=ccleanfast
+fi
    ;;
   r)
    echo received -r 
@@ -571,10 +581,17 @@ fi
 }
 
 
-# If only need update cache and metadata
+# If only need update cache and metadata (force mode)
 
 if [ "$task" = cclean ]; then
 pkcon refresh force | ubugres
+/usr/bin/postinstallerf/generate-metadata &
+fi
+
+
+# If only need update cache and metadata (fast mode)
+if [ "$task" = ccleanfast ]; then
+pkcon refresh | ubugres
 /usr/bin/postinstallerf/generate-metadata &
 fi
 
@@ -2014,7 +2031,7 @@ cleanup
 #if [ $(cat /tmp/update-url-tmp | grep -c 'All\ mirrors\ were\ tried') -gt 0 ] || [ $(cat /tmp/update-url-tmp | grep -c 'Failed\ to\ create\ /var/cache/PackageKit/metadata/updates/packages/') -gt 0 ] || [ $(cat /tmp/update-url-tmp | grep -c 'client\ did\ not\ authorize\ action') -gt 0 ]; then
 
 #notify-send --hint=int:transient:1 "Sorry, something strange happened!
-Changed to force mode 
+#Changed to force mode 
 #Please wait..." -i "/usr/share/icons/acciones/wrong.png"
 
 #if [ "$task" = Update ]; then
