@@ -46,7 +46,8 @@ kill $killprocess
 
 cleancopr
 /usr/bin/postinstallerf/notifier-ocupado &
-dnf repolist | awk '{print $1}' | tee /tmp/repolist
+dnf repolist | awk '{print $1}' | sed '/Last/d' | sed '/id/d'| tee /tmp/repolist
+ 
 
 killernot
 
@@ -61,6 +62,10 @@ wait ${!}
 /usr/bin/postinstallerf/notifier-ppa &
 
 corprep=$(curl -k https://copr.fedoraproject.org/coprs/fulltext/?fulltext=$BUSCA_I | grep "coprs" | grep -i $BUSCA_I | awk -F'href="' '{print $2}' | awk -F'" class' '{print $1}' >> /tmp/copr-url-tmp)
+
+sed -i '/Home/d' /tmp/copr-url-tmp
+sed -i ':/coprs/">:d' /tmp/copr-url-tmp
+sed -i '/^$/d' /tmp/copr-url-tmp
 
 
 # curl -k https://copr.fedoraproject.org$corprep
@@ -124,7 +129,7 @@ fi
 
 echo "=> $line" 
 
-lines=("${lines[@]}" "FALSE" "$title" "$description" "$compatible" "$coprl" "$statusp")
+lines=("${lines[@]}" "FALSE" "$title" "$description" "$compatible " "$coprl" "$statusp")
 
 fi
 	
