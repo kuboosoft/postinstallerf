@@ -60,7 +60,7 @@ fi
 wait ${!}
 /usr/bin/postinstallerf/notifier-ppa &
 
-corprep=$(curl -k https://copr.fedoraproject.org/coprs/fulltext/?fulltext=$BUSCA_I | grep "coprs-list" | grep -i $BUSCA_I | awk -F'href="' '{print $2}' | awk -F'">' '{print $1}' >> /tmp/copr-url-tmp)
+corprep=$(curl -k https://copr.fedoraproject.org/coprs/fulltext/?fulltext=$BUSCA_I | grep "coprs" | grep -i $BUSCA_I | awk -F'href="' '{print $2}' | awk -F'" class' '{print $1}' >> /tmp/copr-url-tmp)
 
 
 # curl -k https://copr.fedoraproject.org$corprep
@@ -95,10 +95,12 @@ if [ "$cod" -eq 200 ] && [ $(grep -ci "$BUSCA_I" /tmp/$BUSCA_I.temp) -gt 0 ] && 
 title=$(cat /tmp/$BUSCA_I.temp | grep '<title>' | awk -F '<title>' '{print $2}' | awk -F '</title>' '{print $1}')
 
 
-pre=$(cat /tmp/$BUSCA_I.temp | grep 'shift-right' | awk -F '<p>' '{print $2}' | awk -F '</p>' '{print $1}' | awk -F '.' '{print $1}' | head -1 | sed -e :a -e N -e 's/\n/ /' -e ta) 
+#pre=$(cat /tmp/$BUSCA_I.temp | grep 'shift-right' | awk -F '<p>' '{print $2}' | awk -F '</p>' '{print $1}' | awk -F '.' '{print $1}' | head -1 | sed -e :a -e N -e 's/\n/ /' -e ta) 
+
+pre=$(awk '/Description/{getline; print}' /tmp/$BUSCA_I.temp | awk -F '<p><p>' '{print $2}' | awk -F '</p></p>' '{print $1}' | sed -e :a -e N -e 's/\n/ /' -e ta) 
 
 
-support=$(cat /tmp/$BUSCA_I.temp | grep -e '<td>' | grep -e "Fedora\ [0-9]" -e 'rawhide' | awk -F '<td>Fedora' '{print $2}' | awk -F '</td>' '{print $1}' | sed -e :a -e N -e 's/\n/ /' -e ta | awk '{print $1, $2, $3}')
+support=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 23' -e 'Fedora\ 21' -e 'Fedora\ 22' -e 'rawhide' -e 'Rawhide' | awk -F '"pficon pficon-save">' '{print $2}' | awk -F '</span>' '{print $1}' | sed 's|^ *||g' | sed -e :a -e N -e 's/\n/ /' -e ta | sed 's|Fedora||g')
 
 support2=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 23' -e 'Fedora\ 21' -e 'Fedora\ 22' -e 'rawhide' -e 'Rawhide' | grep -ve 'https://copr.fedoraproject' -e '.repo' -e '<' -e 'class' -e '>' )
 
