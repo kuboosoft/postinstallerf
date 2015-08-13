@@ -4,12 +4,12 @@
 PostInstallerF
 ==============
 
-PostInstallerF will install all the software that Fedora doesn't include by default, after running Fedora for the first time. Its easy for a new user. PostInstallerF contains everything that you need for your daily computing. 
+PostInstallerF will install all the software that Fedora doesn't include commonly, after running Fedora for the first time. Its easy for a new user. PostInstallerF contains everything that you need for your daily computing. 
 
 
 SPANISH
 
-PostinstallerF Instalara todo software que no se incluye por defecto, después de ejecutar Fedora por primera vez. Es fácil para el nuevo usuario. Contiene lo que tu necesitas!
+PostinstallerF Instalara todo software que no se incluye comúnmente, después de ejecutar Fedora por primera vez. Es fácil para el nuevo usuario. Contiene lo que tu necesitas!
 
 ----------------------------------------------------
 **How to Install PostInstallerF Fedora?**
