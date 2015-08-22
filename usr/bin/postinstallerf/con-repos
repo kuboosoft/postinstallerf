@@ -1,0 +1,81 @@
+#!/bin/bash
+#
+# +--------------------------------------------------------------------------------+
+# | Copyright (C) 2015 David Vasquez                                               |
+# |                                                                                |
+# |This program is free software; You can distribute it and / or                   |
+# |modify it under the terms of the GNU General Public License                     |
+# |as published by the Free Software Foundation; any                               |
+# |version 3 of the License, or (optionally) any version                           |
+# |later. http://www.gnu.org/licenses/gpl-3.0.html                                 |
+# |This program is distributed in the hope that it will be useful,                 |
+# |but WITHOUT ANY WARRANTY. See the GNU General Public License                    |
+# |for details.                                                                    |
+# +--------------------------------------------------------------------------------+
+# |This code is designed, written and maintained by David Vasquez                  |
+# |Any questions, comments or advice on this code                                  |
+# |should be addressed to:                                                         |
+# |https://plus.google.com/communities/118230919321773121406                       |
+# +--------------------------------------------------------------------------------+
+
+source /usr/bin/postinstallerf/pid
+
+cleanoldrep() {
+rm -f /tmp/full-replist-tmp
+rm -f /tmp/enabled-replist-tmp
+rm -f /tmp/disabled-replist-tmp
+}
+
+goback() {
+rm -f /tmp/con-repos..lck
+/usr/bin/postinstallerf/con-repos
+}
+
+export LANG=C
+
+dnf repolist all | awk '{print $1}' | sed -n '3,$p' | sed 's|*||g' >> /tmp/full-replist-tmp
+
+dnf repolist enabled | awk '{print $1}' | sed -n '3,$p' | sed 's|*||g' >> /tmp/enabled-replist-tmp
+
+dnf repolist disabled | awk '{print $1}' | sed -n '3,$p' | sed 's|*||g' >> /tmp/disabled-replist-tmp
+
+
+file="/tmp/full-replist-tmp"
+while IFS= read -r line; do
+        # display $line or do something with $line
+
+if [ $(cat /tmp/enabled-replist-tmp | grep -c $line) -gt 0 ] ; then
+statu=ENABLED
+elif [ $(cat /tmp/disabled-replist-tmp | grep -c $line) -gt 0 ] ; then
+statu=DISABLED
+fi
+namerepo=$line
+
+lines=("${lines[@]}" "FALSE" "$namerepo" "$statu")
+
+	
+done < "$file"
+
+
+wait ${!}
+
+
+
+CHECK=$(yad --list --radiolist --center --title="PostInstallerF - Repositories" --text="\n<b>Enable or Disable Repositories</b>" --width=450 --height=400 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/repositories.png --image-on-top --column=In --column=Repositories --column='STATUS' "${lines[@]}" --button="Enable:0" --button="Disable:2" --button="Close:3")
+ret=$?
+CHECK_INST=$(echo $CHECK | awk -F'|' '{print $2}')
+
+if [[ $ret -eq 0 ]]; then
+pkexec dnf -y config-manager --set-enabled $CHECK_INST
+cleanoldrep
+goback
+elif [[ $ret -eq 2 ]]; then
+pkexec dnf -y config-manager --set-disabled $CHECK_INST
+cleanoldrep
+goback
+elif [[ $ret -eq 3 ]]; then
+cleanoldrep
+exit
+fi
+
+

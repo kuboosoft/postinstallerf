@@ -90,7 +90,10 @@ elif [[ $ret -eq 2 ]]; then
 if [ "$dist" = Ubuntu ]; then
 software-properties-gtk
 else
+if [ -f /usr/bin/gpk-prefs ]; then
 gpk-prefs
+else
+/usr/bin/postinstallerf/con-repos
 fi
 rm -f /tmp/principal-menu..lck
 /usr/bin/postinstallerf/principal-menu
