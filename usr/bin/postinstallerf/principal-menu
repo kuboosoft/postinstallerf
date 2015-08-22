@@ -95,6 +95,7 @@ gpk-prefs
 else
 /usr/bin/postinstallerf/con-repos
 fi
+ fi
 rm -f /tmp/principal-menu..lck
 /usr/bin/postinstallerf/principal-menu
 elif [[ $ret -eq 1 ]]; then
