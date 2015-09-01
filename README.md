@@ -30,5 +30,5 @@ FEDORA 21/22
 
 ----------------------------------------------------
 SOURCE CODE
-http://sourceforge.net/projects/postinstaller/files/fedora/releases/22/SRPM/postinstallerf-1.5-31.fc22.src.rpm
+http://sourceforge.net/projects/postinstaller/files/fedora/releases/22/x86_64/updates/postinstallerf-1.5-35.20150821gitdcdec83.fc22.noarch.rpm
 

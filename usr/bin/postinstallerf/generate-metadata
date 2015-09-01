@@ -107,7 +107,7 @@ echo "export Comment3" >> $line
 echo "export License" >> $line 
 echo "export Screenshot" >> $line 
 echo "export Url" >> $line 
-sed -i '1i#!/bin/sh\' $line 
+#sed -i '1i#!/bin/sh\' $line 
 done <"$fill2"
 
 wait ${!}
@@ -207,7 +207,7 @@ for i in $fill2; do echo "export License" >> $i ; done
 for i in $fill2; do echo "export Screenshot" >> $i ; done
 for i in $fill2; do echo "export Url" >> $i ; done
 
-for i in $fill2; do sed -i '1i#!/bin/sh\' $i ; done
+#for i in $fill2; do sed -i '1i#!/bin/sh\' $i ; done
 wait ${!}
 chmod a+x *.posmet
 wait ${!}
@@ -297,7 +297,7 @@ for i in $fill2; do echo "export License" >> $i ; done
 for i in $fill2; do echo "export Screenshot" >> $i ; done
 for i in $fill2; do echo "export Url" >> $i ; done
 
-for i in $fill2; do sed -i '1i#!/bin/sh\' $i ; done
+#for i in $fill2; do sed -i '1i#!/bin/sh\' $i ; done
 
 wait ${!}
 
