@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 architecture=$(uname -p)
 chrules=/usr/bin/postinstallerf/chrules
 
@@ -46,6 +48,7 @@ kill $killprocess
 
 cleancopr
 /usr/bin/postinstallerf/notifier-ocupado &
+export LANG=C
 dnf repolist | awk '{print $1}' | sed '/Last/d' | sed '/id/d'| tee /tmp/repolist
  
 
@@ -61,12 +64,9 @@ fi
 wait ${!}
 /usr/bin/postinstallerf/notifier-ppa &
 
-corprep=$(curl -k https://copr.fedoraproject.org/coprs/fulltext/?fulltext=$BUSCA_I | grep "coprs" | grep -i $BUSCA_I | awk -F'href="' '{print $2}' | awk -F'" class' '{print $1}' >> /tmp/copr-url-tmp)
+corprep=$(curl -k https://copr.fedoraproject.org/coprs/fulltext/?fulltext=$BUSCA_I | grep "/coprs/" | grep -i $BUSCA_I >> /tmp/copr-url-tmp)
 
-sed -i '/Home/d' /tmp/copr-url-tmp
-sed -i ':/coprs/">:d' /tmp/copr-url-tmp
-sed -i '/^$/d' /tmp/copr-url-tmp
-
+sed -i 's/ //g' /tmp/copr-url-tmp
 
 # curl -k https://copr.fedoraproject.org$corprep
 
@@ -91,7 +91,7 @@ while IFS= read -r line; do
 
 cod=$(curl -s -k --head -w %{http_code} https://copr.fedoraproject.org$line -o /dev/null)
 
-curl -k -o /tmp/$BUSCA_I.temp https://copr.fedoraproject.org$line/
+curl -k -o /tmp/$BUSCA_I.temp https://copr.fedoraproject.org$line
 
 
 
@@ -102,7 +102,7 @@ title=$(cat /tmp/$BUSCA_I.temp | grep '<title>' | awk -F '<title>' '{print $2}' 
 
 #pre=$(cat /tmp/$BUSCA_I.temp | grep 'shift-right' | awk -F '<p>' '{print $2}' | awk -F '</p>' '{print $1}' | awk -F '.' '{print $1}' | head -1 | sed -e :a -e N -e 's/\n/ /' -e ta) 
 
-pre=$(awk '/Description/{getline; print}' /tmp/$BUSCA_I.temp | awk -F '<p><p>' '{print $2}' | awk -F '</p></p>' '{print $1}' | sed -e :a -e N -e 's/\n/ /' -e ta) 
+pre=$(awk '/Description/{getline; print}' /tmp/$BUSCA_I.temp | awk -F '<p><p>' '{print $2}' | awk -F '</p>' '{print $1}' | sed -e :a -e N -e 's/\n/ /' -e ta) 
 
 
 support=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 23' -e 'Fedora\ 21' -e 'Fedora\ 22' -e 'rawhide' -e 'Rawhide' | awk -F '"pficon pficon-save">' '{print $2}' | awk -F '</span>' '{print $1}' | sed 's|^ *||g' | sed -e :a -e N -e 's/\n/ /' -e ta | sed 's|Fedora||g')

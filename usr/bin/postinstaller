@@ -1975,6 +1975,8 @@ fi
 elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
 pkrefresh
 
+export LANG=C
+
 $ang | tee /tmp/update-url-tmp | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 	--title="PostInstallerF - $task" \
 	--center \

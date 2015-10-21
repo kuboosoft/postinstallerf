@@ -21,7 +21,7 @@ else
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' 'ARCH')
 fi
 
-if [ $dist = Ubuntu ]; then
+if [ "$dist" = Ubuntu ]; then
 
 if [ $(dpkg-query -Wf '${db:Status-abbrev}' ubuntu-gnome-desktop) = ii ]; then
 status='INSTALLED'
@@ -43,7 +43,7 @@ fi
 
 elif [ -f /etc/fedora-release ]; then
 
-if [ $(rpm -qa gnome-desktop3 | grep -c gnome-desktop3) -gt 0 ]; then
+if [ $(rpm -qa gnome-desktop3 | grep -c gnome-desktop3) -gt 0 ] && [ $( gnome-shell --version | grep -c [0-9] ) -gt 0 ] ; then
 status='INSTALLED'
 tarea='Update'
 else
