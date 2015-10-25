@@ -2,8 +2,11 @@
 
 
 
-architecture=$(uname -p)
+architecture=$(uname -m)
+
+# Stupid problem of permit in repositories COPR
 chrules=/usr/bin/postinstallerf/chrules
+#
 
 cleancopr() {
 if [ "$(id -u)" -eq 0 ]; then
@@ -48,7 +51,7 @@ kill $killprocess
 
 cleancopr
 /usr/bin/postinstallerf/notifier-ocupado &
-export LANG=C
+#export LANG=C
 dnf repolist | awk '{print $1}' | sed '/Last/d' | sed '/id/d'| tee /tmp/repolist
  
 
@@ -152,6 +155,8 @@ if [[ $ret -eq 0 ]]; then
 if [[ $verifycopr = 'COPR INSTALLED' ]]; then
 postinstaller -i $BUSCA_I
 
+wait ${!}
+
 if [ $(rpm -qa $BUSCA_I | grep -c $BUSCA_I) -gt 0 ]; then
 echo 'fine'
 else
@@ -179,7 +184,7 @@ pkexec dnf -y copr enable $COPR_I
 # test 1
 pkexec $chrules
 postinstaller -q 
-postinstaller -j $BUSCA_I
+postinstaller -i $BUSCA_I
 
 if [ $(rpm -qa $BUSCA_I | grep -c $BUSCA_I) -gt 0 ]; then
 echo 'fine'
@@ -217,7 +222,9 @@ if [ $? -eq 0 ]; then
 pkexec rm -f /etc/yum.repos.d/*copr*$repository.repo
 fi
 
+# Update repositories
 postinstaller -q 
+# end 
 
 if [ $(rpm -qa $BUSCA_I | grep -c $BUSCA_I) -gt 0 ]; then
 zenity --question --title="Remove $BUSCA_I" --text="Do you want remove also $BUSCA_I?" --ok-label "Yes" --cancel-label "No"
