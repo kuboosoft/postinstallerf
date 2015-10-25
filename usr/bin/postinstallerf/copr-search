@@ -150,7 +150,7 @@ COPR_I=$(echo $CHECK | awk -F'|' '{print $5}')
 if [[ $ret -eq 0 ]]; then
 
 if [[ $verifycopr = 'COPR INSTALLED' ]]; then
-postinstaller -j $BUSCA_I
+postinstaller -i $BUSCA_I
 
 if [ $(rpm -qa $BUSCA_I | grep -c $BUSCA_I) -gt 0 ]; then
 echo 'fine'

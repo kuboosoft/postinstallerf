@@ -42,15 +42,6 @@ fi
  fi
 task=Installing 
    ;;
-  j)
-   echo received -j with $OPTARG
-if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
-ang='pkexec dnf -y install'
-else
-echo 'OS no compatible'
-fi
-task=copr 
-   ;;
   k)
    echo received -k with $OPTARG
 if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
@@ -287,7 +278,7 @@ elif [ "$task" = Remove-old-kernel ]; then
     body="Old kernel erased"
 elif [ "$task" = Install-group ]; then
     body="Group $OPTARG installed"
-elif [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Localinstall ] || [ "$task" = force ] || [ "$task" = copr-install ] || [ "$task" = copr ]; then
+elif [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Localinstall ] || [ "$task" = force ] || [ "$task" = copr-install ]; then
 
 if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
 
@@ -640,7 +631,7 @@ fi
 
 # Init check if task isn't equal to install or remove, exlude update. Conditional for open the metadata...
 
-if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Information ] || [ "$task" = Localinstall ] || [ "$task" = copr ] || [ "$task" = force ]; then
+if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Information ] || [ "$task" = Localinstall ] || [ "$task" = force ]; then
 #
 if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 fullname=$(basename $OPTARG | sed 's/-git//g' | sed 's/-bzr//g' | sed 's/-bin//g' | sed 's/-svn//g' | sed 's/-gtk2//g' | sed 's/-qt//g')
@@ -927,7 +918,7 @@ exit
 # If only need install or uninstall
 
 
-if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = copr ]; then
+if [ "$task" = Installing ] || [ "$task" = Uninstalling ]; then
 
 killernot
 
