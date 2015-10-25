@@ -44,7 +44,7 @@ task=Installing
    ;;
   j)
    echo received -j with $OPTARG
-if [ -f /etc/fedora-release ]; then
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
 ang='pkexec dnf -y install'
 else
 echo 'OS no compatible'
@@ -53,7 +53,7 @@ task=copr
    ;;
   k)
    echo received -k with $OPTARG
-if [ -f /etc/fedora-release ]; then
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
 ang='pkexec dnf -y install'
 else
 echo 'OS no compatible'
@@ -131,7 +131,7 @@ fi
   c)
    echo received -c
 . /usr/bin/postinstallerf/pid
-if [ -f /etc/fedora-release ]; then
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
 task=copr-install
 else
 echo 'OS no compatible'
