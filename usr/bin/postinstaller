@@ -147,7 +147,7 @@ task=Update
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
 if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 ang='packer-postinstaller -Syu --noconfirm --noedit'
-elif [ "$dist" = Ubuntu ] ; then
+elif [ "$dist" = Ubuntu ]; then
 ang='apt-get -y dist-upgrade'
 elif [ -f /etc/SuSE-release ]; then
 ang='pkcon -p update'
@@ -1989,6 +1989,8 @@ Done"
 
 fnotify
 cleanup
+killernot
+postinstaller -q
 
 # Clean package info
 if [ "$(id -u)" -eq 0 ]; then
