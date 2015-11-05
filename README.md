@@ -17,7 +17,7 @@ PostinstallerF Instalara todo software que no se incluye comúnmente, después d
 from a terminal:
 
 
-FEDORA 21/22
+FEDORA 22/23
 
 1) su
 
@@ -30,5 +30,5 @@ FEDORA 21/22
 
 ----------------------------------------------------
 SOURCE CODE
-http://sourceforge.net/projects/postinstaller/files/fedora/releases/22/x86_64/updates/postinstallerf-1.5-35.20150821gitdcdec83.fc22.noarch.rpm
+http://sourceforge.net/projects/postinstaller/files/fedora/releases/23/x86_64/updates/postinstallerf-1.5-37.20151028gitd5589f3.fc23.noarch.rpm
 
