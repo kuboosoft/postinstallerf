@@ -98,7 +98,7 @@ curl -k -o /tmp/$BUSCA_I.temp https://copr.fedoraproject.org$line
 
 
 
-if [ "$cod" -eq 200 ] && [ $(grep -ci "$BUSCA_I" /tmp/$BUSCA_I.temp) -gt 0 ] && [ $(grep -c '<td>Fedora' /tmp/$BUSCA_I.temp) -gt 0 ] || [ $(grep -c 'rawhide' /tmp/$BUSCA_I.temp) -gt 0 ] || [ $(grep -c 'Fedora 23' /tmp/$BUSCA_I.temp) -gt 0 ] || [ $(grep -c 'Fedora 21' /tmp/$BUSCA_I.temp) -gt 0 ] || [ $(grep -c 'Fedora 22' /tmp/$BUSCA_I.temp) -gt 0 ]; then
+if [ "$cod" -eq 200 ] && [ $(grep -ci "$BUSCA_I" /tmp/$BUSCA_I.temp) -gt 0 ] && [ $(grep -c '<td>Fedora' /tmp/$BUSCA_I.temp) -gt 0 ] || [ $(grep -c 'rawhide' /tmp/$BUSCA_I.temp) -gt 0 ] || [ $(grep -c 'Fedora 23' /tmp/$BUSCA_I.temp) -gt 0 ] || [ $(grep -c 'Fedora 24' /tmp/$BUSCA_I.temp) -gt 0 ] || [ $(grep -c 'Fedora 22' /tmp/$BUSCA_I.temp) -gt 0 ]; then
 
 title=$(cat /tmp/$BUSCA_I.temp | grep '<title>' | awk -F '<title>' '{print $2}' | awk -F '</title>' '{print $1}')
 
@@ -108,9 +108,9 @@ title=$(cat /tmp/$BUSCA_I.temp | grep '<title>' | awk -F '<title>' '{print $2}' 
 pre=$(awk '/Description/{getline; print}' /tmp/$BUSCA_I.temp | awk -F '<p><p>' '{print $2}' | awk -F '</p>' '{print $1}' | sed -e :a -e N -e 's/\n/ /' -e ta) 
 
 
-support=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 23' -e 'Fedora\ 21' -e 'Fedora\ 22' -e 'rawhide' -e 'Rawhide' | awk -F '"pficon pficon-save">' '{print $2}' | awk -F '</span>' '{print $1}' | sed 's|^ *||g' | sed -e :a -e N -e 's/\n/ /' -e ta | sed 's|Fedora||g')
+support=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 23' -e 'Fedora\ 24' -e 'Fedora\ 22' -e 'rawhide' -e 'Rawhide' | awk -F '"pficon pficon-save">' '{print $2}' | awk -F '</span>' '{print $1}' | sed 's|^ *||g' | sed -e :a -e N -e 's/\n/ /' -e ta | sed 's|Fedora||g')
 
-support2=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 23' -e 'Fedora\ 21' -e 'Fedora\ 22' -e 'rawhide' -e 'Rawhide' | grep -ve 'https://copr.fedoraproject' -e '.repo' -e '<' -e 'class' -e '>' )
+support2=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 23' -e 'Fedora\ 24' -e 'Fedora\ 22' -e 'rawhide' -e 'Rawhide' | grep -ve 'https://copr.fedoraproject' -e '.repo' -e '<' -e 'class' -e '>' )
 
 
 coprl=$(echo $line | awk -F '/coprs/' '{print $2}' | sed 's:/$::' )
