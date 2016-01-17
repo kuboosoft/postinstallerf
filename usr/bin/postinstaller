@@ -783,6 +783,7 @@ if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
           version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
 
 if [ $(rpm -qa $OPTARG | grep -c $OPTARG) -gt 0 ]; then
+prover=$(rpm -q $OPTARG | awk -F '[a-z]-' '{print $2}' | awk -F '.fc[0-9]' '{print $1}')
     echo "$OPTARG is present"
 tarea=Uninstall
 status=INSTALLED
@@ -881,7 +882,7 @@ $pvar
 License: $lic 
 
 $Url"  \
---button="Status: $status:3" --button="Website:4" --button="$tarea:0" --button="Close:1" 
+--button="Status: $status [$prover]:3" --button="Website:4" --button="$tarea:0" --button="Close:1" 
 
 ret=$?
 
