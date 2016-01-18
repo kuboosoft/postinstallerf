@@ -68,7 +68,7 @@ CHECK_INST=$(echo $CHECK | awk -F'|' '{print $2}')
 editable_rep() {
 patrep=$(grep -rnw '/etc/yum.repos.d/' -e "$CHECK_INST" | tr -d '[' | tr -d ']' | grep ":1:$CHECK_INST" | grep -v "$CHECK_INST-" | awk -F':' '{print $1}')
 echo $patrep
-    yad --text-info --show-uri --width=400 --height=200 --name="Editor repository" --window-icon="/usr/share/icons/acciones/topicon.png" --title="Repositorie - Edit $CHECK_INST" --center --button="Save:0" --button="Close:1" --editable --filename=$patrep >> /tmp/.$CHECK_INST
+    yad --text-info --show-uri --width=400 --height=200 --name="Editor repository" --window-icon="/usr/share/icons/acciones/topicon.png" --title="Repository - Edit - $CHECK_INST" --center --button="Save:0" --button="Close:1" --editable --filename=$patrep >> /tmp/.$CHECK_INST
     if [[ $? -eq 0 ]]; then 
 pkexec mv /tmp/.$CHECK_INST $patrep
 fi
