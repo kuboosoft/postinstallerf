@@ -882,7 +882,7 @@ $pvar
 License: $lic 
 
 $Url"  \
---button="Status: $status [$prover]:3" --button="Website:4" --button="$tarea:0" --button="Close:1" 
+--button="Status: $status $prover:3" --button="Website:4" --button="$tarea:0" --button="Close:1" 
 
 ret=$?
 
