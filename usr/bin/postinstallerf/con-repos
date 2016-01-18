@@ -61,9 +61,18 @@ wait ${!}
 
 
 
-CHECK=$(yad --list --radiolist --center --title="PostInstallerF - Repositories" --text="\n<b>Enable or Disable Repositories</b>" --width=450 --height=400 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/repositories.png --image-on-top --column=In --column=Repositories --column='STATUS' "${lines[@]}" --button="Enable:0" --button="Disable:2" --button="Close:3")
+CHECK=$(yad --list --radiolist --center --title="PostInstallerF - Repositories" --text="\n<b>Enable or Disable Repositories</b>" --width=450 --height=400 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/repositories.png --image-on-top --column=In --column=Repositories --column='STATUS' "${lines[@]}" --button="Enable:0" --button="Edit:4" --button="Disable:2" --button="Close:3")
 ret=$?
 CHECK_INST=$(echo $CHECK | awk -F'|' '{print $2}')
+
+editable_rep() {
+patrep=$(grep -rnw '/etc/yum.repos.d/' -e "$CHECK_INST" | tr -d '[' | tr -d ']' | grep ":1:$CHECK_INST" | grep -v "$CHECK_INST-" | awk -F':' '{print $1}')
+echo $patrep
+    yad --text-info --show-uri --geometry=400x200-0-0 --name="Editor repository" --window-icon="/usr/share/icons/acciones/topicon.png" --title="Repositorie - Edit $CHECK_INST" --button="Save:0" --button="Close:1" --editable --filename=$patrep >> /tmp/.$CHECK_INST
+    if [[ $? -eq 0 ]]; then 
+pkexec mv /tmp/.$CHECK_INST $patrep
+fi
+}
 
 if [[ $ret -eq 0 ]]; then
 pkexec dnf -y config-manager --set-enabled $CHECK_INST
@@ -71,6 +80,10 @@ cleanoldrep
 goback
 elif [[ $ret -eq 2 ]]; then
 pkexec dnf -y config-manager --set-disabled $CHECK_INST
+cleanoldrep
+goback
+elif [[ $ret -eq 4 ]]; then
+editable_rep
 cleanoldrep
 goback
 elif [[ $ret -eq 3 ]]; then
