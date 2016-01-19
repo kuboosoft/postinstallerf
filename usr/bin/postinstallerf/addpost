@@ -137,7 +137,7 @@ fi
             fi
 
 if ! $installed | grep "Java JRE Oracle" > /dev/null; then
-if [ -f /usr/java/latest/lib/i386/libnpjp2.so ] || [ -f /usr/java/latest/lib64/x86_64/libnpjp2.so ]; then
+if [ -f /usr/java/latest/lib/i386/libnpjp2.so ] || [ -f /usr/java/latest/lib64/x86_64/libnpjp2.so ] || [ -f /usr/java/latest/lib/amd64/libnpjp2.so ]; then
                     im=$im"FALSE \"Java JRE Oracle\"           \"Implementation propietaria del lenguaje de programacion Java.\" \"INSTALADO [$versionjava] \"  "
 else
 im=$im"FALSE \"Java JRE Oracle\"           \"Implementation propietaria del lenguaje de programacion Java.\" \"NO INSTALADO  \"  "
@@ -147,7 +147,7 @@ fi
 
 if ! $installed | grep "Java JDK Oracle" > /dev/null; then
 if [ -f /usr/java/latest/jre/lib/amd64/libnpjp2.so ] || [ -f /usr/java/latest/jre/lib/i386/libnpjp2.so ]; then
-                    im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Desarrolladores]\" \"INSTALADO [$versionjkd]  \"  "
+                    im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Desarrolladores]\" \"INSTALADO [$versionjava]  \"  "
 else
 im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Desarrolladores]\" \"NO INSTALADO  \"  "
 fi
@@ -1143,7 +1143,7 @@ fi
 
 if ! $installed | grep "Java JRE Oracle" > /dev/null; then
 
-if [ -f /usr/java/latest/lib/i386/libnpjp2.so ] || [ -f /usr/java/latest/lib64/x86_64/libnpjp2.so ]; then
+if [ -f /usr/java/latest/lib/i386/libnpjp2.so ] || [ -f /usr/java/latest/lib64/x86_64/libnpjp2.so ] || [ -f /usr/java/latest/lib/amd64/libnpjp2.so ]; then
                     im=$im"FALSE \"Java JRE Oracle\"           \"Propietary implementation of the Java programming language.\" \"INSTALLED [$versionjava] \"  "
 else
 im=$im"FALSE \"Java JRE Oracle\"           \"Propietary implementation of the Java programming language.\" \"NO INSTALLED  \"  "
@@ -1154,7 +1154,7 @@ fi
 if ! $installed | grep "Java JDK Oracle" > /dev/null; then
 
 if [ -f /usr/java/latest/jre/lib/amd64/libnpjp2.so ] || [ -f /usr/java/latest/jre/lib/i386/libnpjp2.so ]; then
-                    im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Developer]\" \"INSTALLED [$versionjkd]  \"  "
+                    im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Developer]\" \"INSTALLED [$versionjava]  \"  "
 else
 im=$im"FALSE \"Java JDK Oracle\"     \"Oracle Java Runtime Environment [Developer]\" \"NO INSTALLED  \"  "
 fi
@@ -2783,10 +2783,10 @@ xterm -e 'dnf -y install /tmp/jre*-linux-i586.rpm'
 fi
 
 
-if [ `getconf LONG_BIT` = "64" ]; then
-ln -s /usr/java/latest/lib/amd64/libnpjp2.so /usr/lib64/mozilla/plugins/
+if [ `getconf LONG_BIT` = "64" ] && [ ! -f /usr/$libdir/mozilla/plugins/libnpjp2.so ]; then
+ln -s /usr/java/latest/lib/amd64/libnpjp2.so /usr/$libdir/mozilla/plugins/
 else
-ln -s /usr/java/latest/lib/i386/libnpjp2.so /usr/lib/mozilla/plugins/
+ln -s /usr/java/latest/lib/i386/libnpjp2.so /usr/$libdir/mozilla/plugins/
 fi
 
 echo 'PATH=/usr/java/latest/bin:$PATH' > /etc/profile.d/java.sh
@@ -3752,11 +3752,17 @@ truetype(){
     user=$(loginctl show-session $XDG_SESSION_ID | grep 'Name' | cut -d= -f2 | tail -n 1)
 
     #variables deteccion JRE o JDK java Oracle
-    versionjava=$(rpm -qi jre | sed -n '2p' | cut -b1-40)
-
 if [ -f /usr/java/latest/release ]; then
-    versionjkd=$(head -1 /usr/java/latest/release)
+    versionjava=$(head -1 /usr/java/latest/release)
 fi
+
+    # libdir
+if [ `getconf LONG_BIT` = "64" ]; then
+libdir=lib64
+else
+libdir=lib
+fi
+
 
 
 # running PostInstallerF...

@@ -89,11 +89,11 @@ if [[ $ret -eq 0 ]]; then
 elif [[ $ret -eq 2 ]]; then
 if [ "$dist" = Ubuntu ]; then
 software-properties-gtk
+elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
+/usr/bin/postinstallerf/con-repos
 else
 if [ -f /usr/bin/gpk-prefs ]; then
 gpk-prefs
-else
-/usr/bin/postinstallerf/con-repos
 fi
  fi
 rm -f /tmp/principal-menu..lck

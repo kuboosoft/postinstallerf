@@ -40,9 +40,13 @@ rm -f /tmp/Network..lck
 elif [[ $ret -eq 2 ]]; then
 if [ "$dist" = Ubuntu ]; then
 software-properties-gtk
+elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
+/usr/bin/postinstallerf/con-repos
 else
+if [ -f /usr/bin/gpk-prefs ]; then
 gpk-prefs
-fi 
+fi
+ fi
 rm -f /tmp/Network..lck
 /usr/bin/postinstallerf/categorias/Network
 elif [[ $ret -eq 1 ]]; then

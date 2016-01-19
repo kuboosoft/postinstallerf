@@ -40,9 +40,13 @@ rm -f /tmp/Games..lck
 elif [[ $ret -eq 2 ]]; then
 if [ "$dist" = Ubuntu ]; then
 software-properties-gtk
+elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
+/usr/bin/postinstallerf/con-repos
 else
-gpk-prefs 
+if [ -f /usr/bin/gpk-prefs ]; then
+gpk-prefs
 fi
+ fi
 rm -f /tmp/Games..lck
 /usr/bin/postinstallerf/categorias/Games
 elif [[ $ret -eq 1 ]]; then

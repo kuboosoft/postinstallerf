@@ -39,9 +39,13 @@ rm -f /tmp/Office..lck
 elif [[ $ret -eq 2 ]]; then
 if [ "$dist" = Ubuntu ]; then
 software-properties-gtk
+elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
+/usr/bin/postinstallerf/con-repos
 else
+if [ -f /usr/bin/gpk-prefs ]; then
 gpk-prefs
-fi 
+fi
+ fi
 rm -f /tmp/Office..lck
 /usr/bin/postinstallerf/categorias/Office
 elif [[ $ret -eq 1 ]]; then

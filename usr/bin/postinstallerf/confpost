@@ -627,7 +627,13 @@ postinstaller -f
 
 reposi(){
 
+if  [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
+/usr/bin/postinstallerf/con-repos
+else
+if [ -f /usr/bin/gpk-prefs ]; then
 gpk-prefs
+fi
+ fi
 
 
 }
