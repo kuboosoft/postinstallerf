@@ -67,7 +67,7 @@ fi
 wait ${!}
 /usr/bin/postinstallerf/notifier-ppa &
 
-corprep=$(curl -k https://copr.fedoraproject.org/coprs/fulltext/?fulltext=$BUSCA_I | grep "/coprs/" | grep -i $BUSCA_I >> /tmp/copr-url-tmp)
+corprep=$(curl -k https://copr.fedorainfracloud.org/coprs/fulltext/?fulltext=$BUSCA_I | grep "/coprs/" | grep -i $BUSCA_I >> /tmp/copr-url-tmp)
 
 sed -i 's/ //g' /tmp/copr-url-tmp
 
@@ -92,9 +92,9 @@ file="/tmp/copr-url-tmp"
 while IFS= read -r line; do
         # display $line or do somthing with $line
 
-cod=$(curl -s -k --head -w %{http_code} https://copr.fedoraproject.org$line -o /dev/null)
+cod=$(curl -s -k --head -w %{http_code} https://copr.fedorainfracloud.org$line -o /dev/null)
 
-curl -k -o /tmp/$BUSCA_I.temp https://copr.fedoraproject.org$line
+curl -k -o /tmp/$BUSCA_I.temp https://copr.fedorainfracloud.org$line
 
 
 
