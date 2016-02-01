@@ -8,11 +8,11 @@ PostInstallerF will install all the software that Fedora doesn't include commonl
 
 PostInstallerF is for anyone; created to assist the user. There are many official guides, wiki, Ask;  also guides made by third parties. But this is not enough. We are in a changing society; the user does not want to read large guides. The user only wants to install easily and get the best performance and production to its operating system. Why not help a bit to the user?
 
-Features:
+### Features:
 
 PostInstallerF is a simple and powerfull GUI; All process, is asked and authoritated by the user. PostInstallerF have the capacity to restore your system even if you remove the official repositories of Fedora. Now it has a powerful tool to enable, disable and edit repositories. Install and remove COPR repositories, search any software in your system; show a screenshot; give detailed information (over 49000 packages, steadily increasing) thanks a our tools when a rpm is installed, if you open PostInstallerF makes a metadata (program_fu.posmet), included all the information about the rpm package.
 
-Others:
+### Others:
 * Updates your system
 * Configures you system
 * Installs Nvidia drivers (experimental)
@@ -25,6 +25,16 @@ and more...
 SPANISH
 
 PostinstallerF Instalara todo software que no se incluye comúnmente, después de ejecutar Fedora por primera vez. Es fácil para el nuevo usuario. Contiene lo que tu necesitas!
+
+
+### License
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program.  If not, see [gnu.org/licenses](http://www.gnu.org/licenses/).
+
 
 ----------------------------------------------------
 **How to Install PostInstallerF Fedora?**
