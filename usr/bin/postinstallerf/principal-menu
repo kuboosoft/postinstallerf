@@ -79,7 +79,7 @@ testconnection=`wget --no-check-certificate --tries=3 --timeout=15 www.google.co
 		rm /tmp/.testinternet  > /dev/null 2>&1
 	fi
 
-yad --center --image="/usr/share/apps-head/$headpic" --image-on-top --icons --name="PostInstallerF - Principal Menu" --window-icon="/usr/share/icons/Postinstaller1.svg" --class="PostInstallerF" --width=800 --height=500  --read-dir="/usr/share/postinstallerf-desktop/principal/" --item-width=90 --title="PostInstallerF - $postversion - Principal Menu" --sort-by-name --button="Donate:0" --button="Repositories:2" --button="About:3" --button="Close:1" 
+yad --center --image="/usr/share/apps-head/$headpic" --image-on-top --icons --name="PostInstallerF - Main Menu" --window-icon="/usr/share/icons/Postinstaller1.svg" --class="PostInstallerF" --width=800 --height=500  --read-dir="/usr/share/postinstallerf-desktop/principal/" --item-width=90 --title="PostInstallerF - $postversion - Main Menu" --sort-by-name --button="Donate:0" --button="Repositories:2" --button="About:3" --button="Close:1" 
 
 ret=$?
 
