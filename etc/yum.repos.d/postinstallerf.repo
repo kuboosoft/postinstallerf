@@ -3,8 +3,8 @@ name=PostInstallerF
 baseurl=http://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/
 enabled=1
 metadata_expire=2d
-gpgcheck=0
-gpgkey=http://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/RPM-GPG-KEY-postinstallerf
+gpgcheck=1
+gpgkey=https://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/RPM-GPG-KEY-postinstallerf
 skip_if_unavailable=1
 
 
@@ -14,8 +14,8 @@ name=PostInstallerF-Source
 baseurl=http://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/SRPM/
 enabled=0
 metadata_expire=2d
-gpgcheck=0
-gpgkey=http://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/RPM-GPG-KEY-postinstallerf
+gpgcheck=1
+gpgkey=https://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/RPM-GPG-KEY-postinstallerf
 skip_if_unavailable=1
 
 
@@ -26,6 +26,6 @@ name=PostInstallerF-updates
 baseurl=http://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/updates/
 enabled=1
 metadata_expire=2d
-gpgcheck=0
-gpgkey=http://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/RPM-GPG-KEY-postinstallerf
+gpgcheck=1
+gpgkey=https://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/RPM-GPG-KEY-postinstallerf
 skip_if_unavailable=1
