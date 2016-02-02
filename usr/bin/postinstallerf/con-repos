@@ -66,7 +66,7 @@ ret=$?
 CHECK_INST=$(echo $CHECK | awk -F'|' '{print $2}')
 
 editable_rep() {
-patrep=$(grep -rnwc '/etc/yum.repos.d/' -e "$CHECK_INST" | grep ':1' | awk -F':' '{print $1}')
+patrep=$(grep -rnw '/etc/yum.repos.d/' -e "$CHECK_INST" | grep ':1' | awk -F':' '{print $1}')
 echo $patrep
     yad --text-info --show-uri --width=500 --height=200 --name="Editor repository" --window-icon="/usr/share/icons/acciones/topicon.png" --title="Repository - $CHECK_INST" --center --button="Save:0" --button="Close:1" --editable --filename=$patrep >> /tmp/.$CHECK_INST
     if [[ $? -eq 0 ]]; then 
