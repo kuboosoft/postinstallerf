@@ -4,6 +4,7 @@ baseurl=http://sourceforge.net/projects/postinstaller/files/fedora/releases/$rel
 enabled=1
 metadata_expire=2d
 gpgcheck=1
+repo_gpgcheck=1
 gpgkey=https://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/RPM-GPG-KEY-postinstallerf
 skip_if_unavailable=1
 
@@ -15,6 +16,7 @@ baseurl=http://sourceforge.net/projects/postinstaller/files/fedora/releases/$rel
 enabled=0
 metadata_expire=2d
 gpgcheck=1
+repo_gpgcheck=1
 gpgkey=https://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/RPM-GPG-KEY-postinstallerf
 skip_if_unavailable=1
 
@@ -26,5 +28,6 @@ baseurl=http://sourceforge.net/projects/postinstaller/files/fedora/releases/$rel
 enabled=1
 metadata_expire=2d
 gpgcheck=1
+repo_gpgcheck=1
 gpgkey=https://sourceforge.net/projects/postinstaller/files/fedora/releases/$releasever/$basearch/RPM-GPG-KEY-postinstallerf
 skip_if_unavailable=1
