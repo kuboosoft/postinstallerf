@@ -50,10 +50,10 @@ FEDORA 22/23/24
 
 3) wget -P /etc/yum.repos.d/ https://raw.github.com/kuboosoft/postinstallerf/master/postinstallerf.repo
 
-4) dnf -y install postinstallerf
+4) dnf clean all && dnf -y install postinstallerf
 
 
 ----------------------------------------------------
 SOURCE CODE
-http://sourceforge.net/projects/postinstaller/files/fedora/releases/23/x86_64/updates/postinstallerf-1.5-38.20160126git51cade1.fc23.src.rpm
+http://sourceforge.net/projects/postinstaller/files/fedora/releases/23/SRPM/postinstallerf-1.5-39.20160204git8102266.fc23.src.rpm
 
