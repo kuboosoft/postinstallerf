@@ -48,6 +48,8 @@ FEDORA 22/23/24
 
 2) dnf -y install wget 
 
+3) rpm --import https://raw.githubusercontent.com/kuboosoft/postinstallerf/master/GPG/$(rpm -E %fedora)/RPM-GPG-KEY-postinstallerf
+
 3) wget -P /etc/yum.repos.d/ https://raw.github.com/kuboosoft/postinstallerf/master/postinstallerf.repo
 
 4) dnf clean all && dnf -y install postinstallerf
