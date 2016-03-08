@@ -193,7 +193,7 @@
     <description>Enable and disable repositories</description>
     <message>Authentication is required to configure the system.</message>
     <defaults>
-      <allow_any>no</allow_any>
+      <allow_any>auth_admin</allow_any>
       <allow_inactive>auth_admin</allow_inactive>
       <allow_active>auth_admin</allow_active>
     </defaults>
