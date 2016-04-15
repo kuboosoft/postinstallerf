@@ -109,7 +109,7 @@ title=$(cat /tmp/$BUSCA_I.temp | grep '<title>' | awk -F '<title>' '{print $2}' 
 pre=$(awk '/Description/{getline; print}' /tmp/$BUSCA_I.temp | awk -F '<p><p>' '{print $2}' | awk -F '</p>' '{print $1}' | sed -e :a -e N -e 's/\n/ /' -e ta) 
 
 
-support=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 23' -e 'Fedora\ 24' -e 'Fedora\ 22' -e 'rawhide' -e 'Rawhide' | awk -F '"pficon pficon-save">' '{print $2}' | awk -F '</span>' '{print $1}' | sed 's|^ *||g' | sed -e :a -e N -e 's/\n/ /' -e ta | sed 's|Fedora||g')
+support=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 23' -e 'Fedora\ 24' -e 'Fedora\ 22' -e 'rawhide' -e 'Rawhide' | awk -F '<strong>' '{print $2}' | awk -F ':</strong>' '{print $1}' | awk '!x[$0]++' | sed 's|^ *||g' | sed -e :a -e N -e 's/\n/ /' -e ta | sed 's|Fedora||g')
 
 support2=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 23' -e 'Fedora\ 24' -e 'Fedora\ 22' -e 'rawhide' -e 'Rawhide' | grep -ve 'https://copr.fedoraproject' -e '.repo' -e '<' -e 'class' -e '>' )
 
