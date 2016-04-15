@@ -111,7 +111,7 @@ pre=$(awk '/Description/{getline; print}' /tmp/$BUSCA_I.temp | awk -F '<p><p>' '
 
 support=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 23' -e 'Fedora\ 24' -e 'Fedora\ 22' -e 'rawhide' -e 'Rawhide' | awk -F '<strong>' '{print $2}' | awk -F ':</strong>' '{print $1}' | awk '!x[$0]++' | sed 's|^ *||g' | sed -e :a -e N -e 's/\n/ /' -e ta | sed 's|Fedora||g')
 
-support2=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 23' -e 'Fedora\ 24' -e 'Fedora\ 22' -e 'rawhide' -e 'Rawhide' | grep -ve 'https://copr.fedoraproject' -e '.repo' -e '<' -e 'class' -e '>' )
+support2=$(cat /tmp/$BUSCA_I.temp | grep -e 'Fedora\ 23' -e 'Fedora\ 24' -e 'Fedora\ 22' -e 'rawhide' -e 'Rawhide' | awk -F 'span> ' '{print $2}' | awk '!x[$0]++' | sed 's|^ *||g' | sed -e :a -e N -e 's/\n/ /' -e ta | sed 's|Fedora||g')
 
 
 coprl=$(echo $line | awk -F '/coprs/' '{print $2}' | sed 's:/$::' )
