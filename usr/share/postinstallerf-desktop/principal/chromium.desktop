@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=/usr/bin/postinstallerf/chromium
+Version=1.0
+Type=Application
+Name=Chromium
+GenericName=Chromium
+Comment=Chromium is a browser that combines a minimal design with sophisticated technology to make the web faster, safer, and easier.
+Icon=/usr/share/icons/acciones/chrom.png
+Categories=AudioVideo;Player;Qt;
+StartupNotify=false

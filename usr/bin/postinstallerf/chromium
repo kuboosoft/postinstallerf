@@ -1,0 +1,88 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+if [ -f /etc/arch-release ]; then
+dist=ARCH
+else
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
+fi
+
+    # Local install
+    locainst='dnf -y install'
+
+    # Local Progress
+    localprogress='/usr/bin/postinstallerf/local-pro'
+
+    # Architecture
+    architecture=$(uname -m)
+
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+if (pacman -Q flashplugin >/dev/null); then
+status=INSTALLED
+tarea=Uninstall
+else
+status='NO INSTALLED'
+tarea=Install
+fi
+
+elif [ "$dist" = Ubuntu ]; then
+# Ubuntu
+if [ $(dpkg-query -Wf'${db:Status-abbrev}' "*chromium") = ii ] || [ $(dpkg-query -Wf'${db:Status-abbrev}' "*chromium") = ii ] ; then
+status=INSTALLED
+tarea=Uninstall
+else
+status='NO INSTALLED'
+tarea=Install
+fi
+# Fedora
+else
+if [ $(rpm -qa chromium | grep -c chromium) -gt 0 ]; then
+status=INSTALLED
+tarea=Uninstall
+else
+status='NO INSTALLED'
+tarea=Install
+fi
+  fi
+
+Comment='<span size="xx-large">A fast webkit-based web browser</span>'
+
+yad --title="PostInstallerF - Chromium" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--class="PostInstallerF" \
+--image="/usr/share/icons/acciones/chromium-principal.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Chromium is a browser that combines a minimal design with sophisticated technology to make the web faster, safer, and easier.
+
+This is the stable channel Chromium browser. It offers a rock solid browser which is updated with features and fixes once they have been thoroughly tested. If you want the latest features, install the chromium-browser-unstable package instead."  \
+--button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then 
+
+if [[ "$tarea" = Install ]]; then 
+
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
+
+if [ ! -f /etc/yum.repos.d/_copr_churchyard-chromium-russianfedora.repo ]; then
+pkexec dnf -y copr enable churchyard/chromium-russianfedora
+fi
+postinstaller -i chromium  
+elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+postinstaller -i chromium
+fi
+
+elif [[ "$tarea" = Uninstall ]]; then 
+if [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+postinstaller -e chromium
+else
+postinstaller -e chromium
+fi
+
+fi
+fi
