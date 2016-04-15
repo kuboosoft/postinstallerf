@@ -37,7 +37,7 @@ tarea=Install
 fi
 # Fedora
 else
-if [ $(rpm -qa flash-plugin | grep -c flash-plugin) -gt 0 ] && [ $(rpm -qa libhal1-flash | grep -c libhal1-flash) -gt 0 ]; then
+if [ $(rpm -qa freshplayerplugin | grep -c freshplayerplugin) -gt 0 ]; then
 status=INSTALLED
 tarea=Uninstall
 else
@@ -46,9 +46,9 @@ tarea=Install
 fi
   fi
 
-Comment='<span size="xx-large">Flash plugin and hal-flash</span>'
+Comment='<span size="xx-large">ppapi2npapi compatibility layer for Flash Player</span>'
 
-yad --title="PostInstallerF - Flash plugin and hal-flash" \
+yad --title="PostInstallerF - Freshplayer Plugin" \
 --center \
 --window-icon="/usr/share/icons/acciones/topicon.png" \
 --class="PostInstallerF" \
@@ -56,7 +56,9 @@ yad --title="PostInstallerF - Flash plugin and hal-flash" \
 --width=800 --height=500 \
 --text="$Comment
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Adobe Flash (formerly Macromedia Flash) is a multimedia platform used to add animation, video, and interactivity to Web pages."  \
+Freshplayer Plugin allow Firefox to use the Chromium flash plug-in: chromium-pepper-flash. Pepper Flash Player is maintained by Google, and is newer than Adobe Flash Player. Adobe flash plugin is not supported by Adobe any more, it does not receive any security updates at all. Google provides newer features in Pepper Flash Player. 
+
+Pepper Flash Player can currently be used with Chromium, Chrome and Firefox with Freshplayer Plugin."  \
 --button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
 
 ret=$?
@@ -66,28 +68,16 @@ if [[ $ret -eq 0 ]]; then
 if [[ "$tarea" = Install ]]; then 
 
 if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
-if [ $(rpm -qa adobe-release-x86_64 | grep -c adobe-release-x86_64) -gt 0 ] || [ $(rpm -qa adobe-release-i386 | grep -c adobe-release-i386) -gt 0 ]; then
-echo 'installed adobe repository'
- else
-if [[ $architecture = x86_64 ]]; then
-pkexec dnf -y install http://linuxdownload.adobe.com/linux/x86_64/adobe-release-x86_64-1.0-1.noarch.rpm | $localprogress
-else
-pkexec dnf -y install http://linuxdownload.adobe.com/adobe-release/adobe-release-i386-1.0-1.noarch.rpm | $localprogress
-fi
-  fi
-  fi
-
-if [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
-postinstaller -i flashplugin-installer -i adobe-flashplugin
-elif [ -f /etc/fedora-release ]; then
-pkexec postinstaller -i flash-plugin -i libhal1-flash
+postinstaller -i freshplayerplugin  
+elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
+postinstaller -i freshplayerplugin
 fi
 
 elif [[ "$tarea" = Uninstall ]]; then 
 if [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
 postinstaller -e flashplugin-installer -e adobe-flashplugin
 else
-pkexec postinstaller -e flash-plugin -e libhal1-flash
+pkexec postinstaller -e freshplayerplugin
 fi
 
 fi
