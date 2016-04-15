@@ -28,7 +28,7 @@ fi
 
 elif [ "$dist" = Ubuntu ]; then
 # Ubuntu
-if [ $(dpkg-query -Wf'${db:Status-abbrev}' "*flashplugin-installer") = ii ] || [ $(dpkg-query -Wf'${db:Status-abbrev}' "*adobe-flashplugin") = ii ] ; then
+if [ $(dpkg-query -Wf'${db:Status-abbrev}' "*browser-plugin-freshplayer-pepperflash") = ii ] || [ $(dpkg-query -Wf'${db:Status-abbrev}' "*browser-plugin-freshplayer-pepperflash") = ii ] ; then
 status=INSTALLED
 tarea=Uninstall
 else
@@ -70,14 +70,14 @@ if [[ "$tarea" = Install ]]; then
 if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
 postinstaller -i freshplayerplugin  
 elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
-postinstaller -i freshplayerplugin
+postinstaller -i browser-plugin-freshplayer-pepperflash
 fi
 
 elif [[ "$tarea" = Uninstall ]]; then 
 if [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
-postinstaller -e flashplugin-installer -e adobe-flashplugin
+postinstaller -e browser-plugin-freshplayer-pepperflash
 else
-pkexec postinstaller -e freshplayerplugin
+postinstaller -e freshplayerplugin
 fi
 
 fi
