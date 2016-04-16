@@ -67,11 +67,14 @@ if [[ $ret -eq 0 ]]; then
 
 if [[ "$tarea" = Install ]]; then 
 
-if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
-
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then 
 if [ ! -f /etc/yum.repos.d/_copr_churchyard-chromium-russianfedora.repo ]; then
 pkexec dnf -y copr enable churchyard/chromium-russianfedora
 fi
+postinstaller -i chromium  
+elif [ -f /etc/SuSE-release ]; then 
+postinstaller -i chromium  
+elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
 postinstaller -i chromium  
 elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
 postinstaller -i chromium

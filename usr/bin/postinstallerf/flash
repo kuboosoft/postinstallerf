@@ -18,7 +18,7 @@ fi
     architecture=$(uname -m)
 
 if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
-if (pacman -Q flashplugin >/dev/null); then
+if (pacman -Q freshplayerplugin >/dev/null); then
 status=INSTALLED
 tarea=Uninstall
 else
@@ -67,8 +67,16 @@ if [[ $ret -eq 0 ]]; then
 
 if [[ "$tarea" = Install ]]; then 
 
-if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
-postinstaller -i freshplayerplugin  
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
+
+if [ ! -f /etc/yum.repos.d/rpmfusion-free.repo ] && [ ! -f /etc/yum.repos.d/rpmfusion-nonfree.repo ]; then
+/usr/bin/postinstallerf/Rpmfusion
+fi
+postinstaller -i freshplayerplugin 
+elif  [ -f /etc/SuSE-release ]; then 
+postinstaller -i freshplayerplugin 
+elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+postinstaller -i freshplayerplugin 
 elif [ "$dist" = Ubuntu ] || [[ "$(< /etc/lsb-release)" == *"DISTRIB_ID=LinuxMint"* ]]; then
 postinstaller -i browser-plugin-freshplayer-pepperflash
 fi
