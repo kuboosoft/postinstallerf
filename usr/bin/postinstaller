@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # +--------------------------------------------------------------------------------+
-# | Copyright (C) 2015 David Vasquez                                               |
+# | Copyright (C) 2016 David Vasquez                                               |
 # |                                                                                |
 # |This program is free software; You can distribute it and / or                   |
 # |modify it under the terms of the GNU General Public License                     |
@@ -32,13 +32,10 @@ elif [ "$dist" = Ubuntu ] ; then
 ang='apt-get -y install'
 elif [ -f /etc/SuSE-release ]; then
 ang='pkcon -p install'
-else
-if [ $(pkcon backend-details | grep -c 'GDBus.Error:org.freedesktop.DBus.Error.TimedOut') -gt 0 ];
-then
+elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
 ang='pkexec dnf -y install'
 else
 ang='pkcon -p -y install'
-fi
  fi
 task=Installing 
    ;;
@@ -60,13 +57,10 @@ elif [ "$dist" = Ubuntu ] ; then
 ang='apt-get -y remove'
 elif [ -f /etc/SuSE-release ]; then
 ang='pkcon -p remove' 
-else
-if [ $(pkcon backend-details | grep -c 'GDBus.Error:org.freedesktop.DBus.Error.TimedOut') -gt 0 ];
-then
+elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
 ang='pkexec dnf -y remove'
 else
 ang='pkcon -p -y remove' 
-fi
  fi
 task=Uninstalling 
    ;;
@@ -471,7 +465,7 @@ cleansearch() {
 rm -f /tmp/*-tmp
 rm -f /tmp/infp
 rm -f /tmp/dnflist
-#rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearch
 }
 
 killernot() {
@@ -1675,9 +1669,11 @@ CHECK_INST=$(echo $CHECK | awk -F'|' '{print $3}' | awk -F'-[0-9]' '{print $1}')
 /usr/bin/postinstaller -n $CHECK_INST
 fi
 
+# FEDORA
+elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
 
-else
-# TODAS LAS DISTRIBUCIONES
+cleansearch
+
 BUSCA_I=$(yad --entry --center --title="Repository search." --window-icon="/usr/share/icons/acciones/topicon.png" --width=350 --text="Type in as many keywords as you want to search for." --image=/usr/share/icons/acciones/searchpackage.png --image-on-top) 
 
 if [ "$?" != 0 ]; then
@@ -1687,21 +1683,21 @@ fi
 notify-send --hint=int:transient:1 -t 900000 "Searching $BUSCA_I
 Please wait" -i "/usr/share/icons/acciones/loadingimage2.png"
 
-if [ $(pkcon backend-details | grep -c 'GDBus.Error:org.freedesktop.DBus.Error.TimedOut') -gt 0 ]; then
-
-# | Init Alternative mode | #
 cleansearch
 
 if [ ! -f /tmp/dnflistsearch ]; then
-
-dnf list all | awk '{print $1}' | awk -F "." '{print $1}' | grep -ve 'Complementos' -e 'Complements' -e 'Paquetes' -e 'Packages' -e '@updates' -e 'updates' -e '$releasever' -e 'using' -e 'Using' | tr -d '@' | sort | sed '/^[0-9]/d' | awk ' !x[$0]++' | tee /tmp/dnflistsearch
+ if [ $architecture = x86_64 ]; then
+ dnf list all | grep -i ^$BUSCA_I | grep -ve i686 -e "==" -e '-debuginfo' -e '.src' -e ^fedora -e ^gcc | sed -e 's:.x86_64::g' | sed -e 's:.noarch::g' | tee /tmp/dnflistsearch
+ else
+ dnf list all | grep -i ^$BUSCA_I | grep -ve x86_64 -e "==" -e '-debuginfo' -e '.src' -e ^fedora -e ^gcc | sed -e 's:.i686::g' | sed -e 's:.noarch::g' | tee /tmp/dnflistsearch
+ fi
 fi
 
-cat /tmp/dnflistsearch | grep -i "$BUSCA_I" | sed '/^\s*$/d' | head -16 | tee /tmp/$BUSCA_I-tmp
+# cat /tmp/dnflistsearch | grep -i "$BUSCA_I" | sed '/^\s*$/d' | head -16 | tee /tmp/$BUSCA_I-tmp
 
 # checking results
 
-if [ $(grep -c '[a-z]' /tmp/$BUSCA_I-tmp) -gt 0 ]; then
+if [ $(grep -c '[a-z]' /tmp/dnflistsearch) -gt 0 ]; then
 echo 'found result'
 else
 killernot
@@ -1712,21 +1708,23 @@ cleansearch
 exit
  fi
 
-file="/tmp/$BUSCA_I-tmp"
+file="/tmp/dnflistsearch"
 while read -r line; do
         # display $line or do somthing with $line
-dnf repoquery --whatprovides $line --queryformat '%{name} 
-%{version}
-%{summary} 
-%{reponame}' | sed '/Using/d' | sed '/^\s*$/d' | tee /tmp/infp
 
-if [ $(grep -c '[a-z]' /tmp/infp) -gt 0 ]; then
-nam=$(cat /tmp/infp | awk 'NR == 1') 
-verc=$(cat /tmp/infp | awk 'NR == 2')
-archi=$(cat /tmp/infp | awk 'NR == 3') 
-repon=$(cat /tmp/infp | awk 'NR == 4') 
-
-lines=("${lines[@]}" "FALSE" "$nam" "$verc" "$archi" "$repon")
+if [ $(grep -c '[a-z]' /tmp/dnflistsearch) -gt 0 ]; then
+nam=$(echo $line | awk '{print $1}') 
+verc=$(echo $line | awk '{print $2}')
+resumme=$(dnf provides $nam | grep $nam | grep -v ".i686" | grep -e ".x86_64" -e ".noarch" | awk -F ':' '{print $2}' | sort | uniq -w 1 )
+#if [ $(rpm -qa $nam | grep -c $nam) -gt 0 ]; then
+if [ $(dnf list installed $nam | grep -c $nam) -gt 0 ]; then
+ava_i=INSTALLED
+else
+ava_i='NO INSTALLED'
+fi
+avai_repository=$(echo $line | awk '{print $3}' | tr -d '@')
+numb_1=""
+lines=("${lines[@]}" "FALSE" "$nam" "$verc" "$resumme" "$ava_i" "$avai_repository")
 else
 echo 'empty data'
 fi
@@ -1735,7 +1733,7 @@ done < "$file"
 
 killernot
 
-CHECK=$(yad --list --radiolist --center --title="PostInstallerF - Search Package" --text="You've searched for \n<b>$BUSCA_I</b>" --width=800 --height=500 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/searchpackage.png --image-on-top --column=In --column=Name --column=Version --column=Description --column=Repository "${lines[@]}" --button="More Info:0" --button="Close:3")
+CHECK=$(yad --list --radiolist --center --title="PostInstallerF - Search Package" --text="You've searched for \n<b>$BUSCA_I</b>" --width=800 --height=500 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/searchpackage.png --image-on-top --column="" --column=Name --column=Version --column=Info --column=Status --column=Repository "${lines[@]}" --button="More Info:0" --button="Close:3")
 
 ret=$?
 	
@@ -1743,13 +1741,28 @@ ret=$?
 
 if [[ $ret -eq 0 ]]; then	
 /usr/bin/postinstaller -n $CHECK_INST
+cleansearch
 else
+cleansearch
 exit
 fi
 
-# | End alternative mode search | #
 
+# | End FEDORA mode search | #
+
+# TODAS LAS DISTRIBUCIONES
 else
+
+BUSCA_I=$(yad --entry --center --title="Repository search." --window-icon="/usr/share/icons/acciones/topicon.png" --width=350 --text="Type in as many keywords as you want to search for." --image=/usr/share/icons/acciones/searchpackage.png --image-on-top) 
+
+if [ "$?" != 0 ]; then
+exit
+fi
+
+notify-send --hint=int:transient:1 -t 900000 "Searching $BUSCA_I
+Please wait" -i "/usr/share/icons/acciones/loadingimage2.png"
+
+
 if [ $architecture = x86_64 ]; then
 RES_BUSCA_I=$(pkcon search name $BUSCA_I | grep -e 'x86_64' -e 'noarch' | grep -ve 'i686' -e 'i586' -e 'meta' -e 'debug' | grep $BUSCA_I | uniq -c )
 else
@@ -1769,7 +1782,6 @@ else
 exit
 fi
 
-fi
 fi
 #end search global
  fi
