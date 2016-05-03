@@ -30,6 +30,7 @@ rm -rf /tmp/metadata-postinstaller/
 rm -f /tmp/dnflist
 rm -f /tmp/metadata/dirtymet
 
+
 mkdir /tmp/metadata/
 mkdir /tmp/metadata-postinstaller/
 
@@ -308,6 +309,7 @@ cp -f *.posmet $HOME/.local/share/app-install-data-postinstallerf/index/
 rm -f /tmp/met
 rm -rf /tmp/metadata-postinstaller
 rm -rf /tmp/metadata
+rm -f /tmp/dnflistsearchall
 fi
 
   fi

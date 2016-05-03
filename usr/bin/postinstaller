@@ -465,7 +465,7 @@ cleansearch() {
 rm -f /tmp/*-tmp
 rm -f /tmp/infp
 rm -f /tmp/dnflist
-rm -f /tmp/dnflistsearch
+#rm -f /tmp/dnflistsearch
 }
 
 killernot() {
@@ -1685,13 +1685,19 @@ Please wait" -i "/usr/share/icons/acciones/loadingimage2.png"
 
 cleansearch
 
-if [ ! -f /tmp/dnflistsearch ]; then
+if [ ! -f /tmp/dnflistsearchall ]; then
  if [ $architecture = x86_64 ]; then
- dnf list all | grep -i ^$BUSCA_I | grep -ve i686 -e "==" -e '-debuginfo' -e '.src' -e ^fedora -e ^gcc | sed -e 's:.x86_64::g' | sed -e 's:.noarch::g' | tee /tmp/dnflistsearch
+ dnf list all | grep -ve i686 -e "==" -e '-debuginfo' -e '.src' -e ^fedora -e ^gcc | sed -e 's:.x86_64::g' | sed -e 's:.noarch::g' | tee /tmp/dnflistsearchall
  else
- dnf list all | grep -i ^$BUSCA_I | grep -ve x86_64 -e "==" -e '-debuginfo' -e '.src' -e ^fedora -e ^gcc | sed -e 's:.i686::g' | sed -e 's:.noarch::g' | tee /tmp/dnflistsearch
+ dnf list all | grep -ve x86_64 -e "==" -e '-debuginfo' -e '.src' -e ^fedora -e ^gcc | sed -e 's:.i686::g' | sed -e 's:.noarch::g' | tee /tmp/dnflistsearchall
  fi
 fi
+
+
+
+cat /tmp/dnflistsearchall | grep -i ^$BUSCA_I | tee /tmp/dnflistsearch 
+ 
+
 
 # cat /tmp/dnflistsearch | grep -i "$BUSCA_I" | sed '/^\s*$/d' | head -16 | tee /tmp/$BUSCA_I-tmp
 
@@ -1714,8 +1720,8 @@ while read -r line; do
 
 if [ $(grep -c '[a-z]' /tmp/dnflistsearch) -gt 0 ]; then
 nam=$(echo $line | awk '{print $1}') 
-verc=$(echo $line | awk '{print $2}')
-resumme=$(dnf provides $nam | grep $nam | grep -v ".i686" | grep -e ".x86_64" -e ".noarch" | awk -F ':' '{print $2}' | sort | uniq -w 1 )
+verc=$(echo $line | awk '{print $2}' | sort | tail -1)
+resumme=$(dnf provides $nam | grep $nam | tail -2 | grep -v ".i686" | grep -e ".x86_64" -e ".noarch" | awk -F ' :' '{print $2}' | tail -1 | sed 's/$/.../')
 #if [ $(rpm -qa $nam | grep -c $nam) -gt 0 ]; then
 if [ $(dnf list installed $nam | grep -c $nam) -gt 0 ]; then
 ava_i=INSTALLED

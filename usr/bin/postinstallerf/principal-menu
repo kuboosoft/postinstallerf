@@ -99,6 +99,7 @@ fi
 rm -f /tmp/principal-menu..lck
 /usr/bin/postinstallerf/principal-menu
 elif [[ $ret -eq 1 ]]; then
+rm -f /tmp/dnflistsearchall
 	echo "Nothing to do"
 exit
 elif [[ $ret -eq 3 ]]; then

@@ -24,6 +24,7 @@ cleanoldrep() {
 rm -f /tmp/full-replist-tmp
 rm -f /tmp/enabled-replist-tmp
 rm -f /tmp/disabled-replist-tmp
+rm -f /tmp/dnflistsearchall
 }
 
 goback() {
