@@ -72,6 +72,16 @@ cleancopr
 exit
 fi
 
+filter_stupid=$(echo $BUSCA_I | printf "$BUSCA_I" | wc -m)
+if [ $filter_stupid = 1 ] || [ $filter_stupid = 2 ]; then
+killernot
+echo "None package found"
+yad --info --window-icon="/usr/share/icons/acciones/topicon.png" --title="PostInstallerF" --image="/usr/share/icons/acciones/copr.png" --image-on-top --text="Sorry
+None Package found"
+cleansearch
+exit
+fi
+
 wait ${!}
 /usr/bin/postinstallerf/notifier-ppa &
 

@@ -1685,6 +1685,16 @@ Please wait" -i "/usr/share/icons/acciones/loadingimage2.png"
 
 cleansearch
 
+filter_stupid=$(echo $BUSCA_I | printf "$BUSCA_I" | wc -m)
+if [ $filter_stupid = 1 ] || [ $filter_stupid = 2 ]; then
+killernot
+echo "None package found"
+yad --info --window-icon="/usr/share/icons/acciones/topicon.png" --title="PostInstallerF" --image="/usr/share/icons/acciones/copr.png" --image-on-top --text="Sorry
+None Package found"
+cleansearch
+exit
+fi
+
 if [ ! -f /tmp/dnflistsearchall ]; then
  if [ $architecture = x86_64 ]; then
  dnf list all | grep -ve i686 -e "==" -e '-debuginfo' -e '.src' -e ^fedora -e ^gcc | sed -e 's:.x86_64::g' | sed -e 's:.noarch::g' | tee /tmp/dnflistsearchall
