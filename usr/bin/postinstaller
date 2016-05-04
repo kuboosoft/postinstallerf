@@ -1704,12 +1704,24 @@ if [ ! -f /tmp/dnflistsearchall ]; then
 fi
 
 
+# FILTER GENERIC USES
+JS=gstreamer
+FM=ffmpeg
+flashvar=freshplayer
+pepper=chromium-pepper-flash
+h24=x264
+if [ $( echo $BUSCA_I | grep -ci codecs) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci video) -gt 0 ]; then
+cat /tmp/dnflistsearchall | grep -ie ^vlc -e ^$JS -e $FM -e $flashvar -e $pepper -e $h24 -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch 
+elif [ $( echo $BUSCA_I | grep -ci audio) -gt 0 ]; then
+cat /tmp/dnflistsearchall | grep -ie ^audacity -e ^clementine -e ^yarock -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch
+elif [ $( echo $BUSCA_I | grep -ci flash) -gt 0 ]; then
+cat /tmp/dnflistsearchall | grep -ie ^$flashvar -e $pepper -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch 
+else
+cat /tmp/dnflistsearchall | grep -i ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch 
+ fi
+# END FILTER
 
-cat /tmp/dnflistsearchall | grep -i ^$BUSCA_I | tee /tmp/dnflistsearch 
- 
 
-
-# cat /tmp/dnflistsearch | grep -i "$BUSCA_I" | sed '/^\s*$/d' | head -16 | tee /tmp/$BUSCA_I-tmp
 
 # checking results
 
@@ -1731,16 +1743,15 @@ while read -r line; do
 if [ $(grep -c '[a-z]' /tmp/dnflistsearch) -gt 0 ]; then
 nam=$(echo $line | awk '{print $1}') 
 verc=$(echo $line | awk '{print $2}' | sort | tail -1)
-resumme=$(dnf provides $nam | grep $nam | tail -2 | grep -v ".i686" | grep -e ".x86_64" -e ".noarch" | awk -F ' :' '{print $2}' | tail -1 | sed 's/$/.../')
-#if [ $(rpm -qa $nam | grep -c $nam) -gt 0 ]; then
-if [ $(dnf list installed $nam | grep -c $nam) -gt 0 ]; then
-ava_i=INSTALLED
-else
-ava_i='NO INSTALLED'
+if [ -f "/usr/share/app-install-data-postinstallerf/index/$nam.posmet" ]; then
+cutsum=$( cat /usr/share/app-install-data-postinstallerf/index/$nam.posmet | grep 'Comment=' | awk -F'large">' '{print $2}' | awk -F'<' '{print $1}') 
+elif [ -f "$HOME/.local/share/app-install-data-postinstallerf/index/$nam.posmet" ]; then
+cutsum=$( cat $HOME/.local/share/app-install-data-postinstallerf/index/$nam.posmet | grep 'Comment=' | awk -F'large">' '{print $2}' | awk -F'<' '{print $1}')
 fi
+defcut='without information'
+resumme="${cutsum:-$defcut}"
 avai_repository=$(echo $line | awk '{print $3}' | tr -d '@')
-numb_1=""
-lines=("${lines[@]}" "FALSE" "$nam" "$verc" "$resumme" "$ava_i" "$avai_repository")
+lines=("${lines[@]}" "FALSE" "$nam" "$verc" "$resumme" "$avai_repository")
 else
 echo 'empty data'
 fi
@@ -1749,7 +1760,7 @@ done < "$file"
 
 killernot
 
-CHECK=$(yad --list --radiolist --center --title="PostInstallerF - Search Package" --text="You've searched for \n<b>$BUSCA_I</b>" --width=800 --height=500 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/searchpackage.png --image-on-top --column="" --column=Name --column=Version --column=Info --column=Status --column=Repository "${lines[@]}" --button="More Info:0" --button="Close:3")
+CHECK=$(yad --list --radiolist --center --title="PostInstallerF - Search Package" --text="You've searched for \n<b>$BUSCA_I</b>" --width=800 --height=500 --window-icon="/usr/share/icons/acciones/topicon.png" --image=/usr/share/icons/acciones/searchpackage.png --image-on-top --column="" --column=Name --column=Version --column=Info --column=Repository "${lines[@]}" --button="More Info:0" --button="Close:3")
 
 ret=$?
 	
