@@ -86,9 +86,10 @@ wait ${!}
 /usr/bin/postinstallerf/notifier-ppa &
 
 # corprep=$(curl -k https://copr.fedorainfracloud.org/coprs/fulltext/?fulltext=$BUSCA_I | grep "/coprs/" | grep -i $BUSCA_I >> /tmp/copr-url-tmp)
-corprep=$(curl -k https://copr.fedorainfracloud.org/coprs/fulltext/?fulltext=$BUSCA_I | grep "/coprs/" | grep -i $BUSCA_I | sed -e 's:<a href="::g' | sed -r 's/\s+//g' >> /tmp/copr-url-tmp)
+corprep=$(curl -k https://copr.fedorainfracloud.org/coprs/fulltext/?fulltext=$BUSCA_I | grep "/coprs/" | grep -i $BUSCA_I | sed -e 's:<a href="::g' | awk '{print $1}' >> /tmp/copr-url-tmp)
 
 sed -i 's/ //g' /tmp/copr-url-tmp
+sed -i 's/"//g' /tmp/copr-url-tmp
 
 # curl -k https://copr.fedoraproject.org$corprep
 
