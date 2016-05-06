@@ -1713,9 +1713,15 @@ h24=x264
 if [ $( echo $BUSCA_I | grep -ci codecs) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci video) -gt 0 ]; then
 cat /tmp/dnflistsearchall | grep -ie ^vlc -e ^$JS -e $FM -e $flashvar -e $pepper -e $h24 -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch 
 elif [ $( echo $BUSCA_I | grep -ci audio) -gt 0 ]; then
-cat /tmp/dnflistsearchall | grep -ie ^audacity -e ^clementine -e ^yarock -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch
+cat /tmp/dnflistsearchall | grep -ie ^audacity -e ^clementine -e ^yarock -e ^sound-juicer -e ^deadbeef -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch
 elif [ $( echo $BUSCA_I | grep -ci flash) -gt 0 ]; then
 cat /tmp/dnflistsearchall | grep -ie ^$flashvar -e $pepper -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch 
+elif [ $( echo $BUSCA_I | grep -ci transcoder) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci converter) -gt 0 ]; then
+cat /tmp/dnflistsearchall | grep -ie ^transmageddon -e ^winff -e ^handbrake -e ^mvc -e ^sound-juicer -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch 
+elif [ $( echo $BUSCA_I | grep -ci internet) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci web) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci browser) -gt 0 ]; then
+cat /tmp/dnflistsearchall | grep -ie ^chromium -e ^opera -e ^midori -e ^firefox -e ^konqueror -e ^vivaldi -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch
+elif [ $( echo $BUSCA_I | grep -ci office) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci word) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci excel) -gt 0 ]; then
+cat /tmp/dnflistsearchall | grep -ie ^libreoffice -e ^calligra -e ^wps-office -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch
 else
 cat /tmp/dnflistsearchall | grep -i ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch 
  fi
