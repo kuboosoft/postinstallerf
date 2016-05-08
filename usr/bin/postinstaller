@@ -1710,7 +1710,7 @@ FM=ffmpeg
 flashvar=freshplayer
 pepper=chromium-pepper-flash
 h24=x264
-if [ $( echo $BUSCA_I | grep -ci codecs) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci video) -gt 0 ]; then
+if [ $( echo $BUSCA_I | grep -ci codecs) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci video) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci movie) -gt 0 ]; then
 cat /tmp/dnflistsearchall | grep -ie ^vlc -e ^parole -e ^kodi -e ^$JS -e $FM -e $flashvar -e $pepper -e $h24 -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch 
 elif [ $( echo $BUSCA_I | grep -ci audio) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci musica) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci música) -gt 0 ]; then
 cat /tmp/dnflistsearchall | grep -ie ^audacity -e ^mixxx -e ^clementine -e ^yarock -e ^amarok -e ^sound-juicer -e ^deadbeef -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch
@@ -1724,6 +1724,10 @@ elif [ $( echo $BUSCA_I | grep -ci office) -gt 0 ] || [ $( echo $BUSCA_I | grep 
 cat /tmp/dnflistsearchall | grep -ie ^libreoffice -e ^calligra -e ^wps-office -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch
 elif [ $( echo $BUSCA_I | grep -ci torrent) -gt 0 ]; then
 cat /tmp/dnflistsearchall | grep -ie ^transmission -e ^frostwire -e ^deluge -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch
+elif [ $( echo $BUSCA_I | grep -ci burn) -gt 0 ]; then
+cat /tmp/dnflistsearchall | grep -ie ^xfburn -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch
+elif [ $( echo $BUSCA_I | grep -ci diseño) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci dibujo) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci paint) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci design) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci photoshop) -gt 0 ]; then
+cat /tmp/dnflistsearchall | grep -ie ^gimp -e ^darktable -e ^inkscape -e ^calligra-krita -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch
 else
 cat /tmp/dnflistsearchall | grep -i ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch 
  fi
