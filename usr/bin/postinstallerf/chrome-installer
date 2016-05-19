@@ -19,7 +19,7 @@ enabled=1
 gpgcheck=1
 gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
 EOF 
-
+chmod a+x /etc/yum.repos.d/google-chrome.repo
 	postinstaller -r
 	postinstaller -i google-chrome-stable 
 
