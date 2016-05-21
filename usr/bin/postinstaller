@@ -83,6 +83,7 @@ ang='pkcon -p -y install-local'
 fi
  fi
 task=Localinstall
+tarea=Install
    ;;
   g)
    echo received -g with $OPTARG
@@ -256,15 +257,19 @@ if [ "$dist" = Debian ] || [ "$dist" = Ubuntu ]; then
 globalnoti=$(dpkg-deb -I $OPTARG | grep 'Package' | awk '{print $2}')
 
 elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
-globalnoti=$(rpm -qip $OPTARG | grep 'Name' | awk '{print $3}')
-else
+# refinelocal=$(rpm -qip $OPTARG | grep 'Name' | awk '{print $3}')
+# if [ $(echo $refinelocal | grep -c $refinelocal) -gt 0 ]; then
+# globalnoti=$refinelocal
+# else
 cutting=$(basename $OPTARG)
 namecut="${cutting%%-[0-9]*}"
 globalnoti=$namecut
+#fi
+# other distro
 fi
 else
 globalnoti=$OPTARG
-  fi
+    fi
 
 if [ "$task" = Update ]; then
     body="Your system is updated now"
@@ -272,51 +277,39 @@ elif [ "$task" = Remove-old-kernel ]; then
     body="Old kernel erased"
 elif [ "$task" = Install-group ]; then
     body="Group $OPTARG installed"
-elif [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Localinstall ] || [ "$task" = force ] || [ "$task" = copr-install ]; then
+fi
+
+
+if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = force ] || [ "$task" = Localinstall ] || [ "$task" = copr-install ]; then
 
 if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
-
-if [ $(rpm -qa $globalnoti | grep -c $globalnoti) -gt 0 ]; then
+ if [ $(rpm -qa $globalnoti | grep -c $globalnoti) -gt 0 ]; then
     body="$globalnoti is installed"
-else
-if [ "$task" = Uninstalling ]; then
-    body="$globalnoti is not installed now"
-else
+ else
     body="Sorry $globalnoti is not installed"
-fi
-  fi
+ fi
 cleanlock
-     fi
+
  # # #
 
 
-if [ "$dist" = Debian ] || [ "$dist" = Ubuntu ]; then
-
+elif [ "$dist" = Debian ] || [ "$dist" = Ubuntu ]; then
 if [ $(dpkg-query -Wf '${db:Status-abbrev}' $globalnoti) = ii ]; then
 body="$globalnoti is installed"
 else
-if [ "$task" = Uninstalling ]; then
-    body="$globalnoti is not installed now"
-else
     body="Sorry $globalnoti is not installed"
-fi
   fi
 cleanlock
-    fi
+
 
  # # #
 
 
-if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
-
+elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 if (pacman -Q $globalnoti >/dev/null) ; then 
 body="$globalnoti is installed"
 else
-if [ "$task" = Uninstalling ]; then
-    body="$globalnoti is not installed now"
-else
-    body="Sorry $globalnoti is not installed"
-fi
+body="Sorry $globalnoti is not installed"
 fi
 cleanlock
   fi
@@ -325,9 +318,9 @@ cleanlock
 fi
 
 if [ "$task" = Update ]; then
-	/usr/bin/paplay /usr/bin/postinstallerf/update-complete.ogg &
+/usr/bin/paplay /usr/bin/postinstallerf/update-complete.ogg &
 else
-	/usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg &
+/usr/bin/paplay /usr/bin/postinstallerf/sound21.ogg &
 fi
 
     # Usage: notify "title" "description" [options to pass to send-notify"
@@ -377,7 +370,7 @@ tee -a /tmp/summary-group | stdbuf -oL sed -ne '/Installed/ s/^/# /p' -e '/Insta
 	--no-buttons
 
 }
-
+# end install group
 
 ubugres() {
 
@@ -1330,7 +1323,7 @@ fi
 # MENU 4 #
 # If only need install local
 
-
+# MANJARO/ARCH LINUX INSTALL LOCAL
 if [ "$task" = Localinstall ]; then
 
 # fullname=$(basename $OPTARG)
@@ -1382,7 +1375,7 @@ else
 cat /dev/null > /tmp/packer-local-$cuttingname
 fi
 
-#UBUNTU
+# UBUNTU INSTALL LOCAL
 elif [ "$dist" = Ubuntu ] ; then
 
 pkexec $ang $OPTARG | tee /tmp/local-url-$cuttingname | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
@@ -1432,7 +1425,7 @@ cat /dev/null > /tmp/local-url-$cuttingname
 fi
 
 
-# OPENSUSE
+# OPENSUSE INSTALL LOCAL
 
 elif [ -f /etc/SuSE-release ]; then
 $ang $OPTARG | tee /tmp/local-url-$cuttingname | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
@@ -1481,6 +1474,68 @@ else
 cat /dev/null > /tmp/local-url-$cuttingname
 fi
 
+
+# FEDORA INSTALL LOCAL
+elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
+yad --title="PostInstallerF - $task $OPTARG" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="$screenshot" --image-on-top \
+--width=800 --height=500 \
+--text="$fullname
+$resume
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+$pvar 
+
+License: $lic 
+
+$Url"  \
+--button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [ $ret -eq 0 ]; then 
+$ang $OPTARG | tee /tmp/local-url-$cuttingname | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+	--title="PostInstallerF - $task $OPTARG" \
+	--center \
+	--image="$screenshot" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--width=800 --height=500 \
+	--text="$fullname 
+$resume
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+$pvar 
+
+License: $lic 
+
+$Url"  \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+	--no-buttons
+
+fnotify
+
+elif [ $ret -eq 1 ]; then
+	echo "Nothing to do"
+
+# Clean capture
+if [ "$(id -u)" -eq 0 ]; then
+rm -rf /tmp/.pictures/
+else
+rm -f /tmp/.pictures/$OPTARG.png
+fi
+
+# Clean package info
+if [ "$(id -u)" -eq 0 ]; then
+rm -f *.$OPTARG.lck
+rm -f /tmp/local-url-$cuttingname
+rm -f /tmp/localinstall..lck
+else
+cat /dev/null > /tmp/local-url-$cuttingname
+fi
+   fi
+
 # TODAS LAS DISTRIBUCIONES #
 else
 
@@ -1502,43 +1557,6 @@ $Url"  \
 	--pulsate   \
 	--auto-close  \
 	--no-buttons
-
-wait ${!}
-
-# BUG https://bugzilla.redhat.com/show_bug.cgi?id=1187959
-
-if [ $(cat /tmp/local-url-$cuttingname | grep -c 'All\ mirrors\ were\ tried') -gt 0 ] || [ $(cat /tmp/local-url-$cuttingname | grep -c 'Failed\ to\ create\ /var/cache/PackageKit/metadata/updates/packages/') -gt 0 ]; then
-
-notify-send --hint=int:transient:1 "Sorry, something strange happened!
-Changed to force mode 
-Please wait..." -i "/usr/share/icons/acciones/wrong.png"
-
-if [ "$task" = Localinstall ]; then
-forcemode='pkexec dnf -y install'
-fi
-
-echo > /tmp/local-url-$cuttingname
-
-$forcemode $OPTARG | tee /tmp/local-url-$cuttingname | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
-	--title="PostInstallerF - $task $OPTARG" \
-	--center \
-	--image="$screenshot" --image-on-top \
-	--window-icon="/usr/share/icons/acciones/topicon.png" \
-	--width=800 --height=500 \
-	--text="$fullname 
-$resume
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-$pvar 
-
-License: $lic 
-
-$Url"  \
-	--justify=fill \
-	--pulsate   \
-	--auto-close  \
-	--no-buttons
-
-fi
 
 
 Result=$(grep -e 'Resultados:' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'freedesktop.PackageKit:' -e 'Actualizado' -e 'Updated' -e '(local)' /tmp/local-url-$cuttingname | tail -10) 
@@ -1568,7 +1586,7 @@ fi
    
 # End options basics
 fi
-
+exit
  fi
 
 
@@ -1703,7 +1721,7 @@ if [ ! -f /tmp/dnflistsearchall ]; then
  fi
 fi
 
-
+#----------------------------------------------------------------------------------------------------------------------------------------------------
 # FILTER GENERIC USES
 JS=gstreamer
 FM=ffmpeg
@@ -1728,11 +1746,13 @@ elif [ $( echo $BUSCA_I | grep -ci burn) -gt 0 ]; then
 cat /tmp/dnflistsearchall | grep -ie ^xfburn -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch
 elif [ $( echo $BUSCA_I | grep -ci diseño) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci dibujo) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci paint) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci design) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci photoshop) -gt 0 ]; then
 cat /tmp/dnflistsearchall | grep -ie ^gimp -e ^darktable -e ^inkscape -e ^calligra-krita -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch
+elif [ $( echo $BUSCA_I | grep -ci illustrator) -gt 0 ] || [ $( echo $BUSCA_I | grep -ci CorelDRAW) -gt 0 ]; then
+cat /tmp/dnflistsearchall | grep -ie ^inkscape -e ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch
 else
 cat /tmp/dnflistsearchall | grep -i ^$BUSCA_I | grep -ve devel -e doc -e docs  | tee /tmp/dnflistsearch 
  fi
 # END FILTER
-
+#----------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 # checking results
