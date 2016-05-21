@@ -74,13 +74,10 @@ elif [ "$dist" = Ubuntu ] ; then
 ang='dpkg -i'
 elif [ -f /etc/SuSE-release ]; then
 ang='pkcon -p install-local' 
-else
-if [ $(pkcon backend-details | grep -c 'GDBus.Error:org.freedesktop.DBus.Error.TimedOut') -gt 0 ];
-then
+elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
 ang='pkexec dnf -y install'
 else
 ang='pkcon -p -y install-local' 
-fi
  fi
 task=Localinstall
 tarea=Install
