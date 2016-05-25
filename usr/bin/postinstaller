@@ -491,37 +491,37 @@ Sat=6
 Sun=7
 
 if [ ""$nuday = $Fri"" ] && [ ""$time = $setime"" ]; then
-mcache
+/usr/bin/postinstallerf/mcache
 elif [ ""$nuday = $Fri"" ] && [ ""$time2 = $setimea"" ]; then
-mcache
+/usr/bin/postinstallerf/mcache
 elif [ ""$nuday = $Fri"" ] && [ ""$time2 = $setimeb"" ]; then
-mcache
+/usr/bin/postinstallerf/mcache
 elif [ ""$nuday = $Fri"" ] && [ ""$time = $setimec"" ]; then
-mcache
+/usr/bin/postinstallerf/mcache
 elif [ ""$nuday = $Fri"" ] && [ ""$time = $setimed"" ]; then
-mcache
+/usr/bin/postinstallerf/mcache
 
 elif [ ""$nuday = $Wed"" ] && [ ""$time = $setime"" ]; then
-mcache
+/usr/bin/postinstallerf/mcache
 elif [ ""$nuday = $Wed"" ] && [ ""$time2 = $setimea"" ]; then
-mcache
+/usr/bin/postinstallerf/mcache
 elif [ ""$nuday = $Wed"" ] && [ ""$time2 = $setimeb"" ]; then
-mcache
+/usr/bin/postinstallerf/mcache
 elif [ ""$nuday = $Wed"" ] && [ ""$time = $setimec"" ]; then
-mcache
+/usr/bin/postinstallerf/mcache
 elif [ ""$nuday = $Wed"" ] && [ ""$time = $setimed"" ]; then
-mcache
+/usr/bin/postinstallerf/mcache
 
 elif [ ""$nuday = $Mon"" ] && [ ""$time = $setime"" ]; then
-mcache
+/usr/bin/postinstallerf/mcache
 elif [ ""$nuday = $Mon"" ] && [ ""$time2 = $setimea"" ]; then
-mcache
+/usr/bin/postinstallerf/mcache
 elif [ ""$nuday = $Mon"" ] && [ ""$time2 = $setimeb"" ]; then
-mcache
+/usr/bin/postinstallerf/mcache
 elif [ ""$nuday = $Mon"" ] && [ ""$time = $setimec"" ]; then
-mcache
+/usr/bin/postinstallerf/mcache
 elif [ ""$nuday = $Mon"" ] && [ ""$time = $setimed"" ]; then
-mcache
+/usr/bin/postinstallerf/mcache
 fi
 
 }
@@ -543,7 +543,7 @@ fi
 if [ "$task" = cclean ]; then
 if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
 dnf clean all
-/home/makerpm/postinstallerf/postinstallerf.git/usr/bin/postinstallerf/mcache
+/usr/bin/postinstallerf/mcache
 else
 pkcon refresh force | ubugres
 fi
@@ -554,7 +554,7 @@ fi
 # If only need update cache and metadata (fast mode)
 if [ "$task" = ccleanfast ]; then
 if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
-mcache
+/usr/bin/postinstallerf/mcache
 else
 pkcon refresh | ubugres
 fi 
