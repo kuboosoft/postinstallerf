@@ -1210,17 +1210,6 @@ fi
 # MANJARO/ARCH LINUX INSTALL LOCAL
 if [ "$task" = Localinstall ]; then
 
-if [ $(echo $OPTARG | grep -ie ".deb" -e ".rpm" -e ".pkg.tar.xz") -gt 0 ]; then
-echo 'compatible package format'
-else
-echo 'incompatible package format'
-fnotify
-exit
-fi
-
-# fullname=$(basename $OPTARG)
-# cuttingname="${fullname%%-[0-9]*}"
-
 if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 
 $ang $OPTARG 2>&1 | tee -a /tmp/packer-local-$cuttingname | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' -e '/\.\.\.$/ s/^/# /p' | yad --progress \
