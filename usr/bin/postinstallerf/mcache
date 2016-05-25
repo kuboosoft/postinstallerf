@@ -1,0 +1,15 @@
+#!/bin/bash
+
+dnf makecache -vvv 2>&1 /tmp/summary-group | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+	--title="PostInstallerF - Updating Repositories" \
+	--center \
+	--image="/usr/share/icons/acciones/uppa.png" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--text='Please wait..
+
+* This could take a long time.' \
+	--width=500 --height=200 \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+	--no-buttons
