@@ -20,7 +20,7 @@
 
 
 
-while getopts ":i:e:n:l:j:k:g:ocpqrsuhabfdm" option;
+while getopts ":i:e:n:l:j:g:ocpqrsuhabfdm" option;
 do
  case $option in
   i)
@@ -38,15 +38,6 @@ else
 ang='pkcon -p -y install'
  fi
 task=Installing 
-   ;;
-  k)
-   echo received -k with $OPTARG
-if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
-ang='pkexec dnf -y install'
-else
-echo 'OS no compatible'
-fi
-task=force 
    ;;
   e)
    echo received -e with $OPTARG
@@ -187,22 +178,12 @@ task=plistm
   q)
    echo received -q 
 . /usr/bin/postinstallerf/pid
-if [ $(pkcon backend-details | grep -c 'GDBus.Error:org.freedesktop.DBus.Error.TimedOut') -gt 0 ]; then
-echo 'sorry packagekit is broken, and can not refresh'
-exit
-else
 task=ccleanfast
-fi
    ;;
   r)
    echo received -r 
 . /usr/bin/postinstallerf/pid
-if [ $(pkcon backend-details | grep -c 'GDBus.Error:org.freedesktop.DBus.Error.TimedOut') -gt 0 ]; then
-echo 'sorry packagekit is broken, and can not refresh'
-exit
-else
 task=cclean
-fi
    ;;
   :)
    echo "option -$OPTARG needs an argument"
@@ -277,7 +258,7 @@ elif [ "$task" = Install-group ]; then
 fi
 
 
-if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = force ] || [ "$task" = Localinstall ] || [ "$task" = copr-install ]; then
+if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Localinstall ] || [ "$task" = copr-install ]; then
 
 if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
  if [ $(rpm -qa $globalnoti | grep -c $globalnoti) -gt 0 ]; then
@@ -369,9 +350,30 @@ tee -a /tmp/summary-group | stdbuf -oL sed -ne '/Installed/ s/^/# /p' -e '/Insta
 }
 # end install group
 
+
+
+
+
+mcache() {
+dnf makecache -vvv 2>&1 /tmp/summary-group | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+	--title="PostInstallerF - Updating Repositories" \
+	--center \
+	--image="/usr/share/icons/acciones/uppa.png" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--text='Please wait..
+
+* This could take a long time.' \
+	--width=500 --height=200 \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+	--no-buttons
+}
+
+
 ubugres() {
 
-tee -a /tmp/summary-group | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 	--title="PostInstallerF - Updating Repositories" \
 	--center \
 	--image="/usr/share/icons/acciones/uppa.png" --image-on-top \
@@ -509,37 +511,37 @@ Sat=6
 Sun=7
 
 if [ ""$nuday = $Fri"" ] && [ ""$time = $setime"" ]; then
-pkcon refresh force | ubugres
+mcache
 elif [ ""$nuday = $Fri"" ] && [ ""$time2 = $setimea"" ]; then
-pkcon refresh force | ubugres
+mcache
 elif [ ""$nuday = $Fri"" ] && [ ""$time2 = $setimeb"" ]; then
-pkcon refresh force | ubugres
+mcache
 elif [ ""$nuday = $Fri"" ] && [ ""$time = $setimec"" ]; then
-pkcon refresh force | ubugres
+mcache
 elif [ ""$nuday = $Fri"" ] && [ ""$time = $setimed"" ]; then
-pkcon refresh force | ubugres
+mcache
 
 elif [ ""$nuday = $Wed"" ] && [ ""$time = $setime"" ]; then
-pkcon refresh force | ubugres
+mcache
 elif [ ""$nuday = $Wed"" ] && [ ""$time2 = $setimea"" ]; then
-pkcon refresh force | ubugres
+mcache
 elif [ ""$nuday = $Wed"" ] && [ ""$time2 = $setimeb"" ]; then
-pkcon refresh force | ubugres
+mcache
 elif [ ""$nuday = $Wed"" ] && [ ""$time = $setimec"" ]; then
-pkcon refresh force | ubugres
+mcache
 elif [ ""$nuday = $Wed"" ] && [ ""$time = $setimed"" ]; then
-pkcon refresh force | ubugres
+mcache
 
 elif [ ""$nuday = $Mon"" ] && [ ""$time = $setime"" ]; then
-pkcon refresh force | ubugres
+mcache
 elif [ ""$nuday = $Mon"" ] && [ ""$time2 = $setimea"" ]; then
-pkcon refresh force | ubugres
+mcache
 elif [ ""$nuday = $Mon"" ] && [ ""$time2 = $setimeb"" ]; then
-pkcon refresh force | ubugres
+mcache
 elif [ ""$nuday = $Mon"" ] && [ ""$time = $setimec"" ]; then
-pkcon refresh force | ubugres
+mcache
 elif [ ""$nuday = $Mon"" ] && [ ""$time = $setimed"" ]; then
-pkcon refresh force | ubugres
+mcache
 fi
 
 }
@@ -556,17 +558,26 @@ fi
 }
 
 
-# If only need update cache and metadata (force mode)
+# If only need update cache and metadata 
 
 if [ "$task" = cclean ]; then
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
+dnf clean all
+mcache
+else
 pkcon refresh force | ubugres
+fi
 /usr/bin/postinstallerf/generate-metadata &
 fi
 
 
 # If only need update cache and metadata (fast mode)
 if [ "$task" = ccleanfast ]; then
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
+mcache
+else
 pkcon refresh | ubugres
+fi 
 /usr/bin/postinstallerf/generate-metadata &
 fi
 
@@ -615,7 +626,7 @@ fi
 
 # Init check if task isn't equal to install or remove, exlude update. Conditional for open the metadata...
 
-if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Information ] || [ "$task" = Localinstall ] || [ "$task" = force ]; then
+if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Information ] || [ "$task" = Localinstall ]; then
 #
 if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 fullname=$(basename $OPTARG | sed 's/-git//g' | sed 's/-bzr//g' | sed 's/-bin//g' | sed 's/-svn//g' | sed 's/-gtk2//g' | sed 's/-qt//g')
@@ -1170,44 +1181,6 @@ $Url"  \
 
 wait ${!}
 
-# BUG https://bugzilla.redhat.com/show_bug.cgi?id=1187959
-if [ $(cat /tmp/packagekit-url-$OPTARG | grep -c 'All\ mirrors\ were\ tried') -gt 0 ] || [ $(cat /tmp/packagekit-url-$OPTARG | grep -c 'Failed\ to\ create\ /var/cache/PackageKit/metadata/updates/packages/') -gt 0 ] || [ $(cat /tmp/packagekit-url-$OPTARG | grep -c 'Paquete\ no\ encontrado:') -gt 0 ] || [ $(cat /tmp/packagekit-url-$OPTARG | grep -c 'Package\ not\ found') -gt 0 ]; then
-
-notify-send --hint=int:transient:1 "Sorry, something strange happened!
-Changed to force mode 
-Please wait..." -i "/usr/share/icons/acciones/wrong.png"
-
-if [ "$task" = Installing ]; then 
-forcemode='pkexec dnf -y install'
-elif [ "$task" = Uninstalling ]; then
-forcemode='pkexec dnf -y remove'
-fi
-
-echo > /tmp/packagekit-url-$OPTARG
-$forcemode $OPTARG | tee /tmp/packagekit-url-$OPTARG | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
-	--title="PostInstallerF - $task $OPTARG" \
-	--center \
-	--image="$screenshot" --image-on-top \
-	--window-icon="/usr/share/icons/acciones/topicon.png" \
-	--width=800 --height=500 \
-	--text="$names 
-$resume
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-$pvar 
-
-License: $lic 
-
-$Url"  \
-	--justify=fill \
-	--pulsate   \
-	--auto-close  \
-	--no-buttons
-
-fi
-
-wait ${!}
-
-
 if [ $(rpm -qa $OPTARG | grep -c $OPTARG) -gt 0 ]; then
     echo "$OPTARG is present"
 checking='is' 
@@ -1251,77 +1224,19 @@ fi
  fi
 
 
-# MENU 3 #
-# If only need install in force mode
-
-if [ "$task" = force ]; then
-echo > /tmp/packagekit-url-$OPTARG
-$ang $OPTARG | tee /tmp/packagekit-url-$OPTARG | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
-	--title="PostInstallerF - $task $OPTARG" \
-	--center \
-	--image="$screenshot" --image-on-top \
-	--window-icon="/usr/share/icons/acciones/topicon.png" \
-	--width=800 --height=500 \
-	--text="$names 
-$resume
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-$pvar 
-
-License: $lic 
-
-$Url"  \
-	--justify=fill \
-	--pulsate   \
-	--auto-close  \
-	--no-buttons
-
-
-wait ${!}
-
-if [ $(rpm -qa $OPTARG | grep -c $OPTARG) -gt 0 ]; then
-    echo "$OPTARG is present"
-checking='is' 
-else
-    echo "none $OPTARG is present"
-checking='is not' 
-fi
-
-
-Result=$(grep -e 'Resultados:' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'installed' -e 'status' -e 'erased' -e 'freedesktop.PackageKit:' /tmp/packagekit-url-$OPTARG | tail -10) 
-
-yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
-
-$OPTARG $checking installed now
-Done" --width=350 --height=350 --timeout=5
-
-
-fnotify
-
-# Clean capture
-if [ "$(id -u)" -eq 0 ]; then
-rm -rf /tmp/.pictures/
-else
-rm -f /tmp/.pictures/$OPTARG.png
-fi
-
-# Clean package info
-
-if [ "$(id -u)" -eq 0 ]; then
-rm -f /tmp/packagekit-url-$OPTARG
-rm -rf /tmp/.pictures/
-rm -f /tmp/postinstaller.$OPTARG.lck
-else
-cat /dev/null > /tmp/packagekit-url-$OPTARG
-fi
-
-fi
-
-
 # MENU 4 #
 # If only need install local
 
 # MANJARO/ARCH LINUX INSTALL LOCAL
 if [ "$task" = Localinstall ]; then
+
+if [ $(echo $OPTARG | grep -ie ".deb" -e ".rpm" -e ".pkg.tar.xz") -gt 0 ]; then
+echo 'compatible package format'
+else
+echo 'incompatible package format'
+fnotify
+exit
+fi
 
 # fullname=$(basename $OPTARG)
 # cuttingname="${fullname%%-[0-9]*}"
@@ -1855,13 +1770,9 @@ while IFS= read -r line; do
         # display $line or do somthing with $line
 	if [ $(rpm -qa $line | grep -c $line) -gt 0 ] ; then
 echo "$line Installed"
-elif [ $(grep -c 'UnabletosendmessagetoPackageKit' /tmp/group-install) -gt 0 ] ; then
-echo 'exist problems in packagekit'
-exit
 else
 echo "Installing $line"
 postinstaller -i $line
-echo "$line installed"
 fi
 done <"$file" | groupgress
 
@@ -2089,36 +2000,6 @@ $ang | tee /tmp/update-url-tmp | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 wait ${!}
 
 cleanup
-
-# BUG https://bugzilla.redhat.com/show_bug.cgi?id=1187959
-#if [ $(cat /tmp/update-url-tmp | grep -c 'All\ mirrors\ were\ tried') -gt 0 ] || [ $(cat /tmp/update-url-tmp | grep -c 'Failed\ to\ create\ /var/cache/PackageKit/metadata/updates/packages/') -gt 0 ] || [ $(cat /tmp/update-url-tmp | grep -c 'client\ did\ not\ authorize\ action') -gt 0 ]; then
-
-#notify-send --hint=int:transient:1 "Sorry, something strange happened!
-#Changed to force mode 
-#Please wait..." -i "/usr/share/icons/acciones/wrong.png"
-
-#if [ "$task" = Update ]; then
-#forcemode='pkexec dnf -y update'
-#fi
-
-#echo > /tmp/update-url-tmp
-
-#$forcemode | tee /tmp/update-url-tmp | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
-	--title="PostInstallerF - $task" \
-	--center \
-	--image="/usr/share/icons/acciones/update.png" --image-on-top \
-	--window-icon="/usr/share/icons/acciones/topicon.png" \
-	--width=800 --height=500 \
-	--text='<span size="xx-large">Updating, please wait...</span>'  \
-	--justify=fill \
-	--pulsate   \
-	--auto-close  \
-	--no-buttons
-
-
-#fi
-
-#wait ${!}
 
 Result=$(grep -e 'Resultados:' -e '(updates)' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'updated' -e 'Actualizado' -e 'paquetes' -e 'Updated' -e 'freedesktop.PackageKit:' -e 'actualizarse' -e 'operación' -e 'operation' /tmp/update-url-tmp | tail -10) 
 

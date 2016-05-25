@@ -30,6 +30,27 @@ postinstaller -r
 echo $(date +"%m-%d-%y")  > $HOME/.local/share/firstart_postinstallerf
 fi
 
+if [ -f /usr/bin/thunar ] && [ $(cat $HOME/.config/Thunar/uca.xml | grep -c postinstaller) -gt 0 ]; then
+echo 'Thunar integration enabled'
+else
+sed -i 's|</actions>||g' $HOME/.config/Thunar/uca.xml
+echo '<action>
+	<icon>Postinstaller1</icon>
+	<name>open with postinstallerf</name>
+	<unique-id>1463971668116875-2</unique-id>
+	<command>postinstaller -l %f</command>
+	<description>Install local package</description>
+	<patterns>*.rpm;*.deb;*.pkg.tar.xz</patterns>
+	<other-files/>
+</action>
+</actions>' >> $HOME/.config/Thunar/uca.xml
+fi
+
+if [ -f /usr/bin/nautilus ] && [ ! -f $HOME/.local/share/nautilus/scripts/open\ with\ postinstallerf ]; then
+echo '#!/bin/bash
+/usr/bin/postinstaller -l $1' > $HOME/.local/share/nautilus/scripts/open\ with\ postinstallerf
+fi
+
     # Local Progress
     localprogress='/usr/bin/postinstallerf/local-pro'
 
