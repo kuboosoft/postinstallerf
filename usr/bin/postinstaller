@@ -255,6 +255,10 @@ elif [ "$task" = Remove-old-kernel ]; then
     body="Old kernel erased"
 elif [ "$task" = Install-group ]; then
     body="Group $OPTARG installed"
+elif [ "$task" = cclean ]; then
+    body="Done - Metadata cache created"
+elif [ "$task" = ccleanfast ]; then
+    body="Done - Metadata cache created"
 fi
 
 
