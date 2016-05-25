@@ -6,13 +6,24 @@ else
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
 fi
 
+architec=$(uname -m)
+
+
+
 cleanup() {
 if [ -f /tmp/availableu ]; then
 cat /dev/null > /tmp/availableu
 rm -f /tmp/availableu
-elif [ -f /tmp/availableup ]; then
+fi
+
+if [ -f /tmp/availableup ]; then
 cat /dev/null > /tmp/availableup 
 rm -f /tmp/availableup
+fi
+
+if [ -f /tmp/log_availableu ]; then
+cat /dev/null > /tmp/log_availableu
+rm -f /tmp/log_availableu
 fi
 }
 
@@ -32,12 +43,27 @@ tee -a /tmp/availableu | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 
 }
 
-if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then 
+cleanup
+
+dnf check-update -v | tee -a /tmp/log_availableu | stdbuf -oL sed -n 's/^/# /p' | stdbuf -oL grep -i : | yad --progress \
+	--title="PostInstallerF - Checking updates" \
+	--center \
+	--image="/usr/share/icons/acciones/uppa.png" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--text="Please wait.." \
+	--width=400 --height=200 \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+	--no-buttons 
+cat /tmp/log_availableu | grep -ve deltainfo -e updateinfo | grep -e noarch -e $architec | awk '{print $1,tttt,$3}' | tee -a /tmp/availableu
+
+elif [ -f /etc/SuSE-release ]; then 
 
 cleanup
 
 pkcon get-updates | stdbuf -oL sed -n 's/^/* /p' | checkup 
-#dnf check-update | stdbuf -oL sed -n 's/^/# /p' | checkup 
 
 elif [ "$dist" = Debian ] || [ "$dist" = Ubuntu ]; then
 cleanup
@@ -47,6 +73,11 @@ apt-show-versions -u | checkup
 elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] ; then
 cleanup
 packer-postinstaller --quickcheck | checkup 
+
+else
+cleanup
+
+pkcon get-updates | stdbuf -oL sed -n 's/^/* /p' | checkup
 
 fi
 
@@ -70,7 +101,7 @@ if [ $(grep -c '[a-z]' $avail) -gt 0 ]; then
 listupdates=$(sed '/^\s*$/d' $avail | head -5 )
 Numberup=$(wc -l $avail | grep '[ 0-9 ]' | awk '{print $1}' )
 
-yad --class="PostInstallerF" --image="/usr/share/icons/acciones/software-update-available.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --width=500 --height=200 --title="Available updates" --center --text="\n<b>There are $Numberup updates!</b>
+yad --class="PostInstallerF" --image="/usr/share/icons/acciones/software-update-available.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --width=600 --height=300 --title="Available updates" --center --text="\n<b>There are $Numberup updates!</b>
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 \n<b>Do You want update?</b>
 
@@ -79,9 +110,9 @@ ret=$?
 if [[ $ret -eq 1 ]]; then
 echo 'installing updates'
 postinstaller -u
-rm -f /tmp/availableu
+cleanup
 else
-rm -f /tmp/availableu
+cleanup
 exit
 fi
 
@@ -90,7 +121,7 @@ echo 'none updates'
 /usr/bin/paplay /usr/bin/postinstallerf/updateavail.ogg &
 yad --class="PostInstallerF" --image="/usr/share/icons/acciones/noneup.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --width=300 --height=100 --title="Hi! no problem" --center --text="\n<b>No updates found</b>" --button="gtk-ok:1"
 
-rm -f /tmp/availableu
+cleanup
 exit
 fi
 

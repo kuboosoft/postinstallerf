@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dnf makecache -vvv 2>&1 /tmp/summary-group | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
+dnf makecache -v | stdbuf -oL sed -n 's/^/# /p' | stdbuf -oL grep -i : | stdbuf -oL grep -v expired | yad --progress \
 	--title="PostInstallerF - Updating Repositories" \
 	--center \
 	--image="/usr/share/icons/acciones/uppa.png" --image-on-top \
@@ -13,3 +13,4 @@ dnf makecache -vvv 2>&1 /tmp/summary-group | stdbuf -oL sed -n 's/^/# /p' | yad 
 	--pulsate   \
 	--auto-close  \
 	--no-buttons
+echo 'Done - Metadata cache created' >> /tmp/summary-group
