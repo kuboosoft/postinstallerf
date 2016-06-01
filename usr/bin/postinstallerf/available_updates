@@ -57,7 +57,7 @@ dnf check-update -v | tee -a /tmp/log_availableu | stdbuf -oL sed -n 's/^/# /p' 
 	--pulsate   \
 	--auto-close  \
 	--no-buttons 
-cat /tmp/log_availableu | grep -ve deltainfo -e updateinfo | grep -e noarch -e $architec | awk '{print $1,tttt,$3}' | tee -a /tmp/availableu
+cat /tmp/log_availableu | grep -ve deltainfo -e updateinfo -e 'http:' -e 'https:' -e 'ftp:' | grep -e noarch -e $architec | awk '{print $1,tttt,$3}' | tee -a /tmp/availableu
 
 elif [ -f /etc/SuSE-release ]; then 
 
