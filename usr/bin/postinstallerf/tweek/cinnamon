@@ -15,10 +15,22 @@ runasroot() {
 }
 
 
+cinnamon_desktop() {
+pkexec dnf -y install cinnamon-desktop | yad --title="PostInstallerF - Cinnamon Desktop Environment" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/cinnamon.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+A GTK+-based desktop environment. Started as a fork of the GNOME Shell, and was initially developed by (and for) Linux Mint."
+}
+
+
 if [ -f /etc/arch-release ]; then
 dist=ARCH
 else
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' 'ARCH')
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
 fi
 
 if [ $dist = Ubuntu ]; then
@@ -80,7 +92,7 @@ sudo apt-get -y update
 postinstaller -i cinnamon
 
 elif [ -f /etc/fedora-release ]; then
-pkexec postinstaller -g cinnamon-desktop
+cinnamon_desktop
 
 elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
 postinstaller -i cinnamon

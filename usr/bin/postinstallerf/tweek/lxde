@@ -14,11 +14,22 @@ runasroot() {
   fi
 }
 
+lxde_desktop() {
+pkexec dnf -y install lxde-desktop | stdbuf -oL sed -n 's/^/# /p' | yad --title="PostInstallerF - Lxde Desktop Environment" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/lxde.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+The Lightweight X11 Desktop Environment is an extremely fast-performing and energy-saving desktop environment."
+}
+
 
 if [ -f /etc/arch-release ]; then
 dist=ARCH
 else
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' 'ARCH')
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
 fi
 
 if [ $dist = Ubuntu ]; then
@@ -90,7 +101,7 @@ elif [ -f /etc/SuSE-release ]; then
 zypper install patterns-openSUSE-lxde
 
 elif [ -f /etc/fedora-release ]; then
-pkexec postinstaller -g lxde-desktop
+lxde_desktop
 
 elif [ $dist = MANJARO ] || [ $dist = ARCH ]; then 
 postinstaller -i lxde

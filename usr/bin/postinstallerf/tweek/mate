@@ -14,10 +14,21 @@ runasroot() {
   fi
 }
 
+mate_desktop() {
+pkexec dnf -y install mate-desktop | yad --title="PostInstallerF - Mate Desktop Environment" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/mate.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+The MATE Desktop Environment is the continuation of GNOME 2. It provides an intuitive and attractive desktop environment using traditional metaphors for Linux and other Unix-like operating systems."
+}
+
 if [ -f /etc/arch-release ]; then
 dist=ARCH
 else
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' 'ARCH')
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
 fi
 
 if [ $dist = Ubuntu ]; then
@@ -77,7 +88,7 @@ wget -qO - http://mirror1.mate-desktop.org/debian/mate-archive-keyring.gpg | sud
 sudo apt-get -y update
 postinstaller -i mate-core -i mate-desktop-environment -i mate-notification-daemon
 elif [ -f /etc/fedora-release ]; then
-pkexec postinstaller -g mate-desktop
+mate_desktop
 fi
 
 elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then

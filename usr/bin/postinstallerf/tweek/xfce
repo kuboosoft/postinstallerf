@@ -17,10 +17,25 @@ runasroot() {
 }
 
 
+
+
+xfce_group() {
+pkexec dnf -y install xfce-desktop | stdbuf -oL sed -n 's/^/# /p' | yad --title="PostInstallerF - Xfce Desktop Environment" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/xfce.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Xfce is a lightweight desktop environment for UNIX-like operating systems. 
+It aims to be fast and low on system resources, while still being visually appealing and user friendly."
+}
+
+
 if [ -f /etc/arch-release ]; then
 dist=ARCH
 else
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' 'ARCH')
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
 fi
 
 if [ $dist = Ubuntu ]; then
@@ -93,12 +108,7 @@ elif [ -f /etc/SuSE-release ]; then
 pkexec zypper in -t pattern xfce
 
 elif [ -f /etc/fedora-release ]; then
-pkexec postinstaller -g xfce-desktop
-if [ $(rpm -qa xfce4-volumed | grep -c xfce4-volumed) -gt 0 ]; then
-echo 'volumed is installed'
-else
-postinstaller -i xfce4-volumed
-fi
+xfce_group
 
 elif [ $dist = MANJARO ] || [ $dist = ARCH ]; then 
 pkexec postinstaller -i xfce4 -i xfce4-goodies -i gamin -i alsa-utils -i alsa-plugins -i xfce4-notifyd -i network-manager-applet -i volumeicon -i xscreensaver -i mate-polkit -i samba -i smbclient -i lightdm -i lightdm-gtk3-greeter -i xfce4-mixer -i xfce4-volumed -i blueman

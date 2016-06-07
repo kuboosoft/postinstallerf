@@ -15,10 +15,22 @@ runasroot() {
 }
 
 
+gnome_desktop() {
+pkexec dnf -y install gnome-desktop | stdbuf -oL sed -n 's/^/# /p' | yad --title="PostInstallerF - Gnome Desktop Environment" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/gnome.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GNOME 3 is an easy and elegant way to use your computer. It is designed to put you in control and bring freedom to everybody. GNOME 3 is developed by the GNOME community, a diverse, international group of contributors that is supported by an independent, non-profit foundation."
+}
+
+
 if [ -f /etc/arch-release ]; then
 dist=ARCH
 else
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' 'ARCH')
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
 fi
 
 if [ "$dist" = Ubuntu ]; then
@@ -78,7 +90,7 @@ if [ $dist = Ubuntu ]; then
 postinstaller -i  gnome-shell ubuntu-gnome-desktop 
 
 elif [ -f /etc/fedora-release ]; then
-pkexec dnf -y install @gnome-desktop
+gnome_desktop
 
 elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
 postinstaller -i gnome

@@ -16,10 +16,22 @@ runasroot() {
 }
 
 
+kde_desktop() {
+pkexec dnf -y install kde-desktop | stdbuf -oL sed -n 's/^/# /p' | yad --title="PostInstallerF - Kde Desktop Environment" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/kde.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+For users on Linux and Unix, KDE offers a full suite of user workspace applications which allow interaction with these operating systems in a modern, graphical user interface."
+}
+
+
 if [ -f /etc/arch-release ]; then
 dist=ARCH
 else
-dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' 'ARCH')
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
 fi
 
 if [ $dist = Ubuntu ]; then
@@ -79,7 +91,7 @@ if [ $dist = Ubuntu ]; then
 postinstaller -i kubuntu-desktop 
 
 elif [ -f /etc/fedora-release ]; then
-pkexec postinstaller -g kde-desktop
+kde_desktop
 
 elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
 postinstaller -i kde -i kdeplasma-applets-plasma-nm
