@@ -98,15 +98,15 @@ postinstaller -i kde -i kdeplasma-applets-plasma-nm
 fi
 
 fi
-   fi
-
-
-
-
-
+   
 # Clean lck 
 if [[ "$(id -u)" -eq 0 ]]; then
 rm -f /tmp/kde..lck
 else
 cat /dev/null > /tmp/kde..lck
+fi
+#
+/usr/bin/postinstallerf/tweek/kde &
+elif [[ $ret -eq 1 ]]; then
+exit
 fi

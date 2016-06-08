@@ -143,12 +143,16 @@ chmod +x /usr/local/bin/obex_thunar.sh
 fi
 
 fi
-   fi
-
-
+   
 # Clean lck 
 if [[ "$(id -u)" -eq 0 ]]; then
 rm -f /tmp/xfce..lck
 else
 cat /dev/null > /tmp/xfce..lck
+fi
+#
+/usr/bin/postinstallerf/tweek/xfce &
+elif [[ $ret -eq 1 ]]; then
+exit
+# end
 fi

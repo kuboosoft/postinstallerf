@@ -108,11 +108,15 @@ postinstaller -i lxde
 fi
 
 fi
-   fi
-
+   
 # Clean lck 
 if [[ "$(id -u)" -eq 0 ]]; then
 rm -f /tmp/lxde..lck
 else
 cat /dev/null > /tmp/lxde..lck
+fi
+#
+/usr/bin/postinstallerf/tweek/lxde &
+elif [[ $ret -eq 1 ]]; then
+exit
 fi

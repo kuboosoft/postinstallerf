@@ -96,12 +96,15 @@ postinstaller -i mate -i mate-extra
 fi
 
 fi
-   fi
-
-
+   
 # Clean lck 
 if [[ "$(id -u)" -eq 0 ]]; then
 rm -f /tmp/mate..lck
 else
 cat /dev/null > /tmp/mate..lck
+fi
+#
+/usr/bin/postinstallerf/tweek/mate &
+elif [[ $ret -eq 1 ]]; then
+exit
 fi

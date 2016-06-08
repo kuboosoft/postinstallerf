@@ -97,11 +97,15 @@ postinstaller -i gnome
 fi
 
 fi
-   fi
-
+   
 # Clean lck 
 if [[ "$(id -u)" -eq 0 ]]; then
 rm -f /tmp/gnome..lck
 else
 cat /dev/null > /tmp/gnome..lck
+fi
+#
+/usr/bin/postinstallerf/tweek/gnome &
+elif [[ $ret -eq 1 ]]; then
+exit
 fi
