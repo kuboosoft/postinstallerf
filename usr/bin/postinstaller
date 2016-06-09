@@ -1866,7 +1866,8 @@ fi
 # FEDORA 
 
 elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
-pkrefresh
+
+postinstaller -r
 
 
 $ang | tee /tmp/update-url-tmp | stdbuf -oL grep -v warning | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
