@@ -101,11 +101,17 @@ fi
 # Clean lck 
 if [[ "$(id -u)" -eq 0 ]]; then
 rm -f /tmp/gnome..lck
+rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearchall
 else
 cat /dev/null > /tmp/gnome..lck
+rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearchall
 fi
 #
 /usr/bin/postinstallerf/tweek/gnome &
 elif [[ $ret -eq 1 ]]; then
+rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearchall
 exit
 fi

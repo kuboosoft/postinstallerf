@@ -147,12 +147,18 @@ fi
 # Clean lck 
 if [[ "$(id -u)" -eq 0 ]]; then
 rm -f /tmp/xfce..lck
+rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearchall
 else
 cat /dev/null > /tmp/xfce..lck
+rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearchall
 fi
 #
 /usr/bin/postinstallerf/tweek/xfce &
 elif [[ $ret -eq 1 ]]; then
+rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearchall
 exit
 # end
 fi

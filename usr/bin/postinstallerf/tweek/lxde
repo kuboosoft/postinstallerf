@@ -89,7 +89,7 @@ ret=$?
 if [[ $ret -eq 0 ]]; then
 
 if [[ $tarea = Update ]]; then
-echo 'installed Kde Desktop Environment'
+echo 'installed lxde Desktop Environment'
 postinstaller -u
 
 elif [[ $tarea = Install ]]; then
@@ -112,11 +112,17 @@ fi
 # Clean lck 
 if [[ "$(id -u)" -eq 0 ]]; then
 rm -f /tmp/lxde..lck
+rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearchall
 else
 cat /dev/null > /tmp/lxde..lck
+rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearchall
 fi
 #
 /usr/bin/postinstallerf/tweek/lxde &
 elif [[ $ret -eq 1 ]]; then
+rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearchall
 exit
 fi

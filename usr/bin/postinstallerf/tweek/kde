@@ -102,11 +102,17 @@ fi
 # Clean lck 
 if [[ "$(id -u)" -eq 0 ]]; then
 rm -f /tmp/kde..lck
+rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearchall
 else
 cat /dev/null > /tmp/kde..lck
+rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearchall
 fi
 #
 /usr/bin/postinstallerf/tweek/kde &
 elif [[ $ret -eq 1 ]]; then
+rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearchall
 exit
 fi

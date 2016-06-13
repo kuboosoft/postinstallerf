@@ -103,11 +103,17 @@ fi
 # Clean lck 
 if [[ "$(id -u)" -eq 0 ]]; then
 rm -f /tmp/cinnamon..lck
+rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearchall
 else
 cat /dev/null > /tmp/cinnamon..lck
+rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearchall
 fi
 #
 /usr/bin/postinstallerf/tweek/cinnamon &
 elif [[ $ret -eq 1 ]]; then
+rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearchall
 exit
 fi
