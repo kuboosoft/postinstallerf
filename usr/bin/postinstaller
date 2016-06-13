@@ -1670,7 +1670,21 @@ ret=$?
 	CHECK_INST=$(echo $CHECK | awk -F'|' '{print $2}')
 
 if [[ $ret -eq 0 ]]; then	
+if [ $CHECK_INST = xfce-desktop-group ]; then
+/usr/bin/postinstallerf/tweek/xfce
+elif [ $CHECK_INST = lxde-desktop-group ]; then
+/usr/bin/postinstallerf/tweek/lxde
+elif [ $CHECK_INST = kde-desktop-group ]; then
+/usr/bin/postinstallerf/tweek/kde
+elif [ $CHECK_INST = gnome-desktop-group ]; then
+/usr/bin/postinstallerf/tweek/gnome
+elif [ $CHECK_INST = mate-desktop-group ]; then
+/usr/bin/postinstallerf/tweek/mate
+elif [ $CHECK_INST = cinnamon-desktop-group ]; then
+/usr/bin/postinstallerf/tweek/cinnamon
+else
 /usr/bin/postinstaller -n $CHECK_INST
+fi
 cleansearch
 else
 cleansearch
