@@ -1590,14 +1590,14 @@ if [ ! -f /tmp/dnflistsearchall ]; then
  else
  dnf list all | grep -ve x86_64 -e "==" -e '-debuginfo' -e '.src' -e ^fedora -e ^gcc | sed -e 's:.i686::g' | sed -e 's:.noarch::g' | tee /tmp/dnflistsearchall
  fi
-fi
-
 echo 'xfce-desktop-group		current		    fedora
 lxde-desktop-group		current			    fedora
 kde-desktop-group		current			    fedora
 gnome-desktop-group		current			    fedora
 mate-desktop-group		current			    fedora
 cinnamon-desktop-group		current			    fedora' >> /tmp/dnflistsearchall
+fi
+
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------
 # FILTER GENERIC USES
