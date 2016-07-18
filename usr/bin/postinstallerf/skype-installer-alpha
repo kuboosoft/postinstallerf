@@ -64,8 +64,7 @@ postinstaller -u
 elif [[ $tarea = Install ]]; then
 
 if [ $dist = Ubuntu ]; then
-wget -c https://repo.skype.com/latest/skypeforlinux-64-alpha.deb
-postinstaller -i skypeforlinux-64-alpha.deb
+postinstaller -k https://repo.skype.com/latest/skypeforlinux-64-alpha.deb
 
 elif [ -f /etc/fedora-release ]; then
 postinstaller -k https://repo.skype.com/latest/skypeforlinux-64-alpha.rpm
