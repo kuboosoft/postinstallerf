@@ -1653,6 +1653,7 @@ lxde-desktop-group		current			    fedora
 kde-desktop-group		current			    fedora
 gnome-desktop-group		current			    fedora
 mate-desktop-group		current			    fedora
+skype-installer-alpha		current                     external
 cinnamon-desktop-group		current			    fedora' >> /tmp/dnflistsearchall
 fi
 
@@ -1747,6 +1748,8 @@ elif [ $CHECK_INST = mate-desktop-group ]; then
 /usr/bin/postinstallerf/tweek/mate
 elif [ $CHECK_INST = cinnamon-desktop-group ]; then
 /usr/bin/postinstallerf/tweek/cinnamon
+elif [ $CHECK_INST = skype-installer-alpha ]; then
+/usr/bin/postinstallerf/skype-installer-alpha
 else
 /usr/bin/postinstaller -n $CHECK_INST
 fi
