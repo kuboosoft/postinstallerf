@@ -1,0 +1,89 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+if [ -f /etc/arch-release ]; then
+dist=ARCH
+else
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
+fi
+
+if [ $dist = Ubuntu ]; then
+
+if [ $(dpkg-query -Wf '${db:Status-abbrev}' skypeforlinux) = ii ]; then
+status='INSTALLED'
+tarea='Update'
+else
+status='NO INSTALLED'
+tarea='Install'
+fi
+
+elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+           
+if (pacman -Q skypeforlinux >/dev/null) ; then 
+status='INSTALLED'
+tarea='Update'
+else
+status='NO INSTALLED'
+tarea='Install'
+fi
+
+elif [ -f /etc/fedora-release ]; then
+
+if [ $(rpm -qa skypeforlinux | grep -c skypeforlinux) -gt 0 ]; then
+status='INSTALLED'
+tarea='Update'
+else
+status='NO INSTALLED'
+tarea='Install'
+fi
+  fi
+
+Comment='<span size="xx-large">Skype keeps the world taking, for free</span>'
+
+yad --title="PostInstallerF - Skype installer" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/skype.png" --image-on-top \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Skype is for doing things together, whenever you are apart. Skype is text, voice and video make it simple to share experiences with the people that matter to you, wherever they are.
+
+With Skype, you can share a story, celebrate a birthday, learn a language, hold a meeting, work with colleagues – just about anything you need to do together every day. You can use Skype on whatever works best for you - on your phone or computer or a TV with Skype on it. It is free to start using Skype - to speak, see and instant message other people on Skype for example. You can even try out group video, with the latest version of Skype."  \
+--button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then
+
+if [[ $tarea = Update ]]; then
+echo 'installed Skype'
+postinstaller -u
+
+elif [[ $tarea = Install ]]; then
+
+if [ $dist = Ubuntu ]; then
+wget -c https://repo.skype.com/latest/skypeforlinux-64-alpha.deb
+postinstaller -i skypeforlinux-64-alpha.deb
+
+elif [ -f /etc/fedora-release ]; then
+postinstaller -k https://repo.skype.com/latest/skypeforlinux-64-alpha.rpm
+
+elif [ "$dist" = MANJARO ] || [ "$dist" = ARCH ]; then
+postinstaller -i skypeforlinux
+fi
+
+fi
+   
+# Clean lck 
+rm -f /tmp/skypeforlinux*lck
+rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearchall
+#
+/usr/bin/postinstallerf/skype &
+elif [[ $ret -eq 1 ]]; then
+rm -f /tmp/dnflistsearch
+rm -f /tmp/dnflistsearchall
+exit
+fi

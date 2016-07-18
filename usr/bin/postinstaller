@@ -20,7 +20,7 @@
 
 
 
-while getopts ":i:e:n:l:j:g:ocpqrsuhabfdm" option;
+while getopts ":i:e:n:l:k:j:g:ocpqrsuhabfdm" option;
 do
  case $option in
   i)
@@ -153,6 +153,11 @@ task=gra
 . /usr/bin/postinstallerf/pid
 task=frozkernel
    ;;
+  k)
+   echo received -k
+. /usr/bin/postinstallerf/pid
+task=urlpackage
+   ;;
   d)
    echo received -d
 . /usr/bin/postinstallerf/pid
@@ -217,7 +222,7 @@ runasroot() {
 fnotify() {
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'Debian' -e 'ARCH')
 
-if [ "$task" = Localinstall ]; then
+if [ "$task" = Localinstall ] || [ "$task" = urlpackage ]; then
 
 if [ "$dist" = Debian ] || [ "$dist" = Ubuntu ]; then
 globalnoti=$(dpkg-deb -I $OPTARG | grep 'Package' | awk '{print $2}')
@@ -248,7 +253,7 @@ elif [ "$task" = ccleanfast ]; then
 fi
 
 
-if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Localinstall ] || [ "$task" = copr-install ]; then
+if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Localinstall ] || [ "$task" = copr-install ] || [ "$task" = urlpackage ]; then
 
 if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
  if [ $(rpm -qa $globalnoti | grep -c $globalnoti) -gt 0 ]; then
@@ -595,7 +600,7 @@ fi
 
 # Init check if task isn't equal to install or remove, exlude update. Conditional for open the metadata...
 
-if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Information ] || [ "$task" = Localinstall ]; then
+if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Information ] || [ "$task" = Localinstall ] || [ "$task" = urlpackage ]; then
 #
 if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 fullname=$(basename $OPTARG | sed 's/-git//g' | sed 's/-bzr//g' | sed 's/-bin//g' | sed 's/-svn//g' | sed 's/-gtk2//g' | sed 's/-qt//g')
@@ -607,7 +612,7 @@ cuttingname="${fullname%%-[0-9]*}"
 
 /usr/bin/postinstallerf/notifier & 
 
-if [ "$task" = Localinstall ]; then
+if [ "$task" = Localinstall ] || [ "$task" = urlpackage ]; then
 metainfo=$cuttingname
 else
 metainfo=$OPTARG
@@ -661,7 +666,7 @@ lic="${License:-$kwno}"
 
 # DOWLOADING SCREENSHOT
 
-if [ "$task" = Localinstall ]; then
+if [ "$task" = Localinstall ] || [ "$task" = urlpackage ]; then
 imagen=$cuttingname
 else
 if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
@@ -1460,8 +1465,61 @@ fi
 exit
  fi
 
+# MENU 5
+# if only need install from a url
+if [ "$task" = urlpackage ]; then
 
-# MENU 5 #
+dowloadp=$(basename $OPTARG)
+
+set -x
+
+tmp=$(mktemp -d)
+
+trap cleanup EXIT
+cleanup() {
+    set +e
+    [ -z "$tmp" -o ! -d "$tmp" ] || rm -rf "$tmp"
+}
+
+unset CDPATH
+pwd=$(pwd)
+
+
+pushd ${tmp}
+wget --no-check-certificate -c $OPTARG 2>&1 | \
+sed -u 's/^[a-zA-Z\-].*//; s/.* \{1,2\}\([0-9]\{1,3\}\)%.*/\1\n#Downloading... \1%/; s/^20[0-9][0-9].*/#Done./' | \
+yad --progress \
+	--percentage=0 \
+	--title="PostInstallerF - Downloading $dowloadp" \
+	--center \
+	--image="$screenshot" --image-on-top \
+	--window-icon="/usr/share/icons/acciones/topicon.png" \
+	--width=800 --height=500 \
+	--text="$fullname 
+$resume
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+$pvar 
+
+License: $lic 
+
+$Url"  \
+	--justify=fill \
+	--pulsate   \
+	--auto-close  \
+	--no-buttons
+
+wait ${!}
+
+if [ -f ${tmp}/$dowloadp ]; then
+postinstaller -l ${tmp}/$dowloadp
+else
+exit
+fi
+# end install from a url
+ fi
+
+
+# MENU 6 #
 # If only need search copr (only Fedora)
 
 if [ "$task" = copr-install ]; then
@@ -1471,7 +1529,7 @@ cleancopr
 fi
 
 
-# MENU 6 #
+# MENU 7 #
 # If only need search ppa (only Ubuntu and Mint)
 
 if [ "$task" = ppa-install ]; then
@@ -1481,7 +1539,7 @@ cleanppa
 fi
 
 
-# MENU 7 #
+# MENU 8 #
 # If only need search
 
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
@@ -1586,9 +1644,9 @@ fi
 
 if [ ! -f /tmp/dnflistsearchall ]; then
  if [ $architecture = x86_64 ]; then
- dnf list all | grep -ve i686 -e "==" -e '-debuginfo' -e '.src' -e ^fedora -e ^gcc | sed -e 's:.x86_64::g' | sed -e 's:.noarch::g' | tee /tmp/dnflistsearchall
+ dnf list all | grep -ve i686 -e "==" -e '-debuginfo' -e '.src' -e ^fedora -e ^gcc -e ^pkgconfig | sed -e 's:.x86_64::g' | sed -e 's:.noarch::g' | tee /tmp/dnflistsearchall
  else
- dnf list all | grep -ve x86_64 -e "==" -e '-debuginfo' -e '.src' -e ^fedora -e ^gcc | sed -e 's:.i686::g' | sed -e 's:.noarch::g' | tee /tmp/dnflistsearchall
+ dnf list all | grep -ve x86_64 -e "==" -e '-debuginfo' -e '.src' -e ^fedora -e ^gcc -e ^pkgconfig | sed -e 's:.i686::g' | sed -e 's:.noarch::g' | tee /tmp/dnflistsearchall
  fi
 echo 'xfce-desktop-group		current		    fedora
 lxde-desktop-group		current			    fedora
@@ -1888,7 +1946,7 @@ fi
 
 elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
 
-postinstaller -r
+postinstaller -q
 
 
 $ang | tee /tmp/update-url-tmp | stdbuf -oL grep -v warning | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
