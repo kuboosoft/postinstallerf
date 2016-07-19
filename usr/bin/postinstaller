@@ -1202,14 +1202,15 @@ fi
 # MENU 4 #
 # If only need install local
 
-# MANJARO/ARCH LINUX INSTALL LOCAL
 if [ "$task" = Localinstall ]; then
 
 mimel=$(file --mime-type -b $OPTARG)
 
+# Start filter
 if [ -f $OPTARG ] && [ $(echo $mimel | grep -c "x-rpm") -gt 0 ] || [ $(echo $mimel | grep -c "vnd.debian.binary-package") -gt 0 ] || [ $(echo $mimel | grep -c "x-xz") -gt 0 ] ; then
 
-if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
+# MANJARO/ARCH LINUX INSTALL LOCAL
+if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ] && [ $(echo $mimel | grep -c "x-xz") -gt 0 ]; then
 
 $ang $OPTARG 2>&1 | tee -a /tmp/packer-local-$cuttingname | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' -e '/\.\.\.$/ s/^/# /p' | yad --progress \
 --title="PostInstallerF - $task $OPTARG" \
@@ -1256,7 +1257,7 @@ cat /dev/null > /tmp/packer-local-$cuttingname
 fi
 
 # UBUNTU INSTALL LOCAL
-elif [ "$dist" = Ubuntu ] ; then
+elif [ "$dist" = Ubuntu ] && [ $(echo $mimel | grep -c "vnd.debian.binary-package") -gt 0 ]; then
 
 pkexec $ang $OPTARG | tee /tmp/local-url-$cuttingname | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 	--title="PostInstallerF - $task $OPTARG" \
@@ -1307,7 +1308,7 @@ fi
 
 # OPENSUSE INSTALL LOCAL
 
-elif [ -f /etc/SuSE-release ]; then
+elif [ -f /etc/SuSE-release ] && [ $(echo $mimel | grep -c "x-rpm") -gt 0 ]; then
 $ang $OPTARG | tee /tmp/local-url-$cuttingname | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 	--title="PostInstallerF - $task $OPTARG" \
 	--center \
@@ -1356,7 +1357,7 @@ fi
 
 
 # FEDORA INSTALL LOCAL
-elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
+elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] && [ $(echo $mimel | grep -c "x-rpm") -gt 0 ]; then
 yad --title="PostInstallerF - $task $OPTARG" \
 --center \
 --window-icon="/usr/share/icons/acciones/topicon.png" \
@@ -1414,64 +1415,20 @@ rm -f /tmp/localinstall..lck
 else
 cat /dev/null > /tmp/local-url-$cuttingname
 fi
-   fi
-
-# TODAS LAS DISTRIBUCIONES #
+   fi  
 else
-
-$ang $OPTARG | tee /tmp/local-url-$cuttingname | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
-	--title="PostInstallerF - $task $OPTARG" \
-	--center \
-	--image="$screenshot" --image-on-top \
-	--window-icon="/usr/share/icons/acciones/topicon.png" \
-	--width=800 --height=500 \
-	--text="$fullname 
-$resume
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-$pvar 
-
-License: $lic 
-
-$Url"  \
-	--justify=fill \
-	--pulsate   \
-	--auto-close  \
-	--no-buttons
-
-
-Result=$(grep -e 'Resultados:' -e 'Result:' -e 'Status:' -e 'Estado:' -e 'Instalado' -e 'Installed' -e 'Eliminados' -e 'Erased' -e 'freedesktop.PackageKit:' -e 'Actualizado' -e 'Updated' -e '(local)' /tmp/local-url-$cuttingname | tail -10) 
-
-yad --info --title="PostInstallerF Summary" --center --image="/usr/share/icons/acciones/summary.png" --image-on-top --window-icon="/usr/share/icons/acciones/topicon.png" --text="$Result
-Done" --width=350 --height=350 --timeout=5
-
-      	 
-fnotify
-
-# Clean capture
-if [ "$(id -u)" -eq 0 ]; then
-rm -rf /tmp/.pictures/
-else
-rm -f /tmp/.pictures/$OPTARG.png
-fi
-
-# Clean package info
-if [ "$(id -u)" -eq 0 ]; then
-rm -f *.$OPTARG.lck
-rm -f /tmp/local-url-$cuttingname
-rm -f /tmp/localinstall..lck
-else
-cat /dev/null > /tmp/local-url-$cuttingname
-fi
-
-   
-# End options basics
+notify-send --hint=int:transient:1 "Sorry" "Incompatible installer file!" -i "/usr/share/icons/acciones/wrong.png" -t 10000 
 fi
 /usr/bin/postinstaller -q 
+# End options basics
 else
 notify-send --hint=int:transient:1 "Sorry" "Incompatible installer file!" -i "/usr/share/icons/acciones/wrong.png" -t 10000
 exit
  fi
+# End filter
   fi
+# END MENU 4
+
 
 # MENU 5
 # if only need install from a url
