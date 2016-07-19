@@ -1204,6 +1204,10 @@ fi
 # MANJARO/ARCH LINUX INSTALL LOCAL
 if [ "$task" = Localinstall ]; then
 
+mimel=$(file --mime-type -b $OPTARG)
+
+if [ -f $OPTARG ] && [ $(echo $mimel | grep -c "x-rpm") -gt 0 ] || [ $(echo $mimel | grep -c "vnd.debian.binary-package") -gt 0 ] || [ $(echo $mimel | grep -c "x-xz") -gt 0 ] ; then
+
 if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 
 $ang $OPTARG 2>&1 | tee -a /tmp/packer-local-$cuttingname | stdbuf -oL sed -nrue '/==>/ s/^/# /p' -e '/^::/ s/^/# /p' -e '/^  ->/ s/^/# /p' -e '/\.\.\.$/ s/^/# /p' | yad --progress \
@@ -1462,14 +1466,17 @@ fi
 # End options basics
 fi
 /usr/bin/postinstaller -q 
+else
 exit
  fi
+  fi
 
 # MENU 5
 # if only need install from a url
 if [ "$task" = urlpackage ]; then
 
 dowloadp=$(basename $OPTARG)
+
 
 set -x
 
@@ -1510,7 +1517,9 @@ $Url"  \
 
 wait ${!}
 
-if [ -f ${tmp}/$dowloadp ]; then
+mime=$(file --mime-type -b ${tmp}/$dowloadp)
+
+if [ -f ${tmp}/$dowloadp ] && [ $(echo $mime | grep -c "x-rpm") -gt 0 ] || [ $(echo $mime | grep -c "vnd.debian.binary-package") -gt 0 ] || [ $(echo $mime | grep -c "x-xz") -gt 0 ] ; then
 postinstaller -l ${tmp}/$dowloadp
 else
 exit
