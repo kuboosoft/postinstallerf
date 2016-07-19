@@ -446,20 +446,21 @@ usage() {
   echo '    -a           - Disable/Enable SELinux'
   echo '    -b           - Disable/Enable Gracia sudo'
   echo '    -c           - search copr, only Fedora'
-  echo '    -f           - Disable/Enable Kernel updates'
   echo '    -d           - Enable/Disable sudo'
+  echo '    -e           - uninstall package'
+  echo '    -f           - Disable/Enable Kernel updates'
+  echo '    -h           - outputs this message'
   echo '    -i           - install package'
+  echo '    -k           - install package from a url'
   echo '    -l           - install locally package, requires specific path'
   echo '    -m           - Check list Menu'
-  echo '    -e           - uninstall package'
-  echo '    -u     	 - updates all packages'
-  echo '    -s    	 - searches for package'
-  echo '    -p           - search ppa, only Ubuntu'
-  echo '    -o           - erase old kernels, only Fedora'
-  echo
   echo '    -n      	 - outputs info for package'
-  echo '    -h           - outputs this message'
+  echo '    -o           - erase old kernels, only Fedora'
+  echo '    -p           - search ppa, only Ubuntu'
   echo '    -r           - Refresh metadata/cache'
+  echo '    -s    	 - searche package'
+  echo '    -u     	 - updates all packages'
+  echo
   exit
 }
 
