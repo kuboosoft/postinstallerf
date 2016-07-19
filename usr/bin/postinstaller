@@ -443,8 +443,8 @@ kill $killprocess
 usage() {
   echo 'usage: postinstaller [option] [package]'
   echo
-  echo '    -a           - Disable/Enable SELinux'
-  echo '    -b           - Disable/Enable Gracia sudo'
+  echo '    -a           - disable/enable SELinux'
+  echo '    -b           - disable/enable Gracia sudo'
   echo '    -c           - search copr, only Fedora'
   echo '    -d           - Enable/Disable sudo'
   echo '    -e           - uninstall package'
@@ -453,12 +453,12 @@ usage() {
   echo '    -i           - install package'
   echo '    -k           - install package from a url'
   echo '    -l           - install locally package, requires specific path'
-  echo '    -m           - Check list Menu'
+  echo '    -m           - check list Menu'
   echo '    -n      	 - outputs info for package'
   echo '    -o           - erase old kernels, only Fedora'
   echo '    -p           - search ppa, only Ubuntu'
-  echo '    -r           - Refresh metadata/cache'
-  echo '    -s    	 - searche package'
+  echo '    -r           - refresh metadata/cache'
+  echo '    -s    	 - search package'
   echo '    -u     	 - updates all packages'
   echo
   exit
@@ -1468,6 +1468,7 @@ fi
 fi
 /usr/bin/postinstaller -q 
 else
+notify-send --hint=int:transient:1 "Sorry" "Incompatible installer file!" -i "/usr/share/icons/acciones/wrong.png" -t 10000
 exit
  fi
   fi
@@ -1523,6 +1524,7 @@ mime=$(file --mime-type -b ${tmp}/$dowloadp)
 if [ -f ${tmp}/$dowloadp ] && [ $(echo $mime | grep -c "x-rpm") -gt 0 ] || [ $(echo $mime | grep -c "vnd.debian.binary-package") -gt 0 ] || [ $(echo $mime | grep -c "x-xz") -gt 0 ] ; then
 postinstaller -l ${tmp}/$dowloadp
 else
+notify-send --hint=int:transient:1 "Sorry" "Incompatible installer file!" -i "/usr/share/icons/acciones/wrong.png" -t 10000
 exit
 fi
 # end install from a url
