@@ -1638,6 +1638,7 @@ else
 cleansearch
 exit
 fi
+  fi
 
 # FEDORA
 elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
