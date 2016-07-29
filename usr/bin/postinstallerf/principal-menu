@@ -110,6 +110,7 @@ if [[ $ret -eq 0 ]]; then
 elif [[ $ret -eq 2 ]]; then
 if [ "$dist" = Ubuntu ]; then
 software-properties-gtk
+rm -f /tmp/postmet-database
 elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then
 /usr/bin/postinstallerf/con-repos
 else
@@ -121,6 +122,7 @@ rm -f /tmp/principal-menu..lck
 /usr/bin/postinstallerf/principal-menu
 elif [[ $ret -eq 1 ]]; then
 rm -f /tmp/dnflistsearchall
+rm -f /tmp/postmet-database
 	echo "Nothing to do"
 exit
 elif [[ $ret -eq 3 ]]; then
