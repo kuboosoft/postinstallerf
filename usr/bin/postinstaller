@@ -156,6 +156,7 @@ task=frozkernel
   k)
    echo received -k
 . /usr/bin/postinstallerf/pid
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
 task=urlpackage
    ;;
   d)
@@ -228,15 +229,10 @@ if [ "$dist" = Debian ] || [ "$dist" = Ubuntu ]; then
 globalnoti=$(dpkg-deb -I $OPTARG | grep 'Package' | awk '{print $2}')
 
 elif [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
-# refinelocal=$(rpm -qip $OPTARG | grep 'Name' | awk '{print $3}')
-# if [ $(echo $refinelocal | grep -c $refinelocal) -gt 0 ]; then
-# globalnoti=$refinelocal
-# else
+refinelocal=$(rpm -qip $OPTARG | grep 'Name' | awk '{print $3}')
 cutting=$(basename $OPTARG)
 namecut="${cutting%%-[0-9]*}"
-globalnoti=$namecut
-#fi
-# other distro
+globalnoti="${refinelocal:-$namecut}"
 fi
 else
 globalnoti=$OPTARG
@@ -253,7 +249,7 @@ elif [ "$task" = ccleanfast ]; then
 fi
 
 
-if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Localinstall ] || [ "$task" = copr-install ] || [ "$task" = urlpackage ]; then
+if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = copr-install ] || [ "$task" = Localinstall ] || [ "$task" = urlpackage ]; then
 
 if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
  if [ $(rpm -qa $globalnoti | grep -c $globalnoti) -gt 0 ]; then
@@ -605,21 +601,31 @@ fi
 
 if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Information ] || [ "$task" = Localinstall ] || [ "$task" = urlpackage ]; then
 #
+dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
+#
 if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 fullname=$(basename $OPTARG | sed 's/-git//g' | sed 's/-bzr//g' | sed 's/-bin//g' | sed 's/-svn//g' | sed 's/-gtk2//g' | sed 's/-qt//g')
 else
 fullname=$(basename $OPTARG)
 fi
 
+#
 cuttingname="${fullname%%-[0-9]*}"
+#
 
 /usr/bin/postinstallerf/notifier & 
 
 if [ "$task" = Localinstall ] || [ "$task" = urlpackage ]; then
-metainfo=$cuttingname
+if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ] || [ -f /etc/SuSE-release ]; then 
+refinelocal=$(rpm -qip $OPTARG | grep 'Name' | awk '{print $3}')
+metainfo="${refinelocal:-$cuttingname}"
+elif [ "$dist" = Debian ] || [ "$dist" = Ubuntu ]; then
+refinelocal=$(dpkg-deb -I $OPTARG | grep 'Package' | awk '{print $2}')
+metainfo="${refinelocal:-$cuttingname}"
+fi
 else
 metainfo=$OPTARG
-fi
+ fi
 
 
 # Import local metadata
@@ -670,7 +676,7 @@ lic="${License:-$kwno}"
 # DOWLOADING SCREENSHOT
 
 if [ "$task" = Localinstall ] || [ "$task" = urlpackage ]; then
-imagen=$cuttingname
+imagen="${refinelocal:-$cuttingname}"
 else
 if [ "$dist" = MANJARO ] || [ "$dist" = ARCH ] || [ -f /etc/arch-release ]; then
 imagen=$fullname
