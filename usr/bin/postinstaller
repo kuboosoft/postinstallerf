@@ -600,6 +600,21 @@ fi
 # Init check if task isn't equal to install or remove, exlude update. Conditional for open the metadata...
 
 if [ "$task" = Installing ] || [ "$task" = Uninstalling ] || [ "$task" = Information ] || [ "$task" = Localinstall ] || [ "$task" = urlpackage ]; then
+
+# filter local package
+if [ "$task" = Information ] && [ $(cat $OPTARG | grep -c '/') -gt 0 ]; then
+clear
+echo "----ERROR----" 
+echo "you need run..."
+echo "Local package"
+echo "postinstaller -l $OPTARG"
+echo ""
+echo "Url to rpm, deb, or tar.xz"
+echo "postinstaller -k URL"
+exit
+fi
+#
+
 #
 dist=$(uname -a | grep -oe 'MANJARO' -e 'Ubuntu' -e 'ARCH')
 #
@@ -642,7 +657,9 @@ sourceinfo3=$(curl -s -k --head -w %{http_code} https://apps.ubuntu.com/cat/appl
 
 wait ${!}
 
-
+if [ "$task" = Localinstall ]; then
+Comment2=$(rpm -qip $OPTARG | grep -A1 'Description' | grep -v "Description")
+else
 if [ "$sourceinfo3" -eq 301 ]; then
 Comment2=$(wget --no-check-certificate -q https://apps.ubuntu.com/cat/applications/$metainfo -O - | sed -n 's/.*<p><p tabindex="0">\([^<]*\).*/\1/p' ) 
 
@@ -654,14 +671,20 @@ Comment2='Information not avaiable'
 elif [ "$sourceinfo3" -eq 000 ]; then
 Comment2='Please check you internet conexion!'
 fi
+ fi
 # end metadata import  
    fi
   
 
 #DEFINE VARIABLE INFO
 
-kwno=Unknown
+if [ "$task" = Localinstall ]; then
+kwno=$(rpm -qip $OPTARG | grep 'License' | awk -F ':' '{print $2}')
+meta=$(rpm -qip $OPTARG | grep 'Summary' | awk -F ':' '{print $2}')
+else
 meta='<span size="xx-large">A great program</span>'
+kwno=Unknown
+fi
 
 pvar="${Comment3:-$Comment2}"
 
