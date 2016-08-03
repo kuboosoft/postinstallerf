@@ -213,4 +213,40 @@
     <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
   </action>
 
+  <action id="org.freedesktop.pkexec.apt-key.reporules">
+    <description>apt-key rules</description>
+    <message>Authentication is required to configure the system.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/apt-key</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+  <action id="org.freedesktop.pkexec.apt-config.reporules">
+    <description>apt-config rules</description>
+    <message>Authentication is required to configure the system.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/apt-config</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+  <action id="org.freedesktop.pkexec.apt-get.reporules">
+    <description>apt-get rules</description>
+    <message>Authentication is required to configure the system.</message>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/apt-get</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
 </policyconfig>
