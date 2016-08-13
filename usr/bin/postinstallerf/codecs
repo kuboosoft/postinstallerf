@@ -104,7 +104,7 @@ if [ "$tarea" = Install ] || [ "$tarea" = 'More codecs' ]; then
 
 # UBUNTU
 if [ "$dist" = Ubuntu ]; then
-
+echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections
 if [ $currentdesk = XFCE ]; then
 postinstaller -i xubuntu-restricted-extras
 elif [ $currentdesk = LXDE ]; then
