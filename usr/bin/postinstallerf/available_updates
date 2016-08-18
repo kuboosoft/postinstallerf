@@ -46,7 +46,7 @@ tee -a /tmp/availableu | stdbuf -oL sed -n 's/^/# /p' | yad --progress \
 if [ -f /etc/fedora-release ] || [ -f /etc/redhat-release ]; then 
 cleanup
 
-dnf check-update -v | tee -a /tmp/log_availableu | stdbuf -oL sed -n 's/^/# /p' | stdbuf -oL grep -i : | stdbuf -oL grep -ve 'Loaded plugins:' -e "https" -e 'Error reading file' | yad --progress \
+dnf check-update -v | tee -a /tmp/log_availableu | stdbuf -oL sed -n 's/^/# /p' | stdbuf -oL grep -i : | stdbuf -oL grep -ve 'Loaded plugins:' -e "https" -e 'Error reading file' -e "Curl error" | yad --progress \
 	--title="PostInstallerF - Checking updates" \
 	--center \
 	--image="/usr/share/icons/acciones/uppa.png" --image-on-top \
