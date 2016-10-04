@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=/usr/bin/postinstallerf/chromium
+Exec=postinstaller -n chromium
 Version=1.0
 Type=Application
 Name=Chromium
