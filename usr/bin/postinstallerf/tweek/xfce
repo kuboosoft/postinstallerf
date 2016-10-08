@@ -22,7 +22,7 @@ runasroot() {
 xfce_group() {
 pkexec dnf -y install xfce-desktop | stdbuf -oL sed -n 's/^/# /p' | yad --title="PostInstallerF - Xfce Desktop Environment" \
 --center \
---window-icon="/usr/share/icons/acciones/topicon.png" \
+--window-icon="/usr/share/icons/acciones/DNF_logo.png" \
 --image="/usr/share/icons/acciones/xfce.png" --image-on-top \
 --width=800 --height=500 \
 --text="$Comment

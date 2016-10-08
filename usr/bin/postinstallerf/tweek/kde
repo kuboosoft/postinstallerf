@@ -19,7 +19,7 @@ runasroot() {
 kde_desktop() {
 pkexec dnf -y install kde-desktop | stdbuf -oL sed -n 's/^/# /p' | yad --title="PostInstallerF - Kde Desktop Environment" \
 --center \
---window-icon="/usr/share/icons/acciones/topicon.png" \
+--window-icon="/usr/share/icons/acciones/DNF_logo.png" \
 --image="/usr/share/icons/acciones/kde.png" --image-on-top \
 --width=800 --height=500 \
 --text="$Comment

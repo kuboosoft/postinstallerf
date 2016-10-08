@@ -17,7 +17,7 @@ runasroot() {
 mate_desktop() {
 pkexec dnf -y install mate-desktop | yad --title="PostInstallerF - Mate Desktop Environment" \
 --center \
---window-icon="/usr/share/icons/acciones/topicon.png" \
+--window-icon="/usr/share/icons/acciones/DNF_logo.png" \
 --image="/usr/share/icons/acciones/mate.png" --image-on-top \
 --width=800 --height=500 \
 --text="$Comment

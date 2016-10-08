@@ -18,7 +18,7 @@ runasroot() {
 gnome_desktop() {
 pkexec dnf -y install gnome-desktop | stdbuf -oL sed -n 's/^/# /p' | yad --title="PostInstallerF - Gnome Desktop Environment" \
 --center \
---window-icon="/usr/share/icons/acciones/topicon.png" \
+--window-icon="/usr/share/icons/acciones/DNF_logo.png" \
 --image="/usr/share/icons/acciones/gnome.png" --image-on-top \
 --width=800 --height=500 \
 --text="$Comment

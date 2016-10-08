@@ -18,7 +18,7 @@ runasroot() {
 cinnamon_desktop() {
 pkexec dnf -y install cinnamon-desktop | yad --title="PostInstallerF - Cinnamon Desktop Environment" \
 --center \
---window-icon="/usr/share/icons/acciones/topicon.png" \
+--window-icon="/usr/share/icons/acciones/DNF_logo.png" \
 --image="/usr/share/icons/acciones/cinnamon.png" --image-on-top \
 --width=800 --height=500 \
 --text="$Comment

@@ -2,7 +2,7 @@
 
 source /usr/bin/postinstallerf/pid
 
-Packagelocal=$(yad --file-selection --window-icon="/usr/share/icons/acciones/topicon.png" --class="PostInstallerF" --image="/usr/share/icons/acciones/localin.png" --image-on-top --title="Install local package" --text="Please select a rpm, deb or pkg.tar.xz package" --width=800 --height=500 --center)
+Packagelocal=$(yad --file-selection --window-icon="/usr/share/icons/acciones/DNF_logo.png" --class="PostInstallerF" --image="/usr/share/icons/acciones/localin.png" --image-on-top --title="Install local package" --text="Please select a rpm, deb or pkg.tar.xz package" --width=800 --height=500 --center)
 
 case $? in
          0)
