@@ -2,18 +2,6 @@
 
 source /usr/bin/postinstallerf/pid
 
-# Called whenever anything needs to be run as root ($@ is the command)
-runasroot() {
-  if [[ $UID -eq 0 ]]; then
-    "$@"
-  elif zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | sudo -S -v &>/dev/null && sudo -l "$@" &>/dev/null; then
-    sudo -E "$@"
-  else
-    echo -n "root "
-    zenity --password --title=Authentication --class='PostInstallerF' --window-icon="/usr/share/icons/acciones/topicon.png" | su -c "$(printf '%q ' "$@")"
-  fi
-}
-
 
 gnome_desktop() {
 pkexec dnf -y install gnome-desktop | stdbuf -oL sed -n 's/^/# /p' | yad --title="PostInstallerF - Gnome Desktop Environment" \

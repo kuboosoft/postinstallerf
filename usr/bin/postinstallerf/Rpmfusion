@@ -43,11 +43,11 @@ if [[ $ret -eq 0 ]]; then
 
 if [[ "$tarea" = Install ]]; then 
 
-pkexec dnf -y install --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$version.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$version.noarch.rpm | $localprogress 
+pkexec dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm | $localprogress 
 
 elif [[ "$tarea" = Reinstall ]]; then
 
-pkexec dnf -y reinstall --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$version.noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$version.noarch.rpm | $localprogress
+pkexec dnf -y reinstall https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm | $localprogress
 
 elif [[ "$tarea" = Uninstall ]]; then 
 postinstaller -e rpmfusion-free-release 
