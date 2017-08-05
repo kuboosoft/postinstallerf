@@ -1,0 +1,52 @@
+#!/bin/bash
+
+source /usr/bin/postinstallerf/pid
+
+    # Local Progress
+    localprogress='/usr/bin/postinstallerf/local-pro'
+
+    # Define version Fedora
+    version=$(rpm -q --queryformat '%{VERSION}\n' fedora-release)
+
+
+if [ -f /etc/yum.repos.d/unitedrpms.repo ]; then
+status='INSTALLED'
+tarea=Uninstall
+else
+status='NO INSTALLED'
+tarea=Install
+fi
+
+Comment='<span size="xx-large">UnitedRPMs Repository</span>'
+
+yad --title="PostInstallerF - UnitedRPMs Repository" \
+--center \
+--window-icon="/usr/share/icons/acciones/topicon.png" \
+--image="/usr/share/icons/acciones/unitedrpms.png" --image-on-top \
+--class="PostInstallerF" \
+--width=800 --height=500 \
+--text="$Comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+UnitedRPMs is the solution for people with unstable and stable Fedora distributions, increase technical skills, create a Copr-like build system for package incompatible with Fedora. UnitedRPMs it's not a branch maintenance of other projects,it is only a road to give the user a fast solution without bureaucracy where everyone can help."  \
+--button="Status: $status:3" --button="$tarea:0" --button="Close:1" 
+
+ret=$?
+
+if [[ $ret -eq 0 ]]; then 
+
+if [[ "$tarea" = Install ]]; then 
+
+pkexec rpm --import https://raw.githubusercontent.com/UnitedRPMs/unitedrpms/master/URPMS-GPG-PUBLICKEY-Fedora-24
+
+pkexec dnf -y install https://github.com/UnitedRPMs/unitedrpms/releases/download/6/unitedrpms-$(rpm -E %fedora)-6.fc$(rpm -E %fedora).noarch.rpm
+ | $localprogress 
+
+elif [[ "$tarea" = Reinstall ]]; then
+
+pkexec dnf -y reinstall https://github.com/UnitedRPMs/unitedrpms/releases/download/6/unitedrpms-$(rpm -E %fedora)-6.fc$(rpm -E %fedora).noarch.rpm | $localprogress
+
+elif [[ "$tarea" = Uninstall ]]; then 
+postinstaller -e unitedrpms 
+fi
+
+  fi
